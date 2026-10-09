@@ -158,7 +158,6 @@ def create_triggers(pg_engine, columns):
 
 def copy_rows(my_engine, pg_engine, md):
     with my_engine.connect() as src, pg_engine.begin() as dst:
-        dst.execute(sa.text("SET session_replication_role = replica"))  # FK désactivées pendant la copie
         for t in md.sorted_tables:
             res = src.execution_options(stream_results=True).execute(sa.text(f"SELECT * FROM `{t.name}`"))
             n = 0
@@ -166,7 +165,6 @@ def copy_rows(my_engine, pg_engine, md):
                 dst.execute(t.insert(), [dict(r) for r in rows])
                 n += len(rows)
             print(f"  {t.name}: {n} lignes")
-        dst.execute(sa.text("SET session_replication_role = DEFAULT"))
         for t in md.sorted_tables:
             for c in t.primary_key.columns:
                 if c.autoincrement is True and isinstance(c.type, sa.Integer):
@@ -195,9 +193,19 @@ def main():
         sys.exit(f"Tables déjà présentes côté PostgreSQL : {sorted(clash)} (relancer avec --drop)")
     if a.drop:
         md.drop_all(pg_engine)
+    # Clés étrangères posées après la copie : pas besoin de droits superutilisateur
+    # (session_replication_role) pour désactiver leurs contrôles pendant le chargement.
+    fks = [(t, fk) for t in md.sorted_tables for fk in list(t.foreign_key_constraints)]
+    for t, fk in fks:
+        t.constraints.discard(fk)
     md.create_all(pg_engine)
     print(f"{len(md.tables)} tables créées, copie des données…")
     copy_rows(my_engine, pg_engine, md)
+    with pg_engine.begin() as c:
+        for t, fk in fks:
+            c.execute(sa.schema.AddConstraint(fk))
+            t.append_constraint(fk)
+    print(f"{len(fks)} clés étrangères ajoutées.")
     columns = on_update_columns(my_engine)
     create_triggers(pg_engine, columns)
     print(f"{len(columns)} colonnes ON UPDATE CURRENT_TIMESTAMP reproduites par déclencheur.")
