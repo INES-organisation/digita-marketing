@@ -53,7 +53,7 @@ def create_formation_order(user_id, formation, promo, user_email):
 
 def fulfill_order(order_id, stripe_session_id, payment_intent=None):
     db.execute("""UPDATE orders SET status = 'paid', stripe_session_id = ?, stripe_payment_intent = ?,
-                  updated_at = LOCALTIMESTAMP(0) WHERE id = ?""", [stripe_session_id, payment_intent, key(order_id)])
+                  updated_at = NOW() WHERE id = ?""", [stripe_session_id, payment_intent, key(order_id)])
     order = find(order_id)
     for item in get_order_items(order_id):
         if item.get("product_type") == "formation" and php.t(order and order.get("user_id")):
@@ -66,7 +66,7 @@ def fulfill_order(order_id, stripe_session_id, payment_intent=None):
 def _enroll(user_id, formation_id):
     if not db.fetch("SELECT id FROM formation_enrollments WHERE user_id = ? AND formation_id = ?", [user_id, formation_id]):
         db.execute("INSERT INTO formation_enrollments (user_id, formation_id, enrolled_at) "
-                   "VALUES (?, ?, LOCALTIMESTAMP(0))", [user_id, formation_id])
+                   "VALUES (?, ?, NOW())", [user_id, formation_id])
         db.execute("UPDATE formations SET enrolled_count = enrolled_count + 1 WHERE id = ?", [formation_id])
 
 

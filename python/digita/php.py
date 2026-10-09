@@ -566,7 +566,30 @@ def php_upto(start, end, inclusive):
     return out
 
 
+
+def strpos(haystack, needle, offset=0):
+    i = strval(haystack).find(strval(needle), offset)
+    return False if i < 0 else i
+
+
+def to_array(v):
+    """(array) $v."""
+    if is_undef(v) or v is None:
+        return []
+    return v if isinstance(v, (list, dict)) else [v]
+
+
+def same(a, b):
+    """=== quand l'un des côtés est un booléen."""
+    return type(a) is type(b) and a == b
+
+
+def addslashes(s):
+    return re.sub(r"(['\"\\\x00])", lambda m: "\\0" if m.group(1) == "\x00" else "\\" + m.group(1), strval(s))
+
+
 GLOBALS = {
+    "strpos": strpos, "addslashes": addslashes, "same": same, "to_array": to_array, "loose_eq": loose_eq,
     "isset": isset, "empty": empty, "coalesce": coalesce, "t": t, "cat": cat, "h": h,
     "htmlspecialchars": h, "strval": strval, "intval": intval, "floatval": floatval,
     "count": count, "round": php_round, "number_format": number_format, "ceil": ceil,

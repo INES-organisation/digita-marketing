@@ -35,9 +35,9 @@
             <a href="/blog" class="btn-premium btn-premium-blue py-2 px-4 {{ ('active shadow-blue-glow' if (not (isset(currentCategory))) else '') }}">
                 <i class="bi bi-grid-fill me-2"></i> Omnicanal
             </a>
-            {% for cat in php_values(categories) %}                <a href="/blog/categorie/{{ h(cat['slug']) }}" class="btn-premium py-2 px-4 glass-card border-glass text-white {{ ('active border-gold text-gold' if (((isset(currentCategory)) and (currentCategory == cat['slug']))) else '') }}">
-                    {% if (not empty(cat['icon'])) %}                        <span class="me-2">{{ cat['icon'] }}</span>
-                    {% endif %}                    {{ h(cat['name']) }}                </a>
+            {% for cat_ in php_values(categories) %}                <a href="/blog/categorie/{{ h(cat_['slug']) }}" class="btn-premium py-2 px-4 glass-card border-glass text-white {{ ('active border-gold text-gold' if (((isset(currentCategory)) and (loose_eq(currentCategory, cat_['slug'])))) else '') }}">
+                    {% if (not empty(cat_['icon'])) %}                        <span class="me-2">{{ cat_['icon'] }}</span>
+                    {% endif %}                    {{ h(cat_['name']) }}                </a>
             {% endfor %}        </div>
     </div>
 </section>

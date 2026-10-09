@@ -25,7 +25,7 @@ def generate(user_id, formation_id):
         return existing
     row = db.fetch("INSERT INTO certificates (user_id, formation_id, certificate_number) VALUES (?, ?, ?) "
                    "RETURNING id", [user_id, formation_id, _number()])
-    db.execute("UPDATE formation_enrollments SET completed = 1, completed_at = LOCALTIMESTAMP(0) "
+    db.execute("UPDATE formation_enrollments SET completed = 1, completed_at = NOW() "
                "WHERE user_id = ? AND formation_id = ?", [user_id, formation_id])
     return db.fetch("SELECT * FROM certificates WHERE id = ?", [row["id"]])
 

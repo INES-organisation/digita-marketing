@@ -72,7 +72,8 @@ def pg_default(col):
     raw = str(d).strip()
     up = raw.upper()
     if "CURRENT_TIMESTAMP" in up:
-        return sa.text("CURRENT_TIMESTAMP")
+        # MySQL garde la seconde, sans fraction : deux écritures dans la même seconde sont à égalité.
+        return sa.text("date_trunc('second', LOCALTIMESTAMP)")
     if up == "NULL":
         return None
     return sa.text(raw if raw.startswith("'") else f"'{raw.strip(chr(39))}'")
@@ -130,7 +131,7 @@ BEGIN
     -- Comme MySQL : seulement si la ligne change et que la colonne n'est pas fixée par la requête.
     IF to_jsonb(NEW) IS DISTINCT FROM to_jsonb(OLD)
        AND to_jsonb(NEW) -> col IS NOT DISTINCT FROM to_jsonb(OLD) -> col THEN
-        NEW := jsonb_populate_record(NEW, jsonb_build_object(col, LOCALTIMESTAMP(0)));
+        NEW := jsonb_populate_record(NEW, jsonb_build_object(col, date_trunc('second', LOCALTIMESTAMP)));
     END IF;
     RETURN NEW;
 END $$ LANGUAGE plpgsql

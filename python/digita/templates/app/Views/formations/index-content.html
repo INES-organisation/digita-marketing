@@ -57,8 +57,8 @@
             <a href="/formations" class="btn btn-outline-primary">
                 <i class="bi bi-grid-3x3"></i> Toutes
             </a>
-            {% for cat in php_values(categories) %}                <a href="/formations/categorie/{{ cat['slug'] }}" class="btn btn-outline-primary">
-                    {{ cat['icon'] }} {{ h(cat['name']) }}                    <span class="badge bg-primary">{{ cat['formation_count'] }}</span>
+            {% for cat_ in php_values(categories) %}                <a href="/formations/categorie/{{ cat_['slug'] }}" class="btn btn-outline-primary">
+                    {{ cat_['icon'] }} {{ h(cat_['name']) }}                    <span class="badge bg-primary">{{ cat_['formation_count'] }}</span>
                 </a>
             {% endfor %}        </div>
     </div>

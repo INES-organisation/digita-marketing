@@ -58,7 +58,7 @@ def submit_attempt(attempt_id, answers):
     percentage = php.php_round(score / max_score * 100, 2) if max_score > 0 else 0
     passed = percentage >= quiz["passing_score"]
     db.execute("""UPDATE quiz_attempts SET score = ?, max_score = ?, percentage = ?, passed = ?,
-                  answers_json = ?, completed_at = LOCALTIMESTAMP(0) WHERE id = ?""",
+                  answers_json = ?, completed_at = NOW() WHERE id = ?""",
                [score, max_score, percentage, 1 if passed else 0, php.json_encode(results), attempt_id])
     return {"score": score, "max_score": max_score, "percentage": percentage, "passed": passed, "results": results}
 

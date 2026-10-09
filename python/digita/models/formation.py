@@ -198,3 +198,88 @@ def _update_average_rating(formation_id):
                    "WHERE formation_id = ? AND status = 'approved'", [formation_id])["avg_rating"]
     db.execute("UPDATE formations SET rating = ? WHERE id = ?",
                [php.php_round(avg, 2) if avg is not None else 0, formation_id])
+
+
+# ---------------------------------------------------------------- administration
+def get_all(limit=None, offset=0, status=None, category_id=None, search=None):
+    from .article import _admin_filters
+    where, params = _admin_filters(status, category_id, search, "f", "description")
+    sql = _select(icon=False) + " WHERE 1=1" + where + " ORDER BY f.created_at DESC NULLS LAST, f.id DESC"
+    if limit:
+        sql += f" LIMIT {int(limit)} OFFSET {int(offset)}"
+    return db.fetch_all(sql, params)
+
+
+def count_all(status=None, category_id=None, search=None):
+    from .article import _admin_filters
+    where, params = _admin_filters(status, category_id, search, "f", "description")
+    return db.fetch("SELECT COUNT(*) as total FROM formations f WHERE 1=1" + where, params)["total"]
+
+
+def get_full_formation_by_id(formation_id):
+    formation = get_by_id(formation_id)
+    if not formation:
+        return None
+    modules = get_modules(formation["id"])
+    for m in modules:
+        m["lessons"] = get_lessons(m["id"])
+    formation["modules"] = modules
+    return formation
+
+
+def _admin_values(data):
+    return [data["title"], data["slug"], data.get("description", ""),
+            key(data["category_id"]) if php.t(data["category_id"]) else None, data.get("service_name", ""),
+            data.get("level", "debutant"), data.get("duration", ""), data.get("price", 0), data.get("image", ""),
+            data.get("meta_title", data["title"]), data.get("meta_description", ""), data.get("meta_keywords", ""),
+            data.get("status", "draft")]
+
+
+def create(data):
+    row = db.fetch(
+        """INSERT INTO formations (title, slug, description, category_id, service_name, level, duration, price, image,
+                                   meta_title, meta_description, meta_keywords, status, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()) RETURNING id""", _admin_values(data))
+    return str(row["id"])
+
+
+def update(formation_id, data):
+    db.execute(
+        """UPDATE formations SET title = ?, slug = ?, description = ?, category_id = ?, service_name = ?,
+                  level = ?, duration = ?, price = ?, image = ?, meta_title = ?, meta_description = ?,
+                  meta_keywords = ?, status = ?, updated_at = NOW() WHERE id = ?""",
+        _admin_values(data) + [key(formation_id)])
+    return True
+
+
+def delete(formation_id):
+    fid = key(formation_id)
+    for m in get_modules(fid):
+        db.execute("DELETE FROM formation_lessons WHERE module_id = ?", [m["id"]])
+    db.execute("DELETE FROM formation_modules WHERE formation_id = ?", [fid])
+    db.execute("DELETE FROM formation_enrollments WHERE formation_id = ?", [fid])
+    db.execute("DELETE FROM formations WHERE id = ?", [fid])
+    return True
+
+
+def get_all_categories():
+    rows = db.fetch_all("""SELECT c.*, COUNT(f.id) as formation_count FROM service_categories c
+                           LEFT JOIN formations f ON c.id = f.category_id GROUP BY c.id ORDER BY c.id""")
+    return sort_by_name(rows)
+
+
+def generate_slug(title, exclude_id=None):
+    from .article import generate_slug as slug
+    return slug(title, exclude_id, "formations")
+
+
+def get_formation_stats():
+    one = lambda sql: db.fetch(sql)["total"]  # noqa: E731
+    return {
+        "total": one("SELECT COUNT(*) as total FROM formations"),
+        "published": one("SELECT COUNT(*) as total FROM formations WHERE status = 'published'"),
+        "draft": one("SELECT COUNT(*) as total FROM formations WHERE status = 'draft'"),
+        "total_enrolled": one("SELECT COALESCE(SUM(enrolled_count), 0) as total FROM formations"),
+        "total_modules": one("SELECT COUNT(*) as total FROM formation_modules"),
+        "total_lessons": one("SELECT COUNT(*) as total FROM formation_lessons"),
+    }

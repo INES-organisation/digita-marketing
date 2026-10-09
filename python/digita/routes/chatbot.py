@@ -49,7 +49,7 @@ def _send_message(user_message, session_id, page, user_id, ip):
         reply = res["response"]
         db.execute("INSERT INTO chatbot_messages (conversation_id, role, content) VALUES (?, 'assistant', ?)",
                    [conv_id, reply])
-        db.execute("UPDATE chatbot_conversations SET updated_at = CURRENT_TIMESTAMP(0) WHERE id = ?", [conv_id])
+        db.execute("UPDATE chatbot_conversations SET updated_at = NOW() WHERE id = ?", [conv_id])
         # Le PHP teste ici une variable jamais définie ($msgCount) : l'extraction du brief
         # n'a donc jamais lieu. Comportement conservé.
         return {"success": True, "reply": reply, "agent": res["agent"],

@@ -51,6 +51,9 @@ sed -i -E 's/^    public function getById\(\$id\) \{$/    public function find($
 grep -q "public function find" "$REF/app/Models/Formation.php"
 sed -i -E "s/ORDER BY o\.created_at DESC/ORDER BY o.created_at DESC, o.id DESC/" "$REF/app/Models/Order.php"
 sed -i -E "s/ORDER BY cp\.updated_at DESC\"/ORDER BY cp.updated_at DESC, cp.id DESC\"/; s/ORDER BY pm\.created_at ASC\"/ORDER BY pm.created_at ASC, pm.id\"/; s/ORDER BY pf\.created_at DESC\"/ORDER BY pf.created_at DESC, pf.id DESC\"/; s/ORDER BY sort_order ASC\"/ORDER BY sort_order ASC, id\"/; s/ORDER BY psh\.created_at DESC\"/ORDER BY psh.created_at DESC, psh.id DESC\"/" "$REF/app/Models/Project.php"
+sed -i -E 's/^(\s*)cp\.updated_at DESC("?)$/\1cp.updated_at DESC, cp.id DESC\2/' "$REF/app/Models/Project.php"
+sed -i -E "s/all\('created_at DESC'/all('created_at DESC, id DESC'/" "$REF/app/Models/Contact.php" "$REF/app/Controllers/AdminController.php"
+sed -i -E 's/^(\s*)ORDER BY created_at DESC $/\1ORDER BY created_at DESC, id DESC /' "$REF/app/Models/Newsletter.php"
 sed -i -E "s/ORDER BY updated_at DESC LIMIT 1/ORDER BY updated_at DESC, id DESC LIMIT 1/" "$REF/app/Services/ContextManager.php"
 cat > "$WORK/router.php" <<'PHP'
 <?php
@@ -59,7 +62,7 @@ if ($p !== '/' && is_file($_SERVER['DOCUMENT_ROOT'] . $p)) return false;
 require $_SERVER['DOCUMENT_ROOT'] . '/index.php';
 PHP
 (cd "$REF/public" && php -S 127.0.0.1:8081 "$WORK/router.php" > "$WORK/php.log" 2>&1 &)
-(cd "$ROOT/python" && DIGITA_DETERMINISTIC=1 DIGITA_AUDIT_ALLOW_PRIVATE=1 APP_ENV=development DATABASE_URL="$PG_URL" \
+(cd "$ROOT/python" && DIGITA_DETERMINISTIC=1 DIGITA_AUDIT_ALLOW_PRIVATE=1 APP_ENV=development APP_URL=http://127.0.0.1:8000 DATABASE_URL="$PG_URL" \
   .venv/bin/uvicorn digita.main:app --port 8000 > "$WORK/py.log" 2>&1 &)
 sleep 4
 trap 'pkill -f "php -S 127.0.0.1:8081" || true; pkill -f "uvicorn digita.main:app --port 8000" || true' EXIT

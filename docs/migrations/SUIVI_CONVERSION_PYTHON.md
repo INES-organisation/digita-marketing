@@ -14,12 +14,12 @@
 | 0 | Données : MySQL → PostgreSQL, vérification ligne à ligne | ✅ fait (sur l'export de février) |
 | 1 | Pages publiques : accueil, pages fixes, blog, catégories, articles, formations, landings, pages légales, outils (formulaires), connexion/inscription (formulaires) | ✅ fait : **1 300 pages sur 1 302 identiques au HTML PHP** |
 | 2 | Formulaires publics : demande d'audit (accueil), chatbot, outils IA (audit SEO, meta, ROI, calendrier), connexion/inscription, suivi analytics | ✅ fait : **60 réponses sur 60 identiques au PHP** |
-| 3 | Espace élève et paiement : inscription aux formations, leçons, quiz, certificats, avis, Stripe, commandes, factures, espace client projets | ✅ fait : **194 réponses sur 194 identiques au PHP** (phases 2 et 3) |
-| 4 | Administration : tableau de bord, articles, formations, médias, projets, campagnes, newsletters, webhooks | ⏳ à faire |
+| 3 | Espace élève et paiement : inscription aux formations, leçons, quiz, certificats, avis, Stripe, commandes, factures, espace client projets | ✅ fait |
+| 4 | Administration : tableau de bord, articles, formations, médias, projets, campagnes, newsletters, webhooks | ✅ fait : avec les phases 2 et 3, **293 réponses identiques au PHP sur 295**, les 2 autres échouent des deux côtés (§6) |
 | 5 | Mise en ligne : base sur le VPS, conteneur, nginx, certificat, DNS, redirection de l'ancien domaine | ⏳ préparé, rien n'est déployé |
 
-Tant que la phase 4 n'est pas faite, les routes `/admin/*` répondent par un message
-« fonctionnalité en cours de migration » (HTTP 501). Le site PHP reste la version de production.
+Toutes les routes de `public/index.php` sont converties. Le site PHP reste la version de production
+jusqu'à la bascule.
 
 ## 2. Choix techniques
 
@@ -37,8 +37,8 @@ Tant que la phase 4 n'est pas faite, les routes `/admin/*` répondent par un mes
 python/
 ├── digita/
 │   ├── main.py          routeur (même ordre et mêmes règles que public/index.php)
-│   ├── routes/          un module par contrôleur PHP (pages, blog, formations, learning, payment, projects, outils, auth, leads, chatbot, analytics)
-│   ├── services/        e-mail (SMTP), IA (OpenAI, audit SEO, ROI), agents du chatbot, Stripe (API REST)
+│   ├── routes/          un module par contrôleur PHP (pages, blog, formations, learning, payment, projects, admin, outils, auth, leads, chatbot, analytics)
+│   ├── services/        e-mail (SMTP), IA (OpenAI, audit SEO, ROI), agents du chatbot, Stripe (API REST), Webox
 │   ├── security.py      CSRF et limitation des tentatives (middlewares PHP)
 │   ├── models/          requêtes des modèles PHP (articles, formations, quiz, certificats, commandes, factures, projets) adaptées à PostgreSQL
 │   ├── sessions.py      sessions côté serveur (table web_sessions), comme $_SESSION
@@ -70,14 +70,17 @@ le jeton CSRF (aléatoire) et `dateModified` du jour (mis à jour à chaque vue 
 
 Dernier résultat : **1 300 identiques, 0 différente** (hors `/portfolio` et `/equipe`, voir §6).
 
-Les formulaires et API sont comparés ensuite par `python/tools/post_parity.py` : 194 envois (demande
+Les formulaires et API sont comparés ensuite par `python/tools/post_parity.py` : 295 envois (demande
 d'audit, connexion, inscription avec champs manquants, jeton CSRF absent ou faux, compte existant,
 6ᵉ tentative bloquée en 429 ; chatbot et ses réponses de secours, historique, rendez-vous et créneaux ;
 les 4 outils dont un audit SEO complet d'une page de test ; analytics ; parcours élève complet sur une
 formation gratuite : inscription, 20 leçons, quiz réussi et raté, avis, certificat ; paiement sans Stripe :
 codes promo valides, expirés, épuisés, commande offerte à 100 %, commandes, factures, annulation ;
 projets : devis AJAX, brief avec champs manquants ou complets, espace client, projet d'un autre client,
-messages et pièce jointe refusée, webhook Webox en visiteur et en administrateur) donnent le même statut, la même
+messages et pièce jointe refusée, webhook Webox en visiteur et en administrateur ; administration :
+accès refusé aux visiteurs et aux clients, toutes les pages, filtres et pagination, création, modification
+et suppression d'articles et de formations, contacts lus et répondus, export CSV, médias, projets (statut,
+messages, notes, tâches, prix, génération Webox), déconnexion) donnent le même statut, la même
 redirection, le même JSON ou la même page HTML dans les deux versions ; les lignes écrites en base
 sont identiques. Les données de test (formation gratuite, quiz, codes promo, projet Webox, administrateur)
 sont dans `python/tools/fixtures_forms.sql`, appliqué aux deux bases. Les mots de passe sont hachés en
@@ -101,7 +104,7 @@ sont dans `python/tools/fixtures_forms.sql`, appliqué aux deux bases. Les mots 
 | Espace élève | `/mes-formations`, inscription, leçons, quiz, avis, certificats | ✅ |
 | Paiement | checkout, Stripe (webhook), promo, commandes, factures | ✅ |
 | Projets clients | `/projets/brief`, `/espace-client/*`, `/api/project-quote`, `/webhook/webox` | ✅ |
-| Administration | 39 routes `/admin/*` | ⏳ phase 4 |
+| Administration | 39 routes `/admin/*` | ✅ |
 
 ## 6. Écarts connus et défauts déjà présents dans le PHP
 
@@ -147,6 +150,21 @@ sont dans `python/tools/fixtures_forms.sql`, appliqué aux deux bases. Les mots 
   (`requireAdmin()` dans le constructeur) ; Webox ne peut donc pas l'appeler. Reproduit tel quel.
 - Pièces jointes des projets : enregistrées dans `public/uploads/projects/<id>/`, qui est un volume Docker
   (`digita-uploads`) pour survivre aux mises à jour de l'image.
+- **Faille dans l'admin PHP (à corriger sur OVH sans attendre)** : l'envoi d'image des articles et des
+  formations ne vérifie que le type annoncé par le navigateur et garde l'extension du fichier. Un fichier
+  `x.php` envoyé comme `image/png` est enregistré dans `public/uploads/articles/` (vérifié sur la copie
+  locale), et aucun `.htaccess` n'empêche Apache d'exécuter un `.php` existant à cet endroit. Il faut un compte administrateur, mais un mot de passe admin volé suffit
+  pour prendre la main sur l'hébergement. La version Python n'accepte que les extensions d'image
+  (jpg, jpeg, png, gif, webp ; svg, pdf, mp4, webm en plus pour la médiathèque) et ne sert jamais de `.php`.
+- **Page Analytics de l'admin en panne, en PHP comme en Python** : elle lit `orders.total_amount` et la table
+  `user_formations`, qui n'existent pas dans la base. Reproduit tel quel (message d'erreur générique).
+- Admin : les pages « Campagnes » et « Webhooks » sont des maquettes en PHP (données écrites en dur, rien
+  n'est enregistré). Reproduit tel quel.
+- Admin, génération Webox : sans `WEBOX_API_URL`, le PHP appelle `http://localhost:8000`. Sur le VPS il faut
+  l'adresse de Webox (réseau INES), sinon l'admin affiche « Erreur Webox ».
+- Médiathèque : le type d'un fichier (image, vidéo, PDF) est déduit de son extension, le PHP lisait son contenu.
+- Dates : comme MySQL, les dates enregistrées s'arrêtent à la seconde (valeurs par défaut, `NOW()` et
+  déclencheurs), pour que deux écritures dans la même seconde gardent le même ordre d'affichage.
 - Le workflow `deploy.yml` envoie le dépôt sur OVH par FTP : `python/` y est désormais exclu.
 
 ## 7. Ce qu'il faut avant la mise en ligne (bloquants)
@@ -158,7 +176,8 @@ sont dans `python/tools/fixtures_forms.sql`, appliqué aux deux bases. Les mots 
 3. **DNS de digita.buzz** (zone OVH) : `A digita.buzz → 37.187.219.225` et `A www → 37.187.219.225`.
    Ne pas toucher à `lp48.digita.buzz`.
 4. **Feu vert explicite** avant toute action sur le VPS (rien n'a été déployé).
-5. Clés de production Stripe (`STRIPE_SECRET_KEY`, `STRIPE_PUBLIC_KEY`, `STRIPE_WEBHOOK_SECRET`, avec le
+5. Adresse et clé de l'API Webox (`WEBOX_API_URL`, `WEBOX_API_KEY`) si la génération de sites est utilisée.
+6. Clés de production Stripe (`STRIPE_SECRET_KEY`, `STRIPE_PUBLIC_KEY`, `STRIPE_WEBHOOK_SECRET`, avec le
    webhook Stripe à repointer vers `https://digita.buzz/webhook/stripe`), SMTP (`MAIL_*`) et OpenAI.
 
 ## 8. Procédure de mise en ligne (à exécuter seulement après feu vert)
@@ -202,3 +221,4 @@ Retour arrière : retirer le bloc nginx et recharger nginx (le site OVH n'est pa
 | 09/10/2026 | Phase 2 : demande d'audit, connexion et inscription converties, 24/24 réponses identiques au PHP. |
 | 09/10/2026 | Phase 2 terminée : chatbot, rendez-vous, outils IA et analytics ; 60/60 réponses identiques, pages toujours à 1 300/1 302. |
 | 09/10/2026 | Phase 3 : espace élève (leçons, quiz, avis, certificats), paiement (promo, commandes, factures, Stripe par API) et projets clients (brief, devis, espace client, messages, webhook Webox) ; 194/194 réponses identiques, pages toujours à 1 300/1 302. |
+| 09/10/2026 | Phase 4 : administration (39 routes : tableau de bord, contacts, newsletter, articles, formations, médias, analytics, projets, campagnes) ; 293/295 réponses identiques, 2 en erreur des deux côtés ; pages toujours à 1 300/1 302. Faille d'envoi de fichiers PHP relevée. |

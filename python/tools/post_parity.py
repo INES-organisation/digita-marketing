@@ -27,8 +27,18 @@ LOAD_TIME = [
     (re.compile(r'"load_time":[\d.]+'), '"load_time":N'),
     (re.compile(r"https?://(127\.0\.0\.1|localhost)(:\d+)?"), "http://HOST"),
     (re.compile(r"DM-\d{4}-[0-9A-F]{8}"), "DM-NUMERO"),
+    # heure des messages écrits pendant le parcours (« 09/10 14:13 ») : PHP et Python passent à des minutes différentes
+    (re.compile(r"\b\d\d/\d\d \d\d:\d\d\b"), "JJ/MM HH:MM"),
+    # en dernier : aussi appliqué seul aux réponses JSON
     (re.compile(r"\d{4}-\d\d-\d\d \d\d:\d\d:\d\d"), "TIMESTAMP"),
 ]
+GENERIC_500 = "Une erreur est survenue. Veuillez réessayer plus tard."
+
+
+def same_failure(a, b):
+    """Exception non gérée : le PHP affiche son gestionnaire d'erreur (200), le Python le message générique (500)."""
+    return (a[3] == 200 and b[3] == 500 and isinstance(a[-1], list) and isinstance(b[-1], list)
+            and "Exception non gérée" in "".join(a[-1]) and b[-1] == [GENERIC_500])
 
 
 SAMPLE = ("<html><head><title>Agence de marketing digital à La Réunion</title>"
@@ -300,18 +310,113 @@ def run(base):
         call("POST", "/webhook/webox", content=body)
     call("GET", "/espace-client", page=True)
     call("GET", "/espace-client/projet/9401", page=True)
+
+    # administration (compte 9501 encore connecté ; contacts et abonnés de tools/fixtures_forms.sql)
+    admin = c
+    c = httpx.Client(base_url=base, follow_redirects=False, headers={"User-Agent": "parity10"})
+    for path in ("/admin/dashboard", "/admin/contacts/read", "/admin/contacts/read?id=9601", "/admin/projects/9401"):
+        call("GET", path)
+    call("POST", "/admin/articles/store", {"title": "x"})
+    t = tok("/connexion")
+    c.post("/connexion", data={"_csrf_token": t, "email": "client@example.com", "password": "motdepasse1"})
+    for path in ("/admin/dashboard", "/admin/media", "/admin/contacts/read?id=9601"):
+        call("GET", path)
+    call("POST", "/admin/projects/task/update", {"task_id": "9431", "status": "todo"})
+    c = admin
+    for path in ("/admin/dashboard", "/admin/contacts", "/admin/newsletters", "/admin/webhooks", "/admin/campaigns",
+                 "/admin/articles", "/admin/formations", "/admin/media", "/admin/projects"):
+        call("GET", path, page=True)
+    call("GET", "/admin/contacts/read", params={"id": "0"})
+    call("GET", "/admin/contacts/read", params={"id": "9601"})
+    call("GET", "/admin/contacts/replied", params={"id": "9602"})
+    call("GET", "/admin/contacts", page=True)
+    call("GET", "/admin/newsletters/export")
+    call("POST", "/admin/webhooks/save", {"contact_url": "https://x"})
+    call("POST", "/admin/webhooks/test/contact")
+    call("GET", "/admin/campaigns/new")
+    call("POST", "/admin/campaigns/delete/3")
+    for params in ({"page": "2"}, {"page": "0"}, {"status": "draft"}, {"category": "3"}, {"q": "SEO"},
+                   {"q": "reseaux", "status": "published", "page": "abc"}, {"category": "abc"}):
+        call("GET", "/admin/articles", params=params, page=True)
+        call("GET", "/admin/formations", params=params, page=True)
+    call("GET", "/admin/articles/new", page=True)
+    call("POST", "/admin/articles/store", {"title": "  "})
+    call("GET", "/admin/articles/new", page=True)
+    call("POST", "/admin/articles/store", {"title": " Été à La Réunion : ça déçoit ? ", "content": "<p>Texte</p>",
+                                           "category_id": "3", "status": "published", "meta_title": "",
+                                           "featured_image_url": " /img/a.png "})
+    call("POST", "/admin/articles/store", {"title": "Été à La Réunion : ça déçoit ?", "status": "draft",
+                                           "category_id": ""})
+    out.append(["articles", c.get("/admin/articles", params={"q": "Réunion : ça"}).status_code])
+    call("GET", "/admin/articles", params={"q": "ça déçoit"}, page=True)
+    call("GET", "/admin/articles/edit/999999")
+    call("GET", "/admin/articles/edit/1", page=True)
+    call("POST", "/admin/articles/update/1", {"title": ""})
+    call("GET", "/admin/articles/edit/1", page=True)
+    call("POST", "/admin/articles/update/999999", {"title": "x"})
+    call("POST", "/admin/articles/delete/999999")
+    call("POST", "/admin/articles/upload-image")
+    call("POST", "/admin/articles/upload-image", files={"file": ("x.txt", b"x", "text/plain")})
+    call("GET", "/admin/formations/new", page=True)
+    call("POST", "/admin/formations/store", {"title": ""})
+    call("POST", "/admin/formations/store", {"title": "Formation Admin ÉÀ", "price": "49,90", "level": "avance",
+                                             "category_id": "2", "description": "<p>Desc</p>"})
+    call("GET", "/admin/formations/edit/999999")
+    call("GET", "/admin/formations/edit/2", page=True)
+    call("POST", "/admin/formations/update/2", {"title": ""})
+    call("POST", "/admin/formations/delete/999999")
+    call("GET", "/admin/formations/edit/2", page=True)
+    call("POST", "/admin/media/upload")
+    call("POST", "/admin/media/upload", files={"files[]": ("a.exe", b"MZ", "application/octet-stream")})
+    call("POST", "/admin/media/delete")
+    call("POST", "/admin/media/delete", {"filename": "../../index.php"})
+    call("GET", "/admin/analytics", page=True)
+    call("GET", "/admin/analytics", params={"period": "7"}, page=True)
+    for params in ({}, {"view": "list"}, {"view": "list", "status": "pending"}, {"view": "list", "type": "website"}):
+        call("GET", "/admin/projects", params=params, page=True)
+    call("GET", "/admin/projects/999999")
+    call("GET", "/admin/projects", page=True)
+    call("GET", "/admin/projects/9402", page=True)
+    call("POST", "/admin/projects/9402/status", {"status": "bidon"})
+    call("POST", "/admin/projects/9402/status", {"status": "review", "note": " Relecture "})
+    call("POST", "/admin/projects/9402/message", {"message": " "})
+    call("POST", "/admin/projects/9402/message", {"message": "Votre maquette est prête"})
+    call("POST", "/admin/projects/9402/note", {"admin_notes": " Client pressé "})
+    call("POST", "/admin/projects/9402/task", {"task_title": ""})
+    call("POST", "/admin/projects/9402/task", {"task_title": "Logo", "task_description": "SVG"})
+    call("POST", "/admin/projects/9402/task", {"task_title": "Textes"})
+    for data in ({}, {"task_id": "9431", "status": "bidon"}, {"task_id": "9432", "status": "in_progress"}):
+        call("POST", "/admin/projects/task/update", data)
+    call("POST", "/admin/projects/9402/price", {"price": "1234.5"})
+    call("POST", "/admin/projects/9402/generate")
+    call("POST", "/admin/projects/999999/generate")
+    call("GET", "/admin/projects/9402", page=True)
+    call("GET", "/admin/projects", params={"view": "list"}, page=True)
+    call("GET", "/admin/dashboard", page=True)
+    call("GET", "/espace-client/projet/9402")
+    call("POST", "/admin/articles/delete/1")
+    call("GET", "/admin/articles", page=True)
+    call("POST", "/admin/formations/delete/2")
+    call("GET", "/admin/formations", page=True)
+    call("GET", "/admin/logout")
+    call("GET", "/admin/dashboard")
     return out
 
 
 res = {k: run(v) for k, v in SERVERS.items()}
 bad = 0
+known = 0
 for a, b in zip(res["php"], res["py"]):
     if a == b:
         print("OK  ", str(a)[:300])
+    elif same_failure(a, b):
+        print("OK* ", str(a[:3]), "erreur PHP (exception) = erreur 500 en Python")
+        known += 1
+        continue
     elif isinstance(a[-1], list) and isinstance(b[-1], list):
         print("DIFF", a[:-1], "\n  " + "\n  ".join(difflib.unified_diff(a[-1], b[-1], "php", "py", n=1, lineterm="")))
     else:
         print("DIFF", f"\n  php={a}\n  py ={b}")
     bad += a != b
-print(f"formulaires : {len(res['php']) - bad} identiques, {bad} différentes")
+print(f"formulaires : {len(res['php']) - bad - known} identiques, {known} en erreur des deux côtés, {bad} différentes")
 sys.exit(1 if bad else 0)

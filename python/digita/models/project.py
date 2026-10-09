@@ -124,3 +124,53 @@ def update_status(project_id, new_status, changed_by, note=None):
     update(project_id, data)
     _add_status_history(project_id, project["status"], new_status, changed_by, note)
     return True
+
+
+# ---------------------------------------------------------------- administration
+_ADMIN_SELECT = """SELECT cp.*, u.email as client_email, u.username as client_name,
+       (SELECT COUNT(*) FROM project_messages pm WHERE pm.project_id = cp.id AND pm.is_read = 0
+        AND pm.is_admin = 0) as unread_client_messages
+FROM client_projects cp JOIN users u ON cp.client_id = u.id"""
+_PRIORITY = ("CASE cp.priority WHEN 'urgent' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 WHEN 'low' THEN 4 END, "
+             "cp.updated_at DESC NULLS LAST, cp.id DESC")
+KANBAN = ["pending", "generating", "review", "revision", "approved", "delivered"]
+
+
+def get_all_projects(status=None, project_type=None, limit=50):
+    sql, params = _ADMIN_SELECT + " WHERE 1=1", []
+    if php.t(status):
+        sql += " AND cp.status = ?"
+        params.append(status)
+    if php.t(project_type):
+        sql += " AND cp.project_type = ?"
+        params.append(project_type)
+    return db.fetch_all(sql + " ORDER BY " + _PRIORITY + " LIMIT ?", params + [limit])
+
+
+def get_projects_by_status():
+    kanban = {s: [] for s in KANBAN}
+    for p in db.fetch_all(_ADMIN_SELECT + " WHERE cp.status NOT IN ('completed', 'cancelled') ORDER BY " + _PRIORITY):
+        if p["status"] in kanban:
+            kanban[p["status"]].append(p)
+    return kanban
+
+
+def count_unread_for_admin():
+    return db.fetch("SELECT COUNT(*) as total FROM project_messages WHERE is_admin = 0 AND is_read = 0")["total"]
+
+
+def link_webox(project_id, webox_project_id, preview_url=None):
+    update(project_id, {"webox_project_id": webox_project_id, "preview_url": preview_url})
+
+
+def add_task(project_id, title, description=None):
+    pid = key(project_id)
+    nxt = db.fetch("SELECT COALESCE(MAX(sort_order), 0) + 1 as next_order FROM project_tasks WHERE project_id = ?",
+                   [pid])["next_order"]
+    db.execute("INSERT INTO project_tasks (project_id, title, description, sort_order) VALUES (?, ?, ?, ?)",
+               [pid, title, description, nxt])
+
+
+def update_task_status(task_id, status):
+    db.execute("UPDATE project_tasks SET status = ?, completed_at = ? WHERE id = ?",
+               [status, php.date("Y-m-d H:i:s") if status == "done" else None, key(task_id)])

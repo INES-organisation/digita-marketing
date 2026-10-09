@@ -1,15 +1,6 @@
-from starlette.responses import HTMLResponse, RedirectResponse
+from starlette.responses import RedirectResponse
 
 from ..render import render_page
-
-NOT_PORTED = ("Cette fonctionnalité est en cours de migration vers la nouvelle version du site. "
-              "Contactez-nous via <a href=\"/contact\">la page contact</a>.")
-
-
-def not_ported(request, *args):
-    """Route PHP pas encore convertie (liste dans docs/migrations/SUIVI_CONVERSION_PYTHON.md)."""
-    return HTMLResponse(NOT_PORTED, status_code=501)
-
 
 def redirect(url):
     # header('Location: …') sans code explicite → 302 en PHP

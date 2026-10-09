@@ -62,3 +62,18 @@ print("FIXME restants :", left or "aucun")
 
 
 edit("app/Views/layouts/main.html", lambda s: re.sub(r"\{% set projectRoot = [^%]*%\}", "", s))
+
+edit("app/Views/layouts/admin.html", lambda s: s.replace(
+    "{# FIXME php: require __DIR__ . '/../' . $contentView . '.php' #}",
+    "{% include 'app/Views/' ~ contentView ~ '.html' %}"))
+
+
+def dashboard_date(s):
+    # $date = new DateTime() puis $date->format(…) : même chose avec date() du jour.
+    s = re.sub(r"\{# FIXME php \(reste non analysé[^#]*\$date = new DateTime\(\) #\}", "", s)
+    s = s.replace("jours[date.format('w')]", "jours[intval(date('w'))]").replace("date.format('d')", "date('d')")
+    s = s.replace("mois[intval(date.format('n'))]", "mois[intval(date('n'))]").replace("date.format('Y')", "date('Y')")
+    return s
+
+
+edit("app/Views/admin/dashboard.html", dashboard_date)

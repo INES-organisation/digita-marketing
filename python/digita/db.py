@@ -36,6 +36,8 @@ def _prepare(sql, params):
         return f":{key}"
 
     sql = re.sub(r"\?", repl, sql)
+    # NOW() de MySQL renvoie la seconde entière (colonnes DATETIME/TIMESTAMP sans fraction).
+    sql = sql.replace("NOW()", "date_trunc('second', LOCALTIMESTAMP)")
     return text(sql), names
 
 

@@ -24,7 +24,7 @@
         </div>
         <div class="collapse {{ ('show' if (t(currentLesson) and t(in_array(currentLesson['id'], array_column(module['lessons'], 'id')))) else '') }}" 
              id="module{{ module['id'] }}">
-            {% for lesson in php_values(module['lessons']) %}                {% set _ns.isCompleted = (t(is_array(completedLessons)) and t(in_array(lesson['id'], completedLessons))) %}{% set _ns.isActive = (t(currentLesson) and (currentLesson['id'] == lesson['id'])) %}                <a href="/formations/{{ h(formation['slug']) }}/learn?lesson={{ lesson['id'] }}" 
+            {% for lesson in php_values(module['lessons']) %}                {% set _ns.isCompleted = (t(is_array(completedLessons)) and t(in_array(lesson['id'], completedLessons))) %}{% set _ns.isActive = (t(currentLesson) and (loose_eq(currentLesson['id'], lesson['id']))) %}                <a href="/formations/{{ h(formation['slug']) }}/learn?lesson={{ lesson['id'] }}" 
                    class="lesson-item {{ ('active' if t(_ns.isActive) else '') }} {{ ('completed' if t(_ns.isCompleted) else '') }}">
                     <span class="lesson-check">
                         {% if t(_ns.isCompleted) %}                            <i class="bi bi-check-circle-fill text-success"></i>
@@ -34,7 +34,7 @@
                     <span class="text-truncate">{{ h(lesson['title']) }}</span>
                 </a>
             {% endfor %}
-            {% if ((t(moduleQuiz) and (isset(module['id']))) and (moduleQuiz['module_id'] == module['id'])) %}                <a href="/formations/quiz/{{ moduleQuiz['id'] }}" 
+            {% if ((t(moduleQuiz) and (isset(module['id']))) and (loose_eq(moduleQuiz['module_id'], module['id']))) %}                <a href="/formations/quiz/{{ moduleQuiz['id'] }}" 
                    class="lesson-item {{ ('completed' if t((coalesce(moduleQuiz['user_passed'], false))) else '') }}">
                     <span class="lesson-check">
                         {% if t(coalesce(moduleQuiz['user_passed'], false)) %}                            <i class="bi bi-patch-check-fill text-success"></i>
@@ -59,7 +59,7 @@
 <div class="learn-content">
     {% if t(currentLesson) %}        <!-- Vidéo si disponible -->
         {% if (not empty(currentLesson['video_url'])) %}            <div class="video-container">
-                {% set videoUrl = currentLesson['video_url'] %}{% if ((strpos(videoUrl, 'youtube.com') != false) or (strpos(videoUrl, 'youtu.be') != false)) %}{% set matches = preg_matches('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', videoUrl) %}{% set ytId = coalesce(matches[1], '') %}{{ cat(cat('<iframe src="https://www.youtube.com/embed/', h(ytId)), '?rel=0" frameborder="0" allowfullscreen></iframe>') }}{% elif (strpos(videoUrl, 'vimeo.com') != false) %}{% set matches = preg_matches('/vimeo\.com\/(\d+)/', videoUrl) %}{% set vimeoId = coalesce(matches[1], '') %}{{ cat(cat('<iframe src="https://player.vimeo.com/video/', h(vimeoId)), '" frameborder="0" allowfullscreen></iframe>') }}{% else %}{{ cat(cat('<video src="', h(videoUrl)), '" controls></video>') }}{% endif %}            </div>
+                {% set videoUrl = currentLesson['video_url'] %}{% if ((not same(strpos(videoUrl, 'youtube.com'), false)) or (not same(strpos(videoUrl, 'youtu.be'), false))) %}{% set matches = preg_matches('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', videoUrl) %}{% set ytId = coalesce(matches[1], '') %}{{ cat(cat('<iframe src="https://www.youtube.com/embed/', h(ytId)), '?rel=0" frameborder="0" allowfullscreen></iframe>') }}{% elif (not same(strpos(videoUrl, 'vimeo.com'), false)) %}{% set matches = preg_matches('/vimeo\.com\/(\d+)/', videoUrl) %}{% set vimeoId = coalesce(matches[1], '') %}{{ cat(cat('<iframe src="https://player.vimeo.com/video/', h(vimeoId)), '" frameborder="0" allowfullscreen></iframe>') }}{% else %}{{ cat(cat('<video src="', h(videoUrl)), '" controls></video>') }}{% endif %}            </div>
         {% endif %}
         <!-- Contenu de la leçon -->
         <div class="lesson-content-area">

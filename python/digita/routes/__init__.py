@@ -1,10 +1,8 @@
 """Table des routes, dans le même ordre que public/index.php.
 
-Chaque entrée : (méthode, chemin PHP avec :param, fonction). Les routes que la
-version Python ne gère pas encore pointent vers `not_ported` (voir le doc de suivi).
+Chaque entrée : (méthode, chemin PHP avec :param, fonction).
 """
-from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment, projects
-from .common import not_ported
+from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment, projects, admin
 
 R = []
 
@@ -110,20 +108,45 @@ post("/connexion", auth.login)
 get("/inscription", auth.show_register)
 post("/inscription", auth.register)
 
-# ---------------------------------------------------------------- administration (phase 4)
-for _p in ["/admin/dashboard", "/admin/contacts", "/admin/contacts/read", "/admin/contacts/replied",
-           "/admin/newsletters", "/admin/newsletters/export", "/admin/logout", "/admin/webhooks",
-           "/admin/articles", "/admin/articles/new", "/admin/articles/edit/:id", "/admin/formations",
-           "/admin/formations/new", "/admin/formations/edit/:id", "/admin/media", "/admin/analytics",
-           "/admin/projects", "/admin/projects/:id", "/admin/campaigns", "/admin/campaigns/new"]:
-    get(_p, not_ported)
-for _p in ["/admin/webhooks/save", "/admin/webhooks/test/:type", "/admin/articles/store",
-           "/admin/articles/update/:id", "/admin/articles/delete/:id", "/admin/articles/upload-image",
-           "/admin/formations/store", "/admin/formations/update/:id", "/admin/formations/delete/:id",
-           "/admin/media/upload", "/admin/media/delete", "/admin/projects/:id/status",
-           "/admin/projects/:id/message", "/admin/projects/:id/note", "/admin/projects/:id/generate",
-           "/admin/projects/:id/task", "/admin/projects/task/update", "/admin/projects/:id/price",
-           "/admin/campaigns/delete/:id"]:
-    post(_p, not_ported)
+# ---------------------------------------------------------------- administration
+get("/admin/dashboard", admin.dashboard)
+get("/admin/contacts", admin.contacts)
+get("/admin/contacts/read", admin.contact_read)
+get("/admin/contacts/replied", admin.contact_replied)
+get("/admin/newsletters", admin.newsletters)
+get("/admin/newsletters/export", admin.export_newsletters)
+get("/admin/logout", admin.logout)
+get("/admin/webhooks", admin.webhooks)
+post("/admin/webhooks/save", admin.save_webhooks)
+post("/admin/webhooks/test/:type", admin.test_webhook)
+get("/admin/articles", admin.articles)
+get("/admin/articles/new", admin.article_new)
+post("/admin/articles/store", admin.article_store)
+get("/admin/articles/edit/:id", admin.article_edit)
+post("/admin/articles/update/:id", admin.article_update)
+post("/admin/articles/delete/:id", admin.article_delete)
+post("/admin/articles/upload-image", admin.article_upload_image)
+get("/admin/formations", admin.formations)
+get("/admin/formations/new", admin.formation_new)
+post("/admin/formations/store", admin.formation_store)
+get("/admin/formations/edit/:id", admin.formation_edit)
+post("/admin/formations/update/:id", admin.formation_update)
+post("/admin/formations/delete/:id", admin.formation_delete)
+get("/admin/media", admin.media)
+post("/admin/media/upload", admin.media_upload)
+post("/admin/media/delete", admin.media_delete)
+get("/admin/analytics", admin.analytics)
+get("/admin/projects", admin.projects)
+get("/admin/projects/:id", admin.project_show)
+post("/admin/projects/:id/status", admin.project_status)
+post("/admin/projects/:id/message", admin.project_message)
+post("/admin/projects/:id/note", admin.project_note)
+post("/admin/projects/:id/generate", admin.project_generate)
+post("/admin/projects/:id/task", admin.project_task)
+post("/admin/projects/task/update", admin.project_task_update)
+post("/admin/projects/:id/price", admin.project_price)
+get("/admin/campaigns", admin.campaigns)
+get("/admin/campaigns/new", admin.new_campaign)
+post("/admin/campaigns/delete/:id", admin.delete_campaign)
 
 ROUTES = R

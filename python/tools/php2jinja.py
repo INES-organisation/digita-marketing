@@ -20,7 +20,7 @@ JINJA_RESERVED = {
     "not", "and", "or", "if", "else", "for", "def", "lambda", "none", "true", "false",
     "import", "with", "as", "pass", "return", "yield", "global", "del", "try", "while",
     "super", "namespace", "content",
-    "h",  # helper htmlspecialchars : foreach ($history as $h) le masquerait
+    "h", "cat",  # helpers htmlspecialchars et concaténation : foreach ($x as $h) les masquerait
 }
 
 FUNC_MAP = {
@@ -188,6 +188,14 @@ class Parser:
                 left = Node(f"cat({left}, {right})")
             elif op in ("&&", "||", "and", "or"):
                 left = boolean(f"({truthy(left)} {jop} {truthy(right)})")
+            elif op in ("===", "!==") and {str(left), str(right)} & {"true", "false"}:
+                # 0 == false est vrai en Python : la comparaison stricte à un booléen garde son type.
+                neg = "not " if op == "!==" else ""
+                left = boolean(f"({neg}same({left}, {right}))")
+            elif op in ("==", "!=", "<>"):
+                # Comparaison souple PHP 8 : '3' == 3 est vrai.
+                neg = "not " if op != "==" else ""
+                left = boolean(f"({neg}loose_eq({left}, {right}))")
             elif op in COMPARISONS:
                 left = boolean(f"({left} {jop} {right})")
             else:
@@ -205,7 +213,7 @@ class Parser:
         if t.kind == "cast":
             self.i += 1
             fn = {"(int)": "intval", "(string)": "strval", "(float)": "floatval",
-                  "(bool)": "t", "(array)": "list"}[t.val]
+                  "(bool)": "t", "(array)": "to_array"}[t.val]
             return Node(f"{fn}({self.unary()})")
         if t.val == "@":
             self.eat("@")

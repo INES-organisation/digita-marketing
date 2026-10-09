@@ -1,0 +1,293 @@
+<div class="container-fluid px-4 py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold mb-1">
+                <i class="bi bi-images text-primary"></i> Bibliothèque de médias
+            </h1>
+            <p class="text-muted mb-0">
+                {{ stats['total'] }} fichier(s) — 
+                {{ round(((stats['total_size'] / 1024) / 1024), 2) }} Mo au total
+            </p>
+        </div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+            <i class="bi bi-cloud-upload-fill"></i> Uploader des fichiers
+        </button>
+    </div>
+
+    <!-- Messages flash -->
+    {% if (isset(_SESSION['success_message'])) %}        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle-fill"></i> {{ h(_SESSION['success_message']) }}            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% do _SESSION.pop('success_message', none) %}    {% endif %}
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-3">
+                    <div class="h4 fw-bold text-primary mb-0">{{ stats['total'] }}</div>
+                    <small class="text-muted">Fichiers</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-3">
+                    <div class="h4 fw-bold text-success mb-0">{{ stats['images'] }}</div>
+                    <small class="text-muted">Images</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-3">
+                    <div class="h4 fw-bold text-info mb-0">{{ round(((stats['total_size'] / 1024) / 1024), 2) }} Mo</div>
+                    <small class="text-muted">Espace utilisé</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grille de médias -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            {% if empty(files) %}                <div class="text-center py-5">
+                    <i class="bi bi-images display-1 text-muted"></i>
+                    <p class="text-muted mt-3">Aucun fichier dans la bibliothèque</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                        <i class="bi bi-cloud-upload-fill"></i> Uploader des fichiers
+                    </button>
+                </div>
+            {% else %}                <div class="row g-3" id="mediaGrid">
+                    {% for file in php_values(files) %}                        <div class="col-lg-2 col-md-3 col-sm-4 col-6 media-item" data-name="{{ h(file['name']) }}">
+                            <div class="card border h-100 media-card">
+                                <div class="media-preview" style="height: 140px; overflow: hidden; cursor: pointer;"
+                                     onclick="showMediaDetail('{{ h(file['url']) }}', '{{ h(file['name']) }}', '{{ file['type'] }}', '{{ round((file['size'] / 1024), 1) }}', '{{ h(file['folder']) }}')">
+                                    {% if (file['type'] == 'image') %}                                        <img src="{{ h(file['url']) }}" 
+                                             class="w-100 h-100" style="object-fit: cover;" alt="{{ h(file['name']) }}">
+                                    {% elif (file['type'] == 'video') %}                                        <div class="w-100 h-100 bg-dark d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-play-circle-fill text-white display-4"></i>
+                                        </div>
+                                    {% elif (file['type'] == 'pdf') %}                                        <div class="w-100 h-100 bg-light d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-file-earmark-pdf-fill text-danger display-4"></i>
+                                        </div>
+                                    {% else %}                                        <div class="w-100 h-100 bg-light d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-file-earmark display-4 text-muted"></i>
+                                        </div>
+                                    {% endif %}                                </div>
+                                <div class="card-body p-2">
+                                    <p class="small mb-0 text-truncate" title="{{ h(file['name']) }}">
+                                        {{ h(file['name']) }}                                    </p>
+                                    <small class="text-muted">{{ round((file['size'] / 1024), 1) }} Ko</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}                </div>
+            {% endif %}        </div>
+    </div>
+</div>
+
+<!-- Modal Upload -->
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <i class="bi bi-cloud-upload-fill text-primary"></i> Uploader des fichiers
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="dropZone" class="border border-2 border-dashed rounded p-5 text-center" 
+                     style="cursor: pointer; border-color: #dee2e6 !important;">
+                    <i class="bi bi-cloud-arrow-up display-3 text-muted"></i>
+                    <p class="mt-2 mb-1">Glissez-déposez vos fichiers ici</p>
+                    <p class="text-muted small">ou cliquez pour sélectionner</p>
+                    <input type="file" id="fileInput" multiple accept="image/*,video/mp4,video/webm,application/pdf" 
+                           style="display: none;">
+                </div>
+                <div id="uploadProgress" class="mt-3" style="display: none;">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                    </div>
+                    <small class="text-muted mt-1 d-block" id="uploadStatus">Upload en cours...</small>
+                </div>
+                <div id="uploadResults" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Détail -->
+<div class="modal fade" id="mediaDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="mediaDetailTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div id="mediaDetailPreview" class="text-center"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="fw-semibold">Informations</h6>
+                        <table class="table table-sm">
+                            <tr><td class="text-muted">Nom</td><td id="detailName"></td></tr>
+                            <tr><td class="text-muted">Taille</td><td id="detailSize"></td></tr>
+                            <tr><td class="text-muted">Type</td><td id="detailType"></td></tr>
+                            <tr><td class="text-muted">Dossier</td><td id="detailFolder"></td></tr>
+                        </table>
+                        <h6 class="fw-semibold mt-3">URL</h6>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="detailUrl" readonly>
+                            <button class="btn btn-outline-primary" onclick="copyUrl()">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-outline-danger btn-sm w-100 mt-3" id="deleteMediaBtn">
+                            <i class="bi bi-trash"></i> Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Drop zone
+var dropZone = document.getElementById('dropZone');
+var fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('click', function() { fileInput.click(); });
+
+dropZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    dropZone.style.borderColor = '#0d6efd';
+    dropZone.style.backgroundColor = '#f0f7ff';
+});
+
+dropZone.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    dropZone.style.borderColor = '#dee2e6';
+    dropZone.style.backgroundColor = '';
+});
+
+dropZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropZone.style.borderColor = '#dee2e6';
+    dropZone.style.backgroundColor = '';
+    uploadFiles(e.dataTransfer.files);
+});
+
+fileInput.addEventListener('change', function() {
+    uploadFiles(this.files);
+});
+
+function uploadFiles(files) {
+    if (files.length === 0) return;
+    
+    var formData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+        formData.append('files[]', files[i]);
+    }
+    
+    var progress = document.getElementById('uploadProgress');
+    var progressBar = progress.querySelector('.progress-bar');
+    var status = document.getElementById('uploadStatus');
+    var results = document.getElementById('uploadResults');
+    
+    progress.style.display = 'block';
+    progressBar.style.width = '0%';
+    status.textContent = 'Upload en cours...';
+    results.innerHTML = '';
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/admin/media/upload');
+    
+    xhr.upload.addEventListener('progress', function(e) {
+        if (e.lengthComputable) {
+            var pct = Math.round((e.loaded / e.total) * 100);
+            progressBar.style.width = pct + '%';
+            status.textContent = pct + '% uploadé...';
+        }
+    });
+    
+    xhr.onload = function() {
+        progressBar.style.width = '100%';
+        try {
+            var response = JSON.parse(xhr.responseText);
+            if (response.success) {
+                status.textContent = response.uploaded.length + ' fichier(s) uploadé(s)';
+                progressBar.classList.remove('progress-bar-animated');
+                progressBar.classList.add('bg-success');
+                setTimeout(function() { location.reload(); }, 1000);
+            } else {
+                status.textContent = 'Erreur lors de l\'upload';
+                progressBar.classList.add('bg-danger');
+            }
+            if (response.errors && response.errors.length > 0) {
+                results.innerHTML = '<div class="alert alert-warning small mt-2">' + response.errors.join('<br>') + '</div>';
+            }
+        } catch(e) {
+            status.textContent = 'Erreur de réponse serveur';
+            progressBar.classList.add('bg-danger');
+        }
+    };
+    
+    xhr.send(formData);
+}
+
+// Détail média
+function showMediaDetail(url, name, type, size, folder) {
+    document.getElementById('mediaDetailTitle').textContent = name;
+    document.getElementById('detailName').textContent = name;
+    document.getElementById('detailSize').textContent = size + ' Ko';
+    document.getElementById('detailType').textContent = type;
+    document.getElementById('detailFolder').textContent = folder;
+    document.getElementById('detailUrl').value = window.location.origin + url;
+    
+    var preview = document.getElementById('mediaDetailPreview');
+    if (type === 'image') {
+        preview.innerHTML = '<img src="' + url + '" class="img-fluid rounded" style="max-height: 400px;">';
+    } else if (type === 'video') {
+        preview.innerHTML = '<video src="' + url + '" controls class="w-100 rounded"></video>';
+    } else {
+        preview.innerHTML = '<div class="p-5"><i class="bi bi-file-earmark display-1 text-muted"></i></div>';
+    }
+    
+    document.getElementById('deleteMediaBtn').onclick = function() {
+        if (confirm('Supprimer ' + name + ' ?')) {
+            deleteMedia(name);
+        }
+    };
+    
+    new bootstrap.Modal(document.getElementById('mediaDetailModal')).show();
+}
+
+function copyUrl() {
+    var input = document.getElementById('detailUrl');
+    input.select();
+    document.execCommand('copy');
+    var btn = input.nextElementSibling;
+    btn.innerHTML = '<i class="bi bi-check"></i>';
+    setTimeout(function() { btn.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 2000);
+}
+
+function deleteMedia(filename) {
+    var formData = new FormData();
+    formData.append('filename', filename);
+    
+    fetch('/admin/media/delete', { method: 'POST', body: formData })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.error || 'Erreur');
+            }
+        });
+}
+</script>

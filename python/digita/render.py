@@ -15,6 +15,7 @@ env = Environment(
 )
 env.globals.update(php.GLOBALS)
 env.globals["const"] = lambda name: config.CONSTANTS.get(name, name)
+env.globals["defined"] = lambda name: name in config.CONSTANTS
 
 
 def base_context(request):

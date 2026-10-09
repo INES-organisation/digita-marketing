@@ -55,3 +55,17 @@ app/Views/payment/success-content.php
 app/Views/projects/brief-form-content.php
 app/Views/projects/client-dashboard-content.php
 app/Views/projects/client-project-content.php
+app/Views/layouts/admin.php
+app/Views/admin/analytics.php
+app/Views/admin/articles/form.php
+app/Views/admin/articles/index.php
+app/Views/admin/campaigns.php
+app/Views/admin/contacts.php
+app/Views/admin/dashboard.php
+app/Views/admin/formations/form.php
+app/Views/admin/formations/index.php
+app/Views/admin/media/index.php
+app/Views/admin/newsletters.php
+app/Views/admin/projects/index.php
+app/Views/admin/projects/show.php
+app/Views/admin/webhooks.php

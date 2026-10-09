@@ -40,6 +40,18 @@ INSERT INTO project_status_history (id, project_id, old_status, new_status, chan
 INSERT INTO client_context (id, session_id, user_id, business_sector, business_goals, target_audience, lead_score,
                             created_at, updated_at) VALUES
   (9451, 'aucune', 9501, 'Restauration', 'Plus de réservations', 'Familles', 70, '2024-01-01 10:00:00', '2024-01-01 10:00:00');
+-- Administration : messages de contact et abonnés newsletter (deux d'aujourd'hui, à la même seconde).
+INSERT INTO contact_messages (id, name, email, phone, subject, message, status, created_at) VALUES
+  (9601, 'Alice', 'alice@example.com', '0692000000', 'Devis site', 'Bonjour, un devis ?', 'new', '2024-03-01 09:00:00'),
+  (9602, 'Bob', 'bob@example.com', NULL, 'Question', 'Une question', 'read', '2024-03-01 09:00:00'),
+  (9603, 'Chloé', 'chloe@example.com', NULL, 'Merci', 'Merci <b>beaucoup</b>', 'replied', '2024-02-01 08:00:00');
+INSERT INTO contact_messages (id, name, email, subject, message) VALUES
+  (9604, 'Dan', 'dan@example.com', 'Aujourd''hui', 'Message du jour');
+INSERT INTO newsletters (id, email, status, created_at) VALUES
+  (9701, 'a@example.com', 'active', '2024-03-01 09:00:00'),
+  (9702, 'b,c@example.com', 'active', '2024-03-01 09:00:00'),
+  (9703, 'd@example.com', 'inactive', '2024-01-01 09:00:00');
+INSERT INTO newsletters (id, email) VALUES (9704, 'today@example.com');
 -- MySQL avance AUTO_INCREMENT après un id explicite, pas PostgreSQL : on aligne les séquences
 -- pour que les lignes créées pendant le parcours reçoivent les mêmes id des deux côtés.
--- pg: DO $$ DECLARE t text; BEGIN FOREACH t IN ARRAY ARRAY['users', 'quizzes', 'quiz_questions', 'quiz_answers', 'promo_codes', 'client_projects', 'project_messages', 'project_files', 'project_tasks', 'project_status_history', 'client_context'] LOOP EXECUTE 'SELECT setval(pg_get_serial_sequence(' || quote_literal(t) || ', ''id''), (SELECT max(id) FROM ' || quote_ident(t) || '))'; END LOOP; END $$;
+-- pg: DO $$ DECLARE t text; BEGIN FOREACH t IN ARRAY ARRAY['users', 'quizzes', 'quiz_questions', 'quiz_answers', 'promo_codes', 'client_projects', 'project_messages', 'project_files', 'project_tasks', 'project_status_history', 'client_context', 'contact_messages', 'newsletters'] LOOP EXECUTE 'SELECT setval(pg_get_serial_sequence(' || quote_literal(t) || ', ''id''), (SELECT max(id) FROM ' || quote_ident(t) || '))'; END LOOP; END $$;
