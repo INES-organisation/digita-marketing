@@ -77,6 +77,8 @@ jobs:
           **/deploy.log
           **/.github/**
           **/scripts/deploy/**
+          **/python/**
+          **/.dockerignore
           **/DEPLOIEMENT.md
           **/CORRECTION_ERREURS.md
       continue-on-error: true

@@ -1,0 +1,4 @@
+-r requirements.txt
+PyMySQL==1.2.3
+pytest==9.1.1
+httpx==0.28.1
