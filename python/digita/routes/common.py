@@ -7,7 +7,7 @@ NOT_PORTED = ("Cette fonctionnalité est en cours de migration vers la nouvelle 
 
 
 def not_ported(request, *args):
-    """Route PHP pas encore convertie (liste dans docs/migration-python/SUIVI_CONVERSION.md)."""
+    """Route PHP pas encore convertie (liste dans docs/migrations/SUIVI_CONVERSION_PYTHON.md)."""
     return HTMLResponse(NOT_PORTED, status_code=501)
 
 

@@ -13,7 +13,7 @@
 |---|---|---|
 | 0 | Données : MySQL → PostgreSQL, vérification ligne à ligne | ✅ fait (sur l'export de février) |
 | 1 | Pages publiques : accueil, pages fixes, blog, catégories, articles, formations, landings, pages légales, outils (formulaires), connexion/inscription (formulaires) | ✅ fait : **1 300 pages sur 1 302 identiques au HTML PHP** |
-| 2 | Formulaires publics : demande d'audit (accueil), chatbot, outils IA (audit SEO, meta, ROI, calendrier), connexion/inscription, suivi analytics | ⏳ à faire |
+| 2 | Formulaires publics : demande d'audit (accueil), chatbot, outils IA (audit SEO, meta, ROI, calendrier), connexion/inscription, suivi analytics | 🔄 en cours : demande d'audit et connexion/inscription faites (**24 réponses sur 24 identiques au PHP**) ; reste chatbot, outils IA, analytics |
 | 3 | Espace élève et paiement : inscription aux formations, leçons, quiz, certificats, avis, Stripe, commandes, factures, espace client projets | ⏳ à faire |
 | 4 | Administration : tableau de bord, articles, formations, médias, projets, campagnes, newsletters, webhooks | ⏳ à faire |
 | 5 | Mise en ligne : base sur le VPS, conteneur, nginx, certificat, DNS, redirection de l'ancien domaine | ⏳ préparé, rien n'est déployé |
@@ -67,6 +67,12 @@ le jeton CSRF (aléatoire) et `dateModified` du jour (mis à jour à chaque vue 
 
 Dernier résultat : **1 300 identiques, 0 différente** (hors `/portfolio` et `/equipe`, voir §6).
 
+Les formulaires sont comparés ensuite par `python/tools/post_parity.py` : 24 envois (champs manquants,
+jeton CSRF absent ou faux, e-mail invalide, compte existant, bonne et mauvaise connexion, 6ᵉ tentative
+bloquée en 429…) donnent le même statut, la même redirection, le même JSON et le même message d'erreur
+dans les deux versions ; les lignes écrites en base sont identiques. Les mots de passe sont hachés en
+`$2y$` comme PHP : un compte créé d'un côté se connecte de l'autre.
+
 ## 5. Routes (public/index.php)
 
 | Groupe | Routes | État |
@@ -78,8 +84,9 @@ Dernier résultat : **1 300 identiques, 0 différente** (hors `/portfolio` et `/
 | Formations (public) | `/formations`, `/formations/search`, `/formations/categorie/:slug`, `/formations/:slug`, `/formations/:slug/landing`, `/certificat/verifier` | ✅ |
 | Outils (affichage) | `/outils/audit-seo`, `/outils/meta-generator`, `/outils/roi-calculator`, `/outils/calendrier-editorial` | ✅ |
 | Outils (traitement IA) | POST des 4 outils, `POST /api/roi-calculate` | ⏳ phase 2 |
-| Connexion | GET `/connexion`, `/inscription` ✅ — POST ⏳ phase 2 | partiel |
-| Leads | `POST /api/audit-request`, chatbot (`/api/chatbot/*`), analytics (`/api/analytics/*`) | ⏳ phase 2 |
+| Connexion | `/connexion`, `/inscription` (affichage et traitement : CSRF, limitation des tentatives, mots de passe bcrypt compatibles PHP) | ✅ |
+| Leads | `POST /api/audit-request` | ✅ |
+| Chatbot, analytics | `/api/chatbot/*`, `/api/analytics/*` | ⏳ phase 2 |
 | Espace élève | `/mes-formations`, inscription, leçons, quiz, avis, certificats | ⏳ phase 3 |
 | Paiement | checkout, Stripe (webhook), promo, commandes, factures | ⏳ phase 3 |
 | Projets clients | `/projets/brief`, `/espace-client/*`, `/api/project-quote`, `/webhook/webox` | ⏳ phase 3 |
@@ -98,6 +105,14 @@ Dernier résultat : **1 300 identiques, 0 différente** (hors `/portfolio` et `/
 - `ORDER BY RAND()` (articles et formations liés) est conservé (aléatoire) en production.
 - La table `users` de l'export ne contient pas `username`, alors que le code PHP l'utilise (avis de
   formations, commandes, projets). L'export de production doit le confirmer.
+- **Accueil, fenêtre « Audit gratuit » (`templates/home.php`, `#auditForm`)** : les champs n'ont pas
+  d'attribut `name` et le script affiche seulement le message de succès, sans rien envoyer. Les demandes
+  saisies dans cette fenêtre sont perdues, en PHP comme en Python (le rendu est reproduit à l'identique).
+  Le formulaire de `conversion-modal.php`, lui, envoie bien vers `/api/audit-request`. À corriger après bascule.
+- E-mails : le PHP utilisait `mail()` d'OVH. Sur le VPS, l'envoi passe par SMTP (`MAIL_HOST`, `MAIL_PORT`,
+  `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM`) ; sans ces variables, la demande est enregistrée en base
+  et l'e-mail est seulement journalisé.
+- Connexion : comme en MySQL, l'e-mail est comparé sans tenir compte de la casse.
 - Le workflow `deploy.yml` envoie le dépôt sur OVH par FTP : `python/` y est désormais exclu.
 
 ## 7. Ce qu'il faut avant la mise en ligne (bloquants)
@@ -108,7 +123,7 @@ Dernier résultat : **1 300 identiques, 0 différente** (hors `/portfolio` et `/
 3. **DNS de digita.buzz** (zone OVH) : `A digita.buzz → 37.187.219.225` et `A www → 37.187.219.225`.
    Ne pas toucher à `lp48.digita.buzz`.
 4. **Feu vert explicite** avant toute action sur le VPS (rien n'a été déployé).
-5. Pour les phases 2-3 : clés de production Stripe, SMTP et OpenAI (actuellement dans le `.env` OVH).
+5. Pour les phases 2-3 : clés de production Stripe, SMTP (`MAIL_*`) et OpenAI (actuellement dans le `.env` OVH).
 
 ## 8. Procédure de mise en ligne (à exécuter seulement après feu vert)
 
@@ -148,3 +163,4 @@ Retour arrière : retirer le bloc nginx et recharger nginx (le site OVH n'est pa
 | 09/10/2026 | Base PHP de référence montée en local (export février + migrations), 1 302 pages aspirées. |
 | 09/10/2026 | Données copiées vers PostgreSQL, 43 tables, contrôle ligne à ligne OK. |
 | 09/10/2026 | Phase 1 : app FastAPI + 44 templates, 1 300/1 302 pages identiques ; image Docker testée (≈ 145 Mo RAM). |
+| 09/10/2026 | Phase 2 : demande d'audit, connexion et inscription converties, 24/24 réponses identiques au PHP. |

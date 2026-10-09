@@ -61,3 +61,6 @@ echo "▶ Aspiration et comparaison"
 # /portfolio et /equipe : templates absents côté PHP (erreur), écart connu et voulu.
 rm -f "$WORK"/php/portfolio-*.html "$WORK"/php/equipe-*.html "$WORK"/py/portfolio-*.html "$WORK"/py/equipe-*.html
 "$PY" "$ROOT/python/tools/parity.py" diff "$WORK/php" "$WORK/py"
+
+echo "▶ Formulaires (audit, connexion, inscription)"
+"$PY" "$ROOT/python/tools/post_parity.py" http://127.0.0.1:8081 http://127.0.0.1:8000

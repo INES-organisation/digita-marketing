@@ -3,7 +3,7 @@
 Chaque entrée : (méthode, chemin PHP avec :param, fonction). Les routes que la
 version Python ne gère pas encore pointent vers `not_ported` (voir le doc de suivi).
 """
-from . import pages, blog, formations, tools, auth
+from . import pages, blog, formations, tools, auth, leads
 from .common import not_ported
 
 R = []
@@ -51,7 +51,7 @@ get("/mes-commandes/:id", not_ported)
 get("/facture/:id", not_ported)
 
 # ---------------------------------------------------------------- leads / projets
-post("/api/audit-request", not_ported)
+post("/api/audit-request", leads.submit_audit)
 get("/projets/brief", not_ported)
 post("/projets/brief", not_ported)
 post("/api/project-quote", not_ported)
@@ -106,9 +106,9 @@ get("/cookies", pages.legal("cookies", "Politique des Cookies - Digita Marketing
 
 # ---------------------------------------------------------------- authentification
 get("/connexion", auth.show_login)
-post("/connexion", not_ported)
+post("/connexion", auth.login)
 get("/inscription", auth.show_register)
-post("/inscription", not_ported)
+post("/inscription", auth.register)
 
 # ---------------------------------------------------------------- administration (phase 4)
 for _p in ["/admin/dashboard", "/admin/contacts", "/admin/contacts/read", "/admin/contacts/replied",

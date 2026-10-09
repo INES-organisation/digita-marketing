@@ -3,15 +3,18 @@
 Ordre de résolution identique au PHP : fichier statique existant dans public/,
 puis route exacte, puis routes à paramètres dans l'ordre de déclaration, sinon 404.
 """
+import inspect
 import re
 from pathlib import Path
 
 from fastapi import FastAPI, Request
+from starlette.concurrency import run_in_threadpool
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import FileResponse, PlainTextResponse, Response
 
 from . import config
 from .routes import ROUTES
+from .security import Abort
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, redirect_slashes=False)
 app.add_middleware(SessionMiddleware, secret_key=config.SECRET_KEY, session_cookie="DIGITASESSID",
@@ -81,7 +84,12 @@ async def dispatch(request: Request, full_path: str):
     if handler is None:
         return PlainTextResponse("Page non trouvée", status_code=404, media_type="text/html")
 
-    resp = handler(request, *args)
-    if hasattr(resp, "__await__"):
-        resp = await resp
+    try:
+        if inspect.iscoroutinefunction(handler):
+            resp = await handler(request, *args)
+        else:
+            # Les vues font des requêtes SQL bloquantes : pool de threads.
+            resp = await run_in_threadpool(handler, request, *args)
+    except Abort as stop:
+        resp = stop.response
     return resp if isinstance(resp, Response) else Response(resp)
