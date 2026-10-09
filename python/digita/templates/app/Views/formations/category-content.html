@@ -1,0 +1,103 @@
+<!-- Hero Section Catégorie -->
+<section class="hero-section text-white">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb bg-transparent mb-0">
+                <li class="breadcrumb-item"><a href="/" class="text-white text-decoration-none">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="/formations" class="text-white text-decoration-none">Formations</a></li>
+                <li class="breadcrumb-item active text-white" aria-current="page">{{ h(category['name']) }}</li>
+            </ol>
+        </nav>
+        
+        <h1 class="display-4 fw-bold mb-3">
+            {{ category['icon'] }} {{ h(category['name']) }}        </h1>
+        <p class="lead mb-0">{{ totalFormations }} formation(s) dans cette catégorie</p>
+    </div>
+</section>
+
+<!-- Catégorie Formations -->
+<section class="formations-category-page bg-light py-5">
+    <div class="container">
+        
+        <div class="row">
+            <!-- Colonne principale -->
+            <div class="col-lg-8">
+                {% if empty(formations) %}                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> Aucune formation dans cette catégorie pour le moment.
+                    </div>
+                {% else %}                    <div class="row g-4">
+                        {% for formation in php_values(formations) %}                            <div class="col-md-6">
+                                <div class="card h-100 shadow-sm hover-lift">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <span class="badge bg-{{ ('success' if (formation['level'] == 'debutant') else (('warning' if (formation['level'] == 'intermediaire') else 'danger'))) }}">
+                                                {{ ucfirst(formation['level']) }}                                            </span>
+                                            <span class="text-muted small">
+                                                <i class="bi bi-clock"></i> {{ formation['duration_hours'] }}h
+                                            </span>
+                                        </div>
+                                        
+                                        <h5 class="card-title mb-3">
+                                            <a href="/formations/{{ h(formation['slug']) }}" class="text-dark text-decoration-none">
+                                                {{ h(formation['title']) }}                                            </a>
+                                        </h5>
+                                        
+                                        <p class="card-text text-muted small mb-3">
+                                            {{ h(mb_substr(formation['description'], 0, 100)) }}...
+                                        </p>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="text-primary fw-bold">{{ number_format(formation['price'], 2) }} €</span>
+                                            <div class="d-flex gap-2">
+                                                {% if (not empty(formation['article_slug'])) %}                                                    <a href="/blog/{{ h(formation['article_slug']) }}" class="btn btn-sm btn-outline-secondary" title="Lire l'article associé">
+                                                        <i class="bi bi-file-text"></i> Article
+                                                    </a>
+                                                {% endif %}                                                <a href="/formations/{{ h(formation['slug']) }}" class="btn btn-sm btn-outline-primary">
+                                                    Voir détails <i class="bi bi-arrow-right"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}                    </div>
+                    
+                    <!-- Pagination -->
+                    {% if (totalPages > 1) %}                        <nav aria-label="Navigation pagination" class="mt-5">
+                            <ul class="pagination justify-content-center">
+                                {% for i in php_upto(1, totalPages, true) %}                                    <li class="page-item {{ ('active' if (i == page) else '') }}">
+                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}                            </ul>
+                        </nav>
+                    {% endif %}                {% endif %}            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Catégories -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-grid-3x3"></i> Autres Catégories</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for cat in php_values(categories) %}                            <a href="/formations/categorie/{{ cat['slug'] }}" 
+                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ ('active' if (cat['slug'] == category['slug']) else '') }}">
+                                <span class="category-name">
+                                    {{ cat['icon'] }} {{ h(cat['name']) }}                                </span>
+                                <span class="badge bg-primary rounded-pill">{{ cat['formation_count'] }}</span>
+                            </a>
+                        {% endfor %}                    </div>
+                </div>
+                
+                <!-- Retour aux formations -->
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <a href="/formations" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-arrow-left"></i> Toutes les formations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

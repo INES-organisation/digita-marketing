@@ -1,0 +1,154 @@
+<!-- Hero Section Boutique -->
+<section class="boutique-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">🛒 Boutique Digita</h1>
+                <p class="lead mb-4">
+                    Découvrez notre sélection de produits et services digitaux prêts à l'emploi.
+                    Templates, formations, outils et bien plus encore !
+                </p>
+                
+                <!-- Barre de recherche -->
+                <form action="/boutique/search" method="GET" class="search-form">
+                    <div class="input-group input-group-lg">
+                        <input type="text" name="q" class="form-control" placeholder="Rechercher un produit..." required>
+                        <button class="btn btn-light" type="submit">
+                            <i class="bi bi-search"></i> Rechercher
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4 text-center d-none d-lg-block">
+                <i class="bi bi-shop hero-icon"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Catégories -->
+<section class="py-4 bg-light border-bottom">
+    <div class="container">
+        <div class="categories-scroll d-flex gap-2 overflow-auto pb-2">
+            <a href="/boutique" class="btn btn-outline-primary">
+                <i class="bi bi-grid-3x3"></i> Tous
+            </a>
+            <a href="/boutique/categorie/templates" class="btn btn-outline-primary">
+                <i class="bi bi-file-earmark-code"></i> Templates
+                <span class="badge bg-primary">12</span>
+            </a>
+            <a href="/boutique/categorie/formations" class="btn btn-outline-primary">
+                <i class="bi bi-mortarboard"></i> Formations
+                <span class="badge bg-primary">25</span>
+            </a>
+            <a href="/boutique/categorie/outils" class="btn btn-outline-primary">
+                <i class="bi bi-tools"></i> Outils
+                <span class="badge bg-primary">8</span>
+            </a>
+            <a href="/boutique/categorie/services" class="btn btn-outline-primary">
+                <i class="bi bi-briefcase"></i> Services
+                <span class="badge bg-primary">15</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Produits Populaires -->
+<section class="py-5">
+    <div class="container">
+        <h3 class="mb-4"><i class="bi bi-fire text-danger"></i> Produits Populaires</h3>
+        <div class="row g-4">
+            <!-- Produit 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm hover-lift">
+                    <div class="card-img-placeholder bg-primary d-flex align-items-center justify-content-center">
+                        <i class="bi bi-file-earmark-code large-icon text-white"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-primary">Template</span>
+                            <span class="badge bg-danger">
+                                <i class="bi bi-fire"></i> Populaire
+                            </span>
+                        </div>
+                        <h5 class="card-title">Template Site E-commerce</h5>
+                        <p class="card-text text-muted small">Template complet pour créer votre boutique en ligne avec toutes les fonctionnalités essentielles.</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="h5 mb-0 text-primary">297.00 €</div>
+                            <a href="/boutique/template-ecommerce" class="btn btn-sm btn-outline-primary">
+                                Voir <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produit 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm hover-lift">
+                    <div class="card-img-placeholder bg-success d-flex align-items-center justify-content-center">
+                        <i class="bi bi-mortarboard large-icon text-white"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-success">Formation</span>
+                            <span class="badge bg-danger">
+                                <i class="bi bi-fire"></i> Populaire
+                            </span>
+                        </div>
+                        <h5 class="card-title">Pack Formation Marketing Digital</h5>
+                        <p class="card-text text-muted small">Formation complète incluant SEO, réseaux sociaux, publicité en ligne et analytics.</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="h5 mb-0 text-success">497.00 €</div>
+                            <a href="/boutique/pack-formation-marketing" class="btn btn-sm btn-outline-success">
+                                Voir <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produit 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm hover-lift">
+                    <div class="card-img-placeholder bg-warning d-flex align-items-center justify-content-center">
+                        <i class="bi bi-tools large-icon text-white"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-warning">Outil</span>
+                            <span class="badge bg-danger">
+                                <i class="bi bi-fire"></i> Populaire
+                            </span>
+                        </div>
+                        <h5 class="card-title">Suite Outils Marketing</h5>
+                        <p class="card-text text-muted small">Pack complet d'outils pour gérer vos campagnes marketing : planification, analytics, automation.</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="h5 mb-0 text-warning">197.00 €</div>
+                            <a href="/boutique/suite-outils-marketing" class="btn btn-sm btn-outline-warning">
+                                Voir <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tous les produits -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h3 class="mb-4">Tous les produits</h3>
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Catalogue en cours de construction. Revenez bientôt pour découvrir tous nos produits !
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+{% set ctaTitle = "Besoin d'un Produit Sur-Mesure ?" %}{% set ctaText = 'Nous créons des solutions personnalisées adaptées à vos besoins spécifiques.' %}{% set ctaLink = '/contact' %}{% set ctaButton = 'Nous contacter' %}{% set projectRoot = dirname(dirname(dirname(const('__DIR__')))) %}{% if once('includes/partials/cta-section.html') %}{% include 'includes/partials/cta-section.html' %}{% endif %}
