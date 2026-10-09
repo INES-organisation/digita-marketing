@@ -25,7 +25,7 @@ INSERT INTO users (id, username, email, password, role) VALUES
   (9501, 'Admin Test', 'admin-test@example.com', '$2y$10$B2nd82v8svuWAQDf6q7dgeMkbRzmMA7lwyrgbQONlFDYK3O5LkMAi', 'admin');
 INSERT INTO client_projects (id, client_id, project_type, title, brief, brief_data, status, priority, webox_project_id,
                              price, estimated_days, created_at, updated_at) VALUES
-  (9401, 9501, 'website', 'Site de test', 'Brief de test', '{"pages": 6, "colors": ["bleu"]}', 'generating', 'normal',
+  (9401, 9501, 'website', 'Site de test', 'Brief de test', '{"pages": 6, "colors": ["bleu"]}', 'generating', 'low',
    'wbx-9401', 550.00, 7, '2024-01-01 10:00:00', '2024-01-02 10:00:00');
 INSERT INTO project_messages (id, project_id, user_id, message, is_admin, is_read, attachment, created_at) VALUES
   (9411, 9401, 9501, 'Bienvenue sur votre projet', 1, 0, NULL, '2024-01-01 11:00:00'),
