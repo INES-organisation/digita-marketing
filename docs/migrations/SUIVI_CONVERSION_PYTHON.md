@@ -148,7 +148,7 @@ Sur le VPS (`ssh ines-vps`) :
 # 1. Code
 sudo git clone https://github.com/INES-organisation/digita-marketing.git /opt/digita
 cd /opt/digita && git checkout <branche ou main après merge>
-cp python/deploy/.env.example python/deploy/.env   # remplir mot de passe, SECRET_KEY
+cp python/deploy/.env.example python/deploy/.env   # remplir le mot de passe de la base, SMTP, OpenAI
 
 # 2. Base « digita » dans ines-postgres (utilisateur dédié, propriétaire de sa base)
 docker exec -i ines-postgres psql -U ines -d ines_db -c "CREATE ROLE digita LOGIN PASSWORD '…'" \

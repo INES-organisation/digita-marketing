@@ -1,6 +1,6 @@
 """Formations (équivalent de app/Models/Formation.php, partie publique)."""
-from .. import db
-from . import like_ci, rand_order, sort_by_name
+from .. import db, php
+from . import key, like_ci, rand_order, sort_by_name
 
 
 def _select(icon=True):
@@ -110,3 +110,91 @@ def get_categories():
            LEFT JOIN formations f ON c.id = f.category_id AND f.status = 'published'
            GROUP BY c.id HAVING COUNT(f.id) > 0 ORDER BY c.id""")
     return sort_by_name(rows)
+
+
+# ---------------------------------------------------------------- espace élève
+def get_by_id(formation_id):
+    return db.fetch(_select(icon=False) + " WHERE f.id = ?", [key(formation_id)])
+
+
+def enroll(user_id, formation_id):
+    try:
+        db.execute("INSERT INTO formation_enrollments (user_id, formation_id) VALUES (?, ?)", [user_id, formation_id])
+        db.execute("UPDATE formations SET enrolled_count = enrolled_count + 1 WHERE id = ?", [formation_id])
+        return True
+    except Exception:  # noqa: BLE001 — catch (Exception) PHP
+        return False
+
+
+def get_progress(user_id, formation_id):
+    formation_id = key(formation_id)
+    enrollment = db.fetch("SELECT * FROM formation_enrollments WHERE user_id = ? AND formation_id = ?",
+                          [user_id, formation_id])
+    if not enrollment:
+        return None
+    total = db.fetch("SELECT COUNT(*) as total FROM formation_lessons fl JOIN formation_modules fm "
+                     "ON fl.module_id = fm.id WHERE fm.formation_id = ?", [formation_id])["total"]
+    done = db.fetch("SELECT COUNT(*) as total FROM lesson_completions WHERE user_id = ? AND formation_id = ?",
+                    [user_id, formation_id])["total"]
+    enrollment["total_lessons"] = int(total)
+    enrollment["completed_lessons"] = int(done)
+    enrollment["percentage"] = php.php_round(done / total * 100) if total > 0 else 0
+    return enrollment
+
+
+def get_completed_lessons(user_id, formation_id):
+    return [r["lesson_id"] for r in db.fetch_all(
+        "SELECT lesson_id FROM lesson_completions WHERE user_id = ? AND formation_id = ? ORDER BY id",
+        [user_id, key(formation_id)])]
+
+
+def complete_lesson(user_id, lesson_id, formation_id):
+    try:
+        db.execute("INSERT INTO lesson_completions (user_id, lesson_id, formation_id) VALUES (?, ?, ?) "
+                   "ON CONFLICT DO NOTHING", [user_id, lesson_id, formation_id])  # INSERT IGNORE
+        progress = get_progress(user_id, formation_id)
+        if progress:
+            db.execute("UPDATE formation_enrollments SET progress = ? WHERE user_id = ? AND formation_id = ?",
+                       [progress["percentage"], user_id, formation_id])
+        return True
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def get_user_formations(user_id):
+    formations = db.fetch_all(
+        """SELECT f.*, fe.progress, fe.completed, fe.enrolled_at, fe.completed_at,
+                  c.name as category_name, c.slug as category_slug
+           FROM formations f
+           JOIN formation_enrollments fe ON f.id = fe.formation_id
+           LEFT JOIN service_categories c ON f.category_id = c.id
+           WHERE fe.user_id = ?
+           ORDER BY fe.enrolled_at DESC NULLS LAST, fe.id DESC""", [user_id])
+    for f in formations:
+        progress = get_progress(user_id, f["id"])
+        if progress:
+            f["percentage"] = progress["percentage"]
+            f["total_lessons"] = progress["total_lessons"]
+            f["completed_lessons"] = progress["completed_lessons"]
+    return formations
+
+
+def add_review(user_id, formation_id, data):
+    try:
+        db.execute(
+            """INSERT INTO formation_reviews (user_id, formation_id, rating, title, comment)
+               VALUES (?, ?, ?, ?, ?)
+               ON CONFLICT (user_id, formation_id) DO UPDATE SET rating = EXCLUDED.rating,
+               title = EXCLUDED.title, comment = EXCLUDED.comment, status = 'pending'""",
+            [user_id, formation_id, data["rating"], data.get("title"), data.get("comment")])
+        _update_average_rating(formation_id)
+        return True
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def _update_average_rating(formation_id):
+    avg = db.fetch("SELECT AVG(rating) as avg_rating FROM formation_reviews "
+                   "WHERE formation_id = ? AND status = 'approved'", [formation_id])["avg_rating"]
+    db.execute("UPDATE formations SET rating = ? WHERE id = ?",
+               [php.php_round(avg, 2) if avg is not None else 0, formation_id])

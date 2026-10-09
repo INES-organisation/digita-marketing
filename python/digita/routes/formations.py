@@ -38,6 +38,8 @@ def show(request, slug):
     is_enrolled, progress, user_review = False, None, None
     if user_id is not None:
         is_enrolled = Formation.is_enrolled(user_id, f["id"])
+        if is_enrolled:
+            progress = Formation.get_progress(user_id, f["id"])
     reviews = Formation.get_reviews(f["id"])
     average = Formation.get_average_rating(f["id"])
     if user_id is not None:

@@ -26,6 +26,8 @@ LOAD_TIME = [
     (re.compile(r"\d+(\.\d+)?s( \(idéal &lt; 2s\)| \(trop lent\))?</"), "Ns</"),
     (re.compile(r'"load_time":[\d.]+'), '"load_time":N'),
     (re.compile(r"https?://(127\.0\.0\.1|localhost)(:\d+)?"), "http://HOST"),
+    (re.compile(r"DM-\d{4}-[0-9A-F]{8}"), "DM-NUMERO"),
+    (re.compile(r"\d{4}-\d\d-\d\d \d\d:\d\d:\d\d"), "TIMESTAMP"),
 ]
 
 
@@ -121,7 +123,8 @@ def run(base):
 
     def call(method, path, data=None, params=None, page=False):
         r = c.request(method, path, data=data, params=params)
-        body = clean(r.text) if page else re.sub(r'"conversation_id":"?\d+"?', '"conversation_id":N', r.text)
+        body = clean(r.text) if page else re.sub(r'"conversation_id":"?\d+"?', '"conversation_id":N',
+                                                  LOAD_TIME[-1][0].sub("TIMESTAMP", r.text))
         loc = r.headers.get("location")
         if loc:
             loc = re.sub(r"^https?://[^/]+", "", loc)
@@ -166,6 +169,54 @@ def run(base):
     call("POST", "/api/analytics/conversion", {"event_type": "contact"})
     c = c3  # connecté avec un compte « user »
     call("POST", "/api/analytics/pageview", {"page_url": "/"})
+
+    # espace élève (données de tools/fixtures_forms.sql : formation 2 gratuite, quiz 9001)
+    free = "/formations/formation-cration-et-planification-de-contenu"
+    paid = "/formations/formation-community-management"
+    c = httpx.Client(base_url=base, follow_redirects=False, headers={"User-Agent": "parity6"})
+    for path in ("/mes-formations", free + "/learn", "/formations/quiz/9001", "/formations/2/certificate"):
+        call("GET", path)
+    call("POST", free + "/inscription")
+    call("POST", "/formations/complete-lesson", {"lesson_id": "21", "formation_id": "2"})
+    t = tok("/inscription")
+    c.post("/inscription", data={"_csrf_token": t, "email": "eleve@example.com", "password": "motdepasse1",
+                                 "password2": "motdepasse1"})
+    call("GET", "/mes-formations", page=True)
+    call("POST", paid + "/inscription")
+    call("POST", "/formations/inexistante/inscription")
+    call("GET", free + "/learn")
+    call("GET", free, page=True)
+    call("POST", "/formations/2/review", {"rating": "4"})
+    call("POST", free + "/inscription")
+    call("GET", free, page=True)
+    call("POST", free + "/inscription")
+    call("GET", free + "/learn", page=True)
+    call("GET", free + "/learn", params={"lesson": "23"}, page=True)
+    call("GET", free + "/learn", params={"lesson": "abc"}, page=True)
+    call("GET", "/formations/2/certificate")
+    call("GET", free + "/learn", page=True)
+    call("POST", "/formations/complete-lesson", {"lesson_id": "21"})
+    for lesson in (21, 22, 22, 23):
+        call("POST", "/formations/complete-lesson", {"lesson_id": str(lesson), "formation_id": "2"})
+    call("GET", free + "/learn", params={"lesson": "24"}, page=True)
+    call("GET", "/formations/quiz/9001", page=True)
+    call("GET", "/formations/quiz/424242", page=True)
+    call("POST", "/formations/quiz/9001/submit", {"question_9101": "9201", "question_9102[]": ["9204", "9203"],
+                                                 "question_9103": "9207"})
+    call("GET", "/formations/quiz/9001/results", page=True)
+    call("GET", "/formations/quiz/9001/results", page=True)
+    call("POST", "/formations/quiz/9001/submit", {"question_9101": "9202"})
+    call("POST", "/formations/quiz/9001/submit", {"question_9101": "9201"})
+    call("GET", "/formations/quiz/9001", page=True)
+    call("POST", "/formations/2/review", {"rating": "9", "title": " Super ", "comment": "Très bien"})
+    call("POST", "/formations/2/review", {"rating": "0", "title": "Bof"})
+    call("GET", free, page=True)
+    for lesson in range(24, 41):
+        call("POST", "/formations/complete-lesson", {"lesson_id": str(lesson), "formation_id": "2"})
+    call("GET", free + "/learn", params={"lesson": "40"}, page=True)
+    call("GET", "/formations/2/certificate", page=True)
+    call("GET", "/formations/2abc/certificate", page=True)
+    call("GET", "/mes-formations", page=True)
     return out
 
 

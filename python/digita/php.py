@@ -506,6 +506,41 @@ def preg_match(pattern, subject):
     return 1 if _pcre(pattern).search(strval(subject)) else 0
 
 
+def loose_eq(a, b):
+    """Comparaison == de PHP 8 (scalaires et tableaux)."""
+    if is_undef(a):
+        a = None
+    if is_undef(b):
+        b = None
+    if a is None and b is None:
+        return True
+    if a is None or b is None:
+        other = b if a is None else a
+        return other == "" if isinstance(other, str) else not t(other)
+    if isinstance(a, bool) or isinstance(b, bool):
+        return t(a) == t(b)
+    if isinstance(a, (list, tuple)) and isinstance(b, (list, tuple)):
+        return len(a) == len(b) and all(loose_eq(x, y) for x, y in zip(a, b))
+    if isinstance(a, (int, float, Decimal)) and isinstance(b, str):
+        return float(a) == float(b) if is_numeric(b) else strval(a) == b
+    if isinstance(b, (int, float, Decimal)) and isinstance(a, str):
+        return loose_eq(b, a)
+    if isinstance(a, str) and isinstance(b, str) and is_numeric(a) and is_numeric(b):
+        return float(a) == float(b)
+    return a == b
+
+
+def preg_matches(pattern, subject):
+    """Tableau $matches rempli par preg_match($pattern, $subject, $matches)."""
+    m = _pcre(pattern).search(strval(subject))
+    if not m:
+        return []
+    groups = list(m.groups())
+    while groups and groups[-1] is None:
+        groups.pop()  # PHP omet les groupes finaux non capturés
+    return [m.group(0)] + ["" if g is None else g for g in groups]
+
+
 def json_decode(s, assoc=False):
     import json
     try:
@@ -546,6 +581,6 @@ GLOBALS = {
     "array_keys": array_keys, "array_sum": array_sum, "array_map": array_map,
     "in_array": in_array, "array_merge": array_merge, "is_array": is_array,
     "is_numeric": is_numeric, "abs": abs, "rtrim": rtrim, "ltrim": ltrim, "parse_url": parse_url,
-    "preg_replace": preg_replace, "preg_match": preg_match, "json_decode": json_decode,
+    "preg_replace": preg_replace, "preg_match": preg_match, "preg_matches": preg_matches, "json_decode": json_decode,
     "dirname": dirname, "php_upto": php_upto,
 }

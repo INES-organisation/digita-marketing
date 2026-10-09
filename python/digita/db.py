@@ -1,5 +1,6 @@
 """Accès base de données : même interface que la classe Database PHP (fetch/fetchAll)."""
 import datetime as dt
+import json
 import re
 
 from sqlalchemy import create_engine, text
@@ -15,6 +16,9 @@ def _php_value(v):
         return v.strftime("%Y-%m-%d %H:%M:%S")
     if isinstance(v, dt.date):
         return v.strftime("%Y-%m-%d")
+    if isinstance(v, (dict, list)):
+        # Colonne jsonb : PDO renvoie le texte JSON tel que MySQL le formate.
+        return json.dumps(v, ensure_ascii=False)
     return v
 
 

@@ -1,6 +1,5 @@
 """Équivalents de CsrfMiddleware::check() et RateLimitMiddleware::check()."""
 import hashlib
-import secrets
 import re
 
 from starlette.responses import Response
@@ -66,11 +65,9 @@ def valid_email(s):
 
 
 def session_id(request):
-    """Équivalent de session_id() : identifiant stable de la session du visiteur."""
-    sid = request.session.get("_sid")
-    if not sid:
-        sid = request.session["_sid"] = secrets.token_hex(16)
-    return sid
+    """Équivalent de session_id() : identifiant de la session du visiteur."""
+    request.scope["session_id_used"] = True
+    return request.scope["session_id"]
 
 
 def remote_addr(request):

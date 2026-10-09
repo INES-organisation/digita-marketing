@@ -3,7 +3,7 @@
 Chaque entrée : (méthode, chemin PHP avec :param, fonction). Les routes que la
 version Python ne gère pas encore pointent vers `not_ported` (voir le doc de suivi).
 """
-from . import pages, blog, formations, tools, auth, leads, chatbot, analytics
+from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning
 from .common import not_ported
 
 R = []
@@ -28,16 +28,16 @@ get("/blog/:slug", blog.show)
 # ---------------------------------------------------------------- formations
 get("/formations", formations.index)
 get("/formations/search", formations.search)
-get("/mes-formations", not_ported)
+get("/mes-formations", learning.my_formations)
 get("/formations/categorie/:slug", formations.category)
-post("/formations/:slug/inscription", not_ported)
-get("/formations/:slug/learn", not_ported)
-post("/formations/complete-lesson", not_ported)
-get("/formations/quiz/:id", not_ported)
-post("/formations/quiz/:id/submit", not_ported)
-get("/formations/quiz/:id/results", not_ported)
-post("/formations/:id/review", not_ported)
-get("/formations/:id/certificate", not_ported)
+post("/formations/:slug/inscription", learning.enroll)
+get("/formations/:slug/learn", learning.learn)
+post("/formations/complete-lesson", learning.complete_lesson)
+get("/formations/quiz/:id", learning.quiz)
+post("/formations/quiz/:id/submit", learning.submit_quiz)
+get("/formations/quiz/:id/results", learning.quiz_results)
+post("/formations/:id/review", learning.review)
+get("/formations/:id/certificate", learning.certificate)
 get("/certificat/verifier", formations.verify_certificate)
 get("/formations/:slug/landing", formations.landing)
 get("/formations/checkout/:id", not_ported)

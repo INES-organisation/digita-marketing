@@ -11,7 +11,7 @@ env = Environment(
     undefined=ChainableUndefined,
     finalize=php.finalize,     # echo PHP : null → '', true → '1', 2.0 → '2'
     keep_trailing_newline=True,
-    extensions=["jinja2.ext.do"],
+    extensions=["jinja2.ext.do", "jinja2.ext.loopcontrols"],
 )
 env.globals.update(php.GLOBALS)
 env.globals["const"] = lambda name: config.CONSTANTS.get(name, name)

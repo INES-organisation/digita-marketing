@@ -22,3 +22,9 @@ def rand_order(alias):
 def like_ci(column):
     """LIKE insensible à la casse et aux accents, comme MySQL en utf8mb4_unicode_ci."""
     return f"unaccent(lower({column})) LIKE unaccent(lower(?))"
+
+
+def key(v):
+    """Valeur comparée à une colonne entière, convertie comme MySQL ('12abc' → 12, 'abc' → 0)."""
+    from .. import php
+    return php.num(v)

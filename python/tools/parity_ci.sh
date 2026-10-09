@@ -62,5 +62,7 @@ echo "▶ Aspiration et comparaison"
 rm -f "$WORK"/php/portfolio-*.html "$WORK"/php/equipe-*.html "$WORK"/py/portfolio-*.html "$WORK"/py/equipe-*.html
 "$PY" "$ROOT/python/tools/parity.py" diff "$WORK/php" "$WORK/py"
 
-echo "▶ Formulaires (audit, connexion, inscription)"
+echo "▶ Formulaires et espaces connectés"
+"$PY" "$ROOT/python/tools/apply_sql.py" "mysql+pymysql://root:$MYSQL_PWD@$MYSQL_HOST/digita?charset=utf8mb4" "$ROOT/python/tools/fixtures_forms.sql"
+"$PY" "$ROOT/python/tools/apply_sql.py" "$PG_URL" "$ROOT/python/tools/fixtures_forms.sql"
 "$PY" "$ROOT/python/tools/post_parity.py" http://127.0.0.1:8081 http://127.0.0.1:8000

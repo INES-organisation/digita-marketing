@@ -14,14 +14,6 @@ def edit(rel, fn):
     p.write_text(new, encoding="utf-8")
 
 
-def unset_session(s):
-    return re.sub(r"\{# FIXME php: unset\(\$_SESSION\['(\w+)'\]\) #\}", r"{% do _SESSION.pop('\1', none) %}", s)
-
-
-for rel in ["app/Views/outils/meta-generator-content.html", "app/Views/outils/editorial-calendar-content.html",
-            "app/Views/outils/seo-audit-content.html", "app/Views/formations/show-content.html"]:
-    edit(rel, unset_session)
-
 edit("app/Views/layouts/main.html", lambda s: s.replace(
     "{# FIXME php: if (isset($canonical)) $canonicalUrl = $canonical #}",
     "{% if isset(canonical) %}{% set canonicalUrl = canonical %}{% endif %}"))
@@ -46,6 +38,24 @@ edit("templates/home.html", capture)
 
 for rel in ["app/Views/auth/login.html", "app/Views/auth/register.html"]:
     edit(rel, lambda s: re.sub(r"\{% if once\('app/Middleware/CsrfMiddleware.html'\) %\}\{% include [^%]*%\}\{% endif %\}", "", s))
+
+def preg_match_capture(s):
+    return re.sub(r"\{# FIXME php: preg_match\(('[^']*'), \$(\w+), \$matches\) #\}",
+                  r"{% set matches = preg_matches(\1, \2) %}", s)
+
+
+edit("app/Views/formations/learn-content.html", preg_match_capture)
+
+
+def count_completed(s):
+    for neg, flt in (("!", "rejectattr"), ("", "selectattr")):
+        s = s.replace("{# FIXME php (expression inattendue : op:{): count(array_filter($formations, function($f) "
+                      "{ return %s$f['completed']; })) #}" % neg,
+                      "{{ count(php_values(formations)|%s('completed')|list) }}" % flt)
+    return s
+
+
+edit("app/Views/formations/my-formations-content.html", count_completed)
 
 left = [str(p.relative_to(T)) for p in T.rglob("*.html") if "FIXME" in p.read_text(encoding="utf-8")]
 print("FIXME restants :", left or "aucun")

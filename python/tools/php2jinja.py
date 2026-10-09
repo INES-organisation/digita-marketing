@@ -30,6 +30,10 @@ FUNC_MAP = {
 
 
 def var_name(name):
+    # Variables modifiées dans une boucle : en Jinja un {% set %} dans un {% for %} ne sort pas
+    # de l'itération ; elles vivent donc dans un namespace (_ns) pour garder la portée PHP.
+    if name in CURRENT.get("ns_vars", ()):
+        return "_ns." + name
     return name + "_" if name.lower() in JINJA_RESERVED else name
 
 
@@ -351,7 +355,10 @@ def split_statements(code):
         i += 1
     if buf.strip():
         out.append(buf.strip())
-    return [s for s in out if s]
+    out = [s for s in out if s]
+    # « } elseif (…) { » / « } else { » : l'accolade ferme la branche, pas le if.
+    return [s for k, s in enumerate(out)
+            if not (s == "}" and k + 1 < len(out) and re.match(r"(elseif|else\s*if|else)\b", out[k + 1]))]
 
 
 ROOT = __import__("pathlib").Path(__file__).resolve().parent.parent.parent
@@ -372,6 +379,16 @@ def resolve_include(path):
 
 
 def conv_statement(st, stack):
+    if "for" in stack:
+        m = re.match(r"\$(\w+)\s*(?:=(?!=)|\.=|\+=|-=|\+\+|--)", st)
+        if m:
+            CURRENT.setdefault("loop_assigned", set()).add(m.group(1))
+    m = re.fullmatch(r"unset\s*\(\s*\$_SESSION\[\s*'(\w+)'\s*\]\s*\)", st)
+    if m:
+        return f"{{% do _SESSION.pop('{m.group(1)}', none) %}}"
+    m = re.fullmatch(r"if\s*\((.*)\)\s*(continue|break)", st, re.S)
+    if m:
+        return f"{{% if {truthy(conv_expr(m.group(1)))} %}}{{% {m.group(2)} %}}{{% endif %}}"
     m = re.fullmatch(r"(if|elseif|else\s*if)\s*\((.*)\)\s*:", st, re.S)
     if m:
         kw = "if" if m.group(1) == "if" else "elif"
@@ -441,6 +458,17 @@ def raw_text(txt):
 
 def convert(src, rel=""):
     CURRENT["rel"] = rel
+    CURRENT["ns_vars"] = set()
+    CURRENT["loop_assigned"] = set()
+    _convert(src)
+    if not CURRENT["loop_assigned"]:
+        return _convert(src)
+    CURRENT["ns_vars"] = set(CURRENT["loop_assigned"])
+    print(f"  {rel} : variables de boucle en namespace : {sorted(CURRENT['ns_vars'])}", file=sys.stderr)
+    return "{% set _ns = namespace() %}" + _convert(src)
+
+
+def _convert(src):
     out, pos, stack = [], 0, []
     for m in BLOCK_RX.finditer(src):
         out.append(raw_text(src[pos:m.start()]))

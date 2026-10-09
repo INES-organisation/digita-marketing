@@ -1,0 +1,80 @@
+<section class="py-5">
+    <div class="container" style="max-width: 800px;">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/formations">Formations</a></li>
+                <li class="breadcrumb-item"><a href="/formations/{{ h(coalesce(formation['slug'], '')) }}">{{ h(mb_strimwidth(coalesce(formation['title'], ''), 0, 30, '...')) }}</a></li>
+                <li class="breadcrumb-item active">Quiz</li>
+            </ol>
+        </nav>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-1"><i class="bi bi-question-circle-fill"></i> {{ h(quiz['title']) }}</h4>
+                {% if (not empty(quiz['description'])) %}                    <p class="mb-0 opacity-75 small">{{ h(quiz['description']) }}</p>
+                {% endif %}                <div class="d-flex gap-3 mt-2 small">
+                    <span><i class="bi bi-list-check"></i> {{ count(questions) }} questions</span>
+                    <span><i class="bi bi-bullseye"></i> Score requis : {{ quiz['passing_score'] }}%</span>
+                    {% if (quiz['time_limit_minutes'] > 0) %}                        <span><i class="bi bi-clock"></i> {{ quiz['time_limit_minutes'] }} min</span>
+                    {% endif %}                    {% if (quiz['max_attempts'] > 0) %}                        <span><i class="bi bi-arrow-repeat"></i> {{ attemptCount }}/{{ quiz['max_attempts'] }} tentatives</span>
+                    {% endif %}                </div>
+            </div>
+
+            <div class="card-body p-4">
+                <!-- Meilleur résultat précédent -->
+                {% if t(bestAttempt) %}                    <div class="alert alert-{{ ('success' if t(bestAttempt['passed']) else 'warning') }} d-flex align-items-center mb-4">
+                        <i class="bi bi-{{ ('trophy-fill' if t(bestAttempt['passed']) else 'exclamation-triangle-fill') }} me-2 fs-5"></i>
+                        <div>
+                            <strong>Meilleur résultat :</strong> {{ bestAttempt['percentage'] }}% 
+                            ({{ bestAttempt['score'] }}/{{ bestAttempt['max_score'] }} points)
+                            — {{ ('Réussi' if t(bestAttempt['passed']) else 'Non réussi') }}                        </div>
+                    </div>
+                {% endif %}
+                {% if (t(canAttempt) and (not empty(questions))) %}                    <form method="POST" action="/formations/quiz/{{ quiz['id'] }}/submit" id="quizForm">
+                        {% for qIndex, question in php_items(questions) %}                            <div class="mb-4 p-3 bg-light rounded">
+                                <h6 class="fw-bold mb-3">
+                                    <span class="badge bg-primary me-2">{{ (qIndex + 1) }}</span>
+                                    {{ h(question['question']) }}                                    <small class="text-muted fw-normal ms-2">({{ question['points'] }} pt{{ ('s' if (question['points'] > 1) else '') }})</small>
+                                </h6>
+
+                                {% if ((question['question_type'] == 'single') or (question['question_type'] == 'true_false')) %}                                    {% for answer in php_values(question['answers']) %}                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" 
+                                                   name="question_{{ question['id'] }}" 
+                                                   value="{{ answer['id'] }}" 
+                                                   id="answer_{{ answer['id'] }}" required>
+                                            <label class="form-check-label" for="answer_{{ answer['id'] }}">
+                                                {{ h(answer['answer_text']) }}                                            </label>
+                                        </div>
+                                    {% endfor %}                                {% elif (question['question_type'] == 'multiple') %}                                    <small class="text-muted d-block mb-2"><i class="bi bi-info-circle"></i> Plusieurs réponses possibles</small>
+                                    {% for answer in php_values(question['answers']) %}                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   name="question_{{ question['id'] }}[]" 
+                                                   value="{{ answer['id'] }}" 
+                                                   id="answer_{{ answer['id'] }}">
+                                            <label class="form-check-label" for="answer_{{ answer['id'] }}">
+                                                {{ h(answer['answer_text']) }}                                            </label>
+                                        </div>
+                                    {% endfor %}                                {% endif %}                            </div>
+                        {% endfor %}
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="bi bi-send-fill"></i> Soumettre mes réponses
+                            </button>
+                        </div>
+                    </form>
+                {% elif empty(questions) %}                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-journal-x display-3"></i>
+                        <p class="mt-3">Ce quiz ne contient pas encore de questions.</p>
+                    </div>
+                {% else %}                    <div class="text-center py-4">
+                        <i class="bi bi-lock-fill display-3 text-muted"></i>
+                        <p class="mt-3 text-muted">Vous avez atteint le nombre maximum de tentatives.</p>
+                        <a href="/formations/quiz/{{ quiz['id'] }}/results" class="btn btn-outline-primary">
+                            <i class="bi bi-bar-chart"></i> Voir mes résultats
+                        </a>
+                    </div>
+                {% endif %}            </div>
+        </div>
+    </div>
+</section>

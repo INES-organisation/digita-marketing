@@ -10,16 +10,15 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from starlette.concurrency import run_in_threadpool
-from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import FileResponse, PlainTextResponse, Response
 
 from . import config
 from .routes import ROUTES
 from .security import Abort
+from .sessions import SessionMiddleware
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, redirect_slashes=False)
-app.add_middleware(SessionMiddleware, secret_key=config.SECRET_KEY, session_cookie="DIGITASESSID",
-                   https_only=config.APP_ENV == "production", same_site="lax")
+app.add_middleware(SessionMiddleware, https_only=config.APP_ENV == "production")
 
 log = logging.getLogger("digita")
 
