@@ -14,7 +14,7 @@ COPY public/ public/
 # Les scripts PHP de public/ ne sont jamais servis (voir digita/main.py:static_file).
 COPY python/digita python/digita
 
-RUN useradd --system --uid 1001 digita && chown -R digita /app
+RUN mkdir -p public/uploads && useradd --system --uid 1001 digita && chown -R digita /app
 USER digita
 WORKDIR /app/python
 EXPOSE 8000

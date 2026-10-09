@@ -14,11 +14,11 @@
 | 0 | Données : MySQL → PostgreSQL, vérification ligne à ligne | ✅ fait (sur l'export de février) |
 | 1 | Pages publiques : accueil, pages fixes, blog, catégories, articles, formations, landings, pages légales, outils (formulaires), connexion/inscription (formulaires) | ✅ fait : **1 300 pages sur 1 302 identiques au HTML PHP** |
 | 2 | Formulaires publics : demande d'audit (accueil), chatbot, outils IA (audit SEO, meta, ROI, calendrier), connexion/inscription, suivi analytics | ✅ fait : **60 réponses sur 60 identiques au PHP** |
-| 3 | Espace élève et paiement : inscription aux formations, leçons, quiz, certificats, avis, Stripe, commandes, factures, espace client projets | ⏳ à faire |
+| 3 | Espace élève et paiement : inscription aux formations, leçons, quiz, certificats, avis, Stripe, commandes, factures, espace client projets | ✅ fait : **194 réponses sur 194 identiques au PHP** (phases 2 et 3) |
 | 4 | Administration : tableau de bord, articles, formations, médias, projets, campagnes, newsletters, webhooks | ⏳ à faire |
 | 5 | Mise en ligne : base sur le VPS, conteneur, nginx, certificat, DNS, redirection de l'ancien domaine | ⏳ préparé, rien n'est déployé |
 
-Tant que les phases 3 et 4 ne sont pas faites, les routes concernées répondent par un message
+Tant que la phase 4 n'est pas faite, les routes `/admin/*` répondent par un message
 « fonctionnalité en cours de migration » (HTTP 501). Le site PHP reste la version de production.
 
 ## 2. Choix techniques
@@ -37,10 +37,11 @@ Tant que les phases 3 et 4 ne sont pas faites, les routes concernées répondent
 python/
 ├── digita/
 │   ├── main.py          routeur (même ordre et mêmes règles que public/index.php)
-│   ├── routes/          un module par contrôleur PHP (pages, blog, formations, outils, auth, leads, chatbot, analytics)
-│   ├── services/        e-mail (SMTP), IA (OpenAI, audit SEO, ROI), agents du chatbot
+│   ├── routes/          un module par contrôleur PHP (pages, blog, formations, learning, payment, projects, outils, auth, leads, chatbot, analytics)
+│   ├── services/        e-mail (SMTP), IA (OpenAI, audit SEO, ROI), agents du chatbot, Stripe (API REST)
 │   ├── security.py      CSRF et limitation des tentatives (middlewares PHP)
-│   ├── models/          requêtes de Article.php / Formation.php adaptées à PostgreSQL
+│   ├── models/          requêtes des modèles PHP (articles, formations, quiz, certificats, commandes, factures, projets) adaptées à PostgreSQL
+│   ├── sessions.py      sessions côté serveur (table web_sessions), comme $_SESSION
 │   ├── php.py           équivalents des fonctions PHP utilisées par les vues
 │   ├── render.py        rendu des vues avec layout (ViewHelper::render)
 │   └── templates/       vues Jinja (même chemin que les .php d'origine)
@@ -69,12 +70,17 @@ le jeton CSRF (aléatoire) et `dateModified` du jour (mis à jour à chaque vue 
 
 Dernier résultat : **1 300 identiques, 0 différente** (hors `/portfolio` et `/equipe`, voir §6).
 
-Les formulaires et API sont comparés ensuite par `python/tools/post_parity.py` : 60 envois (demande
+Les formulaires et API sont comparés ensuite par `python/tools/post_parity.py` : 194 envois (demande
 d'audit, connexion, inscription avec champs manquants, jeton CSRF absent ou faux, compte existant,
 6ᵉ tentative bloquée en 429 ; chatbot et ses réponses de secours, historique, rendez-vous et créneaux ;
-les 4 outils dont un audit SEO complet d'une page de test ; analytics) donnent le même statut, la même
+les 4 outils dont un audit SEO complet d'une page de test ; analytics ; parcours élève complet sur une
+formation gratuite : inscription, 20 leçons, quiz réussi et raté, avis, certificat ; paiement sans Stripe :
+codes promo valides, expirés, épuisés, commande offerte à 100 %, commandes, factures, annulation ;
+projets : devis AJAX, brief avec champs manquants ou complets, espace client, projet d'un autre client,
+messages et pièce jointe refusée, webhook Webox en visiteur et en administrateur) donnent le même statut, la même
 redirection, le même JSON ou la même page HTML dans les deux versions ; les lignes écrites en base
-sont identiques. Les mots de passe sont hachés en
+sont identiques. Les données de test (formation gratuite, quiz, codes promo, projet Webox, administrateur)
+sont dans `python/tools/fixtures_forms.sql`, appliqué aux deux bases. Les mots de passe sont hachés en
 `$2y$` comme PHP : un compte créé d'un côté se connecte de l'autre.
 
 ## 5. Routes (public/index.php)
@@ -92,9 +98,9 @@ sont identiques. Les mots de passe sont hachés en
 | Leads | `POST /api/audit-request` | ✅ |
 | Chatbot, rendez-vous | `/api/chatbot/message`, `history`, `qualify`, `appointment`, `slots` | ✅ |
 | Analytics | `/api/analytics/pageview`, `/api/analytics/conversion` | ✅ |
-| Espace élève | `/mes-formations`, inscription, leçons, quiz, avis, certificats | ⏳ phase 3 |
-| Paiement | checkout, Stripe (webhook), promo, commandes, factures | ⏳ phase 3 |
-| Projets clients | `/projets/brief`, `/espace-client/*`, `/api/project-quote`, `/webhook/webox` | ⏳ phase 3 |
+| Espace élève | `/mes-formations`, inscription, leçons, quiz, avis, certificats | ✅ |
+| Paiement | checkout, Stripe (webhook), promo, commandes, factures | ✅ |
+| Projets clients | `/projets/brief`, `/espace-client/*`, `/api/project-quote`, `/webhook/webox` | ✅ |
 | Administration | 39 routes `/admin/*` | ⏳ phase 4 |
 
 ## 6. Écarts connus et défauts déjà présents dans le PHP
@@ -128,17 +134,32 @@ sont identiques. Les mots de passe sont hachés en
 - Erreur inattendue : même message générique que le PHP, mais avec le code HTTP 500 (le PHP renvoyait 200).
 - Base : les ENUM MySQL deviennent des contraintes CHECK, les colonnes `ON UPDATE CURRENT_TIMESTAMP`
   sont mises à jour par déclencheur, les colonnes JSON passent en `jsonb` (même texte que MySQL).
+- **Paiement PHP en panne** : `Formation::find()` n'existe pas, donc le checkout PHP plante (« Une erreur est
+  survenue ») dès qu'on ouvre `/formations/checkout/:id`. Le SDK Stripe n'est par ailleurs chargé
+  nulle part dans le code PHP. La version Python corrige les deux : elle lit la formation et appelle
+  l'API Stripe directement. La comparaison ajoute `find()` à la copie PHP de référence pour tester le reste.
+- `sprint3_migration.sql` échoue en bloc sur une base existante (`product_name` existe déjà) : la colonne
+  `order_items.product_type` et `users.username` manquent alors. La base PostgreSQL les contient.
+- Sessions : le PHP gardait `$_SESSION` sur le serveur ; la version Python fait pareil (table
+  `web_sessions`, cookie `DIGITASESSID` qui ne contient qu'un identifiant aléatoire, sessions inactives
+  supprimées après 24 h). Les comptes connectés devront se reconnecter une fois après la bascule.
+- Projets clients : le webhook Webox (`/webhook/webox`) exige un administrateur connecté, comme en PHP
+  (`requireAdmin()` dans le constructeur) ; Webox ne peut donc pas l'appeler. Reproduit tel quel.
+- Pièces jointes des projets : enregistrées dans `public/uploads/projects/<id>/`, qui est un volume Docker
+  (`digita-uploads`) pour survivre aux mises à jour de l'image.
 - Le workflow `deploy.yml` envoie le dépôt sur OVH par FTP : `python/` y est désormais exclu.
 
 ## 7. Ce qu'il faut avant la mise en ligne (bloquants)
 
 1. **Export récent de la base OVH** (phpMyAdmin → Exporter → SQL, structure + données). L'export du dépôt
    date du 10 février 2026 et ne contient que 19 tables sur 43.
-2. **Dossier `public/uploads` d'OVH** s'il existe (images envoyées depuis l'admin).
+2. **Dossier `public/uploads` d'OVH** s'il existe (images de l'admin, pièces jointes des projets), à copier
+   dans le volume `digita-uploads`.
 3. **DNS de digita.buzz** (zone OVH) : `A digita.buzz → 37.187.219.225` et `A www → 37.187.219.225`.
    Ne pas toucher à `lp48.digita.buzz`.
 4. **Feu vert explicite** avant toute action sur le VPS (rien n'a été déployé).
-5. Pour les phases 2-3 : clés de production Stripe, SMTP (`MAIL_*`) et OpenAI (actuellement dans le `.env` OVH).
+5. Clés de production Stripe (`STRIPE_SECRET_KEY`, `STRIPE_PUBLIC_KEY`, `STRIPE_WEBHOOK_SECRET`, avec le
+   webhook Stripe à repointer vers `https://digita.buzz/webhook/stripe`), SMTP (`MAIL_*`) et OpenAI.
 
 ## 8. Procédure de mise en ligne (à exécuter seulement après feu vert)
 
@@ -180,3 +201,4 @@ Retour arrière : retirer le bloc nginx et recharger nginx (le site OVH n'est pa
 | 09/10/2026 | Phase 1 : app FastAPI + 44 templates, 1 300/1 302 pages identiques ; image Docker testée (≈ 145 Mo RAM). |
 | 09/10/2026 | Phase 2 : demande d'audit, connexion et inscription converties, 24/24 réponses identiques au PHP. |
 | 09/10/2026 | Phase 2 terminée : chatbot, rendez-vous, outils IA et analytics ; 60/60 réponses identiques, pages toujours à 1 300/1 302. |
+| 09/10/2026 | Phase 3 : espace élève (leçons, quiz, avis, certificats), paiement (promo, commandes, factures, Stripe par API) et projets clients (brief, devis, espace client, messages, webhook Webox) ; 194/194 réponses identiques, pages toujours à 1 300/1 302. |

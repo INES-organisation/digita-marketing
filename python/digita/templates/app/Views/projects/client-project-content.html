@@ -137,12 +137,12 @@
                         </div>
                         <div class="card-body p-0">
                             <div class="list-group list-group-flush">
-                                {% for h in php_values(array_slice(project['history'], 0, 10)) %}                                    <div class="list-group-item">
+                                {% for h_ in php_values(array_slice(project['history'], 0, 10)) %}                                    <div class="list-group-item">
                                         <div class="d-flex justify-content-between">
-                                            <strong class="small">{{ h(coalesce(statuses[h['new_status']], h['new_status'])) }}</strong>
-                                            <small class="text-muted">{{ date('d/m H:i', strtotime(h['created_at'])) }}</small>
+                                            <strong class="small">{{ h(coalesce(statuses[h_['new_status']], h_['new_status'])) }}</strong>
+                                            <small class="text-muted">{{ date('d/m H:i', strtotime(h_['created_at'])) }}</small>
                                         </div>
-                                        {% if (not empty(h['note'])) %}                                            <small class="text-muted">{{ h(h['note']) }}</small>
+                                        {% if (not empty(h_['note'])) %}                                            <small class="text-muted">{{ h(h_['note']) }}</small>
                                         {% endif %}                                    </div>
                                 {% endfor %}                            </div>
                         </div>

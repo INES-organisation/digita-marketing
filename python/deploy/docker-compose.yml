@@ -13,6 +13,10 @@ services:
     env_file: .env
     environment:
       - APP_ENV=production
+    volumes:
+      # Fichiers envoyés par les clients (pièces jointes de projets…) : conservés entre deux images.
+      # Au premier déploiement, y copier le dossier public/uploads de l'hébergement OVH.
+      - digita-uploads:/app/public/uploads
     networks:
       - ines
     restart: unless-stopped
@@ -22,6 +26,9 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+volumes:
+  digita-uploads:
 
 networks:
   ines:

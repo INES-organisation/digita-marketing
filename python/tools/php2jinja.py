@@ -20,6 +20,7 @@ JINJA_RESERVED = {
     "not", "and", "or", "if", "else", "for", "def", "lambda", "none", "true", "false",
     "import", "with", "as", "pass", "return", "yield", "global", "del", "try", "while",
     "super", "namespace", "content",
+    "h",  # helper htmlspecialchars : foreach ($history as $h) le masquerait
 }
 
 FUNC_MAP = {

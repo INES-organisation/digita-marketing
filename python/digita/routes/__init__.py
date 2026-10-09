@@ -3,7 +3,7 @@
 Chaque entrée : (méthode, chemin PHP avec :param, fonction). Les routes que la
 version Python ne gère pas encore pointent vers `not_ported` (voir le doc de suivi).
 """
-from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment
+from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment, projects
 from .common import not_ported
 
 R = []
@@ -52,13 +52,13 @@ get("/facture/:id", payment.invoice)
 
 # ---------------------------------------------------------------- leads / projets
 post("/api/audit-request", leads.submit_audit)
-get("/projets/brief", not_ported)
-post("/projets/brief", not_ported)
-post("/api/project-quote", not_ported)
-get("/espace-client", not_ported)
-get("/espace-client/projet/:id", not_ported)
-post("/espace-client/projet/:id/message", not_ported)
-post("/webhook/webox", not_ported)
+get("/projets/brief", projects.brief_form)
+post("/projets/brief", projects.submit_brief)
+post("/api/project-quote", projects.ajax_quote)
+get("/espace-client", projects.dashboard)
+get("/espace-client/projet/:id", projects.show)
+post("/espace-client/projet/:id/message", projects.send_message)
+post("/webhook/webox", projects.webhook_webox)
 
 # ---------------------------------------------------------------- chatbot
 post("/api/chatbot/message", chatbot.send_message)

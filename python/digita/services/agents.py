@@ -72,3 +72,19 @@ def get_context(session_id, user_id=None):
         params.append(user_id)
     sql += " ORDER BY updated_at DESC NULLS LAST, id DESC LIMIT 1"
     return db.fetch(sql, params) or {}
+
+
+def calculate_maturity_score(context, projects=()):
+    score = 0.0
+    fields = ["business_sector", "business_goals", "target_audience", "estimated_budget",
+              "current_pain_points", "competitors"]
+    for f in fields:
+        if not php.empty(context.get(f)):
+            score += 50 / len(fields)
+    if projects:
+        score += 10
+        if any(p["status"] == "completed" for p in projects):
+            score += 20
+    if context.get("lead_score") is not None:
+        score += php.floatval(context["lead_score"]) / 100 * 20
+    return min(php.php_round(score), 100)

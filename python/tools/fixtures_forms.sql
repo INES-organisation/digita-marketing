@@ -19,3 +19,27 @@ INSERT INTO promo_codes (id, code, discount_type, discount_value, max_uses, used
   (9304, 'EXPIRE', 'percent', 10.00, NULL, 0, NULL, '2021-01-01 00:00:00', 1),
   (9305, 'INACTIF', 'fixed', 5.00, NULL, 0, NULL, NULL, 0),
   (9306, 'EPUISE', 'fixed', 5.00, 1, 1, NULL, NULL, 1);
+-- Projets clients : un administrateur de test (mot de passe « adminpass1 ») et un projet complet
+-- lié à Webox, qui n'appartient pas aux comptes créés pendant le parcours.
+INSERT INTO users (id, username, email, password, role) VALUES
+  (9501, 'Admin Test', 'admin-test@example.com', '$2y$10$B2nd82v8svuWAQDf6q7dgeMkbRzmMA7lwyrgbQONlFDYK3O5LkMAi', 'admin');
+INSERT INTO client_projects (id, client_id, project_type, title, brief, brief_data, status, priority, webox_project_id,
+                             price, estimated_days, created_at, updated_at) VALUES
+  (9401, 9501, 'website', 'Site de test', 'Brief de test', '{"pages": 6, "colors": ["bleu"]}', 'generating', 'normal',
+   'wbx-9401', 550.00, 7, '2024-01-01 10:00:00', '2024-01-02 10:00:00');
+INSERT INTO project_messages (id, project_id, user_id, message, is_admin, is_read, attachment, created_at) VALUES
+  (9411, 9401, 9501, 'Bienvenue sur votre projet', 1, 0, NULL, '2024-01-01 11:00:00'),
+  (9412, 9401, 9501, 'Pièce jointe', 0, 1, '/uploads/projects/9401/a.pdf', '2024-01-01 12:00:00');
+INSERT INTO project_files (id, project_id, user_id, filename, filepath, filetype, filesize, created_at) VALUES
+  (9421, 9401, 9501, 'a.pdf', '/uploads/projects/9401/a.pdf', 'pdf', 2048, '2024-01-01 12:00:00');
+INSERT INTO project_tasks (id, project_id, title, description, status, sort_order) VALUES
+  (9431, 9401, 'Maquette', 'Première version', 'done', 1), (9432, 9401, 'Intégration', NULL, 'todo', 2);
+INSERT INTO project_status_history (id, project_id, old_status, new_status, changed_by, note, created_at) VALUES
+  (9441, 9401, NULL, 'pending', 9501, 'Projet créé', '2024-01-01 10:00:00'),
+  (9442, 9401, 'pending', 'generating', 9501, NULL, '2024-01-01 10:30:00');
+INSERT INTO client_context (id, session_id, user_id, business_sector, business_goals, target_audience, lead_score,
+                            created_at, updated_at) VALUES
+  (9451, 'aucune', 9501, 'Restauration', 'Plus de réservations', 'Familles', 70, '2024-01-01 10:00:00', '2024-01-01 10:00:00');
+-- MySQL avance AUTO_INCREMENT après un id explicite, pas PostgreSQL : on aligne les séquences
+-- pour que les lignes créées pendant le parcours reçoivent les mêmes id des deux côtés.
+-- pg: DO $$ DECLARE t text; BEGIN FOREACH t IN ARRAY ARRAY['users', 'quizzes', 'quiz_questions', 'quiz_answers', 'promo_codes', 'client_projects', 'project_messages', 'project_files', 'project_tasks', 'project_status_history', 'client_context'] LOOP EXECUTE 'SELECT setval(pg_get_serial_sequence(' || quote_literal(t) || ', ''id''), (SELECT max(id) FROM ' || quote_ident(t) || '))'; END LOOP; END $$;

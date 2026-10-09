@@ -121,8 +121,8 @@ def run(base):
     # chatbot, sans clé OpenAI des deux côtés
     c = httpx.Client(base_url=base, follow_redirects=False, headers={"User-Agent": "parity5"})
 
-    def call(method, path, data=None, params=None, page=False):
-        r = c.request(method, path, data=data, params=params)
+    def call(method, path, data=None, params=None, page=False, files=None, content=None):
+        r = c.request(method, path, data=data, params=params, files=files, content=content)
         body = clean(r.text) if page else re.sub(r'"conversation_id":"?\d+"?', '"conversation_id":N',
                                                   LOAD_TIME[-1][0].sub("TIMESTAMP", r.text))
         loc = r.headers.get("location")
@@ -248,6 +248,58 @@ def run(base):
     call("GET", "/paiement/succes", params={"session_id": "cs_test"}, page=True)
     call("GET", "/mes-commandes", page=True)
     call("POST", "/webhook/stripe", {"x": "1"})
+
+    # projets clients (projet 9401 et administrateur 9501 de tools/fixtures_forms.sql)
+    c = httpx.Client(base_url=base, follow_redirects=False, headers={"User-Agent": "parity8"})
+    call("GET", "/projets/brief", page=True)
+    for path in ("/espace-client", "/espace-client/projet/9401"):
+        call("GET", path)
+    call("POST", "/projets/brief", {"project_type": "website", "title": "x", "brief": "y"})
+    call("POST", "/espace-client/projet/9401/message", {"message": "x"})
+    call("POST", "/webhook/webox", content=b'{"event":"website.generated"}')
+    for data, params in (({}, None), ({"project_type": "ecommerce", "pages": "12", "urgent": "1"}, None),
+                         ({}, {"project_type": "landing", "pages": "8", "multilingual": "on"}),
+                         ({"project_type": "inconnu", "pages": "abc"}, None),
+                         ({"project_type": "app", "pages": "3", "multilingual": "1", "urgent": "1"}, None),
+                         ({"pages": "0"}, {"pages": "20", "urgent": "0"})):
+        call("POST", "/api/project-quote", data, params)
+    t = tok("/inscription")
+    c.post("/inscription", data={"_csrf_token": t, "email": "client@example.com", "password": "motdepasse1",
+                                 "password2": "motdepasse1"})
+    call("GET", "/espace-client", page=True)
+    call("POST", "/projets/brief", {"project_type": "website", "title": " ", "brief": "Mon brief"})
+    call("GET", "/projets/brief", page=True)
+    call("POST", "/projets/brief", {
+        "project_type": "ecommerce", "title": " Boutique bio ", "brief": "Vendre des légumes",
+        "business_name": " Ferme ", "business_type": "Agriculture", "target_audience": "Locaux", "style": "nature",
+        "colors": "vert,,marron,", "pages": "9", "features[]": ["panier", "blog"], "content_tone": "chaleureux",
+        "existing_url": "https://exemple.fr", "competitors": "aucun", "deadline": "2025-06-01", "budget": "2000",
+        "urgent": "1"})
+    call("GET", "/espace-client/projet/1", page=True)
+    call("GET", "/espace-client/projet/1", page=True)
+    call("POST", "/projets/brief", {"project_type": "landing", "title": "Page", "brief": "Promo", "colors": ",rouge"})
+    call("GET", "/espace-client/projet/2", page=True)
+    call("GET", "/espace-client/projet/9401", page=True)
+    call("GET", "/espace-client/projet/1abc", page=True)
+    call("POST", "/espace-client/projet/9401/message", {"message": "intrus"})
+    call("POST", "/espace-client/projet/1/message", {"message": "   "})
+    call("POST", "/espace-client/projet/1/message", {"message": " Bonjour "})
+    call("POST", "/espace-client/projet/1/message", {"message": "Fichier refusé"},
+         files={"attachment": ("script.php", b"<?php echo 1;", "text/plain")})
+    call("GET", "/espace-client/projet/1", page=True)
+    call("GET", "/espace-client", page=True)
+    call("POST", "/webhook/webox", content=b'{"event":"website.generated"}')
+    c = httpx.Client(base_url=base, follow_redirects=False, headers={"User-Agent": "parity9"})
+    t = tok("/connexion")
+    c.post("/connexion", data={"_csrf_token": t, "email": "admin-test@example.com", "password": "adminpass1"})
+    for body in (b"", b"pas du json", b"[]", b'{"event":"autre"}', b'{"event":"website.generated","data":{}}',
+                 b'{"event":"website.generated","data":{"project_id":"inconnu"}}',
+                 b'{"event":"website.generated","data":{"project_id":"wbx-9401","preview_url":"https://p.example"}}',
+                 b'{"event":"website.error","data":{"project_id":"wbx-9401"}}',
+                 b'{"event":"website.deployed","data":{"project_id":"wbx-9401","production_url":"https://s.example"}}'):
+        call("POST", "/webhook/webox", content=body)
+    call("GET", "/espace-client", page=True)
+    call("GET", "/espace-client/projet/9401", page=True)
     return out
 
 

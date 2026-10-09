@@ -50,6 +50,8 @@ sed -i -E "s/ORDER BY f\.created_at DESC/ORDER BY f.created_at DESC, f.id DESC/;
 sed -i -E 's/^    public function getById\(\$id\) \{$/    public function find($id) { return $this->db->fetch("SELECT * FROM formations WHERE id = ?", [$id]); }\n\n    public function getById($id) {/' "$REF/app/Models/Formation.php"
 grep -q "public function find" "$REF/app/Models/Formation.php"
 sed -i -E "s/ORDER BY o\.created_at DESC/ORDER BY o.created_at DESC, o.id DESC/" "$REF/app/Models/Order.php"
+sed -i -E "s/ORDER BY cp\.updated_at DESC\"/ORDER BY cp.updated_at DESC, cp.id DESC\"/; s/ORDER BY pm\.created_at ASC\"/ORDER BY pm.created_at ASC, pm.id\"/; s/ORDER BY pf\.created_at DESC\"/ORDER BY pf.created_at DESC, pf.id DESC\"/; s/ORDER BY sort_order ASC\"/ORDER BY sort_order ASC, id\"/; s/ORDER BY psh\.created_at DESC\"/ORDER BY psh.created_at DESC, psh.id DESC\"/" "$REF/app/Models/Project.php"
+sed -i -E "s/ORDER BY updated_at DESC LIMIT 1/ORDER BY updated_at DESC, id DESC LIMIT 1/" "$REF/app/Services/ContextManager.php"
 cat > "$WORK/router.php" <<'PHP'
 <?php
 $p = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
