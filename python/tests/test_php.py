@@ -56,3 +56,8 @@ def test_preg_replace():
 def test_boucle_for_php_bornes_flottantes():
     assert php.php_upto(1, 3.0, True) == [1, 2, 3]
     assert php.php_upto(1, 3.5, False) == [1, 2, 3]
+
+
+def test_json_encode_whole_floats():
+    from digita.php import json_encode
+    assert json_encode({"a": 1000.0, "b": 66.67, "c": [0.0], "d": "é/"}) == '{"a":1000,"b":66.67,"c":[0],"d":"\\u00e9\\/"}'

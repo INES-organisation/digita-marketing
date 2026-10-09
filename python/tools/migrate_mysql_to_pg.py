@@ -4,6 +4,10 @@ Recrée chaque table avec des types PostgreSQL équivalents, copie toutes les li
 recale les séquences d'auto-incrément et active l'extension `unaccent` (recherche
 insensible aux accents, comme la collation utf8mb4_unicode_ci de MySQL).
 
+Deux comportements MySQL sont conservés côté PostgreSQL :
+- ENUM : une contrainte CHECK refuse les valeurs hors liste (comme le mode strict) ;
+- ON UPDATE CURRENT_TIMESTAMP : un déclencheur met la colonne à jour quand la ligne change.
+
     python tools/migrate_mysql_to_pg.py \
         --mysql mysql+pymysql://root:root@127.0.0.1/digita \
         --pg postgresql+psycopg2://ines:ines@127.0.0.1/digita [--drop]
@@ -15,7 +19,7 @@ import argparse
 import sys
 
 import sqlalchemy as sa
-from sqlalchemy.dialects import mysql
+from sqlalchemy.dialects import mysql, postgresql
 
 BATCH = 500
 
@@ -50,7 +54,8 @@ def pg_type(col_type):
     if isinstance(t, mysql.TIME):
         return sa.Time()
     if isinstance(t, mysql.JSON):
-        return sa.JSON()
+        # jsonb normalise le texte comme MySQL (clés triées par longueur puis ordre, « ": " et ", »).
+        return postgresql.JSONB()
     if isinstance(t, (mysql.BLOB, mysql.LONGBLOB, mysql.MEDIUMBLOB, mysql.TINYBLOB)):
         return sa.LargeBinary()
     if isinstance(t, mysql.BIT):
@@ -90,6 +95,10 @@ def build_pg_metadata(my_engine):
         args = []
         for uc in insp.get_unique_constraints(tname):
             args.append(sa.UniqueConstraint(*uc["column_names"], name=f"{tname}_{uc['name']}"))
+        for c in insp.get_columns(tname):
+            if isinstance(c["type"], mysql.ENUM):
+                values = ", ".join("'" + e.replace("'", "''") + "'" for e in c["type"].enums)
+                args.append(sa.CheckConstraint(f'"{c["name"]}" IN ({values})', name=f"{tname}_{c['name']}_enum"))
         t = sa.Table(tname, md, *cols, *args)
         for ix in insp.get_indexes(tname):
             if ix.get("unique") and any(
@@ -111,6 +120,39 @@ def build_pg_metadata(my_engine):
                 ondelete=(fk.get("options") or {}).get("ondelete"),
             ))
     return md
+
+
+TOUCH_FUNCTION = """
+CREATE OR REPLACE FUNCTION digita_on_update_timestamp() RETURNS trigger AS $$
+DECLARE
+    col text := TG_ARGV[0];
+BEGIN
+    -- Comme MySQL : seulement si la ligne change et que la colonne n'est pas fixée par la requête.
+    IF to_jsonb(NEW) IS DISTINCT FROM to_jsonb(OLD)
+       AND to_jsonb(NEW) -> col IS NOT DISTINCT FROM to_jsonb(OLD) -> col THEN
+        NEW := jsonb_populate_record(NEW, jsonb_build_object(col, LOCALTIMESTAMP(0)));
+    END IF;
+    RETURN NEW;
+END $$ LANGUAGE plpgsql
+"""
+
+
+def on_update_columns(my_engine):
+    with my_engine.connect() as c:
+        return c.execute(sa.text(
+            "SELECT table_name, column_name FROM information_schema.columns "
+            "WHERE table_schema = DATABASE() AND LOWER(extra) LIKE '%on update%'"
+        )).all()
+
+
+def create_triggers(pg_engine, columns):
+    with pg_engine.begin() as c:
+        c.execute(sa.text(TOUCH_FUNCTION))
+        for table, column in columns:
+            c.execute(sa.text(
+                f'CREATE TRIGGER "{table}_{column}_on_update" BEFORE UPDATE ON "{table}" '
+                f"FOR EACH ROW EXECUTE FUNCTION digita_on_update_timestamp('{column}')"
+            ))
 
 
 def copy_rows(my_engine, pg_engine, md):
@@ -155,6 +197,9 @@ def main():
     md.create_all(pg_engine)
     print(f"{len(md.tables)} tables créées, copie des données…")
     copy_rows(my_engine, pg_engine, md)
+    columns = on_update_columns(my_engine)
+    create_triggers(pg_engine, columns)
+    print(f"{len(columns)} colonnes ON UPDATE CURRENT_TIMESTAMP reproduites par déclencheur.")
     print("Migration terminée.")
 
 

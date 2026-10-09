@@ -3,7 +3,7 @@
 Chaque entrée : (méthode, chemin PHP avec :param, fonction). Les routes que la
 version Python ne gère pas encore pointent vers `not_ported` (voir le doc de suivi).
 """
-from . import pages, blog, formations, tools, auth, leads
+from . import pages, blog, formations, tools, auth, leads, chatbot, analytics
 from .common import not_ported
 
 R = []
@@ -61,27 +61,27 @@ post("/espace-client/projet/:id/message", not_ported)
 post("/webhook/webox", not_ported)
 
 # ---------------------------------------------------------------- chatbot
-post("/api/chatbot/message", not_ported)
-get("/api/chatbot/history", not_ported)
-post("/api/chatbot/qualify", not_ported)
-post("/api/chatbot/appointment", not_ported)
-get("/api/chatbot/slots", not_ported)
+post("/api/chatbot/message", chatbot.send_message)
+get("/api/chatbot/history", chatbot.history)
+post("/api/chatbot/qualify", chatbot.qualify)
+post("/api/chatbot/appointment", chatbot.appointment)
+get("/api/chatbot/slots", chatbot.slots)
 
 # ---------------------------------------------------------------- outils gratuits
 get("/outils", tools.index)  # redéclarée plus bas (OutilsController), comme en PHP
 get("/outils/audit-seo", tools.seo_audit)
-post("/outils/audit-seo", not_ported)
+post("/outils/audit-seo", tools.seo_audit_post)
 get("/outils/meta-generator", tools.meta_generator)
-post("/outils/meta-generator", not_ported)
+post("/outils/meta-generator", tools.meta_generator_post)
 get("/outils/roi-calculator", tools.roi_calculator)
-post("/outils/roi-calculator", not_ported)
-post("/api/roi-calculate", not_ported)
+post("/outils/roi-calculator", tools.roi_calculator_post)
+post("/api/roi-calculate", tools.roi_ajax)
 get("/outils/calendrier-editorial", tools.editorial_calendar)
-post("/outils/calendrier-editorial", not_ported)
+post("/outils/calendrier-editorial", tools.editorial_calendar_post)
 
 # ---------------------------------------------------------------- analytics
-post("/api/analytics/pageview", not_ported)
-post("/api/analytics/conversion", not_ported)
+post("/api/analytics/pageview", analytics.pageview)
+post("/api/analytics/conversion", analytics.conversion)
 
 get("/formations/:slug", formations.show)
 get("/boutique", pages.boutique)

@@ -13,12 +13,12 @@
 |---|---|---|
 | 0 | Données : MySQL → PostgreSQL, vérification ligne à ligne | ✅ fait (sur l'export de février) |
 | 1 | Pages publiques : accueil, pages fixes, blog, catégories, articles, formations, landings, pages légales, outils (formulaires), connexion/inscription (formulaires) | ✅ fait : **1 300 pages sur 1 302 identiques au HTML PHP** |
-| 2 | Formulaires publics : demande d'audit (accueil), chatbot, outils IA (audit SEO, meta, ROI, calendrier), connexion/inscription, suivi analytics | 🔄 en cours : demande d'audit et connexion/inscription faites (**24 réponses sur 24 identiques au PHP**) ; reste chatbot, outils IA, analytics |
+| 2 | Formulaires publics : demande d'audit (accueil), chatbot, outils IA (audit SEO, meta, ROI, calendrier), connexion/inscription, suivi analytics | ✅ fait : **60 réponses sur 60 identiques au PHP** |
 | 3 | Espace élève et paiement : inscription aux formations, leçons, quiz, certificats, avis, Stripe, commandes, factures, espace client projets | ⏳ à faire |
 | 4 | Administration : tableau de bord, articles, formations, médias, projets, campagnes, newsletters, webhooks | ⏳ à faire |
 | 5 | Mise en ligne : base sur le VPS, conteneur, nginx, certificat, DNS, redirection de l'ancien domaine | ⏳ préparé, rien n'est déployé |
 
-Tant que les phases 2 à 4 ne sont pas faites, les routes concernées répondent par un message
+Tant que les phases 3 et 4 ne sont pas faites, les routes concernées répondent par un message
 « fonctionnalité en cours de migration » (HTTP 501). Le site PHP reste la version de production.
 
 ## 2. Choix techniques
@@ -37,7 +37,9 @@ Tant que les phases 2 à 4 ne sont pas faites, les routes concernées répondent
 python/
 ├── digita/
 │   ├── main.py          routeur (même ordre et mêmes règles que public/index.php)
-│   ├── routes/          un module par contrôleur PHP (pages, blog, formations, outils, auth)
+│   ├── routes/          un module par contrôleur PHP (pages, blog, formations, outils, auth, leads, chatbot, analytics)
+│   ├── services/        e-mail (SMTP), IA (OpenAI, audit SEO, ROI), agents du chatbot
+│   ├── security.py      CSRF et limitation des tentatives (middlewares PHP)
 │   ├── models/          requêtes de Article.php / Formation.php adaptées à PostgreSQL
 │   ├── php.py           équivalents des fonctions PHP utilisées par les vues
 │   ├── render.py        rendu des vues avec layout (ViewHelper::render)
@@ -45,7 +47,7 @@ python/
 ├── tools/
 │   ├── php2jinja.py, fixups.py, convert_all.sh, templates.txt   conversion des vues
 │   ├── migrate_mysql_to_pg.py, verify_migration.py              données
-│   ├── parity.py, parity_ci.sh                                  comparaison HTML PHP/Python
+│   ├── parity.py, post_parity.py, parity_ci.sh                  comparaison PHP/Python (pages, formulaires)
 ├── deploy/              docker-compose, nginx, import de l'export OVH
 ├── tests/               tests unitaires
 └── Dockerfile
@@ -67,10 +69,12 @@ le jeton CSRF (aléatoire) et `dateModified` du jour (mis à jour à chaque vue 
 
 Dernier résultat : **1 300 identiques, 0 différente** (hors `/portfolio` et `/equipe`, voir §6).
 
-Les formulaires sont comparés ensuite par `python/tools/post_parity.py` : 24 envois (champs manquants,
-jeton CSRF absent ou faux, e-mail invalide, compte existant, bonne et mauvaise connexion, 6ᵉ tentative
-bloquée en 429…) donnent le même statut, la même redirection, le même JSON et le même message d'erreur
-dans les deux versions ; les lignes écrites en base sont identiques. Les mots de passe sont hachés en
+Les formulaires et API sont comparés ensuite par `python/tools/post_parity.py` : 60 envois (demande
+d'audit, connexion, inscription avec champs manquants, jeton CSRF absent ou faux, compte existant,
+6ᵉ tentative bloquée en 429 ; chatbot et ses réponses de secours, historique, rendez-vous et créneaux ;
+les 4 outils dont un audit SEO complet d'une page de test ; analytics) donnent le même statut, la même
+redirection, le même JSON ou la même page HTML dans les deux versions ; les lignes écrites en base
+sont identiques. Les mots de passe sont hachés en
 `$2y$` comme PHP : un compte créé d'un côté se connecte de l'autre.
 
 ## 5. Routes (public/index.php)
@@ -83,10 +87,11 @@ dans les deux versions ; les lignes écrites en base sont identiques. Les mots d
 | Blog | `/blog`, `/blog/search`, `/blog/categorie/:slug`, `/blog/:slug` | ✅ |
 | Formations (public) | `/formations`, `/formations/search`, `/formations/categorie/:slug`, `/formations/:slug`, `/formations/:slug/landing`, `/certificat/verifier` | ✅ |
 | Outils (affichage) | `/outils/audit-seo`, `/outils/meta-generator`, `/outils/roi-calculator`, `/outils/calendrier-editorial` | ✅ |
-| Outils (traitement IA) | POST des 4 outils, `POST /api/roi-calculate` | ⏳ phase 2 |
+| Outils (traitement IA) | POST des 4 outils, `POST /api/roi-calculate` | ✅ |
 | Connexion | `/connexion`, `/inscription` (affichage et traitement : CSRF, limitation des tentatives, mots de passe bcrypt compatibles PHP) | ✅ |
 | Leads | `POST /api/audit-request` | ✅ |
-| Chatbot, analytics | `/api/chatbot/*`, `/api/analytics/*` | ⏳ phase 2 |
+| Chatbot, rendez-vous | `/api/chatbot/message`, `history`, `qualify`, `appointment`, `slots` | ✅ |
+| Analytics | `/api/analytics/pageview`, `/api/analytics/conversion` | ✅ |
 | Espace élève | `/mes-formations`, inscription, leçons, quiz, avis, certificats | ⏳ phase 3 |
 | Paiement | checkout, Stripe (webhook), promo, commandes, factures | ⏳ phase 3 |
 | Projets clients | `/projets/brief`, `/espace-client/*`, `/api/project-quote`, `/webhook/webox` | ⏳ phase 3 |
@@ -113,6 +118,16 @@ dans les deux versions ; les lignes écrites en base sont identiques. Les mots d
   `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM`) ; sans ces variables, la demande est enregistrée en base
   et l'e-mail est seulement journalisé.
 - Connexion : comme en MySQL, l'e-mail est comparé sans tenir compte de la casse.
+- **Audit SEO** : le PHP analysait n'importe quelle adresse, y compris interne. Sur le VPS le conteneur voit
+  les services d'INES : la version Python refuse les adresses privées ou locales (y compris après
+  redirection) et affiche « Impossible d'accéder à l'URL (HTTP 0) ». Seul écart volontaire.
+- Analytics : le contrôleur PHP exige un administrateur connecté (`requireAdmin()` dans le constructeur),
+  donc les visites des visiteurs ne sont jamais enregistrées (redirection vers `/connexion`). Reproduit tel quel.
+- Chatbot : l'extraction du brief client teste une variable PHP jamais définie et ne s'exécute jamais.
+  Reproduit tel quel. Sans `OPENAI_API_KEY`, le chatbot répond avec ses messages de secours.
+- Erreur inattendue : même message générique que le PHP, mais avec le code HTTP 500 (le PHP renvoyait 200).
+- Base : les ENUM MySQL deviennent des contraintes CHECK, les colonnes `ON UPDATE CURRENT_TIMESTAMP`
+  sont mises à jour par déclencheur, les colonnes JSON passent en `jsonb` (même texte que MySQL).
 - Le workflow `deploy.yml` envoie le dépôt sur OVH par FTP : `python/` y est désormais exclu.
 
 ## 7. Ce qu'il faut avant la mise en ligne (bloquants)
@@ -164,3 +179,4 @@ Retour arrière : retirer le bloc nginx et recharger nginx (le site OVH n'est pa
 | 09/10/2026 | Données copiées vers PostgreSQL, 43 tables, contrôle ligne à ligne OK. |
 | 09/10/2026 | Phase 1 : app FastAPI + 44 templates, 1 300/1 302 pages identiques ; image Docker testée (≈ 145 Mo RAM). |
 | 09/10/2026 | Phase 2 : demande d'audit, connexion et inscription converties, 24/24 réponses identiques au PHP. |
+| 09/10/2026 | Phase 2 terminée : chatbot, rendez-vous, outils IA et analytics ; 60/60 réponses identiques, pages toujours à 1 300/1 302. |

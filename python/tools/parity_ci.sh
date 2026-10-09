@@ -49,7 +49,7 @@ if ($p !== '/' && is_file($_SERVER['DOCUMENT_ROOT'] . $p)) return false;
 require $_SERVER['DOCUMENT_ROOT'] . '/index.php';
 PHP
 (cd "$REF/public" && php -S 127.0.0.1:8081 "$WORK/router.php" > "$WORK/php.log" 2>&1 &)
-(cd "$ROOT/python" && DIGITA_DETERMINISTIC=1 APP_ENV=development DATABASE_URL="$PG_URL" \
+(cd "$ROOT/python" && DIGITA_DETERMINISTIC=1 DIGITA_AUDIT_ALLOW_PRIVATE=1 APP_ENV=development DATABASE_URL="$PG_URL" \
   .venv/bin/uvicorn digita.main:app --port 8000 > "$WORK/py.log" 2>&1 &)
 sleep 4
 trap 'pkill -f "php -S 127.0.0.1:8081" || true; pkill -f "uvicorn digita.main:app --port 8000" || true' EXIT

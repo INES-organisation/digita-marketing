@@ -4,6 +4,7 @@ Ordre de résolution identique au PHP : fichier statique existant dans public/,
 puis route exacte, puis routes à paramètres dans l'ordre de déclaration, sinon 404.
 """
 import inspect
+import logging
 import re
 from pathlib import Path
 
@@ -19,6 +20,8 @@ from .security import Abort
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, redirect_slashes=False)
 app.add_middleware(SessionMiddleware, secret_key=config.SECRET_KEY, session_cookie="DIGITASESSID",
                    https_only=config.APP_ENV == "production", same_site="lax")
+
+log = logging.getLogger("digita")
 
 PUBLIC = config.PUBLIC_DIR.resolve()
 
@@ -92,4 +95,8 @@ async def dispatch(request: Request, full_path: str):
             resp = await run_in_threadpool(handler, request, *args)
     except Abort as stop:
         resp = stop.response
+    except Exception:  # noqa: BLE001 — customExceptionHandler PHP : message générique
+        log.exception("Erreur sur %s %s", request.method, uri)
+        return PlainTextResponse("Une erreur est survenue. Veuillez réessayer plus tard.",
+                                 status_code=500, media_type="text/html")
     return resp if isinstance(resp, Response) else Response(resp)
