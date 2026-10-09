@@ -26,6 +26,9 @@ for db in digita digita_pristine; do
   done
   # La production a une colonne users.username (cf. database/production_data.sql) absente de l'export.
   $MY $db -e "ALTER TABLE users ADD COLUMN username VARCHAR(50) NULL AFTER id; UPDATE users SET username = SUBSTRING_INDEX(email, '@', 1)"
+  # sprint3_migration.sql échoue en bloc sur order_items (product_name existe déjà) : product_type,
+  # utilisé par les commandes, n'est donc pas créé. On l'ajoute comme le prévoyait la migration.
+  $MY $db -e "ALTER TABLE order_items ADD COLUMN product_type ENUM('formation','pack','consulting','subscription') DEFAULT 'formation' AFTER product_id"
 done
 
 echo "▶ Migration vers PostgreSQL"
@@ -42,6 +45,11 @@ mkdir -p "$REF/logs" "$REF/cache"
 printf "APP_ENV=development\nAPP_DEBUG=false\nAPP_URL=http://127.0.0.1:8081\nDB_HOST=%s\nDB_NAME=digita\nDB_USER=root\nDB_PASS=%s\n" "$MYSQL_HOST" "$MYSQL_PWD" > "$REF/.env"
 sed -i -E "s/ORDER BY a\.(published_at|views|created_at) DESC/ORDER BY a.\1 DESC, a.id DESC/; s/ORDER BY RAND\(\)/ORDER BY a.id/; s/ORDER BY c\.name'/ORDER BY c.name, c.id'/" "$REF/app/Models/Article.php"
 sed -i -E "s/ORDER BY f\.created_at DESC/ORDER BY f.created_at DESC, f.id DESC/; s/ORDER BY f\.enrolled_count DESC, f\.rating DESC/ORDER BY f.enrolled_count DESC, f.rating DESC, f.id DESC/; s/ORDER BY RAND\(\)/ORDER BY f.id/; s/ORDER BY c\.name'/ORDER BY c.name, c.id'/; s/ORDER BY order_num'/ORDER BY order_num, id'/; s/ORDER BY fr\.created_at DESC/ORDER BY fr.created_at DESC, fr.id DESC/" "$REF/app/Models/Formation.php"
+# Formation::find() n'existe pas : tout le module de paiement PHP plante (« Call to undefined method »).
+# La version Python le corrige ; la référence reçoit la même méthode pour comparer le reste du parcours.
+sed -i -E 's/^    public function getById\(\$id\) \{$/    public function find($id) { return $this->db->fetch("SELECT * FROM formations WHERE id = ?", [$id]); }\n\n    public function getById($id) {/' "$REF/app/Models/Formation.php"
+grep -q "public function find" "$REF/app/Models/Formation.php"
+sed -i -E "s/ORDER BY o\.created_at DESC/ORDER BY o.created_at DESC, o.id DESC/" "$REF/app/Models/Order.php"
 cat > "$WORK/router.php" <<'PHP'
 <?php
 $p = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

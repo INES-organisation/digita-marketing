@@ -123,3 +123,45 @@ def contact_notification_template(d):
         </body>
         </html>
         """
+
+
+def send_order_confirmation(to, order_id):
+    return send(to, f"Confirmation de commande #{order_id}", order_confirmation_template(order_id))
+
+
+def order_confirmation_template(order_id):
+    # Le lien pointait vers l'ancien domaine (digita.tonyalpha80.com) : on utilise APP_URL.
+    from .. import config
+    return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .header {{ background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }}
+                .content {{ padding: 30px; background: #f8f9fa; }}
+                .footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
+                .btn {{ display: inline-block; padding: 12px 24px; background: #667eea; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; }}
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <h1>Commande confirmée !</h1>
+                </div>
+                <div class='content'>
+                    <p>Votre commande <strong>#{order_id}</strong> a été confirmée avec succès.</p>
+                    <p>Votre formation est maintenant accessible depuis votre espace apprenant.</p>
+                    <p style='text-align: center; margin: 30px 0;'>
+                        <a href='{config.APP_URL}/mes-formations' class='btn'>Accéder à mes formations</a>
+                    </p>
+                    <p>Votre facture est disponible dans votre espace commandes.</p>
+                    <p>Merci pour votre confiance !<br>L'équipe Digita Marketing</p>
+                </div>
+                <div class='footer'>
+                    <p>&copy; {php.date('Y')} Digita Marketing. Tous droits réservés.</p>
+                </div>
+            </div>
+        </body>
+        </html>"""

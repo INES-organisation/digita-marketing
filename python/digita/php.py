@@ -379,6 +379,8 @@ def _json_floats(v):
     # json_encode(1000.0) donne 1000 en PHP (pas de « .0 » pour un flottant entier).
     if isinstance(v, float) and v.is_integer() and abs(v) < 1e15:
         return int(v)
+    if isinstance(v, Decimal):
+        return format(v, "f")  # PDO renvoie les DECIMAL sous forme de chaîne
     if isinstance(v, dict):
         return {k: _json_floats(x) for k, x in v.items()}
     if isinstance(v, (list, tuple)):

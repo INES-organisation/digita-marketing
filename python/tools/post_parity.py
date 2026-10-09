@@ -217,6 +217,37 @@ def run(base):
     call("GET", "/formations/2/certificate", page=True)
     call("GET", "/formations/2abc/certificate", page=True)
     call("GET", "/mes-formations", page=True)
+
+    # paiement (sans clé Stripe des deux côtés ; codes promo de tools/fixtures_forms.sql)
+    anon = c
+    c = httpx.Client(base_url=base, follow_redirects=False, headers={"User-Agent": "parity7"})
+    call("GET", "/formations/checkout/1")
+    call("GET", "/mes-commandes")
+    c = anon
+    call("GET", "/formations/checkout/1", page=True)
+    for promo in ("BIENVENUE20", "fixe50", "bidon", "EXPIRE", "INACTIF", "EPUISE"):
+        call("GET", "/formations/checkout/1", params={"promo": promo}, page=True)
+    call("GET", "/formations/checkout/99999", page=True)
+    call("GET", "/formations/checkout/2")
+    for data in ({}, {"code": "bidon"}, {"code": "BIENVENUE20", "formation_id": "1"},
+                 {"code": "FIXE50", "formation_id": "1"}, {"code": "FIXE50"}, {"code": "OFFERT", "formation_id": "3"}):
+        call("POST", "/api/validate-promo", data)
+    call("POST", "/api/validate-promo", params={"code": "BIENVENUE20", "formation_id": "1"})
+    call("POST", "/formations/checkout/1", {"promo_code": "BIENVENUE20"})
+    call("GET", paid, page=True)
+    call("POST", "/formations/checkout/99999")
+    call("POST", "/formations/checkout/1", {"promo_code": "OFFERT"})
+    call("GET", paid + "/learn", page=True)
+    call("GET", "/formations/checkout/1")
+    call("GET", "/mes-commandes", page=True)
+    for path in ("/mes-commandes/1", "/mes-commandes/2", "/mes-commandes/999", "/facture/1", "/facture/2"):
+        call("GET", path, page=True)
+    call("GET", "/paiement/annulation", params={"order_id": "1"}, page=True)
+    call("GET", "/paiement/annulation", params={"order_id": "2"}, page=True)
+    call("GET", "/paiement/annulation", page=True)
+    call("GET", "/paiement/succes", params={"session_id": "cs_test"}, page=True)
+    call("GET", "/mes-commandes", page=True)
+    call("POST", "/webhook/stripe", {"x": "1"})
     return out
 
 

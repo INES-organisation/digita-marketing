@@ -3,7 +3,7 @@
 Chaque entrée : (méthode, chemin PHP avec :param, fonction). Les routes que la
 version Python ne gère pas encore pointent vers `not_ported` (voir le doc de suivi).
 """
-from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning
+from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment
 from .common import not_ported
 
 R = []
@@ -40,15 +40,15 @@ post("/formations/:id/review", learning.review)
 get("/formations/:id/certificate", learning.certificate)
 get("/certificat/verifier", formations.verify_certificate)
 get("/formations/:slug/landing", formations.landing)
-get("/formations/checkout/:id", not_ported)
-post("/formations/checkout/:id", not_ported)
-get("/paiement/succes", not_ported)
-get("/paiement/annulation", not_ported)
-post("/webhook/stripe", not_ported)
-post("/api/validate-promo", not_ported)
-get("/mes-commandes", not_ported)
-get("/mes-commandes/:id", not_ported)
-get("/facture/:id", not_ported)
+get("/formations/checkout/:id", payment.checkout)
+post("/formations/checkout/:id", payment.process_checkout)
+get("/paiement/succes", payment.success)
+get("/paiement/annulation", payment.cancel)
+post("/webhook/stripe", payment.webhook)
+post("/api/validate-promo", payment.validate_promo)
+get("/mes-commandes", payment.my_orders)
+get("/mes-commandes/:id", payment.order_detail)
+get("/facture/:id", payment.invoice)
 
 # ---------------------------------------------------------------- leads / projets
 post("/api/audit-request", leads.submit_audit)
