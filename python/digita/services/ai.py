@@ -11,6 +11,7 @@ import urllib.parse
 import httpx
 
 from .. import php
+from . import ines
 
 
 class AIError(Exception):
@@ -38,6 +39,11 @@ def chat(messages, system_prompt=None):
         chat_messages.append({"role": "system", "content": system_prompt})
     for m in messages:
         chat_messages.append({"role": m.get("role") or "user", "content": m["content"]})
+    if ines.enabled():
+        try:
+            return ines.generate([m for m in chat_messages if m["role"] != "system"], system_prompt or None)
+        except httpx.HTTPError as e:
+            raise AIError("Erreur API INES: " + str(e)) from e
     resp = _send_request("chat/completions", {
         "model": os.getenv("OPENAI_MODEL", "gpt-4"),
         "messages": chat_messages,

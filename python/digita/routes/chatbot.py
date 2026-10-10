@@ -5,7 +5,7 @@ from starlette.concurrency import run_in_threadpool
 from starlette.responses import Response
 
 from .. import db, php, security
-from ..services import agents, ai
+from ..services import agents, ai, ines
 
 log = logging.getLogger("digita.chatbot")
 
@@ -132,6 +132,7 @@ def _book(name, mail, phone, date, slot, subject, user_id):
         return _json({"success": False, "error": "Ce créneau est déjà pris. Veuillez en choisir un autre."})
     db.execute("INSERT INTO appointments (name, email, phone, date, time_slot, subject, user_id) "
                "VALUES (?, ?, ?, ?, ?, ?, ?)", [name, mail, phone, date, slot, subject, user_id])
+    ines.push_lead(name, mail, "rendez-vous", f"Rendez-vous le {date} à {slot} : {subject or ''}", phone)
     return _json({"success": True,
                   "message": "Rendez-vous confirmé le " + php.date("d/m/Y", php.strtotime(date)) + " à " + slot})
 

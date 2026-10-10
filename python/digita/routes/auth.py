@@ -3,6 +3,7 @@ import bcrypt
 from starlette.concurrency import run_in_threadpool
 
 from .. import db, php, security
+from ..services import ines
 from ..render import render_page
 from .common import redirect
 
@@ -53,6 +54,7 @@ def _find_user(mail):
 
 def _create_user(mail, password):
     db.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", [mail, _hash(password), "user"])
+    ines.push_lead(mail, mail, "inscription", "Compte créé sur digita.buzz")
     return _find_user(mail)
 
 

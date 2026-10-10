@@ -5,7 +5,7 @@ from starlette.concurrency import run_in_threadpool
 from starlette.responses import Response
 
 from .. import config, db, php
-from ..services import email
+from ..services import email, ines
 
 log = logging.getLogger("digita.leads")
 
@@ -35,6 +35,7 @@ def _process(name, mail, website):
         message += "Site Web : " + website + "\n"
         db.execute("INSERT INTO contact_messages (name, email, phone, subject, message, status) "
                    "VALUES (?, ?, ?, ?, ?, ?)", [name, mail, "", subject, message, "new"])
+        ines.push_lead(name, mail, "audit", message)
 
         email.send_new_contact_notification(config.ADMIN_EMAIL, {
             "name": name, "email": mail, "subject": subject, "message": message, "phone": "N/A",

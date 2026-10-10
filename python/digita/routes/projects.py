@@ -12,7 +12,7 @@ from .. import config, php, security
 from ..forms import php_post
 from ..models import project as Project
 from ..render import render_view
-from ..services import agents
+from ..services import agents, ines
 from .analytics import _require_admin
 from .common import redirect
 
@@ -82,6 +82,8 @@ def _submit_brief(request, post):
         "priority": "high" if brief_data["urgent"] else "normal",
     })
     if project_id:
+        ines.push_lead(brief_data["business_name"] or title, request.session.get("user_email"), "projet",
+                       f"Brief projet #{project_id} ({project_type}) : {title}\n{brief}")
         request.session["success_message"] = ("Votre projet a été soumis avec succès ! "
                                                "Notre équipe va l'examiner rapidement.")
         return redirect("/espace-client/projet/" + project_id)
