@@ -1,0 +1,35 @@
+{% set pageTitle = coalesce(pageTitle, 'Inscription - Digita Marketing') %}{% set extraCss = ['/assets/css/auth.css'] %}{% if once('includes/partials/header.html') %}{% include 'includes/partials/header.html' %}{% endif %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="auth-title">Créer un compte</h2>
+        
+        {% if ((isset(error)) and t(error)) %}            <div class="alert alert-danger">{{ h(error) }}</div>
+        {% endif %}        
+        <form method="post" action="/inscription" class="auth-form" autocomplete="on">
+            {{ CsrfMiddleware_field() }}            
+            <div class="form-group">
+                <label for="email" class="form-label">Adresse Email</label>
+                <input type="email" class="form-control" id="email" name="email" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" id="password" name="password" required minlength="8">
+                <small class="form-text">Minimum 8 caractères</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="password2" class="form-label">Confirmer le mot de passe</label>
+                <input type="password" class="form-control" id="password2" name="password2" required minlength="8">
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">Créer mon compte</button>
+        </form>
+        
+        <div class="auth-footer">
+            <a href="/connexion">Déjà inscrit ? Se connecter</a>
+        </div>
+    </div>
+</div>
+
+{% if once('includes/partials/footer.html') %}{% include 'includes/partials/footer.html' %}{% endif %}

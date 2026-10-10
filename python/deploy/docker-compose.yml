@@ -1,0 +1,37 @@
+# Digita (Python) sur le VPS INES — projet compose séparé, branché sur le réseau d'INES.
+# Sur le VPS :  cd /opt/digita && docker compose -f python/deploy/docker-compose.yml --env-file python/deploy/.env up -d --build
+#
+# - Base : base « digita » dans le conteneur ines-postgres existant (pas de nouveau serveur SQL).
+# - Exposition : uniquement via ines-nginx (server_name digita.buzz), aucun port publié.
+services:
+  digita-web:
+    build:
+      context: ../..
+      dockerfile: python/Dockerfile
+    image: digita-web:${IMAGE_TAG:-latest}
+    container_name: digita-web
+    env_file: .env
+    environment:
+      - APP_ENV=production
+    volumes:
+      # Fichiers envoyés par les clients (pièces jointes de projets…) : conservés entre deux images.
+      # Au premier déploiement, y copier le dossier public/uploads de l'hébergement OVH.
+      - digita-uploads:/app/public/uploads
+    networks:
+      - ines
+    restart: unless-stopped
+    mem_limit: 384m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  digita-uploads:
+
+networks:
+  ines:
+    external: true
+    # Nom du réseau créé par le compose d'INES (projet « ines ») — vérifier avec `docker network ls`.
+    name: ${INES_NETWORK:-ines_ines-network}

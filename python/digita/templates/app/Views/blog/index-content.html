@@ -1,0 +1,117 @@
+<!-- Hero Section Blog Premium -->
+<section class="page-hero hero-blog py-6 bg-premium-glow position-relative overflow-hidden">
+    <!-- Particules discrètes peuvent être ajoutées ici si besoin -->
+    <div class="container position-relative z-2">
+        <div class="row align-items-center">
+            <div class="col-lg-8" data-aos="fade-right">
+                <span class="badge rounded-pill bg-premium-gold-gradient px-3 py-2 mb-3" style="background: linear-gradient(135deg, var(--gold), #f3d47c); color: var(--dark); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Intelligence Partagée</span>
+                <h1 class="display-3 fw-bold mb-3 text-white" style="font-family: var(--font-heading);">Le Mag <span class="text-gradient-gold">Stratégique</span></h1>
+                <p class="lead mb-5 text-white-50" style="font-size: 1.15rem; max-width: 600px;">
+                    Décryptages de l'IA, stratégies d'automatisation de pointe et visions prospectives pour les leaders de demain.
+                </p>
+                
+                <!-- Barre de recherche Glass -->
+                <form action="/blog/search" method="GET" class="search-form" style="max-width: 500px;">
+                    <div class="input-group glass-card border-0 p-1" style="border-radius: 50px;">
+                        <input type="text" name="q" class="form-control bg-transparent border-0 text-white px-4" placeholder="Rechercher une expertise..." required style="box-shadow: none;">
+                        <button class="btn btn-premium btn-premium-gold rounded-pill px-4" type="submit" style="margin: 2px;">
+                            <i class="bi bi-search me-2"></i> Analyser
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4 text-center d-none d-lg-block" data-aos="zoom-in">
+                <div class="position-absolute" style="top: 20%; right: 10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);"></div>
+                <i class="bi bi-journal-richtext text-gradient-gold" style="font-size: 12rem; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.2));"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Catégories Premium -->
+<section class="py-4 bg-premium-dark-blue border-bottom border-glass sticky-top" style="top: 0; z-index: 100;">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3 flex-wrap justify-content-center">
+            <a href="/blog" class="btn-premium btn-premium-blue py-2 px-4 {{ ('active shadow-blue-glow' if (not (isset(currentCategory))) else '') }}">
+                <i class="bi bi-grid-fill me-2"></i> Omnicanal
+            </a>
+            {% for cat_ in php_values(categories) %}                <a href="/blog/categorie/{{ h(cat_['slug']) }}" class="btn-premium py-2 px-4 glass-card border-glass text-white {{ ('active border-gold text-gold' if (((isset(currentCategory)) and (loose_eq(currentCategory, cat_['slug'])))) else '') }}">
+                    {% if (not empty(cat_['icon'])) %}                        <span class="me-2">{{ cat_['icon'] }}</span>
+                    {% endif %}                    {{ h(cat_['name']) }}                </a>
+            {% endfor %}        </div>
+    </div>
+</section>
+
+<!-- Articles Section -->
+<section class="main-content py-6 bg-premium-grid animated">
+    <div class="container">
+        <!-- Articles Populaires (Sélection Premium) -->
+        <div class="mb-5" data-aos="fade-up">
+            <h5 class="text-gold mb-3 fw-bold" style="letter-spacing: 2px;">POUR LES LEADERS</h5>
+            <h2 class="display-5 fw-bold text-white mb-4">Analyses à Haut Impact</h2>
+        </div>
+        
+        <div class="row g-4 mb-6">
+            {% for article in php_values(popularArticles) %}                <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                    <div class="glass-card h-100 p-0 overflow-hidden border-glass hover-gold-border transition-all">
+                        <div class="article-image-wrapper position-relative overflow-hidden" style="height: 220px;">
+                            {% if (not empty(article['image_url'])) %}                                <img src="{{ h(article['image_url']) }}" class="w-100 h-100 object-fit-cover transition-all hover-zoom" alt="{{ h(article['title']) }}">
+                            {% else %}                                <div class="w-100 h-100 bg-premium-dark-blue d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-cpu text-gold opacity-50" style="font-size: 4rem;"></i>
+                                </div>
+                            {% endif %}                            <div class="position-absolute top-0 start-0 m-3 px-3 py-1 glass-card border-gold rounded-pill" style="font-size: 0.7rem; font-weight: 700; color: var(--gold);">
+                                {{ h(coalesce(article['category_name'], 'STRATÉGIE')) }}                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="d-flex gap-3 text-white-50 small mb-3">
+                                <span><i class="bi bi-eye me-1 text-gold"></i> {{ number_format(coalesce(article['views'], 0)) }}</span>
+                                <span><i class="bi bi-clock me-1 text-gold"></i> 5 min</span>
+                            </div>
+                            <h4 class="fw-bold mb-3 text-white mb-3" style="line-height: 1.4;">{{ h(article['title']) }}</h4>
+                            <p class="text-white-50 small mb-4">{{ h(substr(coalesce(article['excerpt'], ''), 0, 120)) }}...</p>
+                            <a href="/blog/{{ h(article['slug']) }}" class="btn-premium btn-premium-gold w-100 py-3">Explorer le dossier</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}        </div>
+        
+        <hr class="border-glass my-6">
+
+        <!-- Flux Récent -->
+        <div class="mb-5" data-aos="fade-up">
+            <h5 class="text-blue mb-3 fw-bold" style="letter-spacing: 2px;">FLUX TECHNOLOGIQUE</h5>
+            <h2 class="display-5 fw-bold text-white mb-4">Dernières Prospectives</h2>
+        </div>
+        
+        <div class="row g-4">
+            {% for article in php_values(recentArticles) %}                <div class="col-lg-6" data-aos="fade-up">
+                    <div class="glass-card p-4 border-glass hover-blue-border transition-all">
+                        <div class="row align-items-center">
+                            <div class="col-sm-4 mb-3 mb-sm-0">
+                                <div class="rounded-3 overflow-hidden" style="height: 120px;">
+                                    <img src="{{ h(coalesce(article['image_url'], '/assets/images/placeholder-blog.jpg')) }}" class="w-100 h-100 object-fit-cover" alt="">
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <span class="badge bg-premium-blue-gradient mb-2" style="font-size: 0.65rem; background: var(--blue-glow); color: white;">ACTUALITÉ</span>
+                                <h5 class="fw-bold text-white mb-2">{{ h(article['title']) }}</h5>
+                                <p class="text-white-50 small mb-3">{{ h(substr(coalesce(article['excerpt'], ''), 0, 80)) }}...</p>
+                                <a href="/blog/{{ h(article['slug']) }}" class="text-gold text-decoration-none small fw-bold">Lire l'article <i class="bi bi-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}        </div>
+    </div>
+</section>
+
+<!-- CTA Stratégique (Injected) -->
+<section class="py-6 bg-premium-glow">
+    <div class="container px-4 text-center">
+        <div class="glass-card p-5 border-gold shadow-gold-glow" data-aos="zoom-in">
+            <h2 class="display-5 fw-bold text-white mb-4">Une question sur votre stratégie digitale ?</h2>
+            <p class="text-white-50 mb-5 fs-5">Nos consultants analysent votre secteur et vous proposent un plan d'action personnalisé.</p>
+            <a href="/contact" class="btn-premium btn-premium-gold px-5 py-4 fs-5">Demander une Analyse</a>
+        </div>
+    </div>
+</section>
