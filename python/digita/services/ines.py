@@ -1,4 +1,5 @@
-"""Pont vers INES : leads vers son CRM, IA via sa passerelle (même réseau Docker que ines-backend).
+"""Pont vers INES : leads vers son CRM, IA via sa passerelle, e-mails via son fournisseur d'envoi
+(même réseau Docker que ines-backend).
 
 Sans INES_API_KEY, rien n'est envoyé : le site garde son comportement d'origine (base locale seule)."""
 import logging
@@ -50,3 +51,14 @@ def generate(messages, system=None, temperature=0.7, max_tokens=500):
     r = httpx.post(_url("/api/v1/generate"), json=body, headers=_headers(), timeout=60)
     r.raise_for_status()
     return r.json().get("text") or ""
+
+
+def send_email(to, subject, html, from_name, from_address=None):
+    """E-mail envoyé par le fournisseur d'INES (POST /api/v1/emails/transactional). Renvoie False sur échec."""
+    body = {"to": to, "subject": subject, "html": html, "from_name": from_name, "from_address": from_address}
+    try:
+        httpx.post(_url("/api/v1/emails/transactional"), json=body, headers=_headers(), timeout=30).raise_for_status()
+        return True
+    except httpx.HTTPError as e:
+        log.error("E-mail non envoyé par INES à %s : %s", to, e)
+        return False

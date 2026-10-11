@@ -59,7 +59,7 @@ def checkout(request, formation_id):
     return render_view(request, "payment/checkout-content", {
         "title": "Paiement - " + php.strval(f["title"]) + " | Digita Marketing",
         "extraCss": CSS, "formation": f, "promoCode": promo, "discount": discount, "finalPrice": final,
-        "stripePublicKey": stripe.public_key(), "stripeConfigured": stripe.is_configured(),
+        "stripeConfigured": stripe.is_configured(),
     })
 
 
@@ -90,7 +90,7 @@ def _process_checkout(request, formation_id, form):
     try:
         base = base_context(request)["base_url"]
         checkout_session = stripe.create_formation_checkout(
-            f, order_id, base + "/paiement/succes", base + "/paiement/annulation?order_id=" + order_id,
+            f, order_id, order["amount"], base + "/paiement/succes", base + "/paiement/annulation?order_id=" + order_id,
             session.get("user_id"), session.get("user_email"))
         return redirect(checkout_session["url"])
     except stripe.StripeError as e:
@@ -104,16 +104,10 @@ def success(request):
         return redirect("/connexion")
     session_id = request.query_params.get("session_id")
     order = formation = None
-    if php.t(session_id) and stripe.is_configured():
-        result = stripe.verify_session(session_id)
-        if result["success"]:
-            order = Order.get_by_stripe_session(session_id)
-            if order and order["status"] != "paid":
-                Order.fulfill_order(order["id"], session_id, result["payment_intent"])
-                Invoice.create_from_order(Order.find(order["id"]))
-                order = Order.find(order["id"])
-            if order:
-                formation = _formation_of(order)
+    if php.t(session_id):
+        order = stripe.complete(session_id)
+        if order:
+            formation = _formation_of(order)
     return render_view(request, "payment/success-content", {
         "title": "Paiement réussi | Digita Marketing", "extraCss": CSS, "order": order, "formation": formation,
     })
@@ -131,13 +125,6 @@ def cancel(request):
     return render_view(request, "payment/cancel-content", {
         "title": "Paiement annulé | Digita Marketing", "extraCss": CSS, "order": order, "formation": formation,
     })
-
-
-async def webhook(request):
-    payload = await request.body()
-    sig = request.headers.get("stripe-signature", "")
-    result = await run_in_threadpool(stripe.handle_webhook, payload, sig)
-    return _json(result, 200 if result["success"] else 400)
 
 
 async def validate_promo(request):

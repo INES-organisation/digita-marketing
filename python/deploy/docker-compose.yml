@@ -1,5 +1,6 @@
 # Digita (Python) sur le VPS INES — projet compose séparé, branché sur le réseau d'INES.
-# Sur le VPS :  cd /opt/digita && docker compose -f python/deploy/docker-compose.yml --env-file python/deploy/.env up -d --build
+# Sur le VPS :  cd /opt/digita && git pull && docker compose -f python/deploy/docker-compose.yml --env-file python/deploy/.env up -d --build
+# Aucune clé Stripe, e-mail ou IA ici : Digita les utilise à travers INES (python/digita/services/ines.py).
 #
 # - Base : base « digita » dans le conteneur ines-postgres existant (pas de nouveau serveur SQL).
 # - Exposition : uniquement via ines-nginx (server_name digita.buzz), aucun port publié.
@@ -8,7 +9,7 @@ services:
     build:
       context: ../..
       dockerfile: python/Dockerfile
-    image: digita-web:${IMAGE_TAG:-latest}
+    image: digita-web:${DIGITA_IMAGE_TAG:-latest}
     container_name: digita-web
     env_file: .env
     environment:

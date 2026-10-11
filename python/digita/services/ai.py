@@ -1,4 +1,4 @@
-"""Service IA (équivalent de app/Services/AIService.php) : OpenAI, audit SEO, ROI."""
+"""Service IA (équivalent de app/Services/AIService.php) : passerelle IA d'INES, audit SEO, ROI."""
 import ipaddress
 import json
 import math
@@ -15,22 +15,7 @@ from . import ines
 
 
 class AIError(Exception):
-    """Exception levée par sendRequest() en PHP (clé absente, réponse HTTP ≠ 200)."""
-
-
-def _send_request(endpoint, data):
-    key = os.getenv("OPENAI_API_KEY", "")
-    if not key:
-        raise AIError("Clé API OpenAI non configurée")
-    try:
-        r = httpx.post(f"https://api.openai.com/v1/{endpoint}", content=php.json_encode(data),
-                       headers={"Content-Type": "application/json", "Authorization": "Bearer " + key},
-                       timeout=60)
-    except httpx.HTTPError as e:
-        raise AIError("Erreur API OpenAI: " + str(e)) from e
-    if r.status_code != 200:
-        raise AIError("Erreur API OpenAI: " + r.text)
-    return r.json()
+    """Exception levée par sendRequest() en PHP (IA non configurée, réponse HTTP ≠ 200)."""
 
 
 def chat(messages, system_prompt=None):
@@ -39,25 +24,15 @@ def chat(messages, system_prompt=None):
         chat_messages.append({"role": "system", "content": system_prompt})
     for m in messages:
         chat_messages.append({"role": m.get("role") or "user", "content": m["content"]})
-    if ines.enabled():
-        try:
-            turns = [m for m in chat_messages if m["role"] != "system"]
-            if not turns:  # appel « consigne seule » (routage d'intention) : Claude exige un message utilisateur
-                return ines.generate([{"role": "user", "content": system_prompt}])
-            return ines.generate(turns, system_prompt or None)
-        except httpx.HTTPError as e:
-            raise AIError("Erreur API INES: " + str(e)) from e
-    resp = _send_request("chat/completions", {
-        "model": os.getenv("OPENAI_MODEL", "gpt-4"),
-        "messages": chat_messages,
-        "temperature": 0.7,
-        "max_tokens": 500,
-    })
+    if not ines.enabled():
+        raise AIError("IA non configurée : INES_API_KEY manquante")
     try:
-        content = resp["choices"][0]["message"]["content"]
-    except (KeyError, IndexError, TypeError):
-        content = None
-    return "" if content is None else content
+        turns = [m for m in chat_messages if m["role"] != "system"]
+        if not turns:  # appel « consigne seule » (routage d'intention) : Claude exige un message utilisateur
+            return ines.generate([{"role": "user", "content": system_prompt}])
+        return ines.generate(turns, system_prompt or None)
+    except httpx.HTTPError as e:
+        raise AIError("Erreur API INES: " + str(e)) from e
 
 
 def generate_meta_description(page_title, page_content):

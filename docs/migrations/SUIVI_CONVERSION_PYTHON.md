@@ -123,9 +123,9 @@ sont dans `python/tools/fixtures_forms.sql`, appliqué aux deux bases. Les mots 
   d'attribut `name` et le script affiche seulement le message de succès, sans rien envoyer. Les demandes
   saisies dans cette fenêtre sont perdues, en PHP comme en Python (le rendu est reproduit à l'identique).
   Le formulaire de `conversion-modal.php`, lui, envoie bien vers `/api/audit-request`. À corriger après bascule.
-- E-mails : le PHP utilisait `mail()` d'OVH. Sur le VPS, l'envoi passe par SMTP (`MAIL_HOST`, `MAIL_PORT`,
-  `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM`) ; sans ces variables, la demande est enregistrée en base
-  et l'e-mail est seulement journalisé.
+- E-mails : le PHP utilisait `mail()` d'OVH. Sur le VPS, l'envoi passe par INES
+  (`POST /api/v1/emails/transactional`, même fournisseur que les e-mails d'INES) ; sans `INES_API_KEY`,
+  la demande est enregistrée en base et l'e-mail est seulement journalisé.
 - Connexion : comme en MySQL, l'e-mail est comparé sans tenir compte de la casse.
 - **Audit SEO** : le PHP analysait n'importe quelle adresse, y compris interne. Sur le VPS le conteneur voit
   les services d'INES : la version Python refuse les adresses privées ou locales (y compris après
@@ -133,7 +133,7 @@ sont dans `python/tools/fixtures_forms.sql`, appliqué aux deux bases. Les mots 
 - Analytics : le contrôleur PHP exige un administrateur connecté (`requireAdmin()` dans le constructeur),
   donc les visites des visiteurs ne sont jamais enregistrées (redirection vers `/connexion`). Reproduit tel quel.
 - Chatbot : l'extraction du brief client teste une variable PHP jamais définie et ne s'exécute jamais.
-  Reproduit tel quel. Sans `OPENAI_API_KEY`, le chatbot répond avec ses messages de secours.
+  Reproduit tel quel. L'IA passe par INES ; sans `INES_API_KEY`, le chatbot répond avec ses messages de secours.
 - Erreur inattendue : même message générique que le PHP, mais avec le code HTTP 500 (le PHP renvoyait 200).
 - Base : les ENUM MySQL deviennent des contraintes CHECK, les colonnes `ON UPDATE CURRENT_TIMESTAMP`
   sont mises à jour par déclencheur, les colonnes JSON passent en `jsonb` (même texte que MySQL).
@@ -198,7 +198,7 @@ docker exec -i ines-postgres psql -U ines -d ines_db -c "CREATE ROLE digita LOGI
 bash python/deploy/import_ovh_dump.sh ~/export_ovh.sql
 
 # 4. Conteneur
-docker compose -f python/deploy/docker-compose.yml --env-file python/deploy/.env up -d --build
+docker compose -f python/deploy/docker-compose.yml --env-file /opt/ines/.env.production --env-file python/deploy/.env up -d --build
 docker exec digita-web python -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8000/healthz').read())"
 
 # 5. HTTPS (une fois le DNS propagé) puis nginx
@@ -225,3 +225,5 @@ Retour arrière : retirer le bloc nginx et recharger nginx (le site OVH n'est pa
 | 09/10/2026 | Déploiement sur le VPS (sans clés de production) avec les données de février du dépôt : 43 tables vérifiées, conteneur sain. Base OVH et uploads pas encore récupérés (accès FTP refusé), DNS pas encore basculé. La copie vers PostgreSQL ne demande plus de droit superutilisateur. |
 | 09/10/2026 | Mise en ligne : DNS de digita.buzz et www basculé vers le VPS, certificat Let's Encrypt (jusqu'au 07/01/2027), bloc nginx ajouté à ines-nginx (branche INES claude/project-thread-ew9z9f, pas encore fusionnée). Hébergement OVH arrêté : aucune base plus récente que l'export du 10/02 n'existe, les données saisies sur OVH après cette date (contacts, abonnés, comptes, commandes) sont perdues. Clés de production toujours vides. |
 | 10/10/2026 | Pont INES : leads (audit, inscription, rendez-vous, brief projet) copiés dans le CRM INES via `POST /api/v1/contacts/ingest` (INES PR #10), chatbot via la passerelle IA d'INES (`/api/v1/generate`). Activé par `INES_API_KEY` ; sans clé, comportement d'origine. |
+| 11/10/2026 | INES gère Digita : e-mails envoyés par le fournisseur d'INES, clés Stripe lues dans le `.env.production` d'INES, IA uniquement via INES (chemin OpenAI direct et SMTP propre supprimés). Anciennes tâches cron reprises par INES (`PROJECT_CRON_JOBS`) : newsletter du lundi 10h et séquences après achat de 9h appelées sur `/internal/cron/*`, sauvegarde nocturne de la base `digita` (`PROJECT_BACKUP_DATABASES`). Le sitemap est calculé à la demande (l'ancien fichier statique pointait sur `localhost`), lien de désabonnement signé ajouté (il ne menait nulle part en PHP). Vider le cache et `OPTIMIZE TABLE` abandonnés (sans objet en Python/PostgreSQL). |
+| 11/10/2026 | Stripe piloté par INES (`/api/v1/external/stripe/…`, clés de /admin/integrations) au lieu des clés INES injectées dans le conteneur : plus de `payment_method_types` (refusé par Stripe), montant facturé = commande après promo (Stripe recevait le prix plein), webhook Digita retiré au profit de la réconciliation nocturne (`/internal/cron/reconcile-orders`). |
