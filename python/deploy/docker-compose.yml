@@ -1,7 +1,6 @@
 # Digita (Python) sur le VPS INES — projet compose séparé, branché sur le réseau d'INES.
-# Sur le VPS :  cd /opt/digita && git pull && docker compose -f python/deploy/docker-compose.yml \
-#                 --env-file /opt/ines/.env.production --env-file python/deploy/.env up -d --build
-# (le .env d'INES ne sert qu'à remplir les ${…} ci-dessous : rien d'autre n'entre dans le conteneur).
+# Sur le VPS :  cd /opt/digita && git pull && docker compose -f python/deploy/docker-compose.yml --env-file python/deploy/.env up -d --build
+# Aucune clé Stripe, e-mail ou IA ici : Digita les utilise à travers INES (python/digita/services/ines.py).
 #
 # - Base : base « digita » dans le conteneur ines-postgres existant (pas de nouveau serveur SQL).
 # - Exposition : uniquement via ines-nginx (server_name digita.buzz), aucun port publié.
@@ -15,10 +14,6 @@ services:
     env_file: .env
     environment:
       - APP_ENV=production
-      # Paiement : les clés Stripe d'INES (une seule entité, un seul compte Stripe). Seul le secret
-      # du webhook digita.buzz/webhook/stripe reste propre à Digita (STRIPE_WEBHOOK_SECRET, .env).
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
-      - STRIPE_PUBLIC_KEY=${STRIPE_PUBLISHABLE_KEY:-}
     volumes:
       # Fichiers envoyés par les clients (pièces jointes de projets…) : conservés entre deux images.
       # Au premier déploiement, y copier le dossier public/uploads de l'hébergement OVH.

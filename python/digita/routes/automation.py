@@ -164,3 +164,18 @@ def sitemap_xml():
 
 async def sitemap(request):
     return Response(await run_in_threadpool(sitemap_xml), media_type="application/xml")
+
+
+# ---------------------------------------------------------------- paiements non validés (chaque nuit)
+def reconcile_pending_orders():
+    """Commandes restées « pending » alors que Stripe les a payées (visiteur parti avant le retour
+    sur /paiement/succes) : validées comme le ferait la page de succès. Remplace le webhook Stripe,
+    qui arrive à INES (une seule configuration Stripe) et y est ignoré pour les sites câblés."""
+    from ..services import stripe
+    fixed = sum(bool(stripe.complete(o["stripe_session_id"])) for o in db.fetch_all(
+        "SELECT stripe_session_id FROM orders WHERE status = 'pending' AND stripe_session_id LIKE 'cs_%' "
+        "AND created_at > NOW() - INTERVAL '30 days'"))
+    return {"success": True, "fixed": fixed}
+
+
+reconcile_orders = _cron(reconcile_pending_orders)
