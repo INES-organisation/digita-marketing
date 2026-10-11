@@ -1,0 +1,74 @@
+<!-- Générateur Calendrier Éditorial IA -->
+<section class="py-5" style="padding-top: 120px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h1 class="display-5 fw-bold"><i class="bi bi-calendar3 text-danger"></i> Calendrier Éditorial IA</h1>
+                    <p class="lead text-muted">Générez un planning de publication complet pour votre blog</p>
+                </div>
+
+                {% if (not empty(_SESSION['error_message'])) %}                    <div class="alert alert-danger alert-dismissible fade show">
+                        {{ h(_SESSION['error_message']) }}                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% do _SESSION.pop('error_message', none) %}                {% endif %}
+                <!-- Formulaire -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <form action="/outils/calendrier-editorial" method="POST">
+                            <div class="mb-3">
+                                <label for="niche" class="form-label fw-bold">Votre niche / secteur d'activité *</label>
+                                <input type="text" name="niche" id="niche" class="form-control form-control-lg" placeholder="Ex: Marketing digital, Immobilier, Fitness, Cuisine..." value="{{ h(coalesce(niche, '')) }}" required>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="duration" class="form-label fw-bold">Durée du calendrier</label>
+                                    <select name="duration" id="duration" class="form-select">
+                                        <option value="2 semaines" {{ ('selected' if ((coalesce(duration, '')) == '2 semaines') else '') }}>2 semaines</option>
+                                        <option value="1 mois" {{ ('selected' if ((coalesce(duration, '1 mois')) == '1 mois') else '') }}>1 mois</option>
+                                        <option value="2 mois" {{ ('selected' if ((coalesce(duration, '')) == '2 mois') else '') }}>2 mois</option>
+                                        <option value="3 mois" {{ ('selected' if ((coalesce(duration, '')) == '3 mois') else '') }}>3 mois</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="frequency" class="form-label fw-bold">Fréquence de publication</label>
+                                    <select name="frequency" id="frequency" class="form-select">
+                                        <option value="1 par semaine" {{ ('selected' if ((coalesce(frequency, '')) == '1 par semaine') else '') }}>1 par semaine</option>
+                                        <option value="2 par semaine" {{ ('selected' if ((coalesce(frequency, '')) == '2 par semaine') else '') }}>2 par semaine</option>
+                                        <option value="3 par semaine" {{ ('selected' if ((coalesce(frequency, '3 par semaine')) == '3 par semaine') else '') }}>3 par semaine</option>
+                                        <option value="quotidien" {{ ('selected' if ((coalesce(frequency, '')) == 'quotidien') else '') }}>Quotidien</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-danger btn-lg w-100">
+                                <i class="bi bi-calendar3"></i> Générer le calendrier
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                {% if (not empty(result)) %}                    <div class="card shadow-sm border-success mb-4">
+                        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-check-circle"></i> Calendrier généré</h5>
+                            <button class="btn btn-sm btn-light" onclick="navigator.clipboard.writeText(document.getElementById('calendarResult').textContent); this.innerHTML='<i class=\'bi bi-check\'></i> Copié !';">
+                                <i class="bi bi-clipboard"></i> Copier
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="bg-light rounded p-3" id="calendarResult" style="white-space: pre-wrap; font-size: 0.95rem;">
+{{ h(result) }}                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="card bg-primary bg-opacity-10 border-primary text-center">
+                        <div class="card-body py-4">
+                            <h5 class="fw-bold">Besoin d'aide pour rédiger ces articles ?</h5>
+                            <p class="text-muted mb-3">Nos rédacteurs et notre IA peuvent créer du contenu SEO de qualité pour vous.</p>
+                            <a href="/projets/brief" class="btn btn-primary"><i class="bi bi-rocket"></i> Demander un devis</a>
+                        </div>
+                    </div>
+                {% endif %}            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,269 @@
+{% set _ns = namespace() %}<div class="container-fluid px-4 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold"><i class="bi bi-graph-up"></i> Analytics</h1>
+            <p class="text-muted mb-0">Vue d'ensemble des performances</p>
+        </div>
+        <div class="btn-group">
+            <a href="/admin/analytics?period=7" class="btn btn-{{ ('primary' if (loose_eq(period, 7)) else 'outline-primary') }} btn-sm">7j</a>
+            <a href="/admin/analytics?period=30" class="btn btn-{{ ('primary' if (loose_eq(period, 30)) else 'outline-primary') }} btn-sm">30j</a>
+            <a href="/admin/analytics?period=90" class="btn btn-{{ ('primary' if (loose_eq(period, 90)) else 'outline-primary') }} btn-sm">90j</a>
+            <a href="/admin/analytics?period=365" class="btn btn-{{ ('primary' if (loose_eq(period, 365)) else 'outline-primary') }} btn-sm">1 an</a>
+        </div>
+    </div>
+
+    <!-- KPIs principaux -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-2 col-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body py-2">
+                    <div class="fs-4 fw-bold text-primary">{{ number_format(traffic['total_views']) }}</div>
+                    <small class="text-muted">Pages vues</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body py-2">
+                    <div class="fs-4 fw-bold text-info">{{ number_format(traffic['unique_sessions']) }}</div>
+                    <small class="text-muted">Sessions</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body py-2">
+                    <div class="fs-4 fw-bold text-success">{{ number_format(conversions['total']) }}</div>
+                    <small class="text-muted">Conversions</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body py-2">
+                    <div class="fs-4 fw-bold text-warning">{{ number_format(revenue['total'], 0) }} €</div>
+                    <small class="text-muted">Revenus</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body py-2">
+                    <div class="fs-4 fw-bold text-danger">{{ number_format(leads['total']) }}</div>
+                    <small class="text-muted">Leads</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body py-2">
+                    <div class="fs-4 fw-bold">{{ number_format(chatbot['conversations']) }}</div>
+                    <small class="text-muted">Conversations IA</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Colonne gauche -->
+        <div class="col-lg-8">
+            <!-- Revenus -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="mb-0"><i class="bi bi-currency-euro"></i> Revenus</h5>
+                    <span class="badge bg-success fs-6">{{ number_format(revenue['total'], 0) }} €</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3 text-center">
+                        <div class="col-md-3">
+                            <div class="fs-5 fw-bold">{{ revenue['orders'] }}</div>
+                            <small class="text-muted">Commandes</small>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fs-5 fw-bold">{{ number_format(revenue['avg_order'], 0) }} €</div>
+                            <small class="text-muted">Panier moyen</small>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fs-5 fw-bold">{{ number_format(revenue['project_revenue'], 0) }} €</div>
+                            <small class="text-muted">Projets clients</small>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fs-5 fw-bold">{{ number_format((revenue['total'] + revenue['project_revenue']), 0) }} €</div>
+                            <small class="text-muted">Total combiné</small>
+                        </div>
+                    </div>
+                    {% if (not empty(revenue['monthly'])) %}                        <hr>
+                        <h6 class="fw-bold mb-2">Revenus mensuels</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead><tr><th>Mois</th><th>Revenus</th><th>Commandes</th></tr></thead>
+                                <tbody>
+                                    {% for m in php_values(array_slice(revenue['monthly'], 0, 6)) %}                                        <tr>
+                                            <td>{{ m['month'] }}</td>
+                                            <td class="fw-bold">{{ number_format(m['revenue'], 0) }} €</td>
+                                            <td>{{ m['orders'] }}</td>
+                                        </tr>
+                                    {% endfor %}                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}                </div>
+            </div>
+
+            <!-- Conversions par type -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-bullseye"></i> Conversions par type</h5>
+                </div>
+                <div class="card-body">
+                    {% if (not empty(conversions['by_type'])) %}                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead><tr><th>Type</th><th>Nombre</th><th>Valeur</th></tr></thead>
+                                <tbody>
+                                    {% set typeLabels = {'signup': 'Inscription', 'contact': 'Contact', 'newsletter': 'Newsletter', 'enrollment': 'Inscription formation', 'purchase': 'Achat', 'tool_use': 'Outil gratuit', 'appointment': 'RDV'} %}{% for c in php_values(conversions['by_type']) %}                                        <tr>
+                                            <td>{{ coalesce(typeLabels[c['event_type']], c['event_type']) }}</td>
+                                            <td class="fw-bold">{{ c['total'] }}</td>
+                                            <td>{{ (cat(number_format(c['total_value'], 0), ' €') if (c['total_value'] > 0) else '—') }}</td>
+                                        </tr>
+                                    {% endfor %}                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}                        <p class="text-muted text-center mb-0">Aucune conversion enregistrée sur cette période.</p>
+                    {% endif %}                </div>
+            </div>
+
+            <!-- Formations -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-mortarboard"></i> Formations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3 text-center mb-3">
+                        <div class="col-md-3">
+                            <div class="fs-5 fw-bold text-primary">{{ formations['total_enrollments'] }}</div>
+                            <small class="text-muted">Inscriptions</small>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fs-5 fw-bold text-success">{{ formations['completion_rate'] }}%</div>
+                            <small class="text-muted">Taux complétion</small>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fs-5 fw-bold text-warning">{{ formations['total_certificates'] }}</div>
+                            <small class="text-muted">Certificats</small>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fs-5 fw-bold">{{ count(formations['top_formations']) }}</div>
+                            <small class="text-muted">Formations actives</small>
+                        </div>
+                    </div>
+                    {% if (not empty(formations['top_formations'])) %}                        <h6 class="fw-bold mb-2">Top formations</h6>
+                        {% for f in php_values(array_slice(formations['top_formations'], 0, 5)) %}                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small">{{ h(mb_strimwidth(f['title'], 0, 50, '...')) }}</span>
+                                <div>
+                                    <span class="badge bg-primary">{{ f['enrollments'] }} inscrits</span>
+                                    <span class="badge bg-secondary">{{ round(coalesce(f['avg_progress'], 0)) }}%</span>
+                                </div>
+                            </div>
+                        {% endfor %}                    {% endif %}                </div>
+            </div>
+        </div>
+
+        <!-- Colonne droite -->
+        <div class="col-lg-4">
+            <!-- Top pages -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-file-earmark"></i> Top pages</h5>
+                </div>
+                <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
+                    {% if (not empty(traffic['top_pages'])) %}                        {% for p in php_values(traffic['top_pages']) %}                            <div class="list-group-item d-flex justify-content-between py-2">
+                                <span class="small text-truncate" style="max-width: 200px;">{{ h(p['page_url']) }}</span>
+                                <span class="badge bg-primary">{{ p['views'] }}</span>
+                            </div>
+                        {% endfor %}                    {% else %}                        <div class="list-group-item text-muted text-center small">Aucune donnée</div>
+                    {% endif %}                </div>
+            </div>
+
+            <!-- Sources de trafic -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-signpost-split"></i> Sources</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% if (not empty(traffic['by_source'])) %}                        {% for s in php_values(traffic['by_source']) %}                            <div class="list-group-item d-flex justify-content-between py-2">
+                                <span class="small">{{ h(s['source']) }}</span>
+                                <span class="badge bg-info">{{ s['total'] }}</span>
+                            </div>
+                        {% endfor %}                    {% else %}                        <div class="list-group-item text-muted text-center small">Aucune donnée</div>
+                    {% endif %}                </div>
+            </div>
+
+            <!-- Devices -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-phone"></i> Appareils</h5>
+                </div>
+                <div class="card-body">
+                    {% if (not empty(traffic['by_device'])) %}                        {% set deviceIcons = {'desktop': 'bi-display', 'mobile': 'bi-phone', 'tablet': 'bi-tablet'} %}{% set totalDevices = array_sum(array_column(traffic['by_device'], 'total')) %}{% for d in php_values(traffic['by_device']) %}{% set _ns.pct = (round((((d['total'] / totalDevices)) * 100)) if (totalDevices > 0) else 0) %}                            <div class="mb-2">
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span><i class="bi {{ coalesce(deviceIcons[d['device_type']], 'bi-question') }}"></i> {{ ucfirst(d['device_type']) }}</span>
+                                    <span>{{ _ns.pct }}%</span>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar" style="width: {{ _ns.pct }}%"></div>
+                                </div>
+                            </div>
+                        {% endfor %}                    {% else %}                        <p class="text-muted text-center small mb-0">Aucune donnée</p>
+                    {% endif %}                </div>
+            </div>
+
+            <!-- Chatbot & Leads -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-robot"></i> Chatbot & Leads</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2 text-center">
+                        <div class="col-6">
+                            <div class="fs-5 fw-bold">{{ chatbot['conversations'] }}</div>
+                            <small class="text-muted">Conversations</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="fs-5 fw-bold">{{ chatbot['messages'] }}</div>
+                            <small class="text-muted">Messages</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="fs-5 fw-bold text-success">{{ chatbot['qualified'] }}</div>
+                            <small class="text-muted">Qualifiés</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="fs-5 fw-bold text-primary">{{ leads['appointments'] }}</div>
+                            <small class="text-muted">RDV pris</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="text-center">
+                        <span class="small text-muted">Score lead moyen : </span>
+                        <span class="fw-bold">{{ leads['avg_score'] }}/100</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outils gratuits -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-tools"></i> Outils gratuits</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-2">
+                        <div class="fs-4 fw-bold text-primary">{{ tools['total'] }}</div>
+                        <small class="text-muted">Utilisations totales</small>
+                    </div>
+                    {% if (not empty(tools['by_tool'])) %}                        {% set toolLabels = {'seo_audit': 'Audit SEO', 'meta_generator': 'Générateur Meta', 'roi_calculator': 'Calculateur ROI', 'editorial_calendar': 'Calendrier Éditorial'} %}{% for t in php_values(tools['by_tool']) %}                            <div class="d-flex justify-content-between small mb-1">
+                                <span>{{ coalesce(toolLabels[t['tool_name']], t['tool_name']) }}</span>
+                                <span class="fw-bold">{{ t['uses'] }}</span>
+                            </div>
+                        {% endfor %}                    {% endif %}                </div>
+            </div>
+        </div>
+    </div>
+</div>

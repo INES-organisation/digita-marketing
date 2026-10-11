@@ -1,0 +1,163 @@
+<!-- Landing Page Formation - Optimisée Conversion -->
+<section class="landing-hero text-white" style="padding-top: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 60vh;">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                {% if (not empty(formation['category_name'])) %}                    <span class="badge bg-white text-primary mb-3">{{ h(formation['category_name']) }}</span>
+                {% endif %}                <h1 class="display-4 fw-bold mb-3">{{ h(formation['title']) }}</h1>
+                <p class="lead mb-4">{{ h(coalesce(formation['description'], '')) }}</p>
+                
+                <div class="d-flex gap-4 mb-4 flex-wrap">
+                    <div><i class="bi bi-clock"></i> <strong>{{ coalesce(formation['duration_hours'], '—') }} heures</strong></div>
+                    <div><i class="bi bi-bar-chart"></i> <strong>{{ ucfirst(coalesce(formation['level'], 'Tous niveaux')) }}</strong></div>
+                    <div><i class="bi bi-people"></i> <strong>{{ coalesce(formation['enrolled_count'], 0) }} inscrits</strong></div>
+                    {% if ((coalesce(formation['rating'], 0)) > 0) %}                        <div><i class="bi bi-star-fill text-warning"></i> <strong>{{ number_format(formation['rating'], 1) }}/5</strong></div>
+                    {% endif %}                </div>
+
+                <div class="d-flex gap-3 flex-wrap">
+                    {% if (floatval((coalesce(formation['price'], 0))) > 0) %}                        <a href="/formations/checkout/{{ formation['id'] }}" class="btn btn-warning btn-lg fw-bold px-4">
+                            <i class="bi bi-cart-check"></i> S'inscrire — {{ number_format(formation['price'], 2) }} €
+                        </a>
+                    {% else %}                        <form action="/formations/enroll/{{ formation['id'] }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-warning btn-lg fw-bold px-4">
+                                <i class="bi bi-play-circle"></i> Commencer gratuitement
+                            </button>
+                        </form>
+                    {% endif %}                    <a href="#programme" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-list-check"></i> Voir le programme
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                {% if (not empty(formation['image'])) %}                    <img src="{{ h(formation['image']) }}" alt="{{ h(formation['title']) }}" class="img-fluid rounded shadow-lg" style="max-height: 350px;">
+                {% else %}                    <div class="bg-white bg-opacity-10 rounded p-5">
+                        <i class="bi bi-mortarboard" style="font-size: 8rem; opacity: 0.5;"></i>
+                    </div>
+                {% endif %}            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Garanties -->
+<section class="py-4 bg-dark text-white">
+    <div class="container">
+        <div class="row text-center g-3">
+            <div class="col-md-3 col-6">
+                <i class="bi bi-shield-check fs-4 text-success"></i>
+                <div class="small mt-1">Paiement sécurisé</div>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-infinity fs-4 text-info"></i>
+                <div class="small mt-1">Accès illimité à vie</div>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-award fs-4 text-warning"></i>
+                <div class="small mt-1">Certificat inclus</div>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="bi bi-headset fs-4 text-primary"></i>
+                <div class="small mt-1">Support dédié</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ce que vous allez apprendre -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Ce que vous allez apprendre</h2>
+        <div class="row g-4">
+            {% set objectives = [] %}{% if (not empty(formation['objectives'])) %}{% set objectives = json_decode(formation['objectives'], true) %}{% endif %}{% if empty(objectives) %}{% set title = str_replace('Formation ', '', formation['title']) %}{% set objectives = [cat('Maîtriser les fondamentaux de ', strtolower(title)), 'Comprendre les meilleures pratiques et techniques avancées', 'Mettre en place des stratégies efficaces et mesurables', 'Éviter les erreurs courantes et optimiser vos résultats', 'Utiliser les outils professionnels recommandés', 'Appliquer vos connaissances sur des cas concrets'] %}{% endif %}            {% for obj in php_values(objectives) %}                <div class="col-md-6">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-check-circle-fill text-success fs-4 me-3 flex-shrink-0"></i>
+                        <p class="mb-0">{{ h(obj) }}</p>
+                    </div>
+                </div>
+            {% endfor %}        </div>
+    </div>
+</section>
+
+<!-- Programme -->
+<section class="py-5" id="programme">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Programme de la formation</h2>
+        {% if (not empty(formation['modules'])) %}            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="landingModules">
+                        {% for i, module in php_items(formation['modules']) %}                            <div class="accordion-item shadow-sm mb-2">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button {{ ('collapsed' if (i > 0) else '') }}" type="button" data-bs-toggle="collapse" data-bs-target="#lm{{ module['id'] }}">
+                                        <strong>Module {{ (i + 1) }} : {{ h(module['title']) }}</strong>
+                                        {% if (not empty(module['duration'])) %}                                            <span class="badge bg-secondary ms-2">{{ module['duration'] }} min</span>
+                                        {% endif %}                                    </button>
+                                </h2>
+                                <div id="lm{{ module['id'] }}" class="accordion-collapse collapse {{ ('show' if (i == 0) else '') }}" data-bs-parent="#landingModules">
+                                    <div class="accordion-body">
+                                        {% if (not empty(module['lessons'])) %}                                            <ul class="list-group list-group-flush">
+                                                {% for lesson in php_values(module['lessons']) %}                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <span>
+                                                            {% if (not empty(lesson['is_free'])) %}                                                                <i class="bi bi-unlock text-success"></i>
+                                                            {% else %}                                                                <i class="bi bi-lock text-muted"></i>
+                                                            {% endif %}                                                            {{ h(lesson['title']) }}                                                        </span>
+                                                        {% if (not empty(lesson['duration_minutes'])) %}                                                            <small class="text-muted">{{ lesson['duration_minutes'] }} min</small>
+                                                        {% endif %}                                                    </li>
+                                                {% endfor %}                                            </ul>
+                                        {% endif %}                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}                    </div>
+                </div>
+            </div>
+        {% endif %}    </div>
+</section>
+
+<!-- Avis -->
+{% if (not empty(reviews)) %}<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-2">Ce qu'en pensent nos apprenants</h2>
+        {% if ((not empty(averageRating)) and (averageRating['count'] > 0)) %}            <p class="text-center text-muted mb-5">
+                <span class="text-warning fs-5">
+                    {% for s in php_upto(1, 5, true) %}                        <i class="bi bi-star{{ ('-fill' if (s <= round(averageRating['average'])) else '') }}"></i>
+                    {% endfor %}                </span>
+                {{ number_format(averageRating['average'], 1) }}/5 — {{ averageRating['count'] }} avis
+            </p>
+        {% endif %}        <div class="row g-4 justify-content-center">
+            {% for review in php_values(array_slice(reviews, 0, 3)) %}                <div class="col-md-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="text-warning mb-2">
+                                {% for s in php_upto(1, 5, true) %}                                    <i class="bi bi-star{{ ('-fill' if (s <= review['rating']) else '') }}"></i>
+                                {% endfor %}                            </div>
+                            {% if (not empty(review['title'])) %}                                <h6 class="fw-bold">{{ h(review['title']) }}</h6>
+                            {% endif %}                            {% if (not empty(review['comment'])) %}                                <p class="text-muted small">{{ h(mb_strimwidth(review['comment'], 0, 150, '...')) }}</p>
+                            {% endif %}                            <p class="mb-0 small fw-bold">{{ h(review['username']) }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}        </div>
+    </div>
+</section>
+{% endif %}
+<!-- CTA Final -->
+<section class="py-5 text-white text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <h2 class="display-5 fw-bold mb-3">Prêt à vous lancer ?</h2>
+        <p class="lead mb-4">Rejoignez {{ coalesce(formation['enrolled_count'], 0) }} apprenants et développez vos compétences dès aujourd'hui.</p>
+        
+        {% if (floatval((coalesce(formation['price'], 0))) > 0) %}            <div class="mb-3">
+                <span class="display-4 fw-bold">{{ number_format(formation['price'], 2) }} €</span>
+            </div>
+            <a href="/formations/checkout/{{ formation['id'] }}" class="btn btn-warning btn-lg fw-bold px-5 py-3">
+                <i class="bi bi-cart-check"></i> S'inscrire maintenant
+            </a>
+        {% else %}            <form action="/formations/enroll/{{ formation['id'] }}" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-warning btn-lg fw-bold px-5 py-3">
+                    <i class="bi bi-play-circle"></i> Commencer gratuitement
+                </button>
+            </form>
+        {% endif %}        
+        <p class="mt-3 small opacity-75">
+            <i class="bi bi-shield-check"></i> Paiement sécurisé · Accès illimité · Certificat inclus
+        </p>
+    </div>
+</section>

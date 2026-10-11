@@ -1,0 +1,147 @@
+<div class="container-fluid px-4 py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">
+                <i class="bi bi-newspaper text-success"></i> Abonnés Newsletter
+            </h1>
+            <p class="text-muted mb-0">Gérer les abonnements à la newsletter</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/admin/newsletters/export" class="btn btn-success">
+                <i class="bi bi-download"></i> Exporter CSV
+            </a>
+            <a href="/admin/dashboard" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-people-fill text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-0">Total</h6>
+                            <h3 class="mb-0">{{ stats['total'] }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-success">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-check-circle-fill text-success" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-0">Actifs</h6>
+                            <h3 class="mb-0">{{ stats['active'] }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-secondary">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-x-circle-fill text-secondary" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-0">Inactifs</h6>
+                            <h3 class="mb-0">{{ stats['inactive'] }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-calendar-week text-info" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-0">Cette semaine</h6>
+                            <h3 class="mb-0">{{ stats['this_week'] }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter List -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="bi bi-list-ul"></i> Liste des abonnés
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            {% if empty(newsletters) %}                <div class="empty-state">
+                    <i class="bi bi-newspaper"></i>
+                    <p>Aucun abonné pour le moment</p>
+                </div>
+            {% else %}                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Email</th>
+                                <th>Date d'inscription</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for index, newsletter in php_items(newsletters) %}                                <tr>
+                                    <td>{{ (index + 1) }}</td>
+                                    <td>
+                                        <i class="bi bi-envelope-fill text-success me-2"></i>
+                                        <strong>{{ h(newsletter['email']) }}</strong>
+                                    </td>
+                                    <td>
+                                        <small>
+                                            <i class="bi bi-clock"></i>
+                                            {{ date('d/m/Y à H:i', strtotime(newsletter['created_at'])) }}                                        </small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ ('success' if (newsletter['status'] == 'active') else 'secondary') }}">
+                                            <i class="bi bi-{{ ('check-circle' if (newsletter['status'] == 'active') else 'x-circle') }}"></i>
+                                            {{ ucfirst(newsletter['status']) }}                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="mailto:{{ h(newsletter['email']) }}" 
+                                           class="btn btn-sm btn-outline-primary" 
+                                           title="Envoyer un email">
+                                            <i class="bi bi-send"></i> Contacter
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}                        </tbody>
+                    </table>
+                </div>
+            {% endif %}        </div>
+        {% if (not empty(newsletters)) %}            <div class="card-footer bg-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        Total: {{ count(newsletters) }} abonné(s)
+                    </small>
+                    <a href="/admin/newsletters/export" class="btn btn-sm btn-success">
+                        <i class="bi bi-download"></i> Exporter tout
+                    </a>
+                </div>
+            </div>
+        {% endif %}    </div>
+</div>

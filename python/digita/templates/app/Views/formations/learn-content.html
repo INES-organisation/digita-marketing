@@ -1,0 +1,164 @@
+{% set _ns = namespace() %}<!-- Sidebar modules/leçons -->
+<div class="learn-sidebar" id="learnSidebar">
+    <div class="p-3 border-bottom">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <small class="text-muted fw-semibold">PROGRESSION</small>
+            <span class="badge bg-{{ ('success' if ((coalesce(progress['percentage'], 0)) >= 100) else 'primary') }}">
+                {{ coalesce(progress['percentage'], 0) }}%
+            </span>
+        </div>
+        <div class="progress" style="height: 6px;">
+            <div class="progress-bar bg-success" style="width: {{ coalesce(progress['percentage'], 0) }}%"></div>
+        </div>
+        <small class="text-muted d-block mt-1">
+            {{ coalesce(progress['completed_lessons'], 0) }} / {{ coalesce(progress['total_lessons'], 0) }} leçons
+        </small>
+    </div>
+
+    {% for mIndex, module in php_items(formation['modules']) %}        <div class="module-header" data-bs-toggle="collapse" data-bs-target="#module{{ module['id'] }}">
+            <div class="d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-folder2 me-1"></i> Module {{ (mIndex + 1) }}</span>
+                <i class="bi bi-chevron-down small"></i>
+            </div>
+            <div class="small fw-normal mt-1">{{ h(module['title']) }}</div>
+        </div>
+        <div class="collapse {{ ('show' if (t(currentLesson) and t(in_array(currentLesson['id'], array_column(module['lessons'], 'id')))) else '') }}" 
+             id="module{{ module['id'] }}">
+            {% for lesson in php_values(module['lessons']) %}                {% set _ns.isCompleted = (t(is_array(completedLessons)) and t(in_array(lesson['id'], completedLessons))) %}{% set _ns.isActive = (t(currentLesson) and (loose_eq(currentLesson['id'], lesson['id']))) %}                <a href="/formations/{{ h(formation['slug']) }}/learn?lesson={{ lesson['id'] }}" 
+                   class="lesson-item {{ ('active' if t(_ns.isActive) else '') }} {{ ('completed' if t(_ns.isCompleted) else '') }}">
+                    <span class="lesson-check">
+                        {% if t(_ns.isCompleted) %}                            <i class="bi bi-check-circle-fill text-success"></i>
+                        {% elif t(_ns.isActive) %}                            <i class="bi bi-play-circle-fill text-primary"></i>
+                        {% else %}                            <i class="bi bi-circle text-muted"></i>
+                        {% endif %}                    </span>
+                    <span class="text-truncate">{{ h(lesson['title']) }}</span>
+                </a>
+            {% endfor %}
+            {% if ((t(moduleQuiz) and (isset(module['id']))) and (loose_eq(moduleQuiz['module_id'], module['id']))) %}                <a href="/formations/quiz/{{ moduleQuiz['id'] }}" 
+                   class="lesson-item {{ ('completed' if t((coalesce(moduleQuiz['user_passed'], false))) else '') }}">
+                    <span class="lesson-check">
+                        {% if t(coalesce(moduleQuiz['user_passed'], false)) %}                            <i class="bi bi-patch-check-fill text-success"></i>
+                        {% else %}                            <i class="bi bi-question-circle text-warning"></i>
+                        {% endif %}                    </span>
+                    <span class="text-truncate"><strong>Quiz</strong> — {{ h(moduleQuiz['title']) }}</span>
+                </a>
+            {% endif %}        </div>
+    {% endfor %}
+    {% if t(isComplete) %}        <div class="p-3 border-top bg-success bg-opacity-10">
+            <div class="text-center">
+                <i class="bi bi-trophy-fill text-success display-6"></i>
+                <p class="fw-semibold text-success mb-2">Formation terminée !</p>
+                <a href="/formations/{{ formation['id'] }}/certificate" class="btn btn-success btn-sm w-100">
+                    <i class="bi bi-award"></i> Obtenir mon certificat
+                </a>
+            </div>
+        </div>
+    {% endif %}</div>
+
+<!-- Contenu principal -->
+<div class="learn-content">
+    {% if t(currentLesson) %}        <!-- Vidéo si disponible -->
+        {% if (not empty(currentLesson['video_url'])) %}            <div class="video-container">
+                {% set videoUrl = currentLesson['video_url'] %}{% if ((not same(strpos(videoUrl, 'youtube.com'), false)) or (not same(strpos(videoUrl, 'youtu.be'), false))) %}{% set matches = preg_matches('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', videoUrl) %}{% set ytId = coalesce(matches[1], '') %}{{ cat(cat('<iframe src="https://www.youtube.com/embed/', h(ytId)), '?rel=0" frameborder="0" allowfullscreen></iframe>') }}{% elif (not same(strpos(videoUrl, 'vimeo.com'), false)) %}{% set matches = preg_matches('/vimeo\.com\/(\d+)/', videoUrl) %}{% set vimeoId = coalesce(matches[1], '') %}{{ cat(cat('<iframe src="https://player.vimeo.com/video/', h(vimeoId)), '" frameborder="0" allowfullscreen></iframe>') }}{% else %}{{ cat(cat('<video src="', h(videoUrl)), '" controls></video>') }}{% endif %}            </div>
+        {% endif %}
+        <!-- Contenu de la leçon -->
+        <div class="lesson-content-area">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <small class="text-muted">{{ h(coalesce(currentLesson['module_title'], '')) }}</small>
+                    <h2 class="fw-bold mb-0">{{ h(currentLesson['title']) }}</h2>
+                    {% if (not empty(currentLesson['duration_minutes'])) %}                        <small class="text-muted"><i class="bi bi-clock"></i> {{ currentLesson['duration_minutes'] }} min</small>
+                    {% endif %}                </div>
+                {% set lessonCompleted = (t(is_array(completedLessons)) and t(in_array(currentLesson['id'], completedLessons))) %}                <button class="btn btn-{{ ('success' if t(lessonCompleted) else 'outline-success') }} btn-sm" 
+                        id="completeBtn" {{ ('disabled' if t(lessonCompleted) else '') }}                        onclick="markComplete({{ currentLesson['id'] }}, {{ formation['id'] }})">
+                    <i class="bi bi-{{ ('check-circle-fill' if t(lessonCompleted) else 'check-circle') }}"></i>
+                    {{ ('Terminée' if t(lessonCompleted) else 'Marquer comme terminée') }}                </button>
+            </div>
+
+            <!-- Contenu HTML de la leçon -->
+            {% if (not empty(currentLesson['content'])) %}                <div class="lesson-body mb-4">
+                    {{ currentLesson['content'] }}                </div>
+            {% else %}                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-journal-text display-3"></i>
+                    <p class="mt-3">Le contenu de cette leçon sera bientôt disponible.</p>
+                </div>
+            {% endif %}
+            <!-- Ressources -->
+            {% if (not empty(currentLesson['resources'])) %}                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h6 class="mb-0"><i class="bi bi-paperclip text-primary"></i> Ressources</h6>
+                    </div>
+                    <div class="card-body">
+                        {{ currentLesson['resources'] }}                    </div>
+                </div>
+            {% endif %}
+            <!-- Navigation leçons -->
+            <div class="d-flex justify-content-between align-items-center border-top pt-4 mt-4">
+                {% if t(previousLesson) %}                    <a href="/formations/{{ h(formation['slug']) }}/learn?lesson={{ previousLesson['id'] }}" 
+                       class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Précédente
+                    </a>
+                {% else %}                    <div></div>
+                {% endif %}
+                {% if t(nextLesson) %}                    <a href="/formations/{{ h(formation['slug']) }}/learn?lesson={{ nextLesson['id'] }}" 
+                       class="btn btn-primary">
+                        Suivante <i class="bi bi-arrow-right"></i>
+                    </a>
+                {% elif t(isComplete) %}                    <a href="/formations/{{ formation['id'] }}/certificate" class="btn btn-success">
+                        <i class="bi bi-award"></i> Obtenir mon certificat
+                    </a>
+                {% else %}                    <button class="btn btn-secondary" disabled>
+                        Dernière leçon
+                    </button>
+                {% endif %}            </div>
+        </div>
+    {% else %}        <div class="lesson-content-area text-center py-5">
+            <i class="bi bi-journal-x display-1 text-muted"></i>
+            <h4 class="mt-3">Aucune leçon disponible</h4>
+            <p class="text-muted">Cette formation ne contient pas encore de leçons.</p>
+            <a href="/formations/{{ h(formation['slug']) }}" class="btn btn-primary">
+                Retour à la formation
+            </a>
+        </div>
+    {% endif %}</div>
+
+<script>
+function markComplete(lessonId, formationId) {
+    var btn = document.getElementById('completeBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split"></i> En cours...';
+    
+    var formData = new FormData();
+    formData.append('lesson_id', lessonId);
+    formData.append('formation_id', formationId);
+    
+    fetch('/formations/complete-lesson', {
+        method: 'POST',
+        body: formData
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.success) {
+            btn.className = 'btn btn-success btn-sm';
+            btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Terminée';
+            
+            // Mettre à jour la progression dans la sidebar
+            if (data.progress) {
+                var pct = data.progress.percentage;
+                document.querySelectorAll('.progress-bar').forEach(function(bar) {
+                    bar.style.width = pct + '%';
+                });
+                // Recharger pour mettre à jour les icônes
+                setTimeout(function() { location.reload(); }, 500);
+            }
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-check-circle"></i> Marquer comme terminée';
+        }
+    })
+    .catch(function() {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-check-circle"></i> Marquer comme terminée';
+    });
+}
+</script>

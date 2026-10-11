@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ coalesce(title, 'Apprentissage') }} - Digita Marketing</title>
+    <link rel="icon" type="image/png" href="/assets/images/digita.png">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sidebar-width: 320px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+        }
+        .learn-navbar {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            height: 56px;
+            z-index: 1030;
+        }
+        .learn-sidebar {
+            width: var(--sidebar-width);
+            background: #fff;
+            border-right: 1px solid #e9ecef;
+            height: calc(100vh - 56px);
+            overflow-y: auto;
+            position: fixed;
+            top: 56px;
+            left: 0;
+            z-index: 1020;
+            transition: transform 0.3s;
+        }
+        .learn-content {
+            margin-left: var(--sidebar-width);
+            min-height: calc(100vh - 56px);
+            padding: 0;
+        }
+        .module-header {
+            background: #f8f9fa;
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6c757d;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+        }
+        .module-header:hover {
+            background: #e9ecef;
+        }
+        .lesson-item {
+            padding: 10px 16px 10px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        .lesson-item:hover {
+            background: #f0f7ff;
+            color: #0d6efd;
+        }
+        .lesson-item.active {
+            background: #e7f1ff;
+            border-left: 3px solid #0d6efd;
+            color: #0d6efd;
+            font-weight: 500;
+        }
+        .lesson-item.completed .lesson-check {
+            color: #198754;
+        }
+        .lesson-check {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+        .progress-bar-learn {
+            height: 4px;
+            background: #e9ecef;
+        }
+        .progress-bar-learn .progress-bar {
+            background: linear-gradient(90deg, #198754, #20c997);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        .video-container iframe,
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .lesson-content-area {
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .lesson-content-area img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        @media (max-width: 991px) {
+            .learn-sidebar {
+                transform: translateX(-100%);
+            }
+            .learn-sidebar.show {
+                transform: translateX(0);
+            }
+            .learn-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="learn-navbar navbar navbar-dark fixed-top">
+        <div class="container-fluid px-3">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-light btn-sm d-lg-none" id="toggleSidebar">
+                    <i class="bi bi-list"></i>
+                </button>
+                <a href="/formations" class="text-white-50 text-decoration-none">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <span class="text-white fw-semibold text-truncate" style="max-width: 400px;">
+                    {{ h(coalesce(formation['title'], '')) }}                </span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                {% if (isset(progress)) %}                <div class="text-white-50 small d-none d-md-block">
+                    {{ coalesce(progress['percentage'], 0) }}% terminé
+                </div>
+                {% endif %}                <a href="/formations/{{ h(coalesce(formation['slug'], '')) }}" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-info-circle"></i> <span class="d-none d-md-inline">Détails</span>
+                </a>
+            </div>
+        </div>
+        {% if (isset(progress)) %}        <div class="progress-bar-learn w-100 position-absolute bottom-0">
+            <div class="progress-bar" style="width: {{ coalesce(progress['percentage'], 0) }}%"></div>
+        </div>
+        {% endif %}    </nav>
+
+    <!-- Sidebar + Content -->
+    <div style="padding-top: 56px;">
+        {{ content_ }}    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Toggle sidebar mobile
+    var toggleBtn = document.getElementById('toggleSidebar');
+    var sidebar = document.querySelector('.learn-sidebar');
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('show');
+        });
+    }
+    </script>
+</body>
+</html>

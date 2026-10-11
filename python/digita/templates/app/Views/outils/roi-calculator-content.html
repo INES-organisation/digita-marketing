@@ -1,0 +1,178 @@
+<!-- Calculateur ROI Marketing -->
+<section class="py-5" style="padding-top: 120px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="text-center mb-5">
+                    <h1 class="display-5 fw-bold"><i class="bi bi-calculator text-warning"></i> Calculateur ROI Marketing</h1>
+                    <p class="lead text-muted">Estimez le retour sur investissement de vos campagnes publicitaires</p>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Formulaire -->
+                    <div class="col-lg-5">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-warning bg-opacity-10">
+                                <h5 class="mb-0"><i class="bi bi-sliders"></i> Paramètres</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="roiForm">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Budget publicitaire (€)</label>
+                                        <input type="number" name="budget" id="budget" class="form-control" value="{{ coalesce(params['budget'], 1000) }}" min="1" step="100">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Coût par clic moyen (€)</label>
+                                        <input type="number" name="cpc" id="cpc" class="form-control" value="{{ coalesce(params['cpc'], 1.5) }}" min="0.01" step="0.1">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Taux de conversion (%)</label>
+                                        <input type="number" name="conversion_rate" id="conversion_rate" class="form-control" value="{{ coalesce(params['conversion_rate'], 2) }}" min="0.1" step="0.1" max="100">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Panier moyen (€)</label>
+                                        <input type="number" name="avg_order_value" id="avg_order_value" class="form-control" value="{{ coalesce(params['avg_order_value'], 100) }}" min="1" step="10">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Marge bénéficiaire (%)</label>
+                                        <input type="number" name="margin" id="margin" class="form-control" value="{{ coalesce(params['margin'], 30) }}" min="1" max="100" step="1">
+                                    </div>
+                                    <button type="button" class="btn btn-warning w-100 btn-lg" onclick="calculateROI()">
+                                        <i class="bi bi-calculator"></i> Calculer le ROI
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Résultats -->
+                    <div class="col-lg-7">
+                        <div class="card shadow-sm h-100" id="resultsCard">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="bi bi-graph-up-arrow"></i> Résultats estimés</h5>
+                            </div>
+                            <div class="card-body" id="resultsBody">
+                                {% if ((not empty(result)) and empty(result['error'])) %}                                    <!-- Résultats serveur -->
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-6">
+                                            <div class="card bg-light text-center">
+                                                <div class="card-body py-3">
+                                                    <div class="fs-3 fw-bold text-primary">{{ number_format(result['clicks']) }}</div>
+                                                    <small class="text-muted">Clics estimés</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="card bg-light text-center">
+                                                <div class="card-body py-3">
+                                                    <div class="fs-3 fw-bold text-success">{{ number_format(result['conversions']) }}</div>
+                                                    <small class="text-muted">Conversions</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="card bg-light text-center">
+                                                <div class="card-body py-3">
+                                                    <div class="fs-3 fw-bold">{{ number_format(result['revenue'], 0) }} €</div>
+                                                    <small class="text-muted">Chiffre d'affaires</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="card bg-light text-center">
+                                                <div class="card-body py-3">
+                                                    <div class="fs-3 fw-bold text-{{ ('success' if (result['profit'] > 0) else 'danger') }}">{{ number_format(result['profit'], 0) }} €</div>
+                                                    <small class="text-muted">Profit net</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-4">
+                                            <div class="card border-{{ ('success' if (result['roi'] > 0) else 'danger') }} text-center">
+                                                <div class="card-body py-2">
+                                                    <div class="fs-4 fw-bold text-{{ ('success' if (result['roi'] > 0) else 'danger') }}">{{ result['roi'] }}%</div>
+                                                    <small>ROI</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card text-center">
+                                                <div class="card-body py-2">
+                                                    <div class="fs-4 fw-bold">{{ result['cpa'] }} €</div>
+                                                    <small>CPA</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card text-center">
+                                                <div class="card-body py-2">
+                                                    <div class="fs-4 fw-bold">{{ result['roas'] }}x</div>
+                                                    <small>ROAS</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}                                    <div class="text-center py-5 text-muted">
+                                        <i class="bi bi-arrow-left-circle fs-1 d-block mb-3"></i>
+                                        <p>Remplissez les paramètres et cliquez sur "Calculer" pour voir les résultats.</p>
+                                    </div>
+                                {% endif %}                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glossaire -->
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-book"></i> Glossaire</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3 small">
+                            <div class="col-md-4"><strong>ROI</strong> : Retour sur investissement. Mesure la rentabilité.</div>
+                            <div class="col-md-4"><strong>CPA</strong> : Coût par acquisition. Prix moyen pour obtenir un client.</div>
+                            <div class="col-md-4"><strong>ROAS</strong> : Return on Ad Spend. Revenu généré par euro dépensé.</div>
+                            <div class="col-md-4"><strong>CPC</strong> : Coût par clic. Prix moyen d'un clic publicitaire.</div>
+                            <div class="col-md-4"><strong>Taux de conversion</strong> : % de visiteurs qui deviennent clients.</div>
+                            <div class="col-md-4"><strong>Panier moyen</strong> : Montant moyen dépensé par commande.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function calculateROI() {
+    const data = new URLSearchParams({
+        budget: document.getElementById('budget').value,
+        cpc: document.getElementById('cpc').value,
+        conversion_rate: document.getElementById('conversion_rate').value,
+        avg_order_value: document.getElementById('avg_order_value').value,
+        margin: document.getElementById('margin').value
+    });
+
+    fetch('/api/roi-calculate', { method: 'POST', body: data })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            const r = data.result;
+            const roiColor = r.roi > 0 ? 'success' : 'danger';
+            const profitColor = r.profit > 0 ? 'success' : 'danger';
+            document.getElementById('resultsBody').innerHTML = `
+                <div class="row g-3 mb-4">
+                    <div class="col-6"><div class="card bg-light text-center"><div class="card-body py-3"><div class="fs-3 fw-bold text-primary">${r.clicks.toLocaleString()}</div><small class="text-muted">Clics estimés</small></div></div></div>
+                    <div class="col-6"><div class="card bg-light text-center"><div class="card-body py-3"><div class="fs-3 fw-bold text-success">${r.conversions.toLocaleString()}</div><small class="text-muted">Conversions</small></div></div></div>
+                    <div class="col-6"><div class="card bg-light text-center"><div class="card-body py-3"><div class="fs-3 fw-bold">${r.revenue.toLocaleString()} €</div><small class="text-muted">Chiffre d'affaires</small></div></div></div>
+                    <div class="col-6"><div class="card bg-light text-center"><div class="card-body py-3"><div class="fs-3 fw-bold text-${profitColor}">${r.profit.toLocaleString()} €</div><small class="text-muted">Profit net</small></div></div></div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-4"><div class="card border-${roiColor} text-center"><div class="card-body py-2"><div class="fs-4 fw-bold text-${roiColor}">${r.roi}%</div><small>ROI</small></div></div></div>
+                    <div class="col-4"><div class="card text-center"><div class="card-body py-2"><div class="fs-4 fw-bold">${r.cpa} €</div><small>CPA</small></div></div></div>
+                    <div class="col-4"><div class="card text-center"><div class="card-body py-2"><div class="fs-4 fw-bold">${r.roas}x</div><small>ROAS</small></div></div></div>
+                </div>`;
+        }
+    });
+}
+</script>

@@ -1,0 +1,29 @@
+{% set pageTitle = coalesce(pageTitle, 'Connexion - Digita Marketing') %}{% set extraCss = ['/assets/css/auth.css'] %}{% if once('includes/partials/header.html') %}{% include 'includes/partials/header.html' %}{% endif %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="auth-title">Connexion</h2>
+        
+        {% if ((isset(error)) and t(error)) %}            <div class="alert alert-danger">{{ h(error) }}</div>
+        {% endif %}        
+        <form method="post" action="/connexion" class="auth-form" autocomplete="on">
+            {{ CsrfMiddleware_field() }}            
+            <div class="form-group">
+                <label for="email" class="form-label">Adresse Email</label>
+                <input type="email" class="form-control" id="email" name="email" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+        </form>
+        
+        <div class="auth-footer">
+            <a href="/inscription">Créer un compte</a>
+        </div>
+    </div>
+</div>
+
+{% if once('includes/partials/footer.html') %}{% include 'includes/partials/footer.html' %}{% endif %}

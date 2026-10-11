@@ -1,0 +1,12 @@
+.git
+python/.venv
+**/__pycache__
+logs
+cache
+backups
+database
+docs
+tests
+vendor
+.env
+.env.*

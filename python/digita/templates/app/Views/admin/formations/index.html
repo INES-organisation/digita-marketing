@@ -1,0 +1,257 @@
+{% set _ns = namespace() %}<div class="container-fluid px-4 py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold mb-1">
+                <i class="bi bi-mortarboard-fill text-primary"></i> Gestion des formations
+            </h1>
+            <p class="text-muted mb-0">{{ totalFormations }} formation(s) au total</p>
+        </div>
+        <a href="/admin/formations/new" class="btn btn-primary">
+            <i class="bi bi-plus-circle-fill"></i> Nouvelle formation
+        </a>
+    </div>
+
+    <!-- Messages flash -->
+    {% if (isset(_SESSION['success_message'])) %}        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle-fill"></i> {{ h(_SESSION['success_message']) }}            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% do _SESSION.pop('success_message', none) %}    {% endif %}    {% if (isset(_SESSION['error_message'])) %}        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="bi bi-exclamation-triangle-fill"></i> {{ h(_SESSION['error_message']) }}            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% do _SESSION.pop('error_message', none) %}    {% endif %}
+    <!-- Stats rapides -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-2 col-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-3">
+                    <div class="h4 fw-bold text-primary mb-0">{{ stats['total'] }}</div>
+                    <small class="text-muted">Total</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-3">
+                    <div class="h4 fw-bold text-success mb-0">{{ stats['published'] }}</div>
+                    <small class="text-muted">Publiées</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-3">
+                    <div class="h4 fw-bold text-warning mb-0">{{ stats['draft'] }}</div>
+                    <small class="text-muted">Brouillons</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-3">
+                    <div class="h4 fw-bold text-info mb-0">{{ number_format(stats['total_enrolled']) }}</div>
+                    <small class="text-muted">Inscrits</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-3">
+                    <div class="h4 fw-bold text-secondary mb-0">{{ stats['total_modules'] }}</div>
+                    <small class="text-muted">Modules</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-3">
+                    <div class="h4 fw-bold text-dark mb-0">{{ stats['total_lessons'] }}</div>
+                    <small class="text-muted">Leçons</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="GET" action="/admin/formations" class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Rechercher</label>
+                    <input type="text" name="q" class="form-control" placeholder="Titre, description..." 
+                           value="{{ h(coalesce(filterSearch, '')) }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold">Statut</label>
+                    <select name="status" class="form-select">
+                        <option value="">Tous les statuts</option>
+                        <option value="published" {{ ('selected' if ((filterStatus == 'published')) else '') }}>Publiées</option>
+                        <option value="draft" {{ ('selected' if ((filterStatus == 'draft')) else '') }}>Brouillons</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-semibold">Catégorie</label>
+                    <select name="category" class="form-select">
+                        <option value="">Toutes les catégories</option>
+                        {% for cat_ in php_values(categories) %}                            <option value="{{ cat_['id'] }}" {{ ('selected' if ((loose_eq(filterCategory, cat_['id']))) else '') }}>
+                                {{ h(cat_['name']) }} ({{ cat_['formation_count'] }})
+                            </option>
+                        {% endfor %}                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-search"></i> Filtrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tableau des formations -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            {% if empty(formations) %}                <div class="text-center py-5">
+                    <i class="bi bi-mortarboard display-1 text-muted"></i>
+                    <p class="text-muted mt-3">Aucune formation trouvée</p>
+                    <a href="/admin/formations/new" class="btn btn-primary">
+                        <i class="bi bi-plus-circle-fill"></i> Créer une formation
+                    </a>
+                </div>
+            {% else %}                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4" style="width: 35%">Formation</th>
+                                <th>Catégorie</th>
+                                <th>Niveau</th>
+                                <th>Prix</th>
+                                <th>Statut</th>
+                                <th>Inscrits</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for formation in php_values(formations) %}                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            {% if (not empty(formation['image'])) %}                                                <img src="{{ h(formation['image']) }}" 
+                                                     class="rounded me-3" style="width: 48px; height: 48px; object-fit: cover;" alt="">
+                                            {% else %}                                                <div class="rounded me-3 bg-light d-flex align-items-center justify-content-center" 
+                                                     style="width: 48px; height: 48px; min-width: 48px;">
+                                                    <i class="bi bi-mortarboard text-muted"></i>
+                                                </div>
+                                            {% endif %}                                            <div>
+                                                <a href="/admin/formations/edit/{{ formation['id'] }}" 
+                                                   class="fw-semibold text-decoration-none text-dark">
+                                                    {{ h(mb_strimwidth(formation['title'], 0, 50, '...')) }}                                                </a>
+                                                {% if (not empty(formation['duration'])) %}                                                    <div class="text-muted small">
+                                                        <i class="bi bi-clock"></i> {{ h(formation['duration']) }}                                                    </div>
+                                                {% endif %}                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if t(formation['category_name']) %}                                            <span class="badge bg-light text-dark">
+                                                {{ h(formation['category_name']) }}                                            </span>
+                                        {% else %}                                            <span class="text-muted">—</span>
+                                        {% endif %}                                    </td>
+                                    <td>
+                                        {% set _ns.levelBadges = {'debutant': 'bg-success-subtle text-success', 'intermediaire': 'bg-warning-subtle text-warning', 'avance': 'bg-danger-subtle text-danger', 'expert': 'bg-dark'} %}{% set _ns.levelLabels = {'debutant': 'Débutant', 'intermediaire': 'Intermédiaire', 'avance': 'Avancé', 'expert': 'Expert'} %}{% set _ns.level = coalesce(formation['level'], 'debutant') %}                                        <span class="badge {{ coalesce(_ns.levelBadges[_ns.level], 'bg-secondary') }}">
+                                            {{ coalesce(_ns.levelLabels[_ns.level], ucfirst(_ns.level)) }}                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if ((coalesce(formation['price'], 0)) > 0) %}                                            <span class="fw-semibold">{{ number_format(formation['price'], 2, ',', ' ') }} €</span>
+                                        {% else %}                                            <span class="badge bg-success">Gratuit</span>
+                                        {% endif %}                                    </td>
+                                    <td>
+                                        {% if (formation['status'] == 'published') %}                                            <span class="badge bg-success-subtle text-success">
+                                                <i class="bi bi-check-circle-fill"></i> Publiée
+                                            </span>
+                                        {% else %}                                            <span class="badge bg-warning-subtle text-warning">
+                                                <i class="bi bi-pencil-fill"></i> Brouillon
+                                            </span>
+                                        {% endif %}                                    </td>
+                                    <td>
+                                        <span class="text-muted">
+                                            <i class="bi bi-people"></i> {{ number_format(coalesce(formation['enrolled_count'], 0)) }}                                        </span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="/admin/formations/edit/{{ formation['id'] }}" 
+                                               class="btn btn-outline-primary" title="Modifier">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="/formations/{{ h(formation['slug']) }}" 
+                                               class="btn btn-outline-info" target="_blank" title="Voir">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-outline-danger" 
+                                                    onclick="confirmDelete({{ formation['id'] }}, '{{ h(addslashes(formation['title'])) }}')"
+                                                    title="Supprimer">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                {% if (totalPages > 1) %}                    <div class="d-flex justify-content-between align-items-center p-3 border-top">
+                        <small class="text-muted">Page {{ currentPage }} sur {{ totalPages }}</small>
+                        <nav>
+                            <ul class="pagination pagination-sm mb-0">
+                                {% if (currentPage > 1) %}                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ (currentPage - 1) }}{{ (cat('&status=', filterStatus) if t(filterStatus) else '') }}{{ (cat('&category=', filterCategory) if t(filterCategory) else '') }}{{ (cat('&q=', urlencode(filterSearch)) if t(filterSearch) else '') }}">
+                                            <i class="bi bi-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}                                {% for i in php_upto(max(1, (currentPage - 2)), min(totalPages, (currentPage + 2)), true) %}                                    <li class="page-item {{ ('active' if (i == currentPage) else '') }}">
+                                        <a class="page-link" href="?page={{ i }}{{ (cat('&status=', filterStatus) if t(filterStatus) else '') }}{{ (cat('&category=', filterCategory) if t(filterCategory) else '') }}{{ (cat('&q=', urlencode(filterSearch)) if t(filterSearch) else '') }}">
+                                            {{ i }}                                        </a>
+                                    </li>
+                                {% endfor %}                                {% if (currentPage < totalPages) %}                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ (currentPage + 1) }}{{ (cat('&status=', filterStatus) if t(filterStatus) else '') }}{{ (cat('&category=', filterCategory) if t(filterCategory) else '') }}{{ (cat('&q=', urlencode(filterSearch)) if t(filterSearch) else '') }}">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}                            </ul>
+                        </nav>
+                    </div>
+                {% endif %}            {% endif %}        </div>
+    </div>
+</div>
+
+<!-- Modal de suppression -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Voulez-vous vraiment supprimer la formation <strong id="deleteFormationTitle"></strong> ?</p>
+                <p class="text-danger small">Tous les modules, leçons et inscriptions associés seront également supprimés.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form id="deleteForm" method="POST">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(id, title) {
+    document.getElementById('deleteFormationTitle').textContent = title;
+    document.getElementById('deleteForm').action = '/admin/formations/delete/' + id;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
