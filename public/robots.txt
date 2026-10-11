@@ -36,4 +36,4 @@ Disallow: /*.sql$
 Disallow: /*.log$
 
 # Sitemap
-Sitemap: https://digita.tonyalpha80.com/sitemap.xml
+Sitemap: https://digita.buzz/sitemap.xml

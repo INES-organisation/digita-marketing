@@ -2,7 +2,7 @@
 
 Chaque entrée : (méthode, chemin PHP avec :param, fonction).
 """
-from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment, projects, admin
+from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment, projects, admin, automation
 
 R = []
 
@@ -16,6 +16,11 @@ def post(path, fn):
 
 
 get("/", pages.home)
+get("/sitemap.xml", automation.sitemap)
+get("/newsletter/unsubscribe", automation.unsubscribe)
+# Tâches planifiées, appelées par INES (voir routes/automation.py)
+post("/internal/cron/newsletter", automation.newsletter)
+post("/internal/cron/email-sequences", automation.email_sequences)
 
 # ---------------------------------------------------------------- blog
 get("/blog", blog.index)

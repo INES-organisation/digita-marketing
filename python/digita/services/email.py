@@ -1,44 +1,26 @@
 """Envoi d'e-mails (équivalent de app/Services/EmailService.php).
 
-Le PHP utilisait mail() (sendmail d'OVH). Sur le VPS il n'y a pas de sendmail : l'envoi
-passe par SMTP (variables MAIL_*). Sans configuration SMTP, l'e-mail est seulement journalisé
-et l'appelant continue, comme mail() qui renvoie false sans lever d'erreur.
+Plus de SMTP propre à Digita : l'envoi passe par INES (même fournisseur et même compte que les
+e-mails d'INES). Sans INES_API_KEY, l'e-mail est seulement journalisé et l'appelant continue, comme
+mail() qui renvoie false sans lever d'erreur. MAIL_FROM (facultatif) : expéditeur, à déclarer chez
+le fournisseur d'INES ; sinon l'adresse par défaut d'INES avec le nom « Digita Marketing ».
 """
 import logging
 import os
-import smtplib
-from email.message import EmailMessage
-from email.utils import formataddr
 
 from .. import php
+from . import ines
 
 log = logging.getLogger("digita.email")
 
-FROM = "noreply@digita-marketing.com"
 FROM_NAME = "Digita Marketing"
 
 
-def send(to, subject, body, is_html=True):
-    host = os.getenv("MAIL_HOST")
-    if not host:
-        log.warning("SMTP non configuré, e-mail non envoyé : %s → %s", subject, to)
+def send(to, subject, body):
+    if not ines.enabled():
+        log.warning("INES non configuré, e-mail non envoyé : %s → %s", subject, to)
         return False
-    msg = EmailMessage()
-    msg["From"] = formataddr((FROM_NAME, os.getenv("MAIL_FROM", FROM)))
-    msg["Reply-To"] = os.getenv("MAIL_FROM", FROM)
-    msg["To"] = to
-    msg["Subject"] = subject
-    msg.set_content(body, subtype="html" if is_html else "plain", charset="utf-8")
-    try:
-        with smtplib.SMTP(host, int(os.getenv("MAIL_PORT", "587")), timeout=15) as s:
-            s.starttls()
-            if os.getenv("MAIL_USERNAME"):
-                s.login(os.getenv("MAIL_USERNAME"), os.getenv("MAIL_PASSWORD", ""))
-            s.send_message(msg)
-        return True
-    except (OSError, smtplib.SMTPException) as e:
-        log.error("Échec d'envoi à %s : %s", to, e)
-        return False
+    return ines.send_email(to, subject, body, FROM_NAME, os.getenv("MAIL_FROM") or None)
 
 
 def send_welcome(to, name):
