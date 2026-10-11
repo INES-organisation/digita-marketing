@@ -41,7 +41,10 @@ def chat(messages, system_prompt=None):
         chat_messages.append({"role": m.get("role") or "user", "content": m["content"]})
     if ines.enabled():
         try:
-            return ines.generate([m for m in chat_messages if m["role"] != "system"], system_prompt or None)
+            turns = [m for m in chat_messages if m["role"] != "system"]
+            if not turns:  # appel « consigne seule » (routage d'intention) : Claude exige un message utilisateur
+                return ines.generate([{"role": "user", "content": system_prompt}])
+            return ines.generate(turns, system_prompt or None)
         except httpx.HTTPError as e:
             raise AIError("Erreur API INES: " + str(e)) from e
     resp = _send_request("chat/completions", {

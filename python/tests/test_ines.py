@@ -62,3 +62,12 @@ def test_chat_uses_ines_gateway_when_configured(monkeypatch):
     assert url.endswith("/api/v1/generate") and body["no_cache"] is True
     assert body["system"] == "Tu es l'assistant DIGITA"
     assert body["messages"] == [{"role": "user", "content": "Salut"}]
+
+
+def test_prompt_only_call_sends_prompt_as_user_message(monkeypatch):
+    # _route_intention appelle ai.chat([], prompt) : sans ce cas, INES recevait un message vide → 502.
+    monkeypatch.setenv("INES_API_KEY", "ines_pro_sk_x")
+    calls = _capture(monkeypatch, {"text": "projet"})
+    assert ai.chat([], "Classe cette demande") == "projet"
+    _, body, _ = calls[0]
+    assert body["messages"] == [{"role": "user", "content": "Classe cette demande"}] and body["system"] is None
