@@ -258,7 +258,7 @@
                     if (data.success && data.reply) {
                         const botMessage = document.createElement('div');
                         botMessage.className = 'chat-message bot';
-                        botMessage.innerHTML = '<div class="message-content">' + escapeHtml(data.reply) + '</div>';
+                        botMessage.innerHTML = '<div class="message-content">' + formatReply(data.reply) + '</div>';
                         messagesContainer.appendChild(botMessage);
                     }
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -280,6 +280,14 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        // Réponse IA : texte échappé, puis seuls gras, titres (retirés) et sauts de ligne mis en forme.
+        function formatReply(text) {
+            return escapeHtml(text)
+                .replace(/^#{1,6}\s*/gm, '')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
         }
     </script>
     

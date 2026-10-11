@@ -394,15 +394,30 @@
             if (e.key === 'Enter') postMessage();
         });
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Réponse IA : texte échappé, puis seuls gras, titres (retirés) et sauts de ligne mis en forme.
+        function formatReply(text) {
+            return escapeHtml(text)
+                .replace(/^#{1,6}\s*/gm, '')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+        }
+
         function addMessage(text, sender, agentName = null) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message ${sender}`;
             
             let html = '';
             if (agentName && sender === 'bot') {
-                html += `<span class="agent-label">${agentName}</span>`;
+                html += `<span class="agent-label">${escapeHtml(agentName)}</span>`;
             }
-            html += `<div class="message-bubble">${text}</div>`;
+            // Jamais de HTML brut : la réponse vient de l'IA (et le message utilisateur du visiteur).
+            html += `<div class="message-bubble">${formatReply(text)}</div>`;
             
             messageDiv.innerHTML = html;
             chatbotMessages.appendChild(messageDiv);
