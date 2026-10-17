@@ -3,7 +3,7 @@ import math
 
 from .. import db, php
 from ..models import formation as Formation
-from ..render import base_context, render_page, render_view
+from ..render import base_context, render_view
 from .common import not_found, page_param, redirect
 
 
@@ -97,7 +97,9 @@ def search(request):
     query = php.trim(request.query_params.get("q", ""))
     if php.empty(query):
         return redirect("/formations")
-    return render_page(request, "app/Views/formations/search.html", {
+    return render_view(request, "formations/search", {
+        "title": "Recherche « " + query + " » - Formations Digita Marketing", "metaRobots": "noindex, follow",
+        "extraCss": ["/assets/css/formations.css"],
         "query": query,
         "formations": Formation.search(query, 50),
         "categories": Formation.get_categories(),

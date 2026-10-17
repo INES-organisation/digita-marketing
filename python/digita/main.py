@@ -14,6 +14,7 @@ from starlette.responses import FileResponse, PlainTextResponse, Response
 
 from . import config
 from .routes import ROUTES
+from .routes.common import not_found
 from .security import Abort
 from .sessions import SessionMiddleware
 
@@ -84,6 +85,8 @@ async def dispatch(request: Request, full_path: str):
                 handler, args = EXACT[key], m.groups()
                 break
     if handler is None:
+        if method == "GET":
+            return await run_in_threadpool(not_found, request)
         return PlainTextResponse("Page non trouvée", status_code=404, media_type="text/html")
 
     try:

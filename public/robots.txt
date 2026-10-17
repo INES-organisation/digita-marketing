@@ -1,5 +1,5 @@
 # Robots.txt - Digita Marketing
-# https://digita.tonyalpha80.com
+# https://digita.buzz
 
 User-agent: *
 Allow: /

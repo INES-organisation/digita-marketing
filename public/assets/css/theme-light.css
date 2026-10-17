@@ -1,0 +1,236 @@
+/* ==================== THÈME CLAIR ====================
+   Activé par <html data-theme="light"> (bouton dans la navigation, choix gardé dans le navigateur).
+   Reprend la palette claire d'origine du site (fond #f7f7f7, texte #1f2937, bleu #2563eb)
+   en gardant l'or DIGITA comme couleur d'accent. Chargé en dernier : il prime sur les styles sombres. */
+
+[data-theme="light"] {
+    color-scheme: light;
+    --dark: #f7f7f7;
+    --dark-alt: #ffffff;
+    --text-white: #1f2937;
+    --text-muted: #4b5563;
+    --glass-bg: #ffffff;
+    --glass-border: rgba(15, 23, 42, 0.08);
+    --gold: #b8921f;
+    --gold-glow: rgba(184, 146, 31, 0.25);
+    --page-bg: #f7f7f7;
+    --shell-bg: #ffffff;
+    --shell-border: rgba(15, 23, 42, 0.08);
+    --shell-text: #4b5563;
+    --shell-text-strong: #111827;
+    --shell-hover: rgba(37, 99, 235, 0.06);
+    --footer-bg: #ffffff;
+    --auth-text: #111827;
+    --auth-muted: #4b5563;
+    --auth-input-bg: #ffffff;
+}
+
+[data-theme="light"] body,
+[data-theme="light"] .main-container-premium {
+    background: var(--page-bg) !important;
+    color: #1f2937;
+}
+
+/* ---------- Titres et textes ---------- */
+[data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3,
+[data-theme="light"] h4, [data-theme="light"] h5, [data-theme="light"] h6 {
+    color: #111827;
+}
+
+[data-theme="light"] .text-white,
+[data-theme="light"] .text-light {
+    color: #111827 !important;
+}
+
+[data-theme="light"] .text-white-50,
+[data-theme="light"] .text-muted {
+    color: #4b5563 !important;
+}
+
+[data-theme="light"] .text-gold,
+[data-theme="light"] [style*="color: #D4AF37"],
+[data-theme="light"] [style*="color:#D4AF37"] {
+    color: #b8921f !important;
+}
+
+[data-theme="light"] [style*="color: rgba(255,255,255"],
+[data-theme="light"] [style*="color:rgba(255,255,255"],
+[data-theme="light"] [style*="color: rgba(255, 255, 255"],
+[data-theme="light"] [style*="color: #fff"],
+[data-theme="light"] [style*="color: white"] {
+    color: #4b5563 !important;
+}
+
+[data-theme="light"] p, [data-theme="light"] li {
+    color: inherit;
+}
+
+/* Textes en dégradé or / bleu : on garde le dégradé, plus foncé pour rester lisible */
+[data-theme="light"] .text-gradient-gold {
+    background: linear-gradient(135deg, #a07d14, #c99a2e);
+    -webkit-background-clip: text;
+}
+
+/* Sur les fonds colorés (boutons, badges, bandeaux), le texte reste clair */
+[data-theme="light"] .btn-primary, [data-theme="light"] .btn-primary *,
+[data-theme="light"] .bg-primary .text-white, [data-theme="light"] .bg-primary h1,
+[data-theme="light"] .bg-primary h2, [data-theme="light"] .bg-primary p,
+[data-theme="light"] .badge.bg-primary, [data-theme="light"] .badge.bg-success,
+[data-theme="light"] .badge.bg-danger, [data-theme="light"] .bg-gradient .text-white,
+[data-theme="light"] .btn-premium-blue {
+    color: #ffffff !important;
+}
+
+/* ---------- Sections et fonds ---------- */
+[data-theme="light"] section {
+    background: transparent;
+    border-color: rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="light"] .bg-premium-dark-blue,
+[data-theme="light"] .bg-premium-glow,
+[data-theme="light"] .bg-dark,
+[data-theme="light"] [style*="background:#0a0f1a"],
+[data-theme="light"] [style*="background: #0a0f1a"],
+[data-theme="light"] [style*="background: #050505"],
+[data-theme="light"] [style*="background:#050505"],
+[data-theme="light"] [style*="background: #080e1c"],
+[data-theme="light"] [style*="background: linear-gradient(160deg, #0a1628"] {
+    background: #ffffff !important;
+    color: #1f2937;
+}
+
+[data-theme="light"] .bg-premium-grid {
+    background-color: #f7f7f7;
+    background-image:
+        linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+}
+
+[data-theme="light"] .hero-premium,
+[data-theme="light"] .contact-hero {
+    background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.12) 0%, transparent 30%),
+                #f7f7f7 !important;
+}
+
+/* ---------- Cartes ---------- */
+[data-theme="light"] .glass-card,
+[data-theme="light"] .card,
+[data-theme="light"] .service-card-premium,
+[data-theme="light"] .problem-card,
+[data-theme="light"] [style*="background: rgba(255,255,255,0.02)"],
+[data-theme="light"] [style*="background: rgba(255,255,255,0.03)"] {
+    background: #ffffff !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    color: #1f2937;
+}
+
+[data-theme="light"] .service-card-premium p,
+[data-theme="light"] .problem-card p,
+[data-theme="light"] .timeline-content p {
+    color: #4b5563 !important;
+}
+
+[data-theme="light"] .border-glass {
+    border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+/* ---------- Formulaires ---------- */
+[data-theme="light"] .form-control,
+[data-theme="light"] .form-select {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
+}
+
+[data-theme="light"] .form-control::placeholder {
+    color: #9ca3af;
+}
+
+[data-theme="light"] .form-select option {
+    background: #ffffff !important;
+    color: #111827;
+}
+
+[data-theme="light"] .btn-close-white {
+    filter: none;
+}
+
+[data-theme="light"] .modal-content {
+    background: #ffffff !important;
+}
+
+/* ---------- Navigation et pied de page ---------- */
+[data-theme="light"] .sidebar-premium,
+[data-theme="light"] .topbar-premium {
+    box-shadow: 0 0 24px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="light"] .nav-link-premium.active {
+    background: rgba(37, 99, 235, 0.08);
+    color: #2563eb;
+}
+
+[data-theme="light"] .footer-premium {
+    border-top-color: rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .footer-bottom {
+    border-top-color: rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .footer-newsletter-form .form-control {
+    border-radius: 8px 0 0 8px;
+}
+
+[data-theme="light"] .cta-sidebar,
+[data-theme="light"] .btn-newsletter,
+[data-theme="light"] .btn-premium-gold {
+    background: #D4AF37 !important;
+    color: #111827 !important;
+}
+
+/* Logo : version sombre du logo doré sur fond clair */
+[data-theme="light"] .sidebar-logo img,
+[data-theme="light"] .topbar-logo img,
+[data-theme="light"] .footer-premium img {
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.35));
+}
+
+/* ---------- Chatbot ---------- */
+[data-theme="light"] #chatbot-header,
+[data-theme="light"] .chat-message.user .message-content,
+[data-theme="light"] #chatbot-send {
+    background: #2563eb;
+}
+
+[data-theme="light"] #chatbot-header h5 {
+    color: #ffffff;
+}
+
+/* ---------- Sections à fond sombre écrit dans la page (accueil notamment) ---------- */
+[data-theme="light"] section[style*="background: #0"],
+[data-theme="light"] section[style*="background:#0"],
+[data-theme="light"] section[style*="background: linear-gradient(90deg, #0"],
+[data-theme="light"] section[style*="background: linear-gradient(135deg, #0"],
+[data-theme="light"] section[style*="background: radial-gradient"] {
+    background: #f7f7f7 !important;
+}
+
+[data-theme="light"] section[style*="background: linear-gradient(135deg, #0"],
+[data-theme="light"] section[style*="background: linear-gradient(90deg, #0"],
+[data-theme="light"] section[style*="background: #030a17"] {
+    background: #ffffff !important;
+}
+
+[data-theme="light"] #hero-premium {
+    background: radial-gradient(ellipse at 15% 50%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 20%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
+                #f7f7f7 !important;
+}
+
+[data-theme="light"] canvas {
+    opacity: 0.35;
+}

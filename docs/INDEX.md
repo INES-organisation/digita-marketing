@@ -1,30 +1,17 @@
-# 📚 Documentation Digita Marketing
+# Documentation Digita Marketing
 
-## 🎯 Guides Principaux
+## Technique
 
-- [Quick Start](guides/QUICK_START.md) - Démarrage rapide
-- [Features](guides/FEATURES.md) - Fonctionnalités
-- [Guide d'Exécution](guides/GUIDE_EXECUTION.md)
-- [Optimisation Complète](guides/OPTIMISATION_COMPLETE.md)
+- [Conversion PHP → Python et mise en ligne](migrations/SUIVI_CONVERSION_PYTHON.md) : architecture, déploiement sur le VPS INES, historique.
+- [Audit du site](audits/AUDIT_SITE_2026-10.md) : état du site en ligne et priorités d'amélioration.
 
-## 📊 Audits
+## Stratégie et contenu
 
-- [Audit MVC](audits/AUDIT_MVC_STYLES.md)
-- [Audit Responsive](audits/AUDIT_RESPONSIVE.md)
-- [Audit Conflits CSS](audits/AUDIT_CONFLITS_STYLES.md)
+- [Stratégie Digita](DIGITA_STRATEGY.md)
+- [Stratégie de référence](STRATEGIE_REFERENCE_DIGITA.md)
+- [Manifeste](MANIFESTE_DIGITA.md)
+- [Standards premium](STANDARDS_PREMIUM.md)
+- [Catalogue des services](services-catalogue-complet.md) et [liste complète](liste-services-complets.md)
 
-## 🔄 Migrations
-
-Voir le dossier [migrations/](migrations/) pour l'historique complet des migrations MVC.
-
-## 🔧 Corrections
-
-Voir le dossier [corrections/](corrections/) pour l'historique des corrections.
-
-## 📦 Archives
-
-Voir le dossier [archives/](archives/) pour les anciennes documentations.
-
----
-
-**Dernière mise à jour** : 30/10/2025
+Les anciennes notes de la version PHP (corrections, archives, guides, migrations MVC) ont été retirées ;
+elles restent dans l'historique git (dernier commit PHP : `920b9dd`).

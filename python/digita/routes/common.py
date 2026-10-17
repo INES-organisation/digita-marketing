@@ -1,6 +1,6 @@
 from starlette.responses import RedirectResponse
 
-from ..render import render_page
+from ..render import render_view
 
 def redirect(url):
     # header('Location: …') sans code explicite → 302 en PHP
@@ -9,7 +9,8 @@ def redirect(url):
 
 def not_found(request, **ctx):
     """require Views/errors/404.php avec le statut 404 (variables du contrôleur visibles)."""
-    return render_page(request, "app/Views/errors/404.html", ctx, status=404)
+    data = {"title": "Page introuvable - Digita Marketing", "metaRobots": "noindex, follow", **ctx}
+    return render_view(request, "errors/404", data, status=404)
 
 
 def page_param(request):
