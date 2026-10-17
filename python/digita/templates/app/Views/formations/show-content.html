@@ -288,15 +288,15 @@
                     <div class="card-body text-center">
                         <h6 class="mb-3">Partager cette formation</h6>
                         <div class="d-flex gap-2 justify-content-center">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(cat('http://digita-marketing.local/formations/', formation['slug'])) }}"
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(cat(const('BASE_URL'), '/formations/', formation['slug'])) }}"
                                target="_blank" class="btn btn-primary btn-sm" rel="noopener noreferrer">
                                 <i class="bi bi-facebook"></i>
                             </a>
-                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(cat('http://digita-marketing.local/formations/', formation['slug'])) }}&text={{ urlencode(formation['title']) }}"
+                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(cat(const('BASE_URL'), '/formations/', formation['slug'])) }}&text={{ urlencode(formation['title']) }}"
                                target="_blank" class="btn btn-info btn-sm text-white" rel="noopener noreferrer">
                                 <i class="bi bi-twitter"></i>
                             </a>
-                            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(cat('http://digita-marketing.local/formations/', formation['slug'])) }}"
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(cat(const('BASE_URL'), '/formations/', formation['slug'])) }}"
                                target="_blank" class="btn btn-primary btn-sm" rel="noopener noreferrer">
                                 <i class="bi bi-linkedin"></i>
                             </a>

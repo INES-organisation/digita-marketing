@@ -1,4 +1,6 @@
 """Rendu Jinja2 avec la sémantique des vues PHP (ViewHelper::render, require_once…)."""
+import time
+
 from jinja2 import ChainableUndefined, Environment, FileSystemLoader
 from starlette.responses import HTMLResponse
 
@@ -16,6 +18,9 @@ env = Environment(
 env.globals.update(php.GLOBALS)
 env.globals["const"] = lambda name: config.CONSTANTS.get(name, name)
 env.globals["defined"] = lambda name: name in config.CONSTANTS
+# Version des fichiers statiques (?v=…) : change à chaque démarrage, donc à chaque déploiement,
+# au lieu de time() qui empêchait toute mise en cache par le navigateur.
+env.globals["asset_v"] = str(int(time.time()))
 
 
 def base_context(request):

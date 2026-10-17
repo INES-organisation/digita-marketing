@@ -78,27 +78,29 @@
                             </ul>
                         </div>
                         <div class="col-lg-8 p-5">
-                            <form action="/contact" method="POST" class="premium-form">
+                            <form action="/contact" method="POST" class="premium-form" id="formulaire">
+                                {{ CsrfMiddleware_field() }}
+                                {% if contactFlash %}<div class="alert {{ 'alert-success' if contactFlash['ok'] else 'alert-danger' }} mb-4" role="status">{{ h(contactFlash['message']) }}</div>{% endif %}
                                 <div class="row g-4">
                                     <div class="col-md-6">
-                                        <label class="form-label text-white-50 small">Nom complet</label>
-                                        <input type="text" class="form-control glass-card border-glass text-white p-3" name="nom" required>
+                                        <label class="form-label text-white-50 small" for="contact-nom">Nom complet</label>
+                                        <input type="text" class="form-control glass-card border-glass text-white p-3" id="contact-nom" name="nom" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label text-white-50 small">Organisation</label>
-                                        <input type="text" class="form-control glass-card border-glass text-white p-3" name="entreprise">
+                                        <label class="form-label text-white-50 small" for="contact-entreprise">Organisation</label>
+                                        <input type="text" class="form-control glass-card border-glass text-white p-3" id="contact-entreprise" name="entreprise">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label text-white-50 small">Email Expertise</label>
-                                        <input type="email" class="form-control glass-card border-glass text-white p-3" name="email" required>
+                                        <label class="form-label text-white-50 small" for="contact-email">E-mail professionnel</label>
+                                        <input type="email" class="form-control glass-card border-glass text-white p-3" id="contact-email" name="email" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label text-white-50 small">Téléphone</label>
-                                        <input type="tel" class="form-control glass-card border-glass text-white p-3" name="telephone" required>
+                                        <label class="form-label text-white-50 small" for="contact-telephone">Téléphone (facultatif)</label>
+                                        <input type="tel" class="form-control glass-card border-glass text-white p-3" id="contact-telephone" name="telephone">
                                     </div>
                                     <div class="col-12">
-                                        <label class="form-label text-white-50 small">Expertise Recherchée</label>
-                                        <select class="form-select glass-card border-glass text-white p-3" name="service" required style="background-color: transparent;">
+                                        <label class="form-label text-white-50 small" for="contact-service">Expertise Recherchée</label>
+                                        <select class="form-select glass-card border-glass text-white p-3" id="contact-service" name="service" required style="background-color: transparent;">
                                             <option value="" class="bg-dark">Sélectionnez un domaine</option>
                                             <option value="strategie" class="bg-dark">Conseil & Stratégie</option>
                                             <option value="ia" class="bg-dark">Intelligence Artificielle</option>
@@ -108,8 +110,8 @@
                                         </select>
                                     </div>
                                     <div class="col-12">
-                                        <label class="form-label text-white-50 small">Brief de votre projet</label>
-                                        <textarea class="form-control glass-card border-glass text-white p-3" name="message" rows="4" required placeholder="Décrivez vos enjeux stratégiques..."></textarea>
+                                        <label class="form-label text-white-50 small" for="contact-message">Brief de votre projet</label>
+                                        <textarea class="form-control glass-card border-glass text-white p-3" id="contact-message" name="message" rows="4" required placeholder="Décrivez vos enjeux stratégiques..."></textarea>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-check">

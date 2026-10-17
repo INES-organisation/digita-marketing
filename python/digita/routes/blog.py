@@ -3,7 +3,7 @@ import math
 
 from ..models import article as Article
 from ..models import formation as Formation
-from ..render import render_page, render_view
+from ..render import render_view
 from .common import not_found, page_param, redirect
 from .. import db, php
 
@@ -100,7 +100,9 @@ def search(request):
     query = php.trim(request.query_params.get("q", ""))
     if php.empty(query):
         return redirect("/blog")
-    return render_page(request, "app/Views/blog/search.html", {
+    return render_view(request, "blog/search", {
+        "title": "Recherche « " + query + " » - Blog Digita Marketing", "metaRobots": "noindex, follow",
+        "extraCss": ["/assets/css/blog-layout.css"],
         "query": query,
         "articles": Article.search(query, 50),
         "categories": Article.get_categories(),

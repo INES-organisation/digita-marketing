@@ -4,7 +4,7 @@ from starlette.concurrency import run_in_threadpool
 
 from .. import db, php, security
 from ..services import ines
-from ..render import render_page
+from ..render import render_view
 from .common import redirect
 
 
@@ -15,8 +15,8 @@ def _authenticated(request):
 def show_login(request):
     if _authenticated(request):
         return redirect("/admin/dashboard")
-    resp = render_page(request, "app/Views/auth/login.html", {
-        "pageTitle": "Connexion - Digita Marketing",
+    resp = render_view(request, "auth/login", {
+        "title": "Connexion - Digita Marketing", "metaRobots": "noindex, follow",
         "error": request.session.get("login_error"),
     })
     request.session.pop("login_error", None)
@@ -26,8 +26,8 @@ def show_login(request):
 def show_register(request):
     if _authenticated(request):
         return redirect("/admin/dashboard")
-    resp = render_page(request, "app/Views/auth/register.html", {
-        "pageTitle": "Inscription - Digita Marketing",
+    resp = render_view(request, "auth/register", {
+        "title": "Inscription - Digita Marketing", "metaRobots": "noindex, follow",
         "error": request.session.get("register_error"),
     })
     request.session.pop("register_error", None)
