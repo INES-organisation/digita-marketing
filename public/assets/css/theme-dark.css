@@ -1,0 +1,124 @@
+/* ==================== THÈME SOMBRE (par défaut) ====================
+   Activé par <html data-theme="dark" data-bs-theme="dark">. Bootstrap 5.3 passe alors ses
+   propres couleurs en mode sombre (cartes, .text-muted, formulaires, modales).
+   Ce fichier corrige le reste : les anciennes sections écrites pour un site clair
+   (.bg-white / .bg-light, .text-dark…), qui donnaient du texte blanc sur fond blanc
+   ou du texte foncé sur fond foncé. Chargé juste avant theme-light.css. */
+
+[data-theme="dark"] {
+    color-scheme: dark;
+    --bs-body-bg: #050505;
+    --bs-secondary-color: rgba(255, 255, 255, 0.62);
+    --bs-emphasis-color: #ffffff;
+    --dark-surface: #0b1120;
+    --dark-surface-border: rgba(255, 255, 255, 0.08);
+    --dark-text: #e5e7eb;
+    --dark-text-muted: rgba(255, 255, 255, 0.62);
+}
+
+/* ---------- Sections et blocs pensés pour un fond clair ---------- */
+[data-theme="dark"] section.bg-white,
+[data-theme="dark"] section.bg-light,
+[data-theme="dark"] footer.bg-light,
+[data-theme="dark"] ol.bg-light,
+[data-theme="dark"] ol.bg-white,
+[data-theme="dark"] .breadcrumb.bg-light {
+    background: transparent !important;
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] div.bg-white,
+[data-theme="dark"] div.bg-light,
+[data-theme="dark"] pre.bg-light,
+[data-theme="dark"] .legal-content .highlight-box,
+[data-theme="dark"] .card:not([class*="bg-"]):not([style*="background"]):not(.glass-card) {
+    background-color: var(--dark-surface) !important;
+    border-color: var(--dark-surface-border) !important;
+    color: var(--dark-text);
+}
+
+/* Petites pastilles claires : on garde le fond clair, avec un texte foncé */
+[data-theme="dark"] span.bg-white,
+[data-theme="dark"] span.bg-light,
+[data-theme="dark"] .badge.bg-light {
+    color: #111827 !important;
+}
+
+/* ---------- Textes ---------- */
+[data-theme="dark"] .text-dark,
+[data-theme="dark"] .text-body,
+[data-theme="dark"] .card-title,
+[data-theme="dark"] .card .text-dark,
+[data-theme="dark"] a.text-dark {
+    color: var(--dark-text) !important;
+}
+
+/* …sauf sur les fonds jaunes / cyan / clairs, où le texte foncé est voulu */
+[data-theme="dark"] .bg-warning .text-dark,
+[data-theme="dark"] .bg-warning.text-dark,
+[data-theme="dark"] .bg-info .text-dark,
+[data-theme="dark"] .bg-info.text-dark,
+[data-theme="dark"] .btn-warning.text-dark,
+[data-theme="dark"] .btn-info.text-dark,
+[data-theme="dark"] .btn-light.text-dark,
+[data-theme="dark"] span.bg-white.text-dark,
+[data-theme="dark"] span.bg-light.text-dark,
+[data-theme="dark"] .bg-warning:not([class*="bg-opacity"]) h5,
+[data-theme="dark"] .bg-warning:not([class*="bg-opacity"]) h6,
+[data-theme="dark"] .bg-info:not([class*="bg-opacity"]) h5,
+[data-theme="dark"] .bg-info:not([class*="bg-opacity"]) h6 {
+    color: #111827 !important;
+}
+
+[data-theme="dark"] a.text-dark:hover {
+    color: var(--gold) !important;
+}
+
+[data-theme="dark"] .text-muted,
+[data-theme="dark"] .text-secondary,
+[data-theme="dark"] .text-body-secondary,
+[data-theme="dark"] .card-text {
+    color: var(--dark-text-muted) !important;
+}
+
+[data-theme="dark"] .legal-content,
+[data-theme="dark"] .legal-content p,
+[data-theme="dark"] .legal-content li {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .legal-content h2 {
+    color: var(--gold);
+}
+
+[data-theme="dark"] .legal-content .update-date {
+    color: var(--dark-text-muted);
+}
+
+/* Tableaux Bootstrap clairs (CGV, tarifs…) */
+[data-theme="dark"] .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--dark-text);
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.03);
+    --bs-table-striped-color: var(--dark-text);
+    --bs-table-border-color: var(--dark-surface-border);
+}
+
+[data-theme="dark"] .table-light,
+[data-theme="dark"] thead.table-light th {
+    --bs-table-bg: rgba(255, 255, 255, 0.05);
+    --bs-table-color: #ffffff;
+}
+
+/* Listes et accordéons Bootstrap */
+[data-theme="dark"] .list-group-item {
+    background-color: transparent;
+    color: var(--dark-text);
+    border-color: var(--dark-surface-border);
+}
+
+/* ---------- Pastilles colorées : texte foncé sur jaune / cyan ---------- */
+.badge.bg-warning,
+.badge.bg-info {
+    color: #111827 !important;
+}

@@ -28,10 +28,17 @@ def _token(html):
 
 def test_pages_share_navigation_and_footer():
     c = _client()
+    # Accueil : barre latérale verticale ancrée sur les sections, logo vers le héros
+    home = c.get("/").text
+    assert 'class="sidebar-premium"' in home and 'class="navbar-top"' not in home
+    assert 'href="#enjeux"' in home and 'href="#hero-premium"' in home and "Diagnostic gratuit" in home
+    assert 'class="sidebar-onglet-sidebar"' not in home and 'class="footer-premium"' in home
+    # Autres pages : menu horizontal, menu agence et barre de services à droite
     for path in ("/contact", "/connexion", "/inscription", "/page-qui-n-existe-pas"):
         r = c.get(path)
-        assert 'class="sidebar-premium"' in r.text and 'class="footer-premium"' in r.text, path
-        assert "navbar fixed-top" not in r.text, path
+        assert 'class="navbar-top"' in r.text and 'class="sidebar-premium"' not in r.text, path
+        assert 'id="sidebarAgence"' in r.text and 'class="sidebar-onglet-sidebar"' in r.text, path
+        assert 'href="/#hero-premium"' in r.text and 'class="footer-premium"' in r.text, path
     r = c.get("/page-qui-n-existe-pas")
     assert r.status_code == 404 and "Page non trouvée" in r.text and "noindex" in r.text
     assert 'aria-current="page"' in c.get("/contact").text

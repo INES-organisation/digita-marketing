@@ -1,0 +1,81 @@
+{% set navPath = rtrim(strtok(coalesce(_SERVER['REQUEST_URI'], '/'), '?'), '/') or '/' %}{% set navUser = ((isset(_SESSION['user_id'])) and (not empty(_SESSION['user_id']))) %}{% set navRole = coalesce(_SESSION['user_role'], '') %}
+<!-- Navigation des pages intérieures : menu horizontal + menu « agence » coulissant à droite.
+     L'accueil utilise la barre latérale (sidebar-premium.html). -->
+<nav class="navbar-top" aria-label="Navigation principale">
+    <a href="/#hero-premium" class="navbar-top-logo" title="Accueil"><img src="/assets/images/logo.png" alt="DIGITA" width="150" height="35"></a>
+
+    <ul class="navbar-top-links" id="navbarTopLinks">
+        {% for link in [
+            ['/a-propos', 'À propos', 'Apprendre à nous connaître'],
+            ['/services', 'Services', 'Découvrir nos services'],
+            ['/contact', 'Contact', 'Prendre contact'],
+            ['/support', 'Support', 'Nous pouvons vous aider'],
+            ['/tarifs', 'Tarifs', 'Trouver une offre'],
+        ] %}
+        {% set active = (navPath == link[0]) or navPath.startswith(link[0] ~ '/') %}
+        <li>
+            <a href="{{ link[0] }}" class="navbar-top-link{{ ' active' if active else '' }}"{{ ' aria-current="page"' if active else '' }}>
+                <span class="navbar-top-title">{{ link[1] }}</span>
+                <span class="navbar-top-subtitle">{{ link[2] }}</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="navbar-top-actions">
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Changer de thème" title="Thème clair / sombre">
+            <i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-stars-fill theme-icon-dark"></i>
+        </button>
+        <button type="button" class="topbar-burger" aria-label="Ouvrir le menu" aria-controls="sidebarAgence" aria-expanded="false" data-agence-toggle>
+            <i class="bi bi-list"></i>
+        </button>
+    </div>
+</nav>
+
+<!-- Menu « agence » : compte, ressources et liens secondaires -->
+<div class="sidebar-backdrop agence-backdrop" data-agence-close></div>
+<aside class="sidebar-agence" id="sidebarAgence" aria-label="Menu agence" aria-hidden="true">
+    <div class="sidebar-agence-head">
+        <a href="/#hero-premium"><img src="/assets/images/logo.png" alt="DIGITA" width="130" height="30"></a>
+        <button type="button" class="sidebar-close d-block" aria-label="Fermer le menu" data-agence-close><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <div class="sidebar-agence-account">
+        {% if t(navUser) %}
+            {% if navRole == 'admin' %}<a href="/admin/dashboard" class="cta-sidebar"><i class="bi bi-speedometer2"></i> Administration</a>{% endif %}
+            <a href="/mes-formations" class="sidebar-account-link"><i class="bi bi-collection-play"></i> Mes formations</a>
+            <a href="/espace-client" class="sidebar-account-link"><i class="bi bi-briefcase"></i> Espace client</a>
+            <a href="/admin/logout" class="sidebar-account-link"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+        {% else %}
+            <a href="/connexion" class="cta-sidebar"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
+            <a href="/inscription" class="btn-sidebar-outline"><i class="bi bi-person-plus"></i> Inscription</a>
+        {% endif %}
+    </div>
+
+    <!-- Sur mobile, les liens du menu horizontal sont repris ici -->
+    <ul class="sidebar-agence-links sidebar-agence-main">
+        {% for link in [['/a-propos', 'À propos'], ['/services', 'Services'], ['/contact', 'Contact'], ['/support', 'Support'], ['/tarifs', 'Tarifs']] %}
+        <li><a href="{{ link[0] }}">{{ link[1] }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <ul class="sidebar-agence-links">
+        {% for link in [
+            ['/blog', 'Blog', 'Actualités & conseils'],
+            ['/boutique', 'Boutique', 'Produits & services'],
+            ['/solutions', 'Solutions', 'Outils & solutions'],
+            ['/outils', 'Outils', 'Ressources & outils gratuits'],
+            ['/formations', 'Formations', 'Apprendre & se former'],
+        ] %}
+        <li><a href="{{ link[0] }}">{{ link[1] }}<small>{{ link[2] }}</small></a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="sidebar-agence-foot">
+        <button type="button" class="theme-toggle theme-toggle-wide" data-theme-toggle aria-label="Changer de thème">
+            <i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-stars-fill theme-icon-dark"></i>
+            <span class="theme-label-light">Thème clair</span><span class="theme-label-dark">Thème sombre</span>
+        </button>
+        <a href="/projets/brief" class="btn-sidebar-outline">Démarrer un projet</a>
+    </div>
+</aside>

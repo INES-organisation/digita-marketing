@@ -247,6 +247,16 @@
     background: #a0aec0;
 }
 
+/* Couleurs foncées des titres et cartes : thème clair uniquement */
+[data-theme="light"] .main-content h2,
+[data-theme="light"] .card-title {
+    color: #2d3748 !important;
+}
+
+[data-theme="light"] .card-text {
+    color: #4a5568 !important;
+}
+
 /* Section principale */
 .main-content {
     margin-top: 0 !important;
@@ -254,7 +264,6 @@
 }
 
 .main-content h2 {
-    color: #2d3748 !important;
     font-weight: 700;
     margin-bottom: 2rem;
 }
@@ -368,7 +377,6 @@ article.blog-article-page .breadcrumb {
 }
 
 .card-title {
-    color: #2d3748 !important;
     font-weight: 600;
     font-size: 1.125rem;
     margin-bottom: 0.75rem;
@@ -376,7 +384,6 @@ article.blog-article-page .breadcrumb {
 }
 
 .card-text {
-    color: #4a5568 !important;
     font-size: 0.875rem;
     line-height: 1.6;
 }

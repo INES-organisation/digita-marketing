@@ -1,21 +1,22 @@
 /* Styles spécifiques aux formations */
 
-/* Correction texte visible sur fond clair */
-section.py-5 h2,
-section.py-5 h3,
-section.py-5 h4,
-section.py-5 p,
-section.py-5 label,
-.container h2,
-.container h3,
-.container h4,
-.container p,
-.container label,
-.form-control::placeholder {
+/* Texte foncé sur fond clair : uniquement en thème clair (en thème sombre, ces règles
+   rendaient titres, paragraphes et pied de page illisibles, foncés sur fond foncé) */
+[data-theme="light"] section.py-5 h2,
+[data-theme="light"] section.py-5 h3,
+[data-theme="light"] section.py-5 h4,
+[data-theme="light"] section.py-5 p,
+[data-theme="light"] section.py-5 label,
+[data-theme="light"] main .container h2,
+[data-theme="light"] main .container h3,
+[data-theme="light"] main .container h4,
+[data-theme="light"] main .container p,
+[data-theme="light"] main .container label,
+[data-theme="light"] .form-control::placeholder {
     color: #2d3748 !important;
 }
 
-.form-control {
+[data-theme="light"] .form-control {
     color: #2d3748 !important;
     background-color: #fff !important;
 }
@@ -272,7 +273,7 @@ section.bg-gradient .lead {
 
 /* Accordion */
 .accordion-button:not(.collapsed) {
-    background-color: #f093fb;
+    background-color: #c026d3;  /* rose foncé : texte blanc lisible (#f093fb était trop clair) */
     color: white;
 }
 

@@ -20,7 +20,7 @@
 }
 
 .legal-content h3 {
-    color: #495057;
+    color: inherit;
     margin-top: 30px;
     margin-bottom: 15px;
     font-weight: 600;
@@ -42,7 +42,7 @@
 }
 
 .legal-content strong {
-    color: #212529;
+    color: inherit;
 }
 
 .legal-content .highlight-box {

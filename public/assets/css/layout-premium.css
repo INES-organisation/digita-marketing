@@ -1,11 +1,14 @@
 /* ==================== COQUE DU SITE (navigation, pied de page, chatbot) ====================
-   Partagée par toutes les pages publiques : barre latérale sur ordinateur,
-   barre supérieure + menu coulissant sur mobile, pied de page premium.
+   Accueil (body.shell-home) : barre latérale verticale ancrée sur les sections,
+   barre supérieure + menu coulissant sur mobile.
+   Autres pages (body.shell-inner) : menu horizontal + menu « agence » coulissant à droite.
+   Pied de page premium partout.
    Les couleurs passent par des variables redéfinies par le thème clair (theme-light.css). */
 
 :root {
     --nav-width: 260px;
     --topbar-height: 64px;
+    --navbar-top-height: 78px;
     --gold: #D4AF37;
     --gold-dim: rgba(212, 175, 55, 0.75);
     --gold-gradient: linear-gradient(135deg, #D4AF37, #f3d47c);
@@ -29,7 +32,7 @@ body::before {
 
 /* ---------- Contenu principal ---------- */
 .main-container-premium {
-    margin-left: var(--nav-width);
+    margin-left: 0;
     min-height: 100vh;
     background: var(--page-bg);
     position: relative;
@@ -51,7 +54,15 @@ body::before {
     padding-top: 3rem !important;
 }
 
-/* ---------- Barre latérale ---------- */
+body.shell-home .main-container-premium {
+    margin-left: var(--nav-width);
+}
+
+body.shell-inner .main-container-premium {
+    padding-top: var(--navbar-top-height);
+}
+
+/* ---------- Barre latérale (accueil) ---------- */
 .sidebar-premium {
     position: fixed;
     top: 0;
@@ -234,7 +245,7 @@ body::before {
 }
 
 @media (max-width: 991.98px) {
-    .main-container-premium {
+    body.shell-home .main-container-premium {
         margin-left: 0;
         padding-top: var(--topbar-height);
     }
@@ -297,6 +308,243 @@ body::before {
     body.sidebar-open {
         overflow: hidden;
     }
+}
+
+/* ---------- Boutons secondaires des menus ---------- */
+.btn-sidebar-outline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-radius: 50px;
+    border: 1px solid var(--shell-border);
+    color: var(--shell-text-strong);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.btn-sidebar-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.cta-sidebar i,
+.btn-sidebar-outline i {
+    margin-right: 0.35rem;
+}
+
+/* ---------- Menu horizontal (pages intérieures) ---------- */
+.navbar-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--navbar-top-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0 2rem;
+    background: var(--shell-bg);
+    border-bottom: 1px solid var(--shell-border);
+    z-index: 1030;
+}
+
+.navbar-top-logo img {
+    height: 35px;
+    width: auto;
+    display: block;
+}
+
+.navbar-top-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-top-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.25s ease;
+}
+
+.navbar-top-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--shell-text-strong);
+}
+
+.navbar-top-subtitle {
+    font-size: 0.72rem;
+    color: var(--shell-text);
+    white-space: nowrap;
+}
+
+.navbar-top-link:hover {
+    background: var(--shell-hover);
+}
+
+.navbar-top-link:hover .navbar-top-title,
+.navbar-top-link.active .navbar-top-title {
+    color: var(--gold);
+}
+
+.navbar-top-link.active {
+    box-shadow: inset 0 -2px 0 var(--gold);
+    border-radius: 8px 8px 0 0;
+}
+
+.navbar-top-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-top .topbar-burger,
+.sidebar-agence .sidebar-close {
+    display: inline-flex;
+}
+
+.topbar-burger {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--shell-border);
+    background: transparent;
+    color: var(--gold);
+    font-size: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* ---------- Menu « agence » coulissant (à droite) ---------- */
+.sidebar-agence {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(320px, 88vw);
+    background: var(--shell-bg);
+    border-left: 1px solid var(--shell-border);
+    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.25);
+    z-index: 1060;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem 1.5rem 2rem;
+    overflow-y: auto;
+    transform: translateX(105%);
+    visibility: hidden;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
+}
+
+body.agence-open .sidebar-agence {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+body.agence-open .agence-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1055;
+}
+
+body.agence-open {
+    overflow: hidden;
+}
+
+.sidebar-agence-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--shell-border);
+}
+
+.sidebar-agence-head img {
+    height: 30px;
+    width: auto;
+}
+
+.sidebar-agence .sidebar-close {
+    position: static;
+}
+
+.sidebar-agence-account {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.sidebar-agence-links {
+    list-style: none;
+    margin: 0;
+    padding: 1rem 0 0;
+    border-top: 1px solid var(--shell-border);
+}
+
+.sidebar-agence-links a {
+    display: flex;
+    flex-direction: column;
+    padding: 0.55rem 0.25rem;
+    color: var(--shell-text-strong);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: color 0.2s ease;
+}
+
+.sidebar-agence-links a small {
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--shell-text);
+}
+
+.sidebar-agence-links a:hover {
+    color: var(--gold);
+}
+
+.sidebar-agence-main {
+    display: none;
+}
+
+.sidebar-agence-foot {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--shell-border);
+}
+
+@media (max-width: 1199.98px) {
+    .navbar-top-subtitle { display: none; }
+    .navbar-top-link { padding: 0.45rem 0.7rem; }
+}
+
+@media (max-width: 991.98px) {
+    :root { --navbar-top-height: 64px; }
+    .navbar-top { padding: 0 1rem; }
+    .navbar-top-logo img { height: 30px; }
+    .navbar-top-links { display: none; }
+    .sidebar-agence-main { display: block; }
 }
 
 /* ---------- Pied de page ---------- */

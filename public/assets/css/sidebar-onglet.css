@@ -1,0 +1,227 @@
+/* ==================== BARRE DE SERVICES (à droite, pages intérieures) ====================
+   Une icône par service : aperçu au survol, fiche complète au clic (sidebar-onglet.js).
+   Couleurs tirées des variables de la coque (layout-premium.css), donc valables
+   en thème sombre comme en thème clair. */
+
+.sidebar-onglet-sidebar {
+    position: fixed;
+    top: calc(50% + var(--navbar-top-height, 78px) / 2);
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 1020;
+    background: var(--shell-bg);
+    border: 1px solid var(--shell-border);
+    border-right: none;
+    border-radius: 18px 0 0 18px;
+    box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.18);
+    padding: 0.4rem 0.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    max-height: calc(100vh - var(--navbar-top-height, 78px) - 2rem);
+}
+
+.sidebar-onglet-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--gold);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.sidebar-onglet-link:hover,
+.sidebar-onglet-link:focus-visible,
+.sidebar-onglet-with-popup.active-popup .sidebar-onglet-link {
+    background: var(--gold);
+    color: #020617;
+    transform: scale(1.05);
+    outline: none;
+}
+
+.sidebar-onglet-with-popup {
+    position: relative;
+}
+
+/* ---------- Aperçu au survol ---------- */
+.sidebar-onglet-popup-content {
+    position: absolute;
+    right: calc(100% + 1rem);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300px;
+    z-index: 1060;
+    background: var(--shell-bg);
+    color: var(--shell-text-strong);
+    border: 1px solid var(--shell-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    padding: 1.1rem 1.2rem 2.6rem;
+    display: none;
+}
+
+.sidebar-onglet-with-popup:not(.active-popup):hover .sidebar-onglet-popup-content {
+    display: block;
+}
+
+.sidebar-onglet-inner {
+    color: var(--shell-text);
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+.sidebar-onglet-inner p {
+    margin-bottom: 0;
+}
+
+.sidebar-onglet-popup-content .popup-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 0 0 0.5rem;
+}
+
+.sidebar-onglet-popup-content .popup-full {
+    display: none;
+}
+
+.sidebar-onglet-expand-arrow {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 0.6rem;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--shell-hover);
+    color: var(--gold);
+    cursor: pointer;
+}
+
+.sidebar-onglet-expand-arrow:hover {
+    background: var(--gold);
+    color: #020617;
+}
+
+.sidebar-onglet-close {
+    display: none;
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--shell-text);
+    cursor: pointer;
+}
+
+.sidebar-onglet-close:hover {
+    color: var(--gold);
+}
+
+/* ---------- Fiche complète (clic) ---------- */
+.sidebar-onglet-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-onglet-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebar-onglet-popup-content.popup-fullscreen {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    width: min(820px, 92vw);
+    max-height: 88vh;
+    overflow-y: auto;
+    z-index: 9999;
+    display: block;
+    padding: 2.25rem 2rem 2rem;
+}
+
+.sidebar-onglet-popup-content.popup-fullscreen .popup-preview,
+.sidebar-onglet-popup-content.popup-fullscreen .sidebar-onglet-expand-arrow {
+    display: none;
+}
+
+.sidebar-onglet-popup-content.popup-fullscreen .popup-full,
+.sidebar-onglet-popup-content.popup-fullscreen .sidebar-onglet-close {
+    display: block;
+}
+
+.popup-full h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.6rem;
+    color: var(--shell-text-strong);
+}
+
+.popup-full h4 {
+    font-size: 1.05rem;
+    color: var(--gold);
+}
+
+.popup-full .lead,
+.popup-full li {
+    color: var(--shell-text);
+}
+
+.popup-full li strong {
+    color: var(--shell-text-strong);
+}
+
+.popup-full .bi-check-circle {
+    color: var(--gold) !important;
+}
+
+/* Les boutons de la fiche reprennent les couleurs de la marque */
+.popup-full .btn-primary {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #020617 !important;
+    font-weight: 700;
+}
+
+.popup-full .btn-outline-primary {
+    border-color: var(--shell-border);
+    color: var(--shell-text-strong);
+}
+
+.popup-full .btn-outline-primary:hover {
+    border-color: var(--gold);
+    background: transparent;
+    color: var(--gold);
+}
+
+/* Sur tablette et mobile, la barre est masquée : les services restent accessibles via /services */
+@media (max-width: 991.98px) {
+    .sidebar-onglet-sidebar {
+        display: none;
+    }
+}
+
+@media (max-height: 700px) {
+    .sidebar-onglet-link {
+        width: 34px;
+        height: 34px;
+        font-size: 0.95rem;
+    }
+}

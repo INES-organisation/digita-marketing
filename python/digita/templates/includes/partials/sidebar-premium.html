@@ -1,7 +1,8 @@
-{% set navPath = rtrim(strtok(coalesce(_SERVER['REQUEST_URI'], '/'), '?'), '/') or '/' %}{% set isHome = navPath == '/' %}{% set navUser = ((isset(_SESSION['user_id'])) and (not empty(_SESSION['user_id']))) %}{% set navRole = coalesce(_SESSION['user_role'], '') %}
-<!-- Navigation Premium (DIGITA) : barre latérale sur ordinateur, menu coulissant sur mobile -->
+{% set navUser = ((isset(_SESSION['user_id'])) and (not empty(_SESSION['user_id']))) %}{% set navRole = coalesce(_SESSION['user_role'], '') %}
+<!-- Navigation de l'accueil : barre latérale verticale ancrée sur les sections de la page
+     (menu coulissant sur mobile). Les autres pages utilisent navbar-top.html. -->
 <header class="topbar-premium">
-    <a href="/" class="topbar-logo"><img src="/assets/images/logo.png" alt="DIGITA" width="130" height="30"></a>
+    <a href="#hero-premium" class="topbar-logo"><img src="/assets/images/logo.png" alt="DIGITA" width="130" height="30"></a>
     <div class="d-flex align-items-center gap-2">
         <button type="button" class="theme-toggle" data-theme-toggle aria-label="Changer de thème" title="Thème clair / sombre">
             <i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-stars-fill theme-icon-dark"></i>
@@ -15,51 +16,36 @@
 
 <nav class="sidebar-premium" id="sidebarPremium" aria-label="Navigation principale">
     <div class="sidebar-logo">
-        <a href="/"><img src="/assets/images/logo.png" alt="DIGITA" width="160" height="37"></a>
+        <a href="#hero-premium" title="Retour en haut de page"><img src="/assets/images/logo.png" alt="DIGITA" width="160" height="37"></a>
         <button type="button" class="sidebar-close" aria-label="Fermer le menu" data-sidebar-close><i class="bi bi-x-lg"></i></button>
     </div>
 
-    <ul class="nav-links">
+    <ul class="nav-links" data-scrollspy>
         {% for link in [
-            ['/', 'bi-house', 'Accueil'],
-            ['/services', 'bi-grid-1x2', 'Services'],
-            ['/solutions', 'bi-lightbulb', 'Solutions'],
-            ['/formations', 'bi-mortarboard', 'Formations'],
+            ['#enjeux', 'bi-exclamation-triangle', 'Enjeux'],
+            ['#ecosysteme', 'bi-cpu', 'Écosystème'],
+            ['#collaboration', 'bi-people', 'Collaboration'],
+            ['#methode', 'bi-diagram-3', 'Méthode'],
             ['/blog', 'bi-journal-text', 'Ressources'],
-            ['/outils', 'bi-tools', 'Outils gratuits'],
-            ['/tarifs', 'bi-tag', 'Tarifs'],
-            ['/a-propos', 'bi-people', 'À propos'],
-            ['/contact', 'bi-envelope', 'Contact'],
         ] %}
-        {% set active = (navPath == link[0]) or (link[0] != '/' and navPath.startswith(link[0] ~ '/')) %}
         <li class="nav-item">
-            <a href="{{ link[0] }}" class="nav-link-premium{{ ' active' if active else '' }}"{{ ' aria-current="page"' if active else '' }}>
-                <i class="bi {{ link[1] }}"></i><span>{{ link[2] }}</span>
-            </a>
+            <a href="{{ link[0] }}" class="nav-link-premium"><i class="bi {{ link[1] }}"></i><span>{{ link[2] }}</span></a>
         </li>
         {% endfor %}
     </ul>
 
-    <div class="sidebar-account">
+    <div class="sidebar-footer">
         {% if t(navUser) %}
             {% if navRole == 'admin' %}<a href="/admin/dashboard" class="sidebar-account-link"><i class="bi bi-speedometer2"></i> Administration</a>{% endif %}
-            <a href="/mes-formations" class="sidebar-account-link"><i class="bi bi-collection-play"></i> Mes formations</a>
             <a href="/espace-client" class="sidebar-account-link"><i class="bi bi-briefcase"></i> Espace client</a>
             <a href="/admin/logout" class="sidebar-account-link"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
         {% else %}
-            <a href="/connexion" class="sidebar-account-link"><i class="bi bi-person-circle"></i> Connexion</a>
+            <a href="/connexion" class="btn-sidebar-outline"><i class="bi bi-person-circle"></i> Connexion</a>
         {% endif %}
-    </div>
-
-    <div class="sidebar-footer">
         <button type="button" class="theme-toggle theme-toggle-wide" data-theme-toggle aria-label="Changer de thème">
             <i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-stars-fill theme-icon-dark"></i>
             <span class="theme-label-light">Thème clair</span><span class="theme-label-dark">Thème sombre</span>
         </button>
-        {% if isHome %}
         <a href="#auditModal" class="cta-sidebar" data-bs-toggle="modal" data-bs-target="#auditModal">Diagnostic gratuit</a>
-        {% else %}
-        <a href="/projets/brief" class="cta-sidebar">Démarrer un projet</a>
-        {% endif %}
     </div>
 </nav>

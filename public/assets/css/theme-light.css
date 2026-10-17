@@ -11,7 +11,7 @@
     --text-muted: #4b5563;
     --glass-bg: #ffffff;
     --glass-border: rgba(15, 23, 42, 0.08);
-    --gold: #b8921f;
+    --gold: #9a7a16;
     --gold-glow: rgba(184, 146, 31, 0.25);
     --page-bg: #f7f7f7;
     --shell-bg: #ffffff;
@@ -233,4 +233,113 @@
 
 [data-theme="light"] canvas {
     opacity: 0.35;
+}
+
+/* ---------- Corrections de lisibilité relevées page par page ---------- */
+
+/* Bandeaux colorés (héros bleus des catégories) : le texte y reste blanc */
+[data-theme="light"] .hero-section.text-white,
+[data-theme="light"] .hero-section .text-white,
+[data-theme="light"] section.hero-section.text-white h1,
+[data-theme="light"] section.hero-section.text-white p,
+[data-theme="light"] .blog-category-hero,
+[data-theme="light"] .blog-category-hero .text-white,
+[data-theme="light"] .blog-category-hero h1,
+[data-theme="light"] .blog-category-hero p,
+[data-theme="light"] .legal-hero,
+[data-theme="light"] .legal-hero h1,
+[data-theme="light"] .legal-hero p {
+    color: #ffffff !important;
+}
+
+/* Barre de filtres collante (services) */
+[data-theme="light"] .sticky-nav {
+    background: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* Couleurs vives trop claires sur fond blanc : versions foncées */
+[data-theme="light"] .text-warning,
+[data-theme="light"] .btn-outline-warning {
+    color: #b45309 !important;
+}
+
+[data-theme="light"] .btn-outline-warning {
+    border-color: #d97706 !important;
+}
+
+[data-theme="light"] .btn-outline-warning:hover {
+    background: #d97706 !important;
+    color: #ffffff !important;
+}
+
+[data-theme="light"] .text-primary {
+    color: #1d4ed8 !important;
+}
+
+[data-theme="light"] .btn-outline-info {
+    color: #0369a1 !important;
+    border-color: #0284c7 !important;
+}
+
+[data-theme="light"] [style*="color: #00d2ff"],
+[data-theme="light"] [style*="color:#00d2ff"] {
+    color: #0369a1 !important;
+}
+
+[data-theme="light"] [style*="color: #60a5fa"],
+[data-theme="light"] [style*="color:#60a5fa"] {
+    color: #1d4ed8 !important;
+}
+
+[data-theme="light"] [style*="color: #34d399"],
+[data-theme="light"] [style*="color:#34d399"] {
+    color: #047857 !important;
+}
+
+/* Connexion / inscription : bouton doré à texte foncé, liens dorés plus soutenus */
+[data-theme="light"] .auth-form .btn-block.btn-primary {
+    color: #020617 !important;
+}
+
+[data-theme="light"] .auth-footer a {
+    color: #8a6d12;
+}
+
+/* Brief de projet (étapes, cases à cocher, message de l'expert) */
+[data-theme="light"] .step-label {
+    color: #6b7280;
+}
+
+[data-theme="light"] .step-icon {
+    background: #ffffff;
+    color: #4b5563;
+}
+
+[data-theme="light"] .project-type-card,
+[data-theme="light"] .project-type-card span,
+[data-theme="light"] .premium-checkbox label {
+    background: #ffffff;
+    color: #1f2937;
+}
+
+[data-theme="light"] .expert-message-box {
+    background: rgba(212, 175, 55, 0.08);
+    color: #1f2937;
+}
+
+[data-theme="light"] .premium-urgent-toggle label {
+    color: #b45309;
+}
+
+/* Barre de services et menu agence : ombres adaptées au fond clair */
+[data-theme="light"] .sidebar-onglet-sidebar,
+[data-theme="light"] .navbar-top {
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+}
+
+/* Type de projet sélectionné (fond doré) : texte foncé */
+[data-theme="light"] .btn-check:checked + .project-type-card,
+[data-theme="light"] .btn-check:checked + .project-type-card span,
+[data-theme="light"] .btn-check:checked + .project-type-card i {
+    color: #111827;
 }

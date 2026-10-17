@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ h(coalesce(title, pageTitle, 'Digita Marketing - Agence Marketing Digital, Automatisation & IA')) }}</title>
-    <script>try{var t=localStorage.getItem('digita-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+    <script>(function(){var t='dark';try{var s=localStorage.getItem('digita-theme');if(s==='light'||s==='dark')t=s;}catch(e){}var r=document.documentElement;r.setAttribute('data-theme',t);r.setAttribute('data-bs-theme',t);})();</script>
     <link rel="icon" type="image/png" href="/assets/images/digita.png">
     <meta name="theme-color" content="#020617">
     <link rel="manifest" href="/manifest.json">
@@ -50,6 +50,7 @@
     
     <!-- Coque du site : navigation, pied de page, chatbot -->
     <link rel="stylesheet" href="/assets/css/layout-premium.css?v={{ asset_v }}">
+    <link rel="stylesheet" href="/assets/css/sidebar-onglet.css?v={{ asset_v }}">
     
     <!-- CSS Spécifique aux pages (optionnel) - EN DERNIER pour priorité -->
     {% if (isset(extraCss)) %}        {% for css in php_values(extraCss) %}            <link rel="stylesheet" href="{{ css }}?v={{ asset_v }}">
@@ -61,7 +62,8 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
     
     
-    <!-- Thème clair (activé par data-theme="light" sur <html>) : en dernier pour primer -->
+    <!-- Thèmes sombre / clair (data-theme sur <html>) : en dernier pour primer -->
+    <link rel="stylesheet" href="/assets/css/theme-dark.css?v={{ asset_v }}">
     <link rel="stylesheet" href="/assets/css/theme-light.css?v={{ asset_v }}">
     
     <!-- Schema.org Organization (toutes les pages) -->
@@ -167,8 +169,14 @@
     }
     </script>
     {% endif %}</head>
-<body>
-    {% if once('includes/partials/sidebar-premium.html') %}{% include 'includes/partials/sidebar-premium.html' %}{% endif %}
+{% set shellPath = rtrim(strtok(coalesce(_SERVER['REQUEST_URI'], '/'), '?'), '/') or '/' %}{% set shellHome = shellPath == '/' %}
+<body class="{{ 'shell-home' if shellHome else 'shell-inner' }}">
+    {% if shellHome %}
+    {% include 'includes/partials/sidebar-premium.html' %}
+    {% else %}
+    {% include 'includes/partials/navbar-top.html' %}
+    {% include 'includes/partials/sidebar-onglet.html' %}
+    {% endif %}
     
     <!-- Chatbot -->
     <div id="chatbot-container">
@@ -218,6 +226,7 @@
     {% if (isset(extraJs)) %}        {% for js in php_values(extraJs) %}            <script src="{{ js }}"></script>
         {% endfor %}    {% endif %}    
     <script src="/assets/js/site.js?v={{ asset_v }}"></script>
+    {% if not shellHome %}<script src="/assets/js/sidebar-onglet.js?v={{ asset_v }}"></script>{% endif %}
     <script>AOS.init({ duration: 700, once: true });</script>
     
     <!-- Scripts Chatbot IA -->
