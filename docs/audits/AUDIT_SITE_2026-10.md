@@ -21,8 +21,8 @@ Les corrections marquées ✅ sont faites dans la PR « Coque unique, formulaire
 | 9 | **Image manquante sur /blog** (`placeholder-blog.jpg`, 404 ×5) : aucun des 472 articles n'a d'image. | ✅ visuel de remplacement ; ⚠️ images d'articles à produire |
 | 10 | **Partages réseaux sociaux des formations** vers `http://digita-marketing.local/...`. | ✅ URL du site |
 | 11 | Débordement horizontal sur mobile (/a-propos, articles, /projets/brief). | ✅ disparu avec l'ancienne barre |
-| 12 | **Mentions légales fictives** : SIRET 123 456 789 00012, « 123 Rue du Marketing, Paris », hébergeur « [Nom de l'hébergeur] », directeur « [Nom du directeur] ». Obligation légale (LCEN). | ⚠️ **à fournir par Anthony** |
-| 13 | **Téléphone factice** « +262 692 XX XX XX » sur /contact et /support ; e-mail `contact@digita-marketing.com` (domaine différent de digita.buzz). | ⚠️ coordonnées réelles à fournir |
+| 12 | **Mentions légales fictives** : SIRET 123 456 789 00012, « 123 Rue du Marketing, Paris », hébergeur « [Nom de l'hébergeur] », directeur « [Nom du directeur] ». Obligation légale (LCEN). | ✅ remplacées par les vraies informations (EI TONY ALPHA 8.0, SIREN 844 384 198, hébergeur OVH) |
+| 13 | **Téléphone factice** « +262 692 XX XX XX » sur /contact et /support ; e-mail `contact@digita-marketing.com` (domaine différent de digita.buzz). | ✅ vrais téléphone et e-mail |
 
 ## 2. SEO
 
@@ -67,7 +67,7 @@ INES) ; contact et newsletter ont été testés de bout en bout sur une copie lo
 
 ## 5. Contenu à ajouter pour un site complet
 
-1. **Mentions légales, CGV, politique de confidentialité** avec les vraies informations de l'entreprise (bloquant légal).
+1. ✅ Mentions légales, CGV, politique de confidentialité et factures mises à jour avec les vraies informations de l'entreprise.
 2. **Bandeau cookies** : la politique cookies existe mais aucun consentement n'est demandé.
 3. **Portfolio / études de cas** : des visuels clients existent dans le dépôt (`mps.png`, `poly.png`, `neomea.png`) mais ne sont pas utilisés ; `/portfolio` n'a jamais existé.
 4. **Page équipe** (`/equipe` n'a jamais existé) et photos réelles.
