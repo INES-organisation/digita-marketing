@@ -26,15 +26,26 @@ def _token(html):
     return re.search(r'name="_csrf_token" value="([^"]+)"', html).group(1)
 
 
-def test_pages_share_navigation_and_footer():
+def test_inner_pages_use_horizontal_menu_and_services_bar():
     c = _client()
     for path in ("/contact", "/connexion", "/inscription", "/page-qui-n-existe-pas"):
         r = c.get(path)
-        assert 'class="sidebar-premium"' in r.text and 'class="footer-premium"' in r.text, path
-        assert "navbar fixed-top" not in r.text, path
+        assert "navbar-site fixed-top" in r.text and 'class="sidebar-onglet-sidebar"' in r.text, path
+        assert 'id="sidebar-agence"' in r.text and 'class="footer-premium"' in r.text, path
+        assert 'class="sidebar-premium"' not in r.text, path
+        assert 'href="/#hero-premium"' in r.text, path
     r = c.get("/page-qui-n-existe-pas")
     assert r.status_code == 404 and "Page non trouvée" in r.text and "noindex" in r.text
     assert 'aria-current="page"' in c.get("/contact").text
+
+
+def test_home_uses_vertical_menu_anchored_on_sections():
+    r = _client().get("/")
+    assert 'class="sidebar-premium"' in r.text and 'class="footer-premium"' in r.text
+    assert "navbar-site" not in r.text and "sidebar-onglet-sidebar" not in r.text
+    for anchor in ("#enjeux", "#ecosysteme", "#collaboration", "#methode", "#hero-premium"):
+        assert f'href="{anchor}"' in r.text, anchor
+    assert "Connexion" in r.text and "data-theme-toggle" in r.text and "Diagnostic gratuit" in r.text
 
 
 def test_contact_form_is_saved_and_sent_to_ines(monkeypatch):

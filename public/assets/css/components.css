@@ -90,17 +90,18 @@
 
 /* Section CTA */
 .cta-section {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, var(--content-surface-alt) 0%, var(--content-surface) 100%);
+    border-top: 1px solid var(--content-border);
 }
 
 .cta-section h2 {
-    color: #000000;
+    color: var(--content-heading);
     font-weight: 700;
     font-size: 2rem;
 }
 
 .cta-section p {
-    color: #1a1a1a;
+    color: var(--content-text);
     font-size: 1.15rem;
     font-weight: 600;
 }

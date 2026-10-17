@@ -261,7 +261,7 @@
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid var(--border-glass);
         border-radius: 16px;
-        color: white;
+        color: var(--content-heading);
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-align: center;
@@ -281,12 +281,12 @@
     .btn-check:checked + .project-type-card {
         background: var(--gold-gradient);
         border-color: transparent;
-        color: var(--dark);
+        color: #020617;
         transform: translateY(-5px);
         box-shadow: 0 10px 30px var(--gold-glow);
     }
     .btn-check:checked + .project-type-card i {
-        color: var(--dark);
+        color: #020617;
         opacity: 1;
     }
 
@@ -321,7 +321,7 @@
         border-radius: 50%;
         background: var(--dark);
         border: 2px solid var(--border-glass);
-        color: white;
+        color: var(--content-heading);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -333,7 +333,7 @@
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 1px;
-        color: rgba(255, 255, 255, 0.3);
+        color: var(--content-muted);
         font-weight: 600;
     }
     .step-item.active .step-icon {
@@ -353,7 +353,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--dark);
+        color: #020617;
         font-size: 1.2rem;
         position: relative;
     }
@@ -378,7 +378,7 @@
         border-radius: 0 12px 12px 0;
         font-size: 0.95rem;
         line-height: 1.6;
-        color: #e0e0e0;
+        color: var(--content-text);
     }
     .premium-checkbox {
         position: relative;
@@ -390,7 +390,7 @@
         background: rgba(255, 255, 255, 0.02);
         border: 1px solid var(--border-glass);
         border-radius: 8px;
-        color: white;
+        color: var(--content-heading);
         font-size: 0.85rem;
         cursor: pointer;
         transition: all 0.2s;

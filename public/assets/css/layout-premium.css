@@ -1,6 +1,7 @@
 /* ==================== COQUE DU SITE (navigation, pied de page, chatbot) ====================
-   Partagée par toutes les pages publiques : barre latérale sur ordinateur,
-   barre supérieure + menu coulissant sur mobile, pied de page premium.
+   Accueil (body.layout-home) : menu vertical ancré sur les sections, barre supérieure + menu coulissant sur mobile.
+   Autres pages (body.layout-pages) : menu horizontal, menu agence à droite, barre des services (sidebar-onglet.css).
+   Pied de page premium partout.
    Les couleurs passent par des variables redéfinies par le thème clair (theme-light.css). */
 
 :root {
@@ -16,6 +17,24 @@
     --shell-hover: rgba(212, 175, 55, 0.08);
     --page-bg: #050505;
     --footer-bg: linear-gradient(135deg, #020617 0%, #0a0f1a 100%);
+    --navbar-height: 76px;
+    --navbar-bg: rgba(2, 6, 23, 0.92);
+    /* Contenus des pages (y compris les blocs hérités de l'ancien thème blanc) */
+    --content-heading: #ffffff;
+    --content-text: rgba(255, 255, 255, 0.85);
+    --content-muted: rgba(255, 255, 255, 0.62);
+    --content-surface: #0e131e;
+    --content-surface-alt: #0a0f1a;
+    --content-border: rgba(255, 255, 255, 0.08);
+    --content-input-bg: rgba(255, 255, 255, 0.04);
+    --content-link: #D4AF37;
+    /* Bootstrap en mode sombre : mêmes fonds que le site */
+    --bs-body-bg: #050505;
+    --bs-body-color: rgba(255, 255, 255, 0.85);
+    --bs-secondary-color: rgba(255, 255, 255, 0.62);
+    --bs-emphasis-color: #ffffff;
+    --bs-heading-color: #ffffff;
+    --bs-border-color: rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -29,7 +48,7 @@ body::before {
 
 /* ---------- Contenu principal ---------- */
 .main-container-premium {
-    margin-left: var(--nav-width);
+    margin-left: 0;
     min-height: 100vh;
     background: var(--page-bg);
     position: relative;
@@ -42,16 +61,12 @@ body::before {
     flex: 1 0 auto;
 }
 
-/* Les anciennes pages compensaient une barre de navigation fixe en haut */
-.main-container-premium section.py-5:first-of-type:not(#hero):not(.bg-primary) {
-    margin-top: 0 !important;
+/* Les pages internes gardent leur propre marge sous la barre fixe (padding-top dans chaque page) */
+.layout-home .main-container-premium {
+    margin-left: var(--nav-width);
 }
 
-.main-container-premium section.formation-detail-page {
-    padding-top: 3rem !important;
-}
-
-/* ---------- Barre latérale ---------- */
+/* ---------- Accueil : menu vertical ---------- */
 .sidebar-premium {
     position: fixed;
     top: 0;
@@ -101,17 +116,19 @@ body::before {
 }
 
 .sidebar-premium .nav-item {
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.25rem;
     padding: 0;
-    text-align: left;
+    text-align: center;
 }
 
 .nav-link-premium {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.85rem;
+    justify-content: center;
+    gap: 0.35rem;
     text-decoration: none;
-    padding: 0.7rem 1rem;
+    padding: 0.95rem 0.5rem;
     font-family: 'Outfit', sans-serif;
     font-size: 0.82rem;
     font-weight: 600;
@@ -123,10 +140,13 @@ body::before {
 }
 
 .nav-link-premium i {
-    font-size: 1.15rem;
+    font-size: 1.4rem;
     color: var(--gold);
-    width: 1.3rem;
-    text-align: center;
+    transition: transform 0.25s ease;
+}
+
+.nav-link-premium:hover i {
+    transform: translateY(-2px);
 }
 
 .nav-link-premium:hover {
@@ -139,15 +159,10 @@ body::before {
     color: var(--gold);
 }
 
-.sidebar-account {
-    padding: 1rem 1.25rem 0.5rem;
-    border-top: 1px solid var(--shell-border);
-    margin-top: 1rem;
-}
-
 .sidebar-account-link {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.6rem;
     color: var(--shell-text);
     text-decoration: none;
@@ -160,7 +175,9 @@ body::before {
 }
 
 .sidebar-footer {
-    padding: 1rem 1.25rem 0;
+    padding: 1.25rem 1.25rem 0;
+    border-top: 1px solid var(--shell-border);
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -234,7 +251,7 @@ body::before {
 }
 
 @media (max-width: 991.98px) {
-    .main-container-premium {
+    .layout-home .main-container-premium {
         margin-left: 0;
         padding-top: var(--topbar-height);
     }
@@ -297,6 +314,296 @@ body::before {
     body.sidebar-open {
         overflow: hidden;
     }
+}
+
+/* ---------- Pages internes : menu horizontal ---------- */
+.navbar-site {
+    min-height: var(--navbar-height);
+    padding: 0.55rem 0;
+    background: var(--navbar-bg) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--shell-border);
+    z-index: 1040;
+}
+
+.navbar-site .navbar-brand img {
+    width: auto;
+    height: 44px;
+}
+
+.navbar-site .navbar-nav {
+    gap: 0.5rem;
+}
+
+.navbar-site .nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: var(--shell-text-strong) !important;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem !important;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 0.35rem 0.9rem !important;
+    border-radius: 8px;
+    line-height: 1.3;
+}
+
+.navbar-site .nav-link:hover {
+    color: var(--gold) !important;
+    background: var(--shell-hover);
+    transform: none;
+}
+
+.navbar-site .nav-link.active {
+    color: var(--gold) !important;
+}
+
+.navbar-site .nav-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--shell-text);
+    white-space: nowrap;
+}
+
+.navbar-site .navbar-toggler {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--shell-border);
+    color: var(--gold);
+    font-size: 1.2rem !important;
+    padding: 0;
+    box-shadow: none;
+}
+
+.btn-agence-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    margin-left: 0;
+}
+
+.btn-agence-toggle svg {
+    fill: var(--gold);
+}
+
+@media (max-width: 991.98px) {
+    .navbar-site .navbar-brand img {
+        height: 34px;
+    }
+
+    .navbar-site .navbar-collapse {
+        padding: 0.75rem 0 0.25rem;
+    }
+
+    .navbar-site .nav-link {
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
+/* ---------- Pages internes : menu agence ---------- */
+.sidebar-agence {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(320px, 88vw);
+    height: 100vh;
+    z-index: 1070;
+    background: var(--shell-bg);
+    border-left: 1px solid var(--shell-border);
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    overflow-y: auto;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
+}
+
+body.agence-open .sidebar-agence {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+.sidebar-agence-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1065;
+}
+
+body.agence-open .sidebar-agence-overlay {
+    display: block;
+}
+
+body.agence-open {
+    overflow: hidden;
+}
+
+.sidebar-agence-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.sidebar-agence-brand {
+    display: block;
+    font-weight: 800;
+    color: var(--shell-text-strong);
+    letter-spacing: 1px;
+}
+
+.sidebar-agence-tagline {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--shell-text);
+}
+
+.sidebar-agence-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: var(--shell-text-strong);
+    font-size: 1.15rem;
+}
+
+.sidebar-agence-user {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--shell-border);
+}
+
+.sidebar-agence-whoami {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background: var(--shell-hover);
+    color: var(--shell-text-strong);
+}
+
+.sidebar-agence-whoami i {
+    font-size: 1.5rem;
+    color: var(--gold);
+}
+
+.sidebar-agence-whoami small {
+    display: block;
+    color: var(--shell-text);
+}
+
+.btn-agence {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+.btn-agence-primary {
+    background: var(--gold);
+    color: #020617;
+}
+
+.btn-agence-primary:hover {
+    background: #e5c158;
+    color: #020617;
+}
+
+.btn-agence-outline {
+    border: 1px solid var(--gold);
+    color: var(--gold);
+}
+
+.btn-agence-outline:hover {
+    background: var(--shell-hover);
+    color: var(--gold);
+}
+
+.sidebar-agence-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+    flex-grow: 1;
+}
+
+.sidebar-agence-nav a {
+    color: var(--shell-text-strong);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+    padding: 0.55rem 0.25rem;
+}
+
+.sidebar-agence-nav a span {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--shell-text);
+}
+
+.sidebar-agence-nav a:hover {
+    color: var(--gold);
+}
+
+.sidebar-agence-nav hr {
+    border-color: var(--shell-border);
+    opacity: 1;
+    margin: 0.75rem 0;
+}
+
+/* ---------- Blocs hérités de l'ancien thème blanc ----------
+   Beaucoup de pages (légal, catalogue, formations, blog, outils) contiennent des sections
+   bg-white / bg-light et des textes text-dark écrits pour un fond blanc. En thème sombre,
+   on les passe sur les surfaces sombres pour que le texte clair reste lisible. */
+:root:not([data-theme="light"]) .bg-white {
+    background-color: var(--content-surface) !important;
+}
+
+:root:not([data-theme="light"]) .text-dark:not(.btn-warning):not(.bg-warning),
+:root:not([data-theme="light"]) .link-dark,
+:root:not([data-theme="light"]) .text-black {
+    color: var(--content-heading) !important;
+}
+
+:root:not([data-theme="light"]) .card {
+    --bs-card-bg: var(--content-surface);
+    --bs-card-border-color: var(--content-border);
+    --bs-card-cap-bg: rgba(255, 255, 255, 0.03);
+    color: var(--content-text);
+}
+
+/* Boutons et badges sur fond jaune / cyan / or : texte foncé */
+.badge.bg-warning:not(.bg-opacity-10),
+.badge.bg-info:not(.bg-opacity-10),
+.btn.btn-warning,
+.bg-warning:not(.bg-opacity-10) > h5,
+.badge.bg-gold-gradient {
+    color: #111827 !important;
+}
+
+.text-gold-dim {
+    color: var(--gold-dim) !important;
 }
 
 /* ---------- Pied de page ---------- */

@@ -1,0 +1,45 @@
+{% set isLoggedIn = ((isset(_SESSION['user_id'])) and (not empty(_SESSION['user_id']))) %}{% set userEmail = coalesce(_SESSION['user_email'], '') %}{% set userRole = coalesce(_SESSION['user_role'], '') %}
+<!-- Menu latéral agence (ouvert par le bouton à droite de la barre de navigation) -->
+<aside id="sidebar-agence" class="sidebar-agence" aria-label="Menu agence" aria-hidden="true">
+  <div class="sidebar-agence-head">
+    <img src="/assets/images/digita.png" alt="" width="44" height="44">
+    <div>
+      <span class="sidebar-agence-brand">DIGITA</span>
+      <span class="sidebar-agence-tagline">Marketing Digital</span>
+    </div>
+    <button type="button" class="sidebar-agence-close" aria-label="Fermer le menu" data-agence-close><i class="bi bi-x-lg"></i></button>
+  </div>
+
+  <div class="sidebar-agence-user">
+    {% if t(isLoggedIn) %}
+      <div class="sidebar-agence-whoami">
+        <i class="bi bi-person-circle"></i>
+        <div>
+          <small>Connecté en tant que</small>
+          <strong>{{ h(explode('@', userEmail)[0]) }}</strong>
+        </div>
+      </div>
+      {% if userRole == 'admin' %}<a href="/admin/dashboard" class="btn-agence btn-agence-primary"><i class="bi bi-speedometer2"></i> Administration</a>{% endif %}
+      <a href="/espace-client" class="btn-agence btn-agence-primary"><i class="bi bi-briefcase"></i> Espace client</a>
+      <a href="/mes-formations" class="btn-agence btn-agence-outline"><i class="bi bi-collection-play"></i> Mes formations</a>
+      <a href="/admin/logout" class="btn-agence btn-agence-outline"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
+    {% else %}
+      <a href="/connexion" class="btn-agence btn-agence-primary"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
+      <a href="/inscription" class="btn-agence btn-agence-outline"><i class="bi bi-person-plus"></i> Inscription</a>
+    {% endif %}
+  </div>
+
+  <nav class="sidebar-agence-nav">
+    <a href="/blog">Blog<span>Actualités & conseils</span></a>
+    <a href="/boutique">Boutique<span>Produits & services</span></a>
+    <a href="/solutions">Solutions<span>Outils & solutions</span></a>
+    <hr>
+    <a href="/outils">Outils<span>Ressources & outils gratuits</span></a>
+    <a href="/formations">Formations<span>Apprendre & se former</span></a>
+  </nav>
+
+  <div class="sidebar-agence-foot">
+    <a href="/projets/brief" class="cta-sidebar">Démarrer un projet</a>
+  </div>
+</aside>
+<div id="sidebar-overlay" class="sidebar-agence-overlay" data-agence-close></div>

@@ -121,8 +121,8 @@
 
 /* Barre de recherche dans le hero */
 .page-hero .search-form .form-control {
-    background-color: #fff !important;
-    border: none;
+    background-color: var(--content-surface) !important;
+    border: 1px solid var(--content-border) !important;
     padding: 0.75rem 1rem;
     font-size: 1rem;
 }
@@ -140,8 +140,8 @@
 
 /* Section Catégories */
 .py-4.bg-light {
-    background-color: #f8f9fa !important;
-    border-bottom: 1px solid #e9ecef !important;
+    background-color: var(--content-surface-alt) !important;
+    border-bottom: 1px solid var(--content-border) !important;
     padding: 1.5rem 0 !important;
 }
 
@@ -254,7 +254,7 @@
 }
 
 .main-content h2 {
-    color: #2d3748 !important;
+    color: var(--content-heading) !important;
     font-weight: 700;
     margin-bottom: 2rem;
 }
@@ -368,7 +368,7 @@ article.blog-article-page .breadcrumb {
 }
 
 .card-title {
-    color: #2d3748 !important;
+    color: var(--content-heading) !important;
     font-weight: 600;
     font-size: 1.125rem;
     margin-bottom: 0.75rem;
@@ -376,13 +376,13 @@ article.blog-article-page .breadcrumb {
 }
 
 .card-text {
-    color: #4a5568 !important;
+    color: var(--content-text) !important;
     font-size: 0.875rem;
     line-height: 1.6;
 }
 
 .card-text.text-muted {
-    color: #718096 !important;
+    color: var(--content-muted) !important;
     font-size: 0.8125rem;
 }
 
@@ -423,17 +423,18 @@ article.blog-article-page .breadcrumb {
 
 /* Section CTA */
 .cta-section {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, var(--content-surface-alt) 0%, var(--content-surface) 100%);
+    border-top: 1px solid var(--content-border);
 }
 
 .cta-section h2 {
-    color: #000000;
+    color: var(--content-heading);
     font-weight: 700;
     font-size: 2rem;
 }
 
 .cta-section p {
-    color: #1a1a1a;
+    color: var(--content-text);
     font-size: 1.15rem;
     font-weight: 600;
 }
