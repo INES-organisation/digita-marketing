@@ -20,6 +20,25 @@
     --shell-text-strong: #111827;
     --shell-hover: rgba(37, 99, 235, 0.06);
     --footer-bg: #ffffff;
+    --navbar-bg: rgba(255, 255, 255, 0.95);
+    --content-heading: #111827;
+    --content-text: #1f2937;
+    --content-muted: #4b5563;
+    --content-surface: #ffffff;
+    --content-surface-alt: #f3f4f6;
+    --content-border: rgba(15, 23, 42, 0.1);
+    --content-input-bg: #ffffff;
+    --content-link: #1d4ed8;
+    --bs-body-bg: #f7f7f7;
+    --bs-body-color: #1f2937;
+    --bs-secondary-color: #4b5563;
+    --bs-emphasis-color: #111827;
+    --bs-heading-color: #111827;
+    --bs-border-color: #dee2e6;
+    /* Anciennes variables de style.css : --dark devient clair, le bleu des boutons reste foncé */
+    --primary-color: #1e3a8a;
+    --accent-cyan: #0e7490;
+    --light-bg: #ffffff;
     --auth-text: #111827;
     --auth-muted: #4b5563;
     --auth-input-bg: #ffffff;
@@ -73,8 +92,8 @@
 
 /* Sur les fonds colorés (boutons, badges, bandeaux), le texte reste clair */
 [data-theme="light"] .btn-primary, [data-theme="light"] .btn-primary *,
-[data-theme="light"] .bg-primary .text-white, [data-theme="light"] .bg-primary h1,
-[data-theme="light"] .bg-primary h2, [data-theme="light"] .bg-primary p,
+[data-theme="light"] .bg-primary:not(.bg-opacity-10) .text-white, [data-theme="light"] .bg-primary:not(.bg-opacity-10) h1,
+[data-theme="light"] .bg-primary:not(.bg-opacity-10) h2, [data-theme="light"] .bg-primary:not(.bg-opacity-10) p,
 [data-theme="light"] .badge.bg-primary, [data-theme="light"] .badge.bg-success,
 [data-theme="light"] .badge.bg-danger, [data-theme="light"] .bg-gradient .text-white,
 [data-theme="light"] .btn-premium-blue {
@@ -233,4 +252,55 @@
 
 [data-theme="light"] canvas {
     opacity: 0.35;
+}
+
+/* ---------- Couleurs d'accent trop claires sur fond clair ---------- */
+[data-theme="light"] [style*="color: #00d2ff"], [data-theme="light"] [style*="color:#00d2ff"],
+[data-theme="light"] [style*="color: #00D2FF"] {
+    color: #0e7490 !important;
+}
+
+[data-theme="light"] [style*="color: #34d399"], [data-theme="light"] [style*="color:#34d399"] {
+    color: #047857 !important;
+}
+
+[data-theme="light"] [style*="color: #60a5fa"], [data-theme="light"] [style*="color:#60a5fa"] {
+    color: #1d4ed8 !important;
+}
+
+[data-theme="light"] .text-warning,
+[data-theme="light"] .btn-outline-warning {
+    color: #b45309 !important;
+}
+
+[data-theme="light"] .btn-outline-warning { border-color: #b45309 !important; }
+
+[data-theme="light"] .btn-outline-info {
+    color: #0e7490 !important;
+    border-color: #0e7490 !important;
+}
+
+[data-theme="light"] .text-info { color: #0e7490 !important; }
+
+/* Bandeaux qui restent sombres en thème clair (héros des catégories blog / formations) */
+[data-theme="light"] .blog-category-hero .text-white,
+[data-theme="light"] .blog-category-hero h1,
+[data-theme="light"] .blog-category-hero p,
+[data-theme="light"] .formations-category-hero .text-white,
+[data-theme="light"] .formations-category-hero h1,
+[data-theme="light"] .formations-category-hero p {
+    color: #ffffff !important;
+}
+
+/* Connexion / inscription : bouton or avec texte foncé, liens or foncé */
+[data-theme="light"] .auth-form .btn-primary { color: #111827 !important; }
+[data-theme="light"] .auth-footer a { color: #8a6d12 !important; }
+
+[data-theme="light"] .badge.bg-white,
+[data-theme="light"] .badge.bg-light {
+    color: #111827 !important;
+}
+
+[data-theme="light"] .text-gold-dim {
+    color: #8a6d12 !important;
 }

@@ -1,4 +1,4 @@
-// Coque du site : menu mobile, bascule de thème, inscription newsletter du pied de page.
+// Coque du site : menus (accueil et pages internes), bascule de thème, inscription newsletter du pied de page.
 (function () {
     var root = document.documentElement;
     var body = document.body;
@@ -23,11 +23,56 @@
         if (e.key === 'Escape') setSidebar(false);
     });
 
+    // ---------- Menu agence (pages internes) ----------
+    var agence = document.getElementById('sidebar-agence');
+    function setAgence(open) {
+        if (!agence) return;
+        body.classList.toggle('agence-open', open);
+        agence.setAttribute('aria-hidden', open ? 'false' : 'true');
+        document.querySelectorAll('[data-agence-open]').forEach(function (b) {
+            b.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+    }
+    // Noms d'origine, encore appelés par d'anciens contenus
+    window.ouvrirSidebarAgence = function () { setAgence(true); };
+    window.fermerSidebarAgence = function () { setAgence(false); };
+    document.querySelectorAll('[data-agence-open]').forEach(function (b) {
+        b.addEventListener('click', function () { setAgence(true); });
+    });
+    document.querySelectorAll('[data-agence-close]').forEach(function (b) {
+        b.addEventListener('click', function () { setAgence(false); });
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setAgence(false);
+    });
+
+    // ---------- Accueil : section visible surlignée dans le menu ----------
+    var sectionLinks = document.querySelectorAll('[data-section-link]');
+    if (sectionLinks.length && 'IntersectionObserver' in window) {
+        var byId = {};
+        sectionLinks.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                sectionLinks.forEach(function (a) { a.classList.remove('active'); a.removeAttribute('aria-current'); });
+                var link = byId[entry.target.id];
+                if (link) { link.classList.add('active'); link.setAttribute('aria-current', 'true'); }
+            });
+        }, { rootMargin: '-45% 0px -50% 0px' });
+        // Le héros n'a pas d'entrée : quand il est visible, aucun lien n'est surligné
+        Object.keys(byId).concat(['hero-premium']).forEach(function (id) {
+            var section = document.getElementById(id);
+            if (section) observer.observe(section);
+        });
+    }
+
     // ---------- Thème clair / sombre ----------
     document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
         b.addEventListener('click', function () {
             var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             root.setAttribute('data-theme', next);
+            // Composants Bootstrap (cartes, formulaires, textes atténués) suivent le même thème
+            root.setAttribute('data-bs-theme', next);
             try { localStorage.setItem('digita-theme', next); } catch (e) { /* navigation privée */ }
         });
     });
