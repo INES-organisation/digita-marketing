@@ -11,16 +11,16 @@ Les corrections marquées ✅ sont faites dans la PR « Coque unique, formulaire
 | # | Constat (mesuré sur le site en ligne) | Statut |
 |---|---|---|
 | 1 | **Pas de pied de page** sur toutes les pages sauf l'accueil (28 pages sur 29) : le layout `main` l'avait perdu lors de la refonte d'avril. | ✅ pied de page premium partout |
-| 2 | **Trois en-têtes différents** : barre latérale premium sur l'accueil, ancienne barre blanche + menu « agence » ailleurs, ancien header PHP sur connexion, inscription, recherches et 404. | ✅ une seule navigation (barre latérale, menu coulissant sur mobile) |
+| 2 | **Trois en-têtes différents** : barre latérale premium sur l'accueil, ancienne barre blanche + menu « agence » ailleurs, ancien header PHP sur connexion, inscription, recherches et 404. | ✅ deux navigations cohérentes : menu vertical ancré sur les sections à l'accueil, menu horizontal + barre des services à droite sur les autres pages (même pied de page partout) |
 | 3 | **Formulaire de contact inopérant** : `POST /contact` répond 404, les messages étaient perdus (déjà le cas en PHP). | ✅ enregistré en base, copié dans le CRM INES, notifié à l'admin |
 | 4 | **Newsletter inopérante** : le formulaire du pied de page de l'accueil envoyait vers `/newsletter/subscribe`, route inexistante (404). | ✅ inscription en base + INES, réponse sans rechargement |
-| 5 | **Accueil illisible sur mobile** : la barre latérale de 260 px recouvrait le contenu (aucune règle mobile). | ✅ barre supérieure + menu coulissant |
+| 5 | **Accueil illisible sur mobile** : la barre latérale de 260 px recouvrait le contenu (aucune règle mobile). | ✅ barre supérieure + menu coulissant (accueil), menu repliable (autres pages) |
 | 6 | **Connexion / inscription sans mise en forme** (formulaire collé en haut, sous la barre). | ✅ intégrées au thème |
 | 7 | **Page 404 brute** (texte « Page non trouvée » sans design) pour toute URL inconnue ; `/portfolio` et `/equipe` affichaient « Une erreur est survenue ». | ✅ vraie page 404 (noindex) ; portfolio/équipe renvoient vers « À propos » |
 | 8 | **Erreur JavaScript sur l'accueil** (`Cannot read properties of null (reading 'classList')`) venant de `main.js`, plus un code de débogage qui dessinait « DEBUG CANVAS OK ». | ✅ script retiré |
 | 9 | **Image manquante sur /blog** (`placeholder-blog.jpg`, 404 ×5) : aucun des 472 articles n'a d'image. | ✅ visuel de remplacement ; ⚠️ images d'articles à produire |
 | 10 | **Partages réseaux sociaux des formations** vers `http://digita-marketing.local/...`. | ✅ URL du site |
-| 11 | Débordement horizontal sur mobile (/a-propos, articles, /projets/brief). | ✅ disparu avec l'ancienne barre |
+| 11 | Débordement horizontal sur mobile (/a-propos, articles, /projets/brief). | ✅ corrigé |
 | 12 | **Mentions légales fictives** : SIRET 123 456 789 00012, « 123 Rue du Marketing, Paris », hébergeur « [Nom de l'hébergeur] », directeur « [Nom du directeur] ». Obligation légale (LCEN). | ✅ remplacées par les vraies informations (EI TONY ALPHA 8.0, SIREN 844 384 198, hébergeur OVH) |
 | 13 | **Téléphone factice** « +262 692 XX XX XX » sur /contact et /support ; e-mail `contact@digita-marketing.com` (domaine différent de digita.buzz). | ✅ vrais téléphone et e-mail |
 
@@ -42,6 +42,7 @@ Les corrections marquées ✅ sont faites dans la PR « Coque unique, formulaire
 ## 3. Design et expérience
 
 - ✅ Thème clair retrouvé dans l'historique (palette d'avant la refonte du 20/04/2026 : fond `#f7f7f7`, texte `#1f2937`, bleu `#2563eb`) et proposé en bascule à côté du thème sombre ; le choix est gardé dans le navigateur.
+- ✅ Contrastes vérifiés automatiquement sur 38 pages dans les deux thèmes (textes blanc sur blanc des pages légales, catalogue, formations, blog, outils, tarifs…) : plus aucun texte sous le seuil de lisibilité. Les composants Bootstrap suivent le thème (`data-bs-theme`).
 - ✅ Chatbot aux couleurs de la marque (il était bleu Bootstrap) et adapté au mobile.
 - Les pages internes mélangent encore deux générations de contenu : sections sombres « premium » (services, contact, accueil) et blocs blancs Bootstrap de l'ère PHP (formations, blog, tarifs, boutique, solutions). Harmoniser le contenu des pages formations/blog/boutique avec le style premium.
 - Animations AOS : tout le contenu de /services est caché tant que la page n'a pas défilé ; sur une capture ou un robot, la page paraît vide sous le titre.

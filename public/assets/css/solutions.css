@@ -19,8 +19,8 @@
 
 /* Barre de recherche dans le hero */
 .solutions-hero .search-form .form-control {
-    background-color: #fff !important;
-    border: none;
+    background-color: var(--content-surface) !important;
+    border: 1px solid var(--content-border) !important;
     padding: 0.75rem 1rem;
     font-size: 1rem;
 }
