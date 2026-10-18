@@ -43,8 +43,11 @@ def test_home_uses_vertical_menu_anchored_on_sections():
     r = _client().get("/")
     assert 'class="sidebar-premium"' in r.text and 'class="footer-premium"' in r.text
     assert "navbar-site" not in r.text and "sidebar-onglet-sidebar" not in r.text
-    for anchor in ("#enjeux", "#ecosysteme", "#collaboration", "#methode", "#hero-premium"):
+    for anchor in ("#enjeux", "#ecosysteme", "#collaboration", "#methode", "#realisations", "#hero-premium"):
         assert f'href="{anchor}"' in r.text, anchor
+    assert 'id="realisations"' in r.text and "https://lp48.digita.buzz" in r.text
+    for category in ("Sites web et landing", "Réseaux sociaux", "Publicité", "Automatisation", "Agents IA"):
+        assert category in r.text, category
     assert "Connexion" in r.text and "data-theme-toggle" in r.text and "Diagnostic gratuit" in r.text
 
 

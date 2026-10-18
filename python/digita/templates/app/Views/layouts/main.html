@@ -13,6 +13,8 @@
     <meta name="description" content="{{ h(coalesce(metaDescription, 'Digita Marketing : agence spécialisée en marketing digital, automatisation et intelligence artificielle à La Réunion. Formations, services et solutions sur mesure.')) }}">
     <meta name="keywords" content="{{ h(coalesce(metaKeywords, 'marketing digital, automatisation, intelligence artificielle, IA, formation, SEO, La Réunion')) }}">
     <meta name="author" content="Digita Marketing">
+    {% if const('GOOGLE_SITE_VERIFICATION') %}<meta name="google-site-verification" content="{{ h(const('GOOGLE_SITE_VERIFICATION')) }}">{% endif %}
+    {% if const('BING_SITE_VERIFICATION') %}<meta name="msvalidate.01" content="{{ h(const('BING_SITE_VERIFICATION')) }}">{% endif %}
     <meta name="robots" content="{{ coalesce(metaRobots, 'index, follow') }}">
     {% set canonicalUrl = cat(cat(cat((('https' if ((isset(_SERVER['HTTPS'])) and (_SERVER['HTTPS'] == 'on')) else 'http')), '://'), (coalesce(_SERVER['HTTP_HOST'], 'digita.buzz'))), strtok(coalesce(_SERVER['REQUEST_URI'], '/'), '?')) %}{% if isset(canonical) %}{% set canonicalUrl = canonical %}{% endif %}    <link rel="canonical" href="{{ h(canonicalUrl) }}">
     

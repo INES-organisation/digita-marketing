@@ -140,24 +140,32 @@ email_sequences = _cron(process_email_sequences)
 
 
 # ---------------------------------------------------------------- sitemap (était généré à 4h)
-STATIC_PAGES = [("/", "1.0", "daily"), ("/services", "0.9", "weekly"), ("/formations", "0.9", "daily"),
-                ("/blog", "0.9", "daily"), ("/boutique", "0.8", "weekly"), ("/solutions", "0.8", "weekly"),
-                ("/catalogue", "0.8", "weekly"), ("/tarifs", "0.8", "monthly"), ("/a-propos", "0.7", "monthly"),
-                ("/contact", "0.8", "monthly"), ("/mentions-legales", "0.3", "yearly"),
-                ("/politique-confidentialite", "0.3", "yearly"), ("/conditions-generales", "0.3", "yearly")]
+STATIC_PAGES = [("/", "1.0", "weekly"), ("/services", "0.9", "monthly"), ("/formations", "0.9", "weekly"),
+                ("/blog", "0.9", "daily"), ("/boutique", "0.8", "monthly"), ("/solutions", "0.8", "monthly"),
+                ("/catalogue", "0.8", "monthly"), ("/tarifs", "0.8", "monthly"), ("/a-propos", "0.7", "monthly"),
+                ("/contact", "0.8", "monthly"), ("/support", "0.6", "monthly"), ("/projets/brief", "0.7", "monthly"),
+                ("/outils", "0.8", "monthly"), ("/outils/audit-seo", "0.7", "monthly"),
+                ("/outils/meta-generator", "0.7", "monthly"), ("/outils/roi-calculator", "0.7", "monthly"),
+                ("/outils/calendrier-editorial", "0.7", "monthly"), ("/mentions-legales", "0.3", "yearly"),
+                ("/politique-confidentialite", "0.3", "yearly"), ("/conditions-generales", "0.3", "yearly"),
+                ("/cookies", "0.3", "yearly")]
 
 
 def sitemap_xml():
-    base, today = config.APP_URL.rstrip("/"), php.date("Y-m-d")
-    urls = [(p, prio, freq, today) for p, prio, freq in STATIC_PAGES]
-    urls += [("/blog/" + a["slug"], "0.7", "weekly", str(a.get("updated_at") or today)[:10])
+    # lastmod seulement quand la date est réelle (articles, formations) : une date du jour sur
+    # chaque page fixe est ignorée par Google et fait perdre confiance dans les autres.
+    base = config.APP_URL.rstrip("/")
+    urls = [(p, prio, freq, None) for p, prio, freq in STATIC_PAGES]
+    urls += [("/blog/" + a["slug"], "0.7", "monthly", a.get("updated_at") or a.get("published_at"))
              for a in Article.get_all_published()]
-    urls += [("/blog/categorie/" + c["slug"], "0.6", "weekly", today) for c in Article.get_categories()]
-    urls += [("/formations/" + f["slug"], "0.8", "weekly", str(f.get("updated_at") or f.get("created_at") or today)[:10])
+    urls += [("/blog/categorie/" + c["slug"], "0.6", "weekly", None) for c in Article.get_categories()]
+    urls += [("/formations/" + f["slug"], "0.8", "monthly", f.get("updated_at") or f.get("created_at"))
              for f in Formation.get_all_published()]
-    urls += [("/formations/categorie/" + c["slug"], "0.6", "weekly", today) for c in Formation.get_categories()]
-    body = "".join(f"<url><loc>{php.h(base + p)}</loc><changefreq>{freq}</changefreq><priority>{prio}</priority>"
-                   f"<lastmod>{mod}</lastmod></url>" for p, prio, freq, mod in urls)
+    urls += [("/formations/categorie/" + c["slug"], "0.6", "weekly", None) for c in Formation.get_categories()]
+    body = "".join(f"<url><loc>{php.h(base + p)}</loc>"
+                   + (f"<lastmod>{str(mod)[:10]}</lastmod>" if mod else "")
+                   + f"<changefreq>{freq}</changefreq><priority>{prio}</priority></url>"
+                   for p, prio, freq, mod in urls)
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
             f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>')
 

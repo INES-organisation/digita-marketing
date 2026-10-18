@@ -15,10 +15,19 @@ Allow: /catalogue
 Allow: /boutique
 Allow: /tarifs
 
-# Bloquer l'accès admin
+# Bloquer l'accès admin et les pages de compte (non indexables)
 Disallow: /admin/
+Disallow: /api/
 Disallow: /connexion
 Disallow: /inscription
+Disallow: /espace-client
+Disallow: /mes-formations
+Disallow: /mes-commandes
+Disallow: /facture/
+Disallow: /paiement/
+Disallow: /formations/checkout/
+Disallow: /blog/search
+Disallow: /formations/search
 
 # Bloquer les fichiers techniques
 Disallow: /config/
