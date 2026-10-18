@@ -43,7 +43,7 @@ body {
 }
 
 #tunnel {
-    background: linear-gradient(120deg, #f7f7f7 60%, #2563eb11 100%);
+    background: linear-gradient(120deg, #f7f7f7 60%, var(--accent-soft) 100%);
     overflow: hidden;
 }
 
@@ -65,7 +65,7 @@ body {
 }
 
 #seo {
-    background: linear-gradient(120deg, #f7f7f7 60%, #2563eb11 100%);
+    background: linear-gradient(120deg, #f7f7f7 60%, var(--accent-soft) 100%);
     overflow: hidden;
 }
 

@@ -63,7 +63,7 @@
 
 /* Footer hover effect */
 .hover-gold:hover {
-    color: #FFD700 !important;
+    color: var(--gold) !important;
     transition: color 0.3s ease;
 }
 

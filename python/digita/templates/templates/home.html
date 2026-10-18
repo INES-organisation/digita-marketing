@@ -8,19 +8,19 @@
       <div class="row g-0" style="border-radius: 24px; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.6);">
 
         <!-- === COLONNE GAUCHE : VALEUR & SOCIAL PROOF === -->
-        <div class="col-md-5 d-none d-md-flex flex-column justify-content-between p-5 position-relative" style="background: linear-gradient(160deg, #0a1628 0%, #07111f 100%); border-right: 1px solid rgba(212,175,55,0.2);">
+        <div class="col-md-5 d-none d-md-flex flex-column justify-content-between p-5 position-relative" style="background: linear-gradient(160deg, #0a1628 0%, #07111f 100%); border-right: 1px solid rgba(var(--gold-rgb),0.2);">
           <!-- Glow décor -->
-          <div class="position-absolute top-0 start-0 rounded-circle" style="width: 300px; height: 300px; background: radial-gradient(circle, rgba(212,175,55,0.08), transparent 70%); transform: translate(-30%, -30%); pointer-events:none;"></div>
+          <div class="position-absolute top-0 start-0 rounded-circle" style="width: 300px; height: 300px; background: radial-gradient(circle, rgba(var(--gold-rgb),0.08), transparent 70%); transform: translate(-30%, -30%); pointer-events:none;"></div>
           <div>
-            <span style="display:inline-block; background: rgba(212,175,55,0.12); color: #D4AF37; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; padding: 6px 14px; border-radius: 50px; border: 1px solid rgba(212,175,55,0.25); margin-bottom: 1.5rem;">Offre Exclusive</span>
-            <h3 class="fw-black text-white mb-3" style="font-family:'Outfit'; font-size: 1.6rem; line-height: 1.2;">Votre Diagnostic Stratégique <span style="color:#D4AF37;">Offert</span></h3>
+            <span style="display:inline-block; background: rgba(var(--gold-rgb),0.12); color: var(--gold); font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; padding: 6px 14px; border-radius: 50px; border: 1px solid rgba(var(--gold-rgb),0.25); margin-bottom: 1.5rem;">Offre Exclusive</span>
+            <h3 class="fw-black text-white mb-3" style="font-family:'Outfit'; font-size: 1.6rem; line-height: 1.2;">Votre Diagnostic Stratégique <span style="color:var(--gold);">Offert</span></h3>
             <p style="color: rgba(255,255,255,0.6); font-size: 0.88rem; line-height: 1.7; margin-bottom: 2rem;">30 minutes avec un consultant senior pour identifier vos leviers de croissance immédiate et votre roadmap IA personnalisée.</p>
 
             <!-- Bénéfices -->
             <ul class="list-unstyled mb-4">
               <li class="d-flex align-items-start gap-3 mb-3">
-                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:34px; height:34px; background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3);">
-                  <i class="bi bi-search" style="color:#D4AF37; font-size:0.85rem;"></i>
+                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:34px; height:34px; background: rgba(var(--gold-rgb),0.12); border: 1px solid rgba(var(--gold-rgb),0.3);">
+                  <i class="bi bi-search" style="color:var(--gold); font-size:0.85rem;"></i>
                 </div>
                 <div>
                   <div class="fw-bold text-white" style="font-size:0.88rem;">Audit de votre stack digitale</div>
@@ -51,7 +51,7 @@
             <div class="p-3 rounded-3" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);">
               <div class="d-flex align-items-center gap-2 mb-2">
                 <div class="d-flex">
-                  {% for s in php_upto(0, 5, false) %}                  <i class="bi bi-star-fill" style="color:#D4AF37; font-size:0.75rem;"></i>
+                  {% for s in php_upto(0, 5, false) %}                  <i class="bi bi-star-fill" style="color:var(--gold); font-size:0.75rem;"></i>
                   {% endfor %}                </div>
                 <span style="color:rgba(255,255,255,0.5); font-size:0.75rem;">+250 dirigeants accompagnés</span>
               </div>
@@ -61,9 +61,9 @@
           </div>
 
           <!-- Urgency indicator -->
-          <div class="d-flex align-items-center gap-2 mt-4" style="background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); border-radius: 10px; padding: 10px 14px;">
-            <span class="rounded-circle" style="width:8px; height:8px; background:#D4AF37; box-shadow: 0 0 6px #D4AF37; animation: pulse 2s infinite; flex-shrink:0;"></span>
-            <span style="color:rgba(255,255,255,0.7); font-size:0.75rem;"><strong style="color:#D4AF37;">3 créneaux disponibles</strong> cette semaine</span>
+          <div class="d-flex align-items-center gap-2 mt-4" style="background: rgba(var(--gold-rgb),0.08); border: 1px solid rgba(var(--gold-rgb),0.2); border-radius: 10px; padding: 10px 14px;">
+            <span class="rounded-circle" style="width:8px; height:8px; background:var(--gold); box-shadow: 0 0 6px var(--gold); animation: pulse 2s infinite; flex-shrink:0;"></span>
+            <span style="color:rgba(255,255,255,0.7); font-size:0.75rem;"><strong style="color:var(--gold);">3 créneaux disponibles</strong> cette semaine</span>
           </div>
         </div>
 
@@ -80,7 +80,7 @@
 
             <!-- Indicateur de progression -->
             <div class="d-flex gap-2 mb-4">
-              <div style="flex:1; height:3px; border-radius:3px; background: linear-gradient(90deg, #D4AF37, #f0d060);"></div>
+              <div style="flex:1; height:3px; border-radius:3px; background: var(--gold-gradient);"></div>
               <div style="flex:1; height:3px; border-radius:3px; background: rgba(255,255,255,0.1);"></div>
               <div style="flex:1; height:3px; border-radius:3px; background: rgba(255,255,255,0.1);"></div>
             </div>
@@ -126,7 +126,7 @@
                   </select>
                 </div>
                 <div class="col-12 mt-2">
-                  <button type="submit" class="btn w-100 fw-black py-3" style="background: linear-gradient(135deg, #D4AF37, #f0d060); color: #050505; border-radius: 50px; font-size: 0.95rem; letter-spacing: 1.5px; border: none; box-shadow: 0 8px 30px rgba(212,175,55,0.35); transition: all 0.3s ease; text-transform: uppercase;">
+                  <button type="submit" class="btn w-100 fw-black py-3" style="background: var(--gold-gradient); color: var(--on-gold); border-radius: 50px; font-size: 0.95rem; letter-spacing: 1.5px; border: none; box-shadow: 0 8px 30px rgba(var(--gold-rgb),0.35); transition: all 0.3s ease; text-transform: uppercase;">
                     <i class="bi bi-calendar-check me-2"></i>RÉSERVER MON DIAGNOSTIC GRATUIT
                   </button>
                 </div>
@@ -139,7 +139,7 @@
                 <i class="bi bi-check-lg" style="color:#34d399; font-size:2.5rem;"></i>
               </div>
               <h4 class="text-white fw-bold mb-2" style="font-family:'Outfit';">Demande confirmée !</h4>
-              <p style="color:rgba(255,255,255,0.5); font-size:0.9rem; max-width:280px; margin:0 auto;">Notre équipe vous contactera dans les <strong style="color:#D4AF37;">2 heures ouvrées</strong> pour finaliser votre créneau.</p>
+              <p style="color:rgba(255,255,255,0.5); font-size:0.9rem; max-width:280px; margin:0 auto;">Notre équipe vous contactera dans les <strong style="color:var(--gold);">2 heures ouvrées</strong> pour finaliser votre créneau.</p>
             </div>
 
             <div class="mt-3 text-center">
@@ -178,9 +178,9 @@
     appearance: none;
 }
 .audit-input:focus {
-    background: rgba(212,175,55,0.05);
-    border-color: rgba(212,175,55,0.4);
-    box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+    background: rgba(var(--gold-rgb),0.05);
+    border-color: rgba(var(--gold-rgb),0.4);
+    box-shadow: 0 0 0 3px rgba(var(--gold-rgb),0.08);
     color: #fff;
 }
 .audit-input::placeholder { color: rgba(255,255,255,0.22); }
@@ -190,10 +190,10 @@
 <!-- ============================================================
      1. HERO SECTION PREMIUM
      ============================================================ -->
-<section id="hero-premium" class="position-relative overflow-hidden d-flex align-items-center" style="min-height: 100vh; background: radial-gradient(ellipse at 15% 50%, rgba(37,99,235,0.12) 0%, transparent 50%), radial-gradient(ellipse at 85% 20%, rgba(212,175,55,0.1) 0%, transparent 40%), #050505;">
+<section id="hero-premium" class="position-relative overflow-hidden d-flex align-items-center" style="min-height: 100vh; background: radial-gradient(ellipse at 15% 50%, rgba(37,99,235,0.12) 0%, transparent 50%), radial-gradient(ellipse at 85% 20%, rgba(var(--gold-rgb),0.1) 0%, transparent 40%), #050505;">
 
     <!-- Animated Grid Background -->
-    <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image: linear-gradient(rgba(212,175,55,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.03) 1px, transparent 1px); background-size: 60px 60px; animation: gridShift 25s linear infinite; pointer-events:none;"></div>
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image: linear-gradient(rgba(var(--gold-rgb),0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--gold-rgb),0.03) 1px, transparent 1px); background-size: 60px 60px; animation: gridShift 25s linear infinite; pointer-events:none;"></div>
 
     <!-- Particles Canvas -->
     <canvas id="premiumParticles" class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1; pointer-events: none; opacity: 0.5;"></canvas>
@@ -202,25 +202,25 @@
         <div class="row align-items-center g-4 g-lg-5">
             <div class="col-lg-7" data-aos="fade-right" data-aos-duration="1000">
                 <!-- Badge Prestige -->
-                <div class="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill mb-3" style="background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3);">
-                    <span class="rounded-circle d-inline-block" style="width:8px; height:8px; background:#D4AF37; box-shadow: 0 0 8px #D4AF37; animation: pulse 2s infinite;"></span>
-                    <span style="color: #D4AF37; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;">Cabinet de Conseil Stratégique Premium</span>
+                <div class="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill mb-3" style="background: rgba(var(--gold-rgb),0.1); border: 1px solid rgba(var(--gold-rgb),0.3);">
+                    <span class="rounded-circle d-inline-block" style="width:8px; height:8px; background:var(--gold); box-shadow: 0 0 8px var(--gold); animation: pulse 2s infinite;"></span>
+                    <span style="color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;">Cabinet de Conseil Stratégique Premium</span>
                 </div>
 
                 <!-- Title Principal -->
                 <h1 class="fw-black mb-3" style="font-family: 'Outfit', sans-serif; font-size: clamp(2.6rem, 5.5vw, 4.6rem); line-height: 1.08; color: #fff;">
                     DIGITA —<br>
                     Un Écosystème<br>
-                    <span style="background: linear-gradient(135deg, #D4AF37 0%, #f0d060 40%, #2563eb 80%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: titleShine 4s ease-in-out infinite;">Intelligent & Automatisé</span>
+                    <span style="background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 40%, #2563eb 80%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: titleShine 4s ease-in-out infinite;">Intelligent & Automatisé</span>
                 </h1>
 
                 <p class="mb-4" style="color: rgba(255,255,255,0.78); font-size: 1.12rem; line-height: 1.8; max-width: 560px;">
-                    Nous fusionnons l'<strong style="color: #D4AF37;">Intelligence Artificielle</strong>, l'<strong style="color: #60a5fa;">automatisation avancée</strong> et le conseil stratégique pour propulser votre activité vers de nouveaux sommets — sans friction technique.
+                    Nous fusionnons l'<strong style="color: var(--gold);">Intelligence Artificielle</strong>, l'<strong style="color: #60a5fa;">automatisation avancée</strong> et le conseil stratégique pour propulser votre activité vers de nouveaux sommets — sans friction technique.
                 </p>
 
                 <!-- CTAs -->
                 <div class="d-flex flex-wrap gap-3 mb-4">
-                    <button class="btn fw-bold px-5 py-3" data-bs-toggle="modal" data-bs-target="#auditModal" style="background: linear-gradient(135deg, #D4AF37, #f0d060); color: #050505; border-radius: 50px; font-size: 1rem; box-shadow: 0 0 30px rgba(212,175,55,0.4); transition: all 0.3s ease; border: none;">
+                    <button class="btn fw-bold px-5 py-3" data-bs-toggle="modal" data-bs-target="#auditModal" style="background: var(--gold-gradient); color: var(--on-gold); border-radius: 50px; font-size: 1rem; box-shadow: 0 0 30px rgba(var(--gold-rgb),0.4); transition: all 0.3s ease; border: none;">
                         <i class="bi bi-lightning-charge-fill me-2"></i>Diagnostic Gratuit
                     </button>
                     <a href="#ecosysteme" class="btn fw-bold px-4 py-3" style="background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(0,210,255,0.2)); color: #fff; border: 1px solid rgba(37,99,235,0.5); border-radius: 50px; font-size: 1rem; transition: all 0.3s ease; text-decoration: none;">
@@ -231,17 +231,17 @@
                 <!-- Trust Signals -->
                 <div class="d-flex flex-wrap gap-4 align-items-center">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="fw-black" style="color: #D4AF37; font-size: 1.5rem; font-family: 'Outfit';">+250</span>
+                        <span class="fw-black" style="color: var(--gold); font-size: 1.5rem; font-family: 'Outfit';">+250</span>
                         <span style="color: rgba(255,255,255,0.5); font-size: 0.82rem; line-height: 1.3;">Clients<br>accompagnés</span>
                     </div>
                     <div style="width: 1px; height: 36px; background: rgba(255,255,255,0.12);"></div>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="fw-black" style="color: #D4AF37; font-size: 1.5rem; font-family: 'Outfit';">x2.5</span>
+                        <span class="fw-black" style="color: var(--gold); font-size: 1.5rem; font-family: 'Outfit';">x2.5</span>
                         <span style="color: rgba(255,255,255,0.5); font-size: 0.82rem; line-height: 1.3;">ROI moyen<br>constaté</span>
                     </div>
                     <div style="width: 1px; height: 36px; background: rgba(255,255,255,0.12);"></div>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="fw-black" style="color: #D4AF37; font-size: 1.5rem; font-family: 'Outfit';">24/7</span>
+                        <span class="fw-black" style="color: var(--gold); font-size: 1.5rem; font-family: 'Outfit';">24/7</span>
                         <span style="color: rgba(255,255,255,0.5); font-size: 0.82rem; line-height: 1.3;">Systèmes<br>autonomes actifs</span>
                     </div>
                 </div>
@@ -252,22 +252,22 @@
                 <!-- Orbiting Visual Element -->
                 <div class="position-relative" style="width: 420px; height: 420px;">
                     <!-- Outer Ring -->
-                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 380px; height: 380px; border: 2px dashed rgba(212,175,55,0.2); animation: spin 30s linear infinite;"></div>
+                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 380px; height: 380px; border: 2px dashed rgba(var(--gold-rgb),0.2); animation: spin 30s linear infinite;"></div>
                     <!-- Inner Ring -->
                     <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 260px; height: 260px; border: 1px solid rgba(37,99,235,0.3); animation: spin 20s linear infinite reverse;"></div>
                     <!-- Center Glow -->
-                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle d-flex align-items-center justify-content-center" style="width: 160px; height: 160px; background: radial-gradient(circle, rgba(212,175,55,0.15), rgba(37,99,235,0.1)); border: 1px solid rgba(212,175,55,0.3); backdrop-filter: blur(10px);">
-                        <i class="bi bi-lightning-charge" style="font-size: 3.5rem; color: #D4AF37; text-shadow: 0 0 20px rgba(212,175,55,0.6);"></i>
+                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle d-flex align-items-center justify-content-center" style="width: 160px; height: 160px; background: radial-gradient(circle, rgba(var(--gold-rgb),0.15), rgba(37,99,235,0.1)); border: 1px solid rgba(var(--gold-rgb),0.3); backdrop-filter: blur(10px);">
+                        <i class="bi bi-lightning-charge" style="font-size: 3.5rem; color: var(--gold); text-shadow: 0 0 20px rgba(var(--gold-rgb),0.6);"></i>
                     </div>
                     <!-- Orbiting Nodes -->
                     <div class="position-absolute rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.5); backdrop-filter: blur(5px);">
                         <i class="bi bi-cpu" style="color: #60a5fa;"></i>
                     </div>
-                    <div class="position-absolute rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; bottom: 10px; right: 20px; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4); backdrop-filter: blur(5px);">
-                        <i class="bi bi-graph-up-arrow" style="color: #D4AF37;"></i>
+                    <div class="position-absolute rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; bottom: 10px; right: 20px; background: rgba(var(--gold-rgb),0.15); border: 1px solid rgba(var(--gold-rgb),0.4); backdrop-filter: blur(5px);">
+                        <i class="bi bi-graph-up-arrow" style="color: var(--gold);"></i>
                     </div>
-                    <div class="position-absolute rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; bottom: 10px; left: 20px; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4); backdrop-filter: blur(5px);">
-                        <i class="bi bi-stars" style="color: #D4AF37;"></i>
+                    <div class="position-absolute rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; bottom: 10px; left: 20px; background: rgba(var(--gold-rgb),0.15); border: 1px solid rgba(var(--gold-rgb),0.4); backdrop-filter: blur(5px);">
+                        <i class="bi bi-stars" style="color: var(--gold);"></i>
                     </div>
                     <!-- Glow Background -->
                     <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 300px; height: 300px; background: radial-gradient(circle, rgba(37,99,235,0.08), transparent 70%); pointer-events: none;"></div>
@@ -289,13 +289,13 @@
 <!-- ============================================================
      2. STATS PRESTIGE BAR
      ============================================================ -->
-<section class="py-5" style="background: linear-gradient(90deg, #030a17, #050505, #030a17); border-top: 1px solid rgba(212,175,55,0.15); border-bottom: 1px solid rgba(212,175,55,0.15);">
+<section class="py-5" style="background: linear-gradient(90deg, #030a17, #050505, #030a17); border-top: 1px solid rgba(var(--gold-rgb),0.15); border-bottom: 1px solid rgba(var(--gold-rgb),0.15);">
     <div class="container">
         <div class="row g-4 text-center">
             {% set stats = [['+250', 'Clients Stratégiques', 'bi bi-people'], ['45%', 'Gain de Temps Moyen', 'bi bi-hourglass'], ['x2.5', 'ROI Constaté', 'bi bi-graph-up-arrow'], ['24/7', 'Automatisation Active', 'bi bi-lightning-charge']] %}{% for i, stat in php_items(stats) %}            <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="{{ (i * 100) }}">
                 <div class="py-3">
-                    <i class="{{ stat[2] }} fs-4 mb-2 d-block" style="color: #D4AF37; opacity: 0.7;"></i>
-                    <div class="fw-black mb-1" style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; background: linear-gradient(135deg, #D4AF37, #f0d060); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">{{ stat[0] }}</div>
+                    <i class="{{ stat[2] }} fs-4 mb-2 d-block" style="color: var(--gold); opacity: 0.7;"></i>
+                    <div class="fw-black mb-1" style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; background: var(--gold-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">{{ stat[0] }}</div>
                     <div style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;">{{ stat[1] }}</div>
                 </div>
             </div>
@@ -309,14 +309,14 @@
      ============================================================ -->
 <section id="enjeux" class="py-6 position-relative" style="background: #050505; padding: 100px 0;">
     <!-- BG Grid -->
-    <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image: linear-gradient(rgba(212,175,55,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.02) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;"></div>
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image: linear-gradient(rgba(var(--gold-rgb),0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--gold-rgb),0.02) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;"></div>
     <div class="container position-relative" style="z-index:1;">
         <div class="row align-items-center g-5 mb-5">
             <div class="col-lg-6" data-aos="fade-right">
-                <span class="d-inline-block px-3 py-1 rounded-pill mb-3" style="background: rgba(212,175,55,0.1); color: #D4AF37; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(212,175,55,0.25);">Le Constat</span>
+                <span class="d-inline-block px-3 py-1 rounded-pill mb-3" style="background: rgba(var(--gold-rgb),0.1); color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(var(--gold-rgb),0.25);">Le Constat</span>
                 <h2 class="fw-black mb-4" style="font-family:'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem); color: #fff;">Ces blocages coûtent-ils de la croissance à votre entreprise ?</h2>
                 <p style="color: rgba(255,255,255,0.6); font-size: 1.05rem; line-height: 1.8; max-width: 500px;">Dans un marché saturé et en constante accélération, les entreprises qui n'automatisent pas perdent du terrain chaque jour. Ce n'est pas une question de taille — c'est une question de méthode et d'outillage.</p>
-                <button class="btn mt-3 fw-bold px-5 py-3" data-bs-toggle="modal" data-bs-target="#auditModal" style="background: linear-gradient(135deg, #D4AF37, #f0d060); color: #050505; border-radius: 50px; border: none;">
+                <button class="btn mt-3 fw-bold px-5 py-3" data-bs-toggle="modal" data-bs-target="#auditModal" style="background: var(--gold-gradient); color: var(--on-gold); border-radius: 50px; border: none;">
                     <i class="bi bi-arrow-right-circle me-2"></i>Obtenir une Solution
                 </button>
             </div>
@@ -342,7 +342,7 @@
      ============================================================ -->
 <section id="ecosysteme" class="py-6 position-relative overflow-hidden" style="background: linear-gradient(135deg, #050505, #030a17, #050505); padding: 120px 0;">
     <!-- Decorative orbital rings -->
-    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 900px; height: 900px; border: 1px dashed rgba(212,175,55,0.08); pointer-events:none;"></div>
+    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 900px; height: 900px; border: 1px dashed rgba(var(--gold-rgb),0.08); pointer-events:none;"></div>
     <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 600px; height: 600px; border: 1px dashed rgba(37,99,235,0.1); pointer-events:none;"></div>
     <!-- Center glow -->
     <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(37,99,235,0.07), transparent 70%); pointer-events:none;"></div>
@@ -374,15 +374,15 @@
         <div class="row g-4 justify-content-center align-items-stretch mb-4">
             <!-- Left Card -->
             <div class="col-lg-4 col-md-6" data-aos="fade-right" data-aos-delay="100">
-                <div class="p-4 h-100 position-relative overflow-hidden" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; transition: all 0.4s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(212,175,55,0.12)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                    <div class="position-absolute top-0 start-0 rounded-circle" style="width: 120px; height: 120px; background: radial-gradient(circle, rgba(212,175,55,0.1), transparent); transform: translate(-30%, -30%); pointer-events:none;"></div>
-                    <i class="bi bi-trophy d-block mb-3" style="font-size: 2.2rem; color: #D4AF37;"></i>
+                <div class="p-4 h-100 position-relative overflow-hidden" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(var(--gold-rgb),0.3); border-radius: 20px; transition: all 0.4s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(212,175,55,0.12)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                    <div class="position-absolute top-0 start-0 rounded-circle" style="width: 120px; height: 120px; background: radial-gradient(circle, rgba(var(--gold-rgb),0.1), transparent); transform: translate(-30%, -30%); pointer-events:none;"></div>
+                    <i class="bi bi-trophy d-block mb-3" style="font-size: 2.2rem; color: var(--gold);"></i>
                     <h4 class="fw-bold text-white mb-2" style="font-family:'Outfit';">Conseil Stratégique</h4>
                     <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.7; margin-bottom: 1rem;">Un partenaire de réflexion qui pilote votre croissance sur le long terme. Nous devenons votre DSI et CMO externalisé, alignés sur vos objectifs business.</p>
                     <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: #D4AF37; font-size: 0.75rem;"></i>Audit & Roadmap Stratégique</li>
-                        <li class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: #D4AF37; font-size: 0.75rem;"></i>DSI / CMO Externalisé</li>
-                        <li class="d-flex align-items-center gap-2" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: #D4AF37; font-size: 0.75rem;"></i>Pilotage OKR & KPI</li>
+                        <li class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: var(--gold); font-size: 0.75rem;"></i>Audit & Roadmap Stratégique</li>
+                        <li class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: var(--gold); font-size: 0.75rem;"></i>DSI / CMO Externalisé</li>
+                        <li class="d-flex align-items-center gap-2" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: var(--gold); font-size: 0.75rem;"></i>Pilotage OKR & KPI</li>
                     </ul>
                 </div>
             </div>
@@ -418,14 +418,14 @@
         <!-- Bottom Row (2 cards) -->
         <div class="row g-4 justify-content-center">
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <div class="p-4 h-100 position-relative overflow-hidden" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.25); border-radius: 20px; transition: all 0.4s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(212,175,55,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                    <i class="bi bi-building-gear d-block mb-3" style="font-size: 2.2rem; color: #D4AF37;"></i>
+                <div class="p-4 h-100 position-relative overflow-hidden" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(var(--gold-rgb),0.25); border-radius: 20px; transition: all 0.4s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(212,175,55,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                    <i class="bi bi-building-gear d-block mb-3" style="font-size: 2.2rem; color: var(--gold);"></i>
                     <h4 class="fw-bold text-white mb-2" style="font-family:'Outfit';">Architecture Web</h4>
                     <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.7; margin-bottom: 1rem;">Sites vitrines premium, plateformes e-commerce sur-mesure et applications métiers à très haute vélocité, conçus pour convertir et performer.</p>
                     <ul style="list-style: none; padding: 0; margin: 0;">
-                        <li class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: #D4AF37; font-size: 0.75rem;"></i>Sites Vitrines & E-Commerce</li>
-                        <li class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: #D4AF37; font-size: 0.75rem;"></i>Applications Métier Sur-Mesure</li>
-                        <li class="d-flex align-items-center gap-2" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: #D4AF37; font-size: 0.75rem;"></i>Performance & Sécurité Web</li>
+                        <li class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: var(--gold); font-size: 0.75rem;"></i>Sites Vitrines & E-Commerce</li>
+                        <li class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: var(--gold); font-size: 0.75rem;"></i>Applications Métier Sur-Mesure</li>
+                        <li class="d-flex align-items-center gap-2" style="font-size: 0.82rem; color: rgba(255,255,255,0.7);"><i class="bi bi-check-circle-fill" style="color: var(--gold); font-size: 0.75rem;"></i>Performance & Sécurité Web</li>
                     </ul>
                 </div>
             </div>
@@ -451,11 +451,11 @@
      5. SECTION COLLABORATION (Partenariat Stratégique)
      ============================================================ -->
 <section id="collaboration" class="py-6 position-relative" style="background: linear-gradient(135deg, #030a17, #050505); padding: 120px 0;">
-    <div class="position-absolute bottom-0 start-0 rounded-circle" style="width: 500px; height: 500px; background: radial-gradient(circle, rgba(212,175,55,0.05), transparent); pointer-events:none;"></div>
+    <div class="position-absolute bottom-0 start-0 rounded-circle" style="width: 500px; height: 500px; background: radial-gradient(circle, rgba(var(--gold-rgb),0.05), transparent); pointer-events:none;"></div>
     <div class="container position-relative" style="z-index:1;">
         <div class="row align-items-center g-5">
             <div class="col-lg-6" data-aos="fade-right">
-                <span class="d-inline-block px-3 py-1 rounded-pill mb-4" style="background: rgba(212,175,55,0.1); color: #D4AF37; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(212,175,55,0.25);">Partenariat Stratégique</span>
+                <span class="d-inline-block px-3 py-1 rounded-pill mb-4" style="background: rgba(var(--gold-rgb),0.1); color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(var(--gold-rgb),0.25);">Partenariat Stratégique</span>
                 <h2 class="fw-black text-white mb-4" style="font-family:'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem);">Bien plus qu'une prestation.</h2>
                 <p style="color: rgba(255,255,255,0.65); font-size: 1.05rem; line-height: 1.85; margin-bottom: 2rem;">Nous ne sommes pas de simples exécutants. DIGITA devient votre partenaire de croissance. Nous co-construisons chaque solution et partageons votre vision à long terme. Votre réussite est notre seul critère de succès.</p>
 
@@ -475,11 +475,11 @@
             </div>
             <!-- Visual Stats Panel -->
             <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
-                <div class="p-4" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.15); border-radius: 24px; backdrop-filter: blur(10px);">
+                <div class="p-4" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(var(--gold-rgb),0.15); border-radius: 24px; backdrop-filter: blur(10px);">
                     <div class="row g-3 mb-4">
                         <div class="col-6">
-                            <div class="p-3 text-center rounded-3" style="background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2);">
-                                <div class="fw-black mb-1" style="color: #D4AF37; font-size: 2rem; font-family:'Outfit';">100%</div>
+                            <div class="p-3 text-center rounded-3" style="background: rgba(var(--gold-rgb),0.08); border: 1px solid rgba(var(--gold-rgb),0.2);">
+                                <div class="fw-black mb-1" style="color: var(--gold); font-size: 2rem; font-family:'Outfit';">100%</div>
                                 <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; text-transform:uppercase; letter-spacing:1px;">Personnalisé</div>
                             </div>
                         </div>
@@ -520,7 +520,7 @@
 
     <div class="container position-relative" style="z-index: 1;">
         <div class="text-center mb-5" data-aos="fade-up" style="margin-bottom: 80px;">
-            <span class="d-inline-block px-3 py-1 rounded-pill mb-3" style="background: rgba(212,175,55,0.1); color: #D4AF37; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(212,175,55,0.25);">La Méthode DIGITA</span>
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-3" style="background: rgba(var(--gold-rgb),0.1); color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(var(--gold-rgb),0.25);">La Méthode DIGITA</span>
             <h2 class="fw-black text-white mb-3" style="font-family:'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem);">Le Parcours vers l'Excellence</h2>
             <p style="color: rgba(255,255,255,0.5); max-width: 550px; margin: 0 auto; font-size: 1.05rem;">Une approche structurée et rigoureuse en 5 étapes, de la vision à l'exploitation, pour un résultat mesurable et durable.</p>
         </div>
@@ -556,15 +556,17 @@
 <section id="realisations" class="realisations-section position-relative">
     <div class="container position-relative" style="z-index: 1;">
         <div class="text-center mb-5" data-aos="fade-up">
-            <span class="d-inline-block px-3 py-1 rounded-pill mb-3" style="background: rgba(212,175,55,0.1); color: #D4AF37; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(212,175,55,0.25);">Nos Réalisations</span>
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-3" style="background: rgba(var(--gold-rgb),0.1); color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(var(--gold-rgb),0.25);">Nos Réalisations</span>
             <h2 class="fw-black text-white mb-3" style="font-family:'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem);">Ce que nous construisons</h2>
             <p class="realisations-intro">Ce que nous savons réaliser pour vous, avec des tarifs clairs, et les projets déjà livrés. La vitrine s'enrichit au fil des nouveaux projets.</p>
         </div>
 
-        <div class="row g-4 justify-content-center">
+        <div class="realisations-carousel" data-carousel>
+            <button type="button" class="carousel-arrow carousel-prev" data-carousel-prev aria-label="Réalisations précédentes"><i class="bi bi-chevron-left"></i></button>
+            <div class="realisations-track" data-carousel-track tabindex="0" role="region" aria-label="Réalisations par catégorie (faire défiler horizontalement)">
             {% for cat in realisations %}
-            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="{{ (loop.index0 % 2) * 80 }}">
-                <article class="realisation-category h-100" id="realisations-{{ cat.id }}" style="--cat-accent: {{ cat.color }};">
+            <div class="realisations-slide">
+                <article class="realisation-category h-100" id="realisations-{{ cat.id }}">
                     <div class="d-flex align-items-center gap-3 mb-3">
                         <span class="realisation-icon"><i class="bi {{ cat.icon }}"></i></span>
                         <div>
@@ -615,6 +617,11 @@
                 </article>
             </div>
             {% endfor %}
+            </div>
+            <button type="button" class="carousel-arrow carousel-next" data-carousel-next aria-label="Réalisations suivantes"><i class="bi bi-chevron-right"></i></button>
+        </div>
+        <div class="realisations-dots" data-carousel-dots aria-hidden="true">
+            {% for cat in realisations %}<button type="button" tabindex="-1" data-index="{{ loop.index0 }}" title="{{ cat.title }}"></button>{% endfor %}
         </div>
         <p class="realisations-footnote text-center mt-4 mb-0">Tarifs indicatifs, TVA non applicable (art. 293 B du CGI). Devis personnalisé et gratuit sous 48h ouvrées.</p>
     </div>
@@ -625,13 +632,13 @@
      8. CTA FINAL PRESTIGE
      ============================================================ -->
 <section class="py-6 position-relative overflow-hidden" style="background: #030a17; padding: 120px 0;">
-    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 800px; height: 800px; background: radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%); pointer-events:none;"></div>
+    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 800px; height: 800px; background: radial-gradient(circle, rgba(var(--gold-rgb),0.06) 0%, transparent 70%); pointer-events:none;"></div>
     <div class="container position-relative text-center" style="z-index:1;" data-aos="zoom-in">
-        <div class="p-5 mx-auto" style="max-width: 750px; background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.25); border-radius: 28px; box-shadow: 0 0 60px rgba(212,175,55,0.08);">
-            <span class="d-inline-block px-3 py-1 rounded-pill mb-4" style="background: rgba(212,175,55,0.1); color: #D4AF37; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(212,175,55,0.25);">Première Étape</span>
+        <div class="p-5 mx-auto" style="max-width: 750px; background: rgba(255,255,255,0.02); border: 1px solid rgba(var(--gold-rgb),0.25); border-radius: 28px; box-shadow: 0 0 60px rgba(var(--gold-rgb),0.08);">
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-4" style="background: rgba(var(--gold-rgb),0.1); color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(var(--gold-rgb),0.25);">Première Étape</span>
             <h2 class="fw-black text-white mb-4" style="font-family:'Outfit'; font-size: clamp(1.8rem,3.5vw,2.8rem);">Le Futur de votre Entreprise commence ici</h2>
             <p class="mb-5" style="color: rgba(255,255,255,0.6); font-size: 1.05rem; line-height: 1.8;">Réservez votre diagnostic stratégique gratuit de 30 minutes. Nos consultants analysent votre situation et vous remettent un plan d'action concret et personnalisé.</p>
-            <button class="btn fw-bold px-5 py-4 mb-3" data-bs-toggle="modal" data-bs-target="#auditModal" style="background: linear-gradient(135deg, #D4AF37, #f0d060); color: #050505; border-radius: 50px; font-size: 1.05rem; letter-spacing: 1px; border: none; box-shadow: 0 10px 40px rgba(212,175,55,0.3); transition: all 0.3s ease;">
+            <button class="btn fw-bold px-5 py-4 mb-3" data-bs-toggle="modal" data-bs-target="#auditModal" style="background: var(--gold-gradient); color: var(--on-gold); border-radius: 50px; font-size: 1.05rem; letter-spacing: 1px; border: none; box-shadow: 0 10px 40px rgba(var(--gold-rgb),0.3); transition: all 0.3s ease;">
                 <i class="bi bi-calendar-check me-2"></i>DÉMARRER MA TRANSFORMATION
             </button>
             <div>
@@ -737,7 +744,7 @@
     font-weight: 700;
     padding: 0.2rem 0.6rem;
     border-radius: 50px;
-    color: #111827;
+    color: var(--on-gold);
     background: var(--cat-accent);
 }
 
@@ -856,14 +863,97 @@
     text-decoration: none;
 }
 
-[data-theme="light"] .realisation-cta,
-[data-theme="light"] .realisation-tagline,
-[data-theme="light"] .realisation-item-client {
-    filter: brightness(0.75);
-}
-
 .realisation-cta:hover {
     text-decoration: underline;
+}
+
+/* --- Carrousel : toutes les catégories sur une seule ligne, défilement horizontal --- */
+.realisation-category {
+    --cat-accent: var(--accent);
+}
+
+.realisations-carousel {
+    position: relative;
+}
+
+.realisations-track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0.5rem 0 1.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--accent-rgb), 0.4) transparent;
+}
+
+.realisations-track:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 12px;
+}
+
+.realisations-slide {
+    flex: 0 0 min(420px, 86%);
+    scroll-snap-align: start;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--accent-rgb), 0.4);
+    background: var(--content-surface);
+    color: var(--accent);
+    font-size: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.carousel-arrow:hover {
+    background: var(--accent);
+    color: var(--on-gold);
+}
+
+.carousel-arrow[disabled] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.carousel-prev { left: -14px; }
+.carousel-next { right: -14px; }
+
+.realisations-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.realisations-dots button {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(var(--accent-rgb), 0.3);
+    transition: width 0.2s ease, background 0.2s ease;
+}
+
+.realisations-dots button.active {
+    width: 26px;
+    border-radius: 6px;
+    background: var(--accent);
+}
+
+@media (max-width: 767.98px) {
+    .carousel-arrow { display: none; }
 }
 
 .realisations-footnote {
@@ -877,19 +967,14 @@
     font-style: italic;
 }
 
-[data-theme="light"] .realisation-icon,
-[data-theme="light"] .realisation-item-title i {
-    filter: brightness(0.75);
-}
-
 /* === Animations globales === */
 @keyframes gridShift {
     from { background-position: 0 0; }
     to { background-position: 60px 60px; }
 }
 @keyframes pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 8px #D4AF37; }
-    50% { opacity: 0.6; box-shadow: 0 0 16px #D4AF37; }
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--gold); }
+    50% { opacity: 0.6; box-shadow: 0 0 16px var(--gold); }
 }
 @keyframes spin {
     from { transform: translate(-50%, -50%) rotate(0deg); }
@@ -915,9 +1000,9 @@ a.btn:hover {
 .modal .form-control:focus,
 .modal .form-select:focus {
     background: rgba(255,255,255,0.08) !important;
-    border-color: rgba(212,175,55,0.5) !important;
+    border-color: rgba(var(--gold-rgb),0.5) !important;
     color: #fff !important;
-    box-shadow: 0 0 0 0.2rem rgba(212,175,55,0.15) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--gold-rgb),0.15) !important;
     outline: none;
 }
 

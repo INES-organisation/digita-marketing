@@ -29,7 +29,7 @@
     padding-bottom: 3rem !important;
     min-height: auto !important;
     max-height: 250px !important;
-    background: linear-gradient(135deg, #010f35 10%, #0c0292 50%, #1e40af 90%) !important;
+    background: var(--hero-gradient) !important;
     position: relative;
     overflow: hidden;
     border-radius: 0 !important;
@@ -160,27 +160,27 @@
 }
 
 .py-4.bg-light .btn-primary {
-    background-color: #0d6efd !important;
-    border-color: #0d6efd !important;
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
     color: #fff !important;
 }
 
 .py-4.bg-light .btn-primary:hover {
-    background-color: #0a58ca !important;
-    border-color: #0a58ca !important;
+    background-color: var(--accent-strong) !important;
+    border-color: var(--accent-strong) !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
 }
 
 .py-4.bg-light .btn-outline-primary {
-    border-color: #0d6efd !important;
-    color: #0d6efd !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
     background-color: #fff !important;
 }
 
 .py-4.bg-light .btn-outline-primary:hover {
-    background-color: #0d6efd !important;
-    border-color: #0d6efd !important;
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
     color: #fff !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
@@ -206,7 +206,7 @@
 }
 
 .py-4.bg-light .btn-outline-primary .badge {
-    background-color: #0d6efd !important;
+    background-color: var(--accent) !important;
     color: #fff !important;
 }
 
@@ -393,7 +393,7 @@ article.blog-article-page .breadcrumb {
 }
 
 .card-body .badge.bg-primary {
-    background-color: #0d6efd !important;
+    background-color: var(--accent) !important;
 }
 
 .card-body .badge.bg-success {
@@ -406,8 +406,8 @@ article.blog-article-page .breadcrumb {
 
 /* Boutons dans les cartes */
 .card .btn-primary {
-    background-color: #0d6efd !important;
-    border-color: #0d6efd !important;
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
     color: #fff !important;
     font-size: 0.875rem;
     padding: 0.5rem 1rem;
@@ -416,8 +416,8 @@ article.blog-article-page .breadcrumb {
 }
 
 .card .btn-primary:hover {
-    background-color: #0a58ca !important;
-    border-color: #0a58ca !important;
+    background-color: var(--accent-strong) !important;
+    border-color: var(--accent-strong) !important;
     transform: translateX(4px);
 }
 

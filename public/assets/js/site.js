@@ -102,4 +102,37 @@
                 .finally(function () { btn.disabled = false; });
         });
     });
+
+    // ---------- Carrousels horizontaux (Réalisations de l'accueil) ----------
+    document.querySelectorAll('[data-carousel]').forEach(function (carousel) {
+        var track = carousel.querySelector('[data-carousel-track]');
+        var prev = carousel.querySelector('[data-carousel-prev]');
+        var next = carousel.querySelector('[data-carousel-next]');
+        var dotsBox = carousel.parentElement.querySelector('[data-carousel-dots]');
+        var dots = dotsBox ? Array.prototype.slice.call(dotsBox.querySelectorAll('button')) : [];
+        var slides = Array.prototype.slice.call(track.children);
+        function step() { return slides.length > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : track.clientWidth; }
+        function current() { return Math.round(track.scrollLeft / step()); }
+        function go(i) {
+            i = Math.max(0, Math.min(slides.length - 1, i));
+            track.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft, behavior: 'smooth' });
+        }
+        function update() {
+            var max = track.scrollWidth - track.clientWidth - 2;
+            if (prev) prev.disabled = track.scrollLeft <= 2;
+            if (next) next.disabled = track.scrollLeft >= max;
+            var index = track.scrollLeft >= max ? slides.length - 1 : current();
+            dots.forEach(function (d, i) { d.classList.toggle('active', i === index); });
+        }
+        if (prev) prev.addEventListener('click', function () { go(current() - 1); });
+        if (next) next.addEventListener('click', function () { go(current() + 1); });
+        dots.forEach(function (d, i) { d.addEventListener('click', function () { go(i); }); });
+        track.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight') { e.preventDefault(); go(current() + 1); }
+            if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); }
+        });
+        track.addEventListener('scroll', function () { window.requestAnimationFrame(update); }, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    });
 })();

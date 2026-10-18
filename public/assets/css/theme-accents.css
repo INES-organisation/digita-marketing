@@ -1,0 +1,187 @@
+/* ==================== COULEUR D'ACCENT UNIQUE PAR THÈME ====================
+   Thème sombre : noir et or. Thème clair : blanc et bleu.
+   Les composants Bootstrap (bleus par défaut) et les anciennes couleurs vives des pages
+   suivent la variable --accent (définie dans layout-premium.css et theme-light.css).
+   Chargé en tout dernier. */
+
+[data-theme] {
+    --bs-primary: var(--accent);
+    --bs-primary-rgb: var(--accent-rgb);
+    --bs-info: var(--accent);
+    --bs-info-rgb: var(--accent-rgb);
+    --bs-link-color: var(--accent);
+    --bs-link-color-rgb: var(--accent-rgb);
+    --bs-link-hover-color: var(--accent-strong);
+    --bs-link-hover-color-rgb: var(--accent-rgb);
+    --bs-primary-text-emphasis: var(--accent);
+    --bs-primary-bg-subtle: var(--accent-soft);
+    --bs-primary-border-subtle: rgba(var(--accent-rgb), 0.35);
+    --bs-focus-ring-color: rgba(var(--accent-rgb), 0.25);
+}
+
+/* ---------- Textes et bordures ---------- */
+[data-theme] .text-primary,
+[data-theme] .text-info,
+[data-theme] .link-primary,
+[data-theme] .text-gold {
+    color: var(--accent) !important;
+}
+
+[data-theme] .border-primary,
+[data-theme] .border-info {
+    border-color: var(--accent) !important;
+}
+
+/* ---------- Fonds pleins (pastilles, petits blocs) ---------- */
+[data-theme] .badge.bg-primary,
+[data-theme] .badge.bg-info,
+[data-theme] span.bg-primary,
+[data-theme] .progress-bar,
+[data-theme] .nav-pills .nav-link.active,
+[data-theme] .page-item.active .page-link {
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: var(--on-gold) !important;
+}
+
+/* Grands bandeaux bleus (héros des pages légales, catégories, formations) :
+   noir et or en sombre, dégradé bleu en clair. Le texte y reste clair. */
+[data-theme] section.bg-primary,
+[data-theme] div.bg-primary:not(.badge),
+[data-theme] .hero-section,
+[data-theme] .blog-category-hero,
+[data-theme] .bg-gradient-primary,
+[data-theme] .page-hero,
+[data-theme] .solutions-hero,
+[data-theme] .boutique-hero,
+[data-theme] .formations-hero,
+[data-theme] .formations-category-hero,
+[data-theme] section[style*="#667eea"] {
+    background: var(--hero-gradient) !important;
+    color: #ffffff;
+}
+
+[data-theme="dark"] section.bg-primary,
+[data-theme="dark"] .hero-section,
+[data-theme="dark"] .blog-category-hero,
+[data-theme="dark"] .page-hero,
+[data-theme="dark"] .solutions-hero,
+[data-theme="dark"] .boutique-hero,
+[data-theme="dark"] .formations-hero,
+[data-theme="dark"] section[style*="#667eea"] {
+    border-bottom: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+
+[data-theme] section.bg-primary h1, [data-theme] section.bg-primary h2, [data-theme] section.bg-primary p,
+[data-theme] section.bg-primary .text-white, [data-theme] section.bg-primary .lead,
+[data-theme] .hero-section h1, [data-theme] .hero-section p, [data-theme] .hero-section .text-white,
+[data-theme] .blog-category-hero h1, [data-theme] .blog-category-hero p, [data-theme] .blog-category-hero .text-white,
+[data-theme] .page-hero h1, [data-theme] .page-hero p, [data-theme] .page-hero .lead,
+[data-theme] .solutions-hero h1, [data-theme] .solutions-hero p, [data-theme] .solutions-hero .lead,
+[data-theme] .boutique-hero h1, [data-theme] .boutique-hero p, [data-theme] .boutique-hero .lead,
+[data-theme] .formations-hero h1, [data-theme] .formations-hero p, [data-theme] .formations-hero .lead,
+[data-theme] section[style*="#667eea"] h1, [data-theme] section[style*="#667eea"] p {
+    color: #ffffff !important;
+}
+
+/* ---------- Boutons ---------- */
+[data-theme] .btn-primary,
+[data-theme] .btn-info,
+[data-theme] .btn-premium-blue {
+    --bs-btn-bg: var(--accent);
+    --bs-btn-border-color: var(--accent);
+    --bs-btn-hover-bg: var(--accent-strong);
+    --bs-btn-hover-border-color: var(--accent-strong);
+    --bs-btn-active-bg: var(--accent-strong);
+    --bs-btn-active-border-color: var(--accent-strong);
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: var(--on-gold) !important;
+}
+
+[data-theme] .btn-primary:hover,
+[data-theme] .btn-info:hover,
+[data-theme] .btn-premium-blue:hover {
+    background: var(--accent-strong) !important;
+    border-color: var(--accent-strong) !important;
+    color: var(--on-gold) !important;
+}
+
+[data-theme] .btn-primary *,
+[data-theme] .btn-premium-blue * {
+    color: inherit !important;
+}
+
+/* Les boutons « contour » restent des contours (formations.css les remplissait en bleu) */
+[data-theme] .btn-outline-primary,
+[data-theme] a.btn-outline-primary,
+[data-theme] .btn-outline-info {
+    background: transparent !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+[data-theme] .btn-outline-primary:hover,
+[data-theme] a.btn-outline-primary:hover,
+[data-theme] .btn-outline-info:hover {
+    background: var(--accent) !important;
+    color: var(--on-gold) !important;
+}
+
+/* ---------- Textes en dégradé or ---------- */
+[data-theme="light"] .text-gradient-gold,
+[data-theme="light"] .text-gradient {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ---------- Anciennes couleurs vives écrites dans les pages ---------- */
+[data-theme] [style*="color: #60a5fa"], [data-theme] [style*="color:#60a5fa"],
+[data-theme] [style*="color: #00d2ff"], [data-theme] [style*="color:#00d2ff"],
+[data-theme] [style*="color: #0d6efd"], [data-theme] [style*="color:#0d6efd"],
+[data-theme] [style*="color: var(--accent-cyan"] {
+    color: var(--accent) !important;
+}
+
+[data-theme] [style*="border-color: var(--accent-cyan"],
+[data-theme] [style*="border-color: #00d2ff"] {
+    border-color: var(--accent) !important;
+}
+
+[data-theme] [style*="background: rgba(0, 210, 255"] {
+    background: var(--accent-soft) !important;
+}
+
+
+/* Boutons de recherche des bandeaux (anciennement bleu marine) */
+[data-theme] .page-hero .search-form .btn-light,
+[data-theme] .solutions-hero .search-form .btn-light,
+[data-theme] .boutique-hero .search-form .btn-light,
+[data-theme] .formations-hero .search-form .btn-light,
+[data-theme] .page-hero .btn-light,
+[data-theme] .solutions-hero .btn-light,
+[data-theme] .boutique-hero .btn-light,
+[data-theme] .formations-hero .btn-light {
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: var(--on-gold) !important;
+}
+
+/* Thème clair : les jaunes « warning » utilisés comme accent passent au bleu */
+[data-theme="light"] .btn-warning {
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="light"] .bg-warning:not(.bg-opacity-10):not(.bg-opacity-25) {
+    background: var(--accent) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="light"] .bg-warning .text-dark,
+[data-theme="light"] .btn-warning.text-dark {
+    color: #ffffff !important;
+}

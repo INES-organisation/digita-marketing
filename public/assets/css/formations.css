@@ -2,7 +2,7 @@
 
 :root {
     --formations-hero-bg: linear-gradient(135deg, #0a0f1a 0%, #1e1b4b 100%);
-    --formations-accent: #f093fb;
+    --formations-accent: var(--accent);
 }
 
 [data-theme="light"] {
@@ -40,14 +40,14 @@ main .container label {
 .btn-outline-primary,
 a.btn-outline-primary {
     color: #fff !important;
-    background-color: #0d6efd !important;
-    border-color: #0d6efd !important;
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
 }
 
 .btn-outline-primary:hover,
 a.btn-outline-primary:hover {
-    background-color: #0a58ca !important;
-    border-color: #0a58ca !important;
+    background-color: var(--accent-strong) !important;
+    border-color: var(--accent-strong) !important;
 }
 
 /* Hero Section - Identique au blog */
@@ -58,7 +58,7 @@ a.btn-outline-primary:hover {
     padding-bottom: 3rem !important;
     min-height: auto !important;
     max-height: 250px !important;
-    background: linear-gradient(135deg, #010f35 10%, #0c0292 50%, #1e40af 90%) !important;
+    background: var(--hero-gradient) !important;
     position: relative;
     overflow: hidden;
     border-radius: 0 !important;
@@ -154,7 +154,7 @@ a.btn-outline-primary:hover {
 }
 
 .col-lg-4 .list-group::-webkit-scrollbar-thumb {
-    background: #0d6efd;
+    background: var(--accent);
     border-radius: 3px;
 }
 
@@ -226,7 +226,7 @@ a.btn-outline-primary:hover {
 
 /* Section CTA "Nous contacter" */
 section.bg-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    background: var(--hero-gradient) !important;
 }
 
 section.bg-gradient h2,
@@ -249,7 +249,7 @@ section.bg-gradient .lead {
 }
 
 .categories-scroll::-webkit-scrollbar-thumb {
-    background: #f093fb;
+    background: var(--accent);
     border-radius: 3px;
 }
 
@@ -294,7 +294,7 @@ section.bg-gradient .lead {
 
 .accordion-button:focus {
     box-shadow: none;
-    border-color: #f093fb;
+    border-color: var(--accent);
 }
 
 /* Progress bar */
@@ -333,7 +333,7 @@ section.bg-gradient .lead {
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    background: var(--accent-gradient);
     transform: scale(1.05);
 }
 
@@ -355,5 +355,5 @@ section.bg-gradient .lead {
 
 /* Gradient backgrounds */
 .bg-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--hero-gradient);
 }

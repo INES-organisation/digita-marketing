@@ -46,7 +46,7 @@
 }
 
 .categories-scroll::-webkit-scrollbar-thumb {
-    background: #0d6efd;
+    background: var(--accent);
     border-radius: 3px;
 }
 

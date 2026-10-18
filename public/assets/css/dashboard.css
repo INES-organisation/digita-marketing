@@ -1,6 +1,6 @@
 .navbar-brand {
     font-weight: bold;
-    color: #2563EB !important;
+    color: var(--accent) !important;
 }
 .nav-link {
     color: #1F2937;
@@ -10,11 +10,11 @@
 }
 .nav-link:hover {
     background-color: #F3F4F6;
-    color: #2563EB;
+    color: var(--accent);
 }
 .nav-link.active {
     background-color: #EFF6FF;
-    color: #2563EB;
+    color: var(--accent);
     font-weight: 500;
 }
 .stat-card {

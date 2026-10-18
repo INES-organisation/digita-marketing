@@ -11,8 +11,20 @@
     --text-muted: #4b5563;
     --glass-bg: #ffffff;
     --glass-border: rgba(15, 23, 42, 0.08);
-    --gold: #b8921f;
-    --gold-glow: rgba(184, 146, 31, 0.25);
+    /* Accent du thème clair : bleu (les variables --gold… désignent l'accent) */
+    --gold: #1d4ed8;
+    --gold-rgb: 29, 78, 216;
+    --gold-light: #3b82f6;
+    --gold-dim: rgba(29, 78, 216, 0.75);
+    --gold-glow: rgba(37, 99, 235, 0.25);
+    --gold-gradient: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    --on-gold: #ffffff;
+    --accent: #1d4ed8;
+    --accent-rgb: 29, 78, 216;
+    --accent-strong: #1e40af;
+    --accent-soft: rgba(37, 99, 235, 0.08);
+    --accent-gradient: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    --hero-gradient: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 60%, #2563eb 100%);
     --page-bg: #f7f7f7;
     --shell-bg: #ffffff;
     --shell-border: rgba(15, 23, 42, 0.08);
@@ -69,7 +81,7 @@
 [data-theme="light"] .text-gold,
 [data-theme="light"] [style*="color: #D4AF37"],
 [data-theme="light"] [style*="color:#D4AF37"] {
-    color: #b8921f !important;
+    color: var(--accent) !important;
 }
 
 [data-theme="light"] [style*="color: rgba(255,255,255"],
@@ -129,7 +141,7 @@
 [data-theme="light"] .hero-premium,
 [data-theme="light"] .contact-hero {
     background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 30%),
-                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.12) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.10) 0%, transparent 30%),
                 #f7f7f7 !important;
 }
 
@@ -207,8 +219,8 @@
 [data-theme="light"] .cta-sidebar,
 [data-theme="light"] .btn-newsletter,
 [data-theme="light"] .btn-premium-gold {
-    background: #D4AF37 !important;
-    color: #111827 !important;
+    background: var(--accent-gradient) !important;
+    color: #ffffff !important;
 }
 
 /* Logo : version sombre du logo doré sur fond clair */
@@ -246,7 +258,7 @@
 
 [data-theme="light"] #hero-premium {
     background: radial-gradient(ellipse at 15% 50%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 85% 20%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 20%, rgba(59, 130, 246, 0.10) 0%, transparent 50%),
                 #f7f7f7 !important;
 }
 
@@ -270,10 +282,10 @@
 
 [data-theme="light"] .text-warning,
 [data-theme="light"] .btn-outline-warning {
-    color: #b45309 !important;
+    color: var(--accent) !important;
 }
 
-[data-theme="light"] .btn-outline-warning { border-color: #b45309 !important; }
+[data-theme="light"] .btn-outline-warning { border-color: var(--accent) !important; }
 
 [data-theme="light"] .btn-outline-info {
     color: #0e7490 !important;
@@ -292,9 +304,9 @@
     color: #ffffff !important;
 }
 
-/* Connexion / inscription : bouton or avec texte foncé, liens or foncé */
-[data-theme="light"] .auth-form .btn-primary { color: #111827 !important; }
-[data-theme="light"] .auth-footer a { color: #8a6d12 !important; }
+/* Connexion / inscription : bouton et liens à la couleur d'accent (bleu) */
+[data-theme="light"] .auth-form .btn-primary { color: var(--on-gold) !important; }
+[data-theme="light"] .auth-footer a { color: var(--accent) !important; }
 
 [data-theme="light"] .badge.bg-white,
 [data-theme="light"] .badge.bg-light {
@@ -302,5 +314,5 @@
 }
 
 [data-theme="light"] .text-gold-dim {
-    color: #8a6d12 !important;
+    color: var(--accent) !important;
 }

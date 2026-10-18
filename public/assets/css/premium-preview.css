@@ -1,6 +1,6 @@
 /* 
    DIGITA - Système de Design Premium (Aperçu)
-   Couleurs: Or (#D4AF37), Bleu (#2563eb), Noir (#050505)
+   Couleurs: Or (var(--gold)), Bleu (#2563eb), Noir (#050505)
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
@@ -17,7 +17,7 @@
     --sidebar-width: 280px;
     --font-heading: 'Plus Jakarta Sans', sans-serif;
     --font-body: 'Outfit', sans-serif;
-    --border-color: rgba(212, 175, 55, 0.2);
+    --border-color: rgba(var(--gold-rgb), 0.2);
 }
 
 /* Global text override: body default is white, Bootstrap text-muted is overridden */
@@ -69,7 +69,7 @@ main.premium-content {
     position: relative;
     padding: 0 5%;
     background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 20%);
+                radial-gradient(circle at 90% 80%, rgba(var(--gold-rgb), 0.1) 0%, transparent 20%);
 }
 
 .hero-premium-content {
@@ -373,7 +373,7 @@ main.premium-content {
 .timeline-number {
     font-size: 3rem;
     font-weight: 800;
-    color: rgba(212, 175, 55, 0.1);
+    color: rgba(var(--gold-rgb), 0.1);
     position: absolute;
     top: -20px;
     right: 40px;
@@ -399,8 +399,8 @@ main.premium-content {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background-image: 
-        linear-gradient(to right, rgba(212,175,55,0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(212,175,55,0.02) 1px, transparent 1px);
+        linear-gradient(to right, rgba(var(--gold-rgb),0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(var(--gold-rgb),0.02) 1px, transparent 1px);
     background-size: 50px 50px;
     z-index: -1;
     pointer-events: none;
@@ -441,7 +441,7 @@ main.premium-content {
     position: absolute;
     top: -20%; left: -10%;
     width: 60%; height: 60%;
-    background: radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(var(--gold-rgb),0.06) 0%, transparent 60%);
     pointer-events: none;
     z-index: -1;
 }

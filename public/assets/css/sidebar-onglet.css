@@ -5,9 +5,9 @@
 
 :root {
   --onglet-bg: rgba(2, 6, 23, 0.94);
-  --onglet-border: rgba(212, 175, 55, 0.25);
-  --onglet-icon: #D4AF37;
-  --onglet-accent: #D4AF37;
+  --onglet-border: rgba(var(--gold-rgb), 0.25);
+  --onglet-icon: var(--gold);
+  --onglet-accent: var(--gold);
   --onglet-accent-text: #020617;
   --onglet-popup-bg: #0b1222;
   --onglet-popup-text: rgba(255, 255, 255, 0.85);
@@ -18,8 +18,8 @@
 [data-theme="light"] {
   --onglet-bg: rgba(255, 255, 255, 0.96);
   --onglet-border: rgba(15, 23, 42, 0.08);
-  --onglet-icon: #2563eb;
-  --onglet-accent: #2563eb;
+  --onglet-icon: var(--accent);
+  --onglet-accent: var(--accent);
   --onglet-accent-text: #ffffff;
   --onglet-popup-bg: #ffffff;
   --onglet-popup-text: #232323;

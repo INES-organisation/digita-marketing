@@ -118,7 +118,7 @@
 
             <!-- Widget Formation (Fidélisation demandée par l'user) -->
             <div class="col-lg-4" data-aos="fade-left">
-                {% if (not empty(relatedFormation)) %}                    <div class="glass-card p-4 border-gold h-100 d-flex flex-column" style="background: linear-gradient(135deg, rgba(212,175,55,0.05) 0%, rgba(5,5,5,0.8) 100%);">
+                {% if (not empty(relatedFormation)) %}                    <div class="glass-card p-4 border-gold h-100 d-flex flex-column" style="background: linear-gradient(135deg, rgba(var(--gold-rgb),0.05) 0%, rgba(5,5,5,0.8) 100%);">
                         <span class="text-gold uppercase small tracking-widest fw-bold mb-2">Recommandation du Cabinet</span>
                         <h4 class="text-white fw-bold mb-3">{{ h(relatedFormation['title']) }}</h4>
                         <p class="text-white-50 small mb-4 flex-grow-1">

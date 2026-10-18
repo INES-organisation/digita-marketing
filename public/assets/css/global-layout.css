@@ -4,7 +4,7 @@
     /* Palette de Couleurs */
     --gold: #D4AF37;
     --gold-glow: rgba(212, 175, 55, 0.4);
-    --blue: #2563eb;
+    --blue: var(--accent);
     --blue-glow: rgba(37, 99, 235, 0.4);
     --dark: #050505;
     --dark-alt: #0a0f1a;
@@ -54,7 +54,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-subtitle-link:hover {
-    color: #0d6efd;
+    color: var(--accent);
     text-decoration: underline;
 }
 
@@ -68,8 +68,8 @@ h1, h2, h3, h4, h5, h6 {
 .bg-premium-grid {
     background-color: var(--dark);
     background-image: 
-        linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+        linear-gradient(rgba(var(--gold-rgb), 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--gold-rgb), 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
     position: relative;
 }
@@ -143,7 +143,7 @@ h1, h2, h3, h4, h5, h6 {
 .btn-premium-gold:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px var(--gold-glow);
-    background: #e5c158;
+    background: var(--gold-light);
 }
 
 .btn-premium-blue {
@@ -160,13 +160,13 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Gradients de Texte */
 .text-gradient-gold {
-    background: linear-gradient(135deg, var(--gold), #f3d47c);
+    background: var(--gold-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .text-gradient-blue {
-    background: linear-gradient(135deg, #60a5fa, var(--blue));
+    background: var(--accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -227,7 +227,7 @@ section.py-5:first-of-type:not(#hero):not(.bg-primary) {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    background: var(--accent-gradient);
     color: white;
     border: none;
     box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
@@ -275,7 +275,7 @@ section.py-5:first-of-type:not(#hero):not(.bg-primary) {
 }
 
 #chatbot-header {
-    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    background: var(--accent-gradient);
     color: white;
     padding: 16px;
     display: flex;
@@ -339,7 +339,7 @@ section.py-5:first-of-type:not(#hero):not(.bg-primary) {
 }
 
 .chat-message.user .message-content {
-    background: #0d6efd;
+    background: var(--accent);
     color: white;
     border-bottom-right-radius: 4px;
 }
@@ -368,14 +368,14 @@ section.py-5:first-of-type:not(#hero):not(.bg-primary) {
 }
 
 #chatbot-input:focus {
-    border-color: #0d6efd;
+    border-color: var(--accent);
 }
 
 #chatbot-send {
     position: absolute;
     right: 24px;
     bottom: 22px;
-    background: #0d6efd;
+    background: var(--accent);
     color: white;
     border: none;
     width: 32px;
@@ -389,7 +389,7 @@ section.py-5:first-of-type:not(#hero):not(.bg-primary) {
 }
 
 #chatbot-send:hover {
-    background: #0a58ca;
+    background: var(--accent-strong);
 }
 
 .typing-indicator {

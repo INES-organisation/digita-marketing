@@ -10,24 +10,35 @@
     --gold: #D4AF37;
     --gold-dim: rgba(212, 175, 55, 0.75);
     --gold-gradient: linear-gradient(135deg, #D4AF37, #f3d47c);
-    --shell-bg: #020617;
-    --shell-border: rgba(212, 175, 55, 0.25);
+    /* Couleur d'accent du thème : or en sombre, bleu en clair (redéfinie dans theme-light.css).
+       Les noms --gold… sont historiques : ils désignent l'accent, quel que soit le thème. */
+    --gold-rgb: 212, 175, 55;
+    --gold-light: #f0d060;
+    --on-gold: #050505;
+    --accent: #D4AF37;
+    --accent-rgb: 212, 175, 55;
+    --accent-strong: #f0d060;
+    --accent-soft: rgba(212, 175, 55, 0.08);
+    --accent-gradient: linear-gradient(135deg, #D4AF37, #f0d060);
+    --hero-gradient: radial-gradient(ellipse at 80% 0%, rgba(212, 175, 55, 0.14), transparent 55%), linear-gradient(135deg, #050505 0%, #0b0b0b 60%, #14110a 100%);
+    --shell-bg: #0a0a0a;
+    --shell-border: rgba(var(--gold-rgb), 0.25);
     --shell-text: rgba(255, 255, 255, 0.6);
     --shell-text-strong: #ffffff;
-    --shell-hover: rgba(212, 175, 55, 0.08);
+    --shell-hover: rgba(var(--gold-rgb), 0.08);
     --page-bg: #050505;
-    --footer-bg: linear-gradient(135deg, #020617 0%, #0a0f1a 100%);
+    --footer-bg: linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
     --navbar-height: 76px;
-    --navbar-bg: rgba(2, 6, 23, 0.92);
+    --navbar-bg: rgba(8, 8, 8, 0.94);
     /* Contenus des pages (y compris les blocs hérités de l'ancien thème blanc) */
     --content-heading: #ffffff;
     --content-text: rgba(255, 255, 255, 0.85);
     --content-muted: rgba(255, 255, 255, 0.62);
-    --content-surface: #0e131e;
-    --content-surface-alt: #0a0f1a;
+    --content-surface: #111111;
+    --content-surface-alt: #0b0b0b;
     --content-border: rgba(255, 255, 255, 0.08);
     --content-input-bg: rgba(255, 255, 255, 0.04);
-    --content-link: #D4AF37;
+    --content-link: var(--gold);
     /* Bootstrap en mode sombre : mêmes fonds que le site */
     --bs-body-bg: #050505;
     --bs-body-color: rgba(255, 255, 255, 0.85);
@@ -155,7 +166,7 @@ body::before {
 }
 
 .nav-link-premium.active {
-    background: rgba(212, 175, 55, 0.14);
+    background: rgba(var(--gold-rgb), 0.14);
     color: var(--gold);
 }
 
@@ -185,7 +196,7 @@ body::before {
 
 .cta-sidebar {
     background: var(--gold);
-    color: #020617;
+    color: var(--on-gold);
     padding: 0.8rem 1.25rem;
     border-radius: 50px;
     text-decoration: none;
@@ -198,7 +209,7 @@ body::before {
 
 .cta-sidebar:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 5px 20px rgba(var(--gold-rgb), 0.4);
     color: #020617;
 }
 
@@ -522,11 +533,11 @@ body.agence-open {
 
 .btn-agence-primary {
     background: var(--gold);
-    color: #020617;
+    color: var(--on-gold);
 }
 
 .btn-agence-primary:hover {
-    background: #e5c158;
+    background: var(--gold-light);
     color: #020617;
 }
 
@@ -609,7 +620,7 @@ body.agence-open {
 /* ---------- Pied de page ---------- */
 .footer-premium {
     background: var(--footer-bg);
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
+    border-top: 1px solid rgba(var(--gold-rgb), 0.1);
     position: relative;
     z-index: 1;
     padding: 3rem 0 1.5rem;
@@ -666,7 +677,7 @@ body.agence-open {
 
 .footer-newsletter-form .form-control {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(var(--gold-rgb), 0.2);
     color: var(--shell-text-strong);
     padding: 12px 18px;
     font-size: 0.9rem;
@@ -684,7 +695,7 @@ body.agence-open {
 
 .footer-newsletter-form .btn-newsletter {
     background: var(--gold);
-    color: #020617;
+    color: var(--on-gold);
     border-radius: 0 8px 8px 0;
     font-weight: 800;
     letter-spacing: 1px;
@@ -693,7 +704,7 @@ body.agence-open {
 }
 
 .footer-newsletter-form .btn-newsletter:hover {
-    background: #e5c158;
+    background: var(--gold-light);
 }
 
 .footer-newsletter-message {
@@ -744,8 +755,8 @@ body.agence-open {
 /* ---------- Chatbot aux couleurs de la marque ---------- */
 #chatbot-button {
     background: var(--gold);
-    color: #020617;
-    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.45);
+    color: var(--on-gold);
+    box-shadow: 0 4px 14px rgba(var(--gold-rgb), 0.45);
 }
 
 #chatbot-header,
