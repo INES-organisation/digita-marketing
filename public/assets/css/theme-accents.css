@@ -185,3 +185,16 @@
 [data-theme="light"] .btn-warning.text-dark {
     color: #ffffff !important;
 }
+
+/* Listes Bootstrap : élément actif (catégories du blog et des formations) */
+[data-theme] .list-group {
+    --bs-list-group-active-bg: var(--accent);
+    --bs-list-group-active-border-color: var(--accent);
+    --bs-list-group-active-color: var(--on-gold);
+}
+
+[data-theme] .list-group-item.active {
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: var(--on-gold) !important;
+}
