@@ -10,6 +10,10 @@ APP_ENV = os.getenv("APP_ENV", "production")
 APP_URL = os.getenv("APP_URL", "https://digita.buzz")
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@digita.fr")
 
+# Codes de vérification Google Search Console / Bing Webmaster Tools (balise meta), vides par défaut.
+GOOGLE_SITE_VERIFICATION = os.getenv("GOOGLE_SITE_VERIFICATION", "")
+BING_SITE_VERIFICATION = os.getenv("BING_SITE_VERIFICATION", "")
+
 # Tri reproductible (tests de parité) : remplace ORDER BY RAND() par l'identifiant.
 DETERMINISTIC = os.getenv("DIGITA_DETERMINISTIC") == "1"
 
@@ -19,4 +23,6 @@ CONSTANTS = {
     "BASE_URL": APP_URL.rstrip("/"),
     "ENVIRONMENT": APP_ENV,
     "ADMIN_EMAIL": ADMIN_EMAIL,
+    "GOOGLE_SITE_VERIFICATION": GOOGLE_SITE_VERIFICATION,
+    "BING_SITE_VERIFICATION": BING_SITE_VERIFICATION,
 }

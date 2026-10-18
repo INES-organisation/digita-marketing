@@ -1,10 +1,11 @@
 """Pages de contenu fixe (contrôleurs About, Services, Catalogue, Contact…)."""
+from ..realisations import REALISATIONS
 from ..render import render_page, render_view
 from .common import redirect
 
 
 def home(request):
-    return render_page(request, "templates/home.html")
+    return render_page(request, "templates/home.html", {"realisations": REALISATIONS})
 
 
 def _simple(view, title, css):

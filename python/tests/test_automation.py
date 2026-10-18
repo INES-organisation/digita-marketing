@@ -62,3 +62,6 @@ def test_sitemap_is_built_from_published_content(monkeypatch):
     assert "<loc>https://digita.buzz/blog/seo</loc>" in xml and "<lastmod>2026-09-01</lastmod>" in xml
     assert "<loc>https://digita.buzz/formations/ads</loc>" in xml and "<lastmod>2026-05-02</lastmod>" in xml
     assert "https://digita.buzz/blog/categorie/ia" in xml and "localhost" not in xml
+    assert "<loc>https://digita.buzz/outils/audit-seo</loc>" in xml and "<loc>https://digita.buzz/cookies</loc>" in xml
+    # Pages fixes : pas de date du jour inventée
+    assert "<loc>https://digita.buzz/</loc><changefreq>" in xml
