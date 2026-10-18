@@ -52,6 +52,7 @@ def test_home_uses_vertical_menu_anchored_on_sections():
         assert offer in r.text, offer
     for case in ("TTC France", "TTC Sales", "TatooModel", "Lurel"):
         assert case in r.text, case
+    assert "TVA non applicable (art. 293 B du CGI)" in r.text and "Devis gratuit sous 48h" in r.text
     assert "Connexion" in r.text and "data-theme-toggle" in r.text and "Diagnostic gratuit" in r.text
 
 
