@@ -11,7 +11,8 @@ TYPES = {
     "website": "Site vitrine", "ecommerce": "E-commerce", "landing": "Landing page",
     "app": "Application web", "seo": "Audit SEO", "marketing": "Stratégie marketing",
 }
-BASE_PRICES = {"website": 500, "ecommerce": 1200, "landing": 200, "app": 2000, "seo": 300, "marketing": 400}
+# Alignés sur la grille tarifaire du site (identité + site vitrine 990 €, LP48 997 €, boutique 2 490 €…)
+BASE_PRICES = {"website": 990, "ecommerce": 2490, "landing": 997, "app": 2990, "seo": 690, "marketing": 990}
 ESTIMATED_DAYS = {"website": 7, "ecommerce": 14, "landing": 3, "app": 21, "seo": 5, "marketing": 7}
 
 

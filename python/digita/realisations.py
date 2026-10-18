@@ -16,10 +16,10 @@ REALISATIONS = [
         "color": "#D4AF37",
         "tagline": "Des sites qui font sonner le téléphone.",
         "description": "Offre 974 : on crée, on héberge et on maintient votre site vitrine. "
-                       "Vous ne payez que votre identité visuelle, une fois.",
-        "price": "1 490 €",
-        "price_note": "identité visuelle (logo, charte, photos, textes), site offert, "
-                      "puis maintenance 79 €/mois sur 24 mois",
+                       "Vous payez votre identité visuelle une fois, puis une petite maintenance.",
+        "price": "990 €",
+        "price_note": "identité visuelle (logo, charte, photos, textes), 690 € si vous avez déjà un logo ; "
+                      "site et hébergement inclus, puis maintenance 49 €/mois (engagement 12 mois)",
         "delay": "3 à 4 semaines",
         "capabilities": [
             "Site vitrine sur mesure, rapide et compatible mobile",
@@ -53,12 +53,12 @@ REALISATIONS = [
         "tagline": "Des publications régulières, sans y passer vos soirées.",
         "description": "On crée, on planifie, on publie et on répond aux commentaires. "
                        "Vous récoltez les clients.",
-        "price": "590 €/mois",
-        "price_note": "tarif indicatif selon le nombre de réseaux et de publications",
+        "price": "390 €/mois",
+        "price_note": "Essentiel : 1 réseau, 8 publications. Pro : 2 réseaux, 12 à 16 publications, 590 €/mois",
         "delay": "Engagement 3 mois minimum",
         "capabilities": [
             "Charte réseaux sociaux adaptée à votre métier",
-            "12 à 20 publications par mois : visuels, vidéos courtes, textes",
+            "8 à 16 publications par mois : visuels, vidéos courtes, textes",
             "Calendrier mensuel validé par vous en 10 minutes",
             "Messages et commentaires traités tous les jours",
             "Point mensuel de 30 minutes avec les chiffres clés",
@@ -73,8 +73,9 @@ REALISATIONS = [
         "tagline": "Payez pour des résultats, pas pour des promesses.",
         "description": "Campagnes Google, Facebook et Instagram pilotées pour que chaque euro "
                        "investi vous en rapporte plus.",
-        "price": "490 €/mois",
-        "price_note": "gestion, hors budget publicitaire (300 à 500 €/mois conseillés)",
+        "price": "290 €/mois",
+        "price_note": "gestion pour un budget publicitaire jusqu'à 1 000 €/mois (300 à 500 € conseillés pour démarrer), "
+                      "sans engagement au-delà d'un mois",
         "delay": "Résultats en 2 à 6 semaines",
         "capabilities": [
             "Objectif chiffré : appels, devis ou visites en boutique",
@@ -93,8 +94,9 @@ REALISATIONS = [
         "tagline": "Arrêtez de faire à la main ce que l'ordinateur peut faire.",
         "description": "Devis, factures, relances, rendez-vous, transferts entre logiciels : "
                        "on branche vos outils pour que tout se fasse tout seul.",
-        "price": "890 €",
-        "price_note": "par scénario, payé une fois (outils : 10 à 30 €/mois)",
+        "price": "490 €",
+        "price_note": "par scénario simple (un outil vers un autre), payé une fois ; scénarios complexes sur devis "
+                      "(outils : 10 à 30 €/mois)",
         "delay": "1 à 3 semaines",
         "capabilities": [
             "Gmail, Outlook, Google Sheets, agendas, CRM, WhatsApp Business",
@@ -136,8 +138,9 @@ REALISATIONS = [
         "tagline": "Un assistant qui ne dort jamais, formé sur vos informations.",
         "description": "Il répond à vos clients, prend des rendez-vous, qualifie les demandes "
                        "et transmet à un humain quand il le faut.",
-        "price": "1 490 €",
-        "price_note": "mise en place, puis quelques centimes par conversation",
+        "price": "990 €",
+        "price_note": "assistant FAQ sur votre site ; WhatsApp ou prise de rendez-vous sur devis, "
+                      "puis quelques centimes par conversation",
         "delay": "2 à 4 semaines",
         "capabilities": [
             "Réponse immédiate 24h/24, sur votre site, WhatsApp ou messagerie",

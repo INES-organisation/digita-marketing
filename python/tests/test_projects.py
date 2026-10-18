@@ -30,5 +30,5 @@ def test_colors_keep_php_keys():
 
 
 def test_quote():
-    assert Project.calculate_quote("ecommerce", {"pages": 9, "urgent": True}) == 2100
+    assert Project.calculate_quote("ecommerce", {"pages": 9, "urgent": True}) == 4035  # (2490 + 4×50) × 1,5
     assert Project.calculate_quote("inconnu", {"pages": "abc", "multilingual": "on"}) == 650
