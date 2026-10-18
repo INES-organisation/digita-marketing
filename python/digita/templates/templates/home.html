@@ -558,33 +558,53 @@
         <div class="text-center mb-5" data-aos="fade-up">
             <span class="d-inline-block px-3 py-1 rounded-pill mb-3" style="background: rgba(212,175,55,0.1); color: #D4AF37; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(212,175,55,0.25);">Nos Réalisations</span>
             <h2 class="fw-black text-white mb-3" style="font-family:'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem);">Ce que nous construisons</h2>
-            <p class="realisations-intro">Des offres et des projets concrets, regroupés par expertise. La vitrine s'enrichit au fil des nouveaux projets.</p>
+            <p class="realisations-intro">Ce que nous savons faire, à quel prix, et les projets déjà livrés. La vitrine s'enrichit au fil des nouveaux projets.</p>
         </div>
 
         <div class="row g-4 justify-content-center">
             {% for cat in realisations %}
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}">
-                <article class="realisation-category h-100" id="realisations-{{ cat.id }}" style="--cat-accent: {{ cat.color }};">
+                <article class="realisation-category h-100 d-flex flex-column" id="realisations-{{ cat.id }}" style="--cat-accent: {{ cat.color }};">
                     <div class="d-flex align-items-center gap-3 mb-3">
                         <span class="realisation-icon"><i class="bi {{ cat.icon }}"></i></span>
                         <h3 class="realisation-title mb-0">{{ cat.title }}</h3>
                     </div>
                     <p class="realisation-desc">{{ cat.description }}</p>
+                    {% if cat.price %}
+                    <div class="realisation-offer">
+                        <span class="realisation-price">{{ cat.price }}</span>
+                        {% if cat.price_note %}<span class="realisation-price-note">{{ cat.price_note }}</span>{% endif %}
+                        {% if cat.delay %}<span class="realisation-delay"><i class="bi bi-clock me-1"></i>{{ cat.delay }}</span>{% endif %}
+                    </div>
+                    {% endif %}
+                    {% if cat.points %}
+                    <ul class="realisation-points list-unstyled">
+                        {% for point in cat.points %}<li><i class="bi bi-check2"></i>{{ point }}</li>{% endfor %}
+                    </ul>
+                    {% endif %}
+                    <h4 class="realisation-subtitle">Réalisations</h4>
                     {% if cat['items'] %}
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
                         {% for item in cat['items'] %}
                         <li>
-                            <a href="{{ item.url }}" class="realisation-item" target="_blank" rel="noopener">
-                                <span class="realisation-item-title">{{ item.title }} <i class="bi bi-box-arrow-up-right"></i></span>
+                            {% if item.url %}<a href="{{ item.url }}" class="realisation-item" target="_blank" rel="noopener">{% else %}<div class="realisation-item">{% endif %}
+                                <span class="realisation-item-title">{{ item.title }}{% if item.url %} <i class="bi bi-box-arrow-up-right"></i>{% endif %}</span>
+                                {% if item.client %}<span class="realisation-item-client">{{ item.client }}</span>{% endif %}
                                 <span class="realisation-item-desc">{{ item.description }}</span>
+                                {% if item.metrics %}
+                                <span class="realisation-metrics">
+                                    {% for metric in item.metrics %}<span class="realisation-metric"><strong>{{ metric[0] }}</strong>{{ metric[1] }}</span>{% endfor %}
+                                </span>
+                                {% endif %}
                                 {% if item.tag %}<span class="realisation-item-tag">{{ item.tag }}</span>{% endif %}
-                            </a>
+                            {% if item.url %}</a>{% else %}</div>{% endif %}
                         </li>
                         {% endfor %}
                     </ul>
                     {% else %}
                     <p class="realisation-soon mb-0"><i class="bi bi-hourglass-split me-2"></i>Premières réalisations bientôt en ligne.</p>
                     {% endif %}
+                    <a href="/projets/brief" class="realisation-cta">Demander un devis <i class="bi bi-arrow-right"></i></a>
                 </article>
             </div>
             {% endfor %}
@@ -713,6 +733,111 @@
     background: var(--cat-accent);
 }
 
+.realisation-offer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--cat-accent) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cat-accent) 35%, transparent);
+}
+
+.realisation-price {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--content-heading);
+}
+
+.realisation-price-note {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--content-text);
+}
+
+.realisation-delay {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--content-muted);
+}
+
+.realisation-points {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--content-text);
+}
+
+.realisation-points li {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.realisation-points i {
+    flex-shrink: 0;
+    color: var(--cat-accent);
+}
+
+.realisation-subtitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    color: var(--content-muted);
+}
+
+.realisation-item-client {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--content-muted);
+}
+
+.realisation-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.realisation-metric {
+    display: flex;
+    flex-direction: column;
+    padding: 0.35rem 0.6rem;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    color: var(--content-muted);
+    border: 1px solid var(--content-border);
+}
+
+.realisation-metric strong {
+    font-size: 0.9rem;
+    color: var(--content-heading);
+}
+
+.realisation-cta {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    align-self: flex-start;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--content-heading);
+}
+
+.realisation-cta:hover {
+    text-decoration: underline;
+}
+
+.realisation-cta i {
+    color: var(--cat-accent);
+}
+
 .realisation-soon {
     font-size: 0.88rem;
     color: var(--content-muted);
@@ -720,7 +845,9 @@
 }
 
 [data-theme="light"] .realisation-icon,
-[data-theme="light"] .realisation-item-title i {
+[data-theme="light"] .realisation-item-title i,
+[data-theme="light"] .realisation-points i,
+[data-theme="light"] .realisation-cta i {
     filter: brightness(0.75);
 }
 

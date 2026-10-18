@@ -48,6 +48,10 @@ def test_home_uses_vertical_menu_anchored_on_sections():
     assert 'id="realisations"' in r.text and "https://lp48.digita.buzz" in r.text
     for category in ("Sites web et landing", "Réseaux sociaux", "Publicité", "Automatisation", "Agents IA"):
         assert category in r.text, category
+    for offer in ("Site vitrine offert", "590 €/mois", "490 €/mois", "890 € par scénario", "1 490 € + usage"):
+        assert offer in r.text, offer
+    for case in ("TTC France", "TTC Sales", "TatooModel", "Lurel"):
+        assert case in r.text, case
     assert "Connexion" in r.text and "data-theme-toggle" in r.text and "Diagnostic gratuit" in r.text
 
 
