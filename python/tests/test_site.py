@@ -85,3 +85,21 @@ def test_newsletter_subscription(monkeypatch):
     assert c.post("/newsletter/subscribe", data={"_csrf_token": token, "email": "x"}).json()["success"] is False
     r = c.post("/newsletter/subscribe", data={"_csrf_token": token, "email": "Abo@Example.com"})
     assert r.json()["success"] is True and saved == [["abo@example.com"]]
+
+
+def test_empty_formation_cannot_be_bought(monkeypatch):
+    """Formation sans contenu : « Bientôt disponible », pas de page de paiement."""
+    from types import SimpleNamespace
+    from digita.models import formation as Formation
+    from digita.routes import payment
+    f = {"id": 5, "slug": "seo", "title": "SEO", "price": "97.00"}
+    monkeypatch.setattr(payment, "_find_formation", lambda fid: f)
+    monkeypatch.setattr(Formation.db, "fetch", lambda sql, p=None: None)  # aucune leçon avec contenu
+    request = SimpleNamespace(session={"user_id": 1}, query_params={})
+    r = payment.checkout(request, "5")
+    assert r.status_code == 302 and r.headers["location"] == "/formations/seo"
+    assert "bientôt disponible" in request.session["info_message"]
+
+    lesson = {"content": "", "video_url": None}
+    assert not Formation._lesson_has_content(lesson)
+    assert Formation._lesson_has_content({"content": "Leçon 1", "video_url": None})

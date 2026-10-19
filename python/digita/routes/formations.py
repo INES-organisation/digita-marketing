@@ -12,6 +12,7 @@ def index(request):
     per_page = 12
     total = Formation.count()
     return render_view(request, "formations/index-content", {
+        "availableIds": Formation.available_ids(),
         "title": "Formations - Marketing Digital | Digita",
         "extraCss": ["/assets/css/formations.css"],
         "totalFormations": total,
@@ -82,6 +83,7 @@ def category(request, slug):
     if not cat:
         return not_found(request, categorySlug=slug, formations=formations, categories=categories)
     return render_view(request, "formations/category-content", {
+        "availableIds": Formation.available_ids(),
         "title": cat["name"] + " - Formations Digita Marketing",
         "extraCss": ["/assets/css/formations.css"],
         "category": cat,
@@ -98,6 +100,7 @@ def search(request):
     if php.empty(query):
         return redirect("/formations")
     return render_view(request, "formations/search", {
+        "availableIds": Formation.available_ids(),
         "title": "Recherche « " + query + " » - Formations Digita Marketing", "metaRobots": "noindex, follow",
         "extraCss": ["/assets/css/formations.css"],
         "query": query,

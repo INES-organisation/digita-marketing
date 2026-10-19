@@ -39,7 +39,29 @@ def get_full_formation(slug):
     for m in modules:
         m["lessons"] = get_lessons(m["id"])
     formation["modules"] = modules
+    formation["available"] = any(_lesson_has_content(lesson) for m in modules for lesson in m["lessons"])
     return formation
+
+
+def _lesson_has_content(lesson):
+    return bool(php.trim(lesson.get("content") or "") or php.trim(lesson.get("video_url") or ""))
+
+
+def is_available(formation_id):
+    """Une formation n'est en vente qu'une fois enrichie : au moins une leçon avec du contenu ou une vidéo.
+    Tant que ce n'est pas le cas, elle s'affiche « Bientôt disponible » et ne peut pas être achetée."""
+    return db.fetch(
+        "SELECT 1 AS ok FROM formation_lessons l JOIN formation_modules m ON m.id = l.module_id"
+        " WHERE m.formation_id = ? AND (TRIM(COALESCE(l.content, '')) <> '' OR TRIM(COALESCE(l.video_url, '')) <> '')"
+        " LIMIT 1", [formation_id]) is not None
+
+
+def available_ids():
+    """Identifiants des formations déjà enrichies (pour les listes de formations)."""
+    rows = db.fetch_all(
+        "SELECT DISTINCT m.formation_id FROM formation_lessons l JOIN formation_modules m ON m.id = l.module_id"
+        " WHERE TRIM(COALESCE(l.content, '')) <> '' OR TRIM(COALESCE(l.video_url, '')) <> ''")
+    return {r["formation_id"] for r in rows}
 
 
 def get_by_category(category_slug, limit=None):

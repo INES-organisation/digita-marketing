@@ -40,6 +40,10 @@ def checkout(request, formation_id):
     f = _find_formation(formation_id)
     if not f:
         return not_found(request, formationId=formation_id, formation=f)
+    if not Formation.is_available(f["id"]):
+        # Formation pas encore enrichie : pas de vente (bouton « Bientôt disponible » côté pages)
+        request.session["info_message"] = "Cette formation sera bientôt disponible."
+        return redirect("/formations/" + f["slug"])
     user_id = request.session["user_id"]
     if Order.has_user_purchased_formation(user_id, formation_id):
         request.session["info_message"] = "Vous avez déjà acheté cette formation."
@@ -74,6 +78,8 @@ def _process_checkout(request, formation_id, form):
     f = _find_formation(formation_id)
     if not f:
         return Response(b"", status_code=404, media_type="text/html")
+    if not Formation.is_available(f["id"]):
+        return redirect("/formations/" + f["slug"])
     promo = Order.validate_promo_code(form["promo_code"]) if php.t(form.get("promo_code")) else None
     session = request.session
     order_id = Order.create_formation_order(session["user_id"], f, promo, session.get("user_email"))

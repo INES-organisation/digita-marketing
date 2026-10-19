@@ -241,16 +241,24 @@
                     <div class="card-body text-center">
                         <h3 class="text-primary mb-3">{{ number_format(formation['price'], 2) }} €</h3>
                         
-                        {% if (not t(isEnrolled)) %}                            {% if (isset(_SESSION['user_id'])) %}                                <form action="/formations/enroll/{{ formation['id'] }}" method="POST">
-                                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
-                                        <i class="bi bi-box-arrow-in-right"></i> S'inscrire maintenant
-                                    </button>
-                                </form>
-                            {% else %}                                <a href="/connexion" class="btn btn-primary btn-lg w-100 mb-3">
-                                    <i class="bi bi-box-arrow-in-right"></i> Se connecter pour s'inscrire
-                                </a>
-                            {% endif %}                        {% else %}                            <a href="/formations/{{ h(formation['slug']) }}/learn" class="btn btn-success btn-lg w-100 mb-3">
+                        {% if t(isEnrolled) %}
+                            <a href="/formations/{{ h(formation['slug']) }}/learn" class="btn btn-success btn-lg w-100 mb-3">
                                 <i class="bi bi-play-circle"></i> Accéder à la formation
+                            </a>
+                        {% elif not formation['available'] %}
+                            <button type="button" class="btn btn-secondary btn-lg w-100 mb-2" disabled>
+                                <i class="bi bi-hourglass-split"></i> Bientôt disponible
+                            </button>
+                            <a href="/contact" class="btn btn-outline-primary w-100 mb-3">
+                                <i class="bi bi-bell"></i> Être prévenu de la sortie
+                            </a>
+                        {% elif isset(_SESSION['user_id']) %}
+                            <a href="/formations/checkout/{{ formation['id'] }}" class="btn btn-primary btn-lg w-100 mb-3">
+                                <i class="bi bi-box-arrow-in-right"></i> S'inscrire maintenant
+                            </a>
+                        {% else %}
+                            <a href="/connexion" class="btn btn-primary btn-lg w-100 mb-3">
+                                <i class="bi bi-box-arrow-in-right"></i> Se connecter pour s'inscrire
                             </a>
                         {% endif %}                        
                         <p class="text-muted small mb-0">
