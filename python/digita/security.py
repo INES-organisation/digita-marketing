@@ -7,7 +7,7 @@ from starlette.responses import Response
 from . import csrf, php
 
 LIMITS = {
-    "login": (5, 900), "register": (3, 3600), "contact": (10, 3600),
+    "login": (5, 900), "register": (3, 3600), "reset": (5, 3600), "contact": (10, 3600),
     "api": (100, 60), "default": (60, 60),
 }
 

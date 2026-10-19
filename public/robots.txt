@@ -19,6 +19,8 @@ Allow: /tarifs
 Disallow: /admin/
 Disallow: /api/
 Disallow: /connexion
+Disallow: /mot-de-passe-oublie
+Disallow: /reinitialiser-mot-de-passe
 Disallow: /inscription
 Disallow: /espace-client
 Disallow: /mes-formations

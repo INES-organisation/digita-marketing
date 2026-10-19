@@ -115,6 +115,10 @@ get("/connexion", auth.show_login)
 post("/connexion", auth.login)
 get("/inscription", auth.show_register)
 post("/inscription", auth.register)
+get("/mot-de-passe-oublie", auth.show_forgot)
+post("/mot-de-passe-oublie", auth.forgot)
+get("/reinitialiser-mot-de-passe", auth.show_reset)
+post("/reinitialiser-mot-de-passe", auth.reset)
 
 # ---------------------------------------------------------------- administration
 get("/admin/dashboard", admin.dashboard)

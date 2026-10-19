@@ -1,0 +1,26 @@
+{% set pageTitle = coalesce(pageTitle, 'Mot de passe oublié - Digita Marketing') %}{% set extraCss = ['/assets/css/auth.css'] %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="auth-title">Mot de passe oublié</h2>
+
+        {% if ((isset(error)) and t(error)) %}            <div class="alert alert-danger">{{ h(error) }}</div>
+        {% endif %}
+        {% if ((isset(success)) and t(success)) %}            <div class="alert alert-success">{{ h(success) }}</div>
+        {% else %}
+        <p class="form-text mb-3">Indiquez l'adresse email de votre compte : nous vous envoyons un lien pour choisir un nouveau mot de passe.</p>
+        <form method="post" action="/mot-de-passe-oublie" class="auth-form" autocomplete="on">
+            {{ CsrfMiddleware_field() }}
+            <div class="form-group">
+                <label for="email" class="form-label">Adresse Email</label>
+                <input type="email" class="form-control" id="email" name="email" required autofocus>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Recevoir le lien</button>
+        </form>
+        {% endif %}
+
+        <div class="auth-footer">
+            <a href="/connexion">Retour à la connexion</a>
+        </div>
+    </div>
+</div>

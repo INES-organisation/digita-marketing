@@ -5,6 +5,8 @@
         
         {% if ((isset(error)) and t(error)) %}            <div class="alert alert-danger">{{ h(error) }}</div>
         {% endif %}        
+        {% if ((isset(success)) and t(success)) %}            <div class="alert alert-success">{{ h(success) }}</div>
+        {% endif %}
         <form method="post" action="/connexion" class="auth-form" autocomplete="on">
             {{ CsrfMiddleware_field() }}            
             <div class="form-group">
@@ -15,6 +17,7 @@
             <div class="form-group">
                 <label for="password" class="form-label">Mot de passe</label>
                 <input type="password" class="form-control" id="password" name="password" required>
+                <small class="form-text"><a href="/mot-de-passe-oublie">Mot de passe oublié ?</a></small>
             </div>
             
             <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
