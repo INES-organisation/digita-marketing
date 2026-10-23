@@ -215,7 +215,7 @@
                 </h1>
 
                 <!-- Slogan -->
-                <p class="hero-slogan mb-3">Faites <span>Buzzer</span> votre Business</p>
+                <p class="hero-slogan mb-4">Faites <span class="hero-buzz">Buzzer</span> votre Business&nbsp;!</p>
 
                 <p class="mb-4" style="color: rgba(255,255,255,0.78); font-size: 1.12rem; line-height: 1.8; max-width: 560px;">
                     Nous fusionnons l'<strong style="color: var(--gold);">Intelligence Artificielle</strong>, l'<strong style="color: #60a5fa;">automatisation avancée</strong> et le conseil stratégique pour propulser votre activité vers de nouveaux sommets — sans friction technique.
@@ -653,18 +653,39 @@
 
 
 <style>
-/* === Slogan du héro === */
+/* === Slogan du héro : en biais, « Buzzer » vibre en continu === */
 .hero-slogan {
+    display: inline-block;
     font-family: 'Syne', 'Outfit', sans-serif;
     font-weight: 800;
     font-size: clamp(1.3rem, 2.4vw, 1.9rem);
     line-height: 1.15;
     letter-spacing: -0.5px;
     color: #fff;
+    transform: rotate(-4deg);
+    transform-origin: left center;
+    margin-top: 0.5rem;
 }
 
-.hero-slogan span {
+.hero-buzz {
+    display: inline-block;
+    margin: 0 0.2em;
     color: var(--gold);
+    animation: heroBuzz 2.4s ease-in-out infinite;
+}
+
+@keyframes heroBuzz {
+    0%, 55%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); text-shadow: 0 0 0 transparent; }
+    60% { transform: translate(-2px, 1px) rotate(-3deg) scale(1.06); }
+    64% { transform: translate(2px, -1px) rotate(3deg) scale(1.08); text-shadow: 0 0 18px rgba(var(--gold-rgb), 0.7); }
+    68% { transform: translate(-2px, 0) rotate(-2deg) scale(1.06); }
+    72% { transform: translate(2px, 1px) rotate(2deg) scale(1.08); text-shadow: 0 0 18px rgba(var(--gold-rgb), 0.7); }
+    76% { transform: translate(-1px, -1px) rotate(-1deg) scale(1.04); }
+    80% { transform: translate(0, 0) rotate(0deg) scale(1); text-shadow: 0 0 8px rgba(var(--gold-rgb), 0.35); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-buzz { animation: none; }
 }
 
 /* === Réalisations : couleurs du thème actif (variables de layout-premium.css) === */
