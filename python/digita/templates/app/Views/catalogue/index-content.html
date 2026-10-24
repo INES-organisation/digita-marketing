@@ -27,20 +27,20 @@
 <nav class="catalogue-nav" aria-label="Catégories du catalogue" data-catalogue-nav>
   <div class="container">
     <div class="catalogue-nav-track" data-catalogue-track>
-      <a href="#cat-web" class="catalogue-chip" data-catalogue-link="cat-web">Sites web & landing pages</a>
-      <a href="#cat-ecommerce" class="catalogue-chip" data-catalogue-link="cat-ecommerce">E-commerce</a>
-      <a href="#cat-mobile" class="catalogue-chip" data-catalogue-link="cat-mobile">Applications mobiles</a>
-      <a href="#cat-reseaux" class="catalogue-chip" data-catalogue-link="cat-reseaux">Réseaux sociaux & influence</a>
-      <a href="#cat-identite" class="catalogue-chip" data-catalogue-link="cat-identite">Identité visuelle & design</a>
-      <a href="#cat-video" class="catalogue-chip" data-catalogue-link="cat-video">Vidéo & multimédia</a>
-      <a href="#cat-redaction" class="catalogue-chip" data-catalogue-link="cat-redaction">Rédaction & contenus</a>
-      <a href="#cat-pub" class="catalogue-chip" data-catalogue-link="cat-pub">Publicité en ligne</a>
-      <a href="#cat-seo" class="catalogue-chip" data-catalogue-link="cat-seo">Référencement (SEO)</a>
-      <a href="#cat-email" class="catalogue-chip" data-catalogue-link="cat-email">Email marketing</a>
-      <a href="#cat-ia" class="catalogue-chip" data-catalogue-link="cat-ia">IA & automatisation</a>
-      <a href="#cat-analytics" class="catalogue-chip" data-catalogue-link="cat-analytics">Analytics & data</a>
-      <a href="#cat-strategie" class="catalogue-chip" data-catalogue-link="cat-strategie">Conseil & stratégie</a>
-      <a href="#cat-formation" class="catalogue-chip" data-catalogue-link="cat-formation">Formation & coaching</a>
+      <a href="#cat-web" class="catalogue-chip" data-catalogue-link="cat-web" title="Sites web & landing pages">Sites web</a>
+      <a href="#cat-ecommerce" class="catalogue-chip" data-catalogue-link="cat-ecommerce" title="E-commerce">E-commerce</a>
+      <a href="#cat-mobile" class="catalogue-chip" data-catalogue-link="cat-mobile" title="Applications mobiles">Applications mobiles</a>
+      <a href="#cat-reseaux" class="catalogue-chip" data-catalogue-link="cat-reseaux" title="Réseaux sociaux & influence">Réseaux sociaux</a>
+      <a href="#cat-identite" class="catalogue-chip" data-catalogue-link="cat-identite" title="Identité visuelle & design">Identité visuelle</a>
+      <a href="#cat-video" class="catalogue-chip" data-catalogue-link="cat-video" title="Vidéo & multimédia">Vidéo</a>
+      <a href="#cat-redaction" class="catalogue-chip" data-catalogue-link="cat-redaction" title="Rédaction & contenus">Rédaction</a>
+      <a href="#cat-pub" class="catalogue-chip" data-catalogue-link="cat-pub" title="Publicité en ligne">Publicité</a>
+      <a href="#cat-seo" class="catalogue-chip" data-catalogue-link="cat-seo" title="Référencement (SEO)">SEO</a>
+      <a href="#cat-email" class="catalogue-chip" data-catalogue-link="cat-email" title="Email marketing">Email marketing</a>
+      <a href="#cat-ia" class="catalogue-chip" data-catalogue-link="cat-ia" title="IA & automatisation">IA & automatisation</a>
+      <a href="#cat-analytics" class="catalogue-chip" data-catalogue-link="cat-analytics" title="Analytics & data">Analytics</a>
+      <a href="#cat-strategie" class="catalogue-chip" data-catalogue-link="cat-strategie" title="Conseil & stratégie">Conseil</a>
+      <a href="#cat-formation" class="catalogue-chip" data-catalogue-link="cat-formation" title="Formation & coaching">Formation</a>
     </div>
   </div>
 </nav>
@@ -1332,10 +1332,47 @@
   function setHeight() { document.documentElement.style.setProperty('--catalogue-nav-h', nav.offsetHeight + 'px'); }
   setHeight();
   window.addEventListener('resize', setHeight);
+  if ('ResizeObserver' in window) new ResizeObserver(setHeight).observe(nav);
+
+  // Position réelle d'une section dans la page (offsetTop ignore les animations d'apparition,
+  // qui décalent temporairement les sections et faussaient le calage)
+  function pageTop(el) { var y = 0; while (el) { y += el.offsetTop; el = el.offsetParent; } return y; }
+  function stickyBottom() { return nav.offsetHeight + (parseFloat(getComputedStyle(nav).top) || 0); }
+  // La section visée s'affiche tout de suite (sans attendre l'animation d'apparition)
+  function reveal(el) { if (el && el.hasAttribute('data-aos')) el.classList.add('aos-animate'); }
+
+  // Arrivée depuis une autre page (ex. /catalogue#cat-web) : le navigateur saute à l'ancre avant
+  // que la page ait fini de se mettre en place ; on recale la section une fois tout chargé.
+  function realign() {
+    setHeight();
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target) {
+      // Saut immédiat (sans l'animation de défilement de la page), ancre calée sous la barre
+      reveal(target);
+      window.scrollTo({ top: pageTop(target) - stickyBottom() - 24, behavior: 'instant' });
+      onScroll();
+    }
+  }
+  if (location.hash) {
+    window.addEventListener('load', function () { realign(); setTimeout(realign, 300); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(realign);
+  }
 
   // Catégorie en cours de lecture surlignée (et ramenée dans la barre si elle est hors champ)
   var links = document.querySelectorAll('[data-catalogue-link]');
   var sections = document.querySelectorAll('[id^="cat-"]');
+
+  links.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var target = document.getElementById(a.getAttribute('data-catalogue-link'));
+      if (!target) return;
+      e.preventDefault();
+      history.replaceState(null, '', '#' + target.id);
+      reveal(target);
+      window.scrollTo({ top: pageTop(target) - stickyBottom() - 24, behavior: 'smooth' });
+    });
+  });
+
   function activate(id) {
     links.forEach(function (a) {
       var on = a.getAttribute('data-catalogue-link') === id;
@@ -1349,10 +1386,14 @@
     });
   }
   function onScroll() {
-    var limit = nav.getBoundingClientRect().bottom + 80, current = null;
-    sections.forEach(function (sec) { if (sec.getBoundingClientRect().top <= limit) current = sec.id; });
+    var limit = window.scrollY + stickyBottom() + 80, current = null;
+    sections.forEach(function (sec) { if (pageTop(sec) <= limit) current = sec.id; });
     if (current) activate(current);
-    else links.forEach(function (a) { a.classList.remove('active'); a.removeAttribute('aria-current'); });
+    else {
+      // En haut de page : aucune catégorie active, la barre revient au début (« Sites web » visible)
+      links.forEach(function (a) { a.classList.remove('active'); a.removeAttribute('aria-current'); });
+      if (track.scrollLeft) track.scrollTo({ left: 0, behavior: 'smooth' });
+    }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();

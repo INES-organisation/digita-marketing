@@ -43,6 +43,15 @@
     display: none;
 }
 
+/* Ordinateur : toutes les catégories visibles d'un coup (retour à la ligne si besoin) */
+@media (min-width: 992px) {
+    .catalogue-nav-track {
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow-x: visible;
+    }
+}
+
 .catalogue-chip {
     flex: 0 0 auto;
     padding: 0.4rem 0.9rem;
