@@ -1,4 +1,5 @@
 """Pages de contenu fixe (contrôleurs About, Services, Catalogue, Contact…)."""
+from .. import services_catalog
 from ..realisations import REALISATIONS
 from ..render import render_page, render_view
 from .common import redirect
@@ -15,7 +16,11 @@ def _simple(view, title, css):
 
 
 about = _simple("about/index-content", "À propos - Digita Marketing", "/assets/css/about.css")
-services = _simple("services/index-content", "Services - Digita Marketing", "/assets/css/services.css")
+def services(request):
+    return render_view(request, "services/index-content", {
+        "title": "Services - Digita Marketing", "extraCss": ["/assets/css/services.css"],
+        "poles": services_catalog.POLES, "categories": services_catalog.categories(),
+    })
 catalogue = _simple("catalogue/index-content", "Catalogue Complet - Digita Marketing", "/assets/css/catalogue.css")
 support = _simple("support/index-content", "Support - Digita Marketing", "/assets/css/support.css")
 tarifs = _simple("tarifs/index-content", "Tarifs - Digita Marketing", "/assets/css/tarifs.css")

@@ -124,3 +124,24 @@ def test_navigation_order_matches_footer():
     assert order(agence, [">Blog<", ">Outils<", ">Support<", "<hr>", ">Formations<", ">Boutique<", ">Lancer un projet<"])
     assert order(footer, [">À propos<", ">Services<", ">Contact<", ">Solutions<", ">Tarifs<", "footer-sep", ">Espace membre<",
                           ">Blog<", ">Outils<", ">Support<", ">Formations<", ">Boutique<", "footer-sep", ">Lancer un projet<"])
+
+
+def test_services_page_lists_every_category_in_order():
+    """/services : sommaire, barre mobile et sections ouvertes dans le même ordre que la barre de droite."""
+    from digita import services_catalog
+    html = _client().get("/services").text
+    ids = [c["id"] for c in services_catalog.categories()]
+    assert len(ids) == 14 and "accordion-collapse" not in html and "data-services-search" in html
+    toc = html[html.index('class="services-toc"'):html.index("data-services-search")]
+    sections = html[html.index("data-services-search"):]
+    bar = html[html.index('class="sidebar-onglet-sidebar"'):]
+
+    def in_order(fragment, needles):
+        pos = 0
+        for n in needles:
+            pos = fragment.index(n, pos) + len(n)
+        return True
+
+    assert in_order(toc, [f'href="#{i}"' for i in ids])
+    assert in_order(sections, [f'<div id="{i}" class="services-category"' for i in ids])
+    assert in_order(bar, [f"/services#{i}" for i in ids])

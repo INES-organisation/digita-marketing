@@ -63,7 +63,8 @@ body::before {
     min-height: 100vh;
     background: var(--page-bg);
     position: relative;
-    overflow-x: hidden;
+    overflow-x: hidden; /* anciens navigateurs */
+    overflow-x: clip; /* coupe le débordement sans créer de zone de défilement : position: sticky fonctionne dans les pages */
     display: flex;
     flex-direction: column;
 }

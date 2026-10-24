@@ -18,3 +18,8 @@
         padding-top: 100px !important;
     }
 }
+
+/* Les ancres du sommaire arrivent sous le menu et la barre des catégories collée */
+[id^="cat-"] {
+    scroll-margin-top: calc(var(--navbar-height) + 5rem);
+}

@@ -23,655 +23,123 @@
   </div>
 </section>
 
-<!-- Navigation par Catégories Premium (Sticky Glass) -->
-<section class="py-4 sticky-nav shadow-lg" style="background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); z-index: 1000;">
+<!-- Services : sommaire collé à gauche (ordinateur), barre des catégories collée sous le menu
+     (mobile), sections ouvertes et recherche. Données : digita/services_catalog.py -->
+<section class="services-browser py-5">
   <div class="container">
-    <div class="d-flex flex-wrap gap-2 justify-content-center">
-      <a href="#reseaux-sociaux" class="btn btn-sm btn-premium btn-premium-blue py-1 px-3 scroll-link" data-target="#reseaux" style="font-size: 0.75rem;">Visibilité Sociale</a>
-      <a href="#identite-visuelle" class="btn btn-sm btn-premium btn-premium-gold py-1 px-3 scroll-link" data-target="#identite" style="font-size: 0.75rem;">Identité Prestige</a>
-      <a href="#sites-web" class="btn btn-sm btn-premium btn-premium-blue py-1 px-3 scroll-link" data-target="#sites" style="font-size: 0.75rem;">Architecture Web</a>
-      <a href="#ia-automation" class="btn btn-sm btn-premium btn-premium-gold py-1 px-3 scroll-link" data-target="#ia-collapse" style="font-size: 0.75rem;">IA & Automation</a>
-      <a href="#strategie" class="btn btn-sm btn-premium btn-premium-blue py-1 px-3 scroll-link" data-target="#strategie-collapse" style="font-size: 0.75rem;">Stratégie & ROI</a>
+
+    <nav class="services-chips d-lg-none" aria-label="Catégories de services">
+      <div class="services-chips-track">
+        {% for cat in categories %}<a href="#{{ cat.id }}" class="services-chip" data-spy-link="{{ cat.id }}"><i class="bi {{ cat.icon }}"></i>{{ h(cat.title) }}</a>{% endfor %}
+      </div>
+    </nav>
+
+    <div class="row g-4 g-xl-5">
+      <aside class="col-lg-3 d-none d-lg-block">
+        <nav class="services-toc" aria-label="Sommaire des services">
+          {% for pole in poles %}
+          <p class="services-toc-pole"><i class="bi {{ pole.icon }}"></i>{{ h(pole.title) }}</p>
+          <ul>
+            {% for cat in pole.categories %}
+            <li><a href="#{{ cat.id }}" data-spy-link="{{ cat.id }}">{{ h(cat.title) }}<span>{{ cat.from_price }}</span></a></li>
+            {% endfor %}
+          </ul>
+          {% endfor %}
+        </nav>
+      </aside>
+
+      <div class="col-lg-9">
+        <div class="services-search">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <input type="search" placeholder="Rechercher un service (ex. logo, Google Ads, chatbot…)" aria-label="Rechercher un service" data-services-search autocomplete="off">
+        </div>
+
+        {% for pole in poles %}
+        <div class="services-pole" data-services-pole>
+          <h2 class="services-pole-title"><i class="bi {{ pole.icon }}"></i>{{ h(pole.title) }}</h2>
+          {% for cat in pole.categories %}
+          <div id="{{ cat.id }}" class="services-category" data-spy-section data-services-category>
+            <div class="services-category-head">
+              <span class="services-category-icon"><i class="bi {{ cat.icon }}"></i></span>
+              <div class="services-category-text">
+                <h3>{{ h(cat.title) }}</h3>
+                <p>{{ h(cat.description) }}</p>
+              </div>
+              <span class="services-category-price">{% if cat.from_price != 'Sur devis' %}<small>À partir de</small>{% endif %}{{ cat.from_price }}</span>
+            </div>
+            <div class="row g-3">
+              {% for s in cat.services %}
+              <div class="col-md-6 col-xl-4" data-service data-search="{{ h((cat.title ~ ' ' ~ s.name ~ ' ' ~ (s.bullets | join(' '))) | lower) }}">
+                <article class="service-card">
+                  <h4>{{ h(s.name) }}</h4>
+                  <ul>
+                    {% for b in s.bullets %}<li><i class="bi bi-check2" aria-hidden="true"></i>{{ h(b) }}</li>{% endfor %}
+                  </ul>
+                  <div class="service-card-foot">
+                    <span class="service-card-price">{% if s['from'] %}<small>À partir de</small> {% endif %}{{ s.price }}</span>
+                    <a href="/contact" class="service-card-cta">Demander un devis <i class="bi bi-arrow-right"></i></a>
+                  </div>
+                </article>
+              </div>
+              {% endfor %}
+            </div>
+            <a href="{{ cat.catalogue }}" class="services-category-more">Tout le détail dans le catalogue <i class="bi bi-arrow-right"></i></a>
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+
+        <p class="services-empty" data-services-empty hidden>Aucun service ne correspond à votre recherche. <a href="/contact">Décrivez-nous votre besoin</a>, nous vous répondons sous 48h.</p>
+
+        <p class="services-footnote">Cette page présente nos catégories et nos tarifs d'entrée ; le <a href="/catalogue">catalogue complet</a> détaille chaque prestation.<br>Tarifs indicatifs, TVA non applicable (art. 293 B du CGI). Devis personnalisé et gratuit sous 48h ouvrées.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Script pour gérer le scroll et l'ouverture des accordéons -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const scrollLinks = document.querySelectorAll('.scroll-link');
-  
-  scrollLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Récupérer l'ID de la section et de l'accordéon
-      const sectionId = this.getAttribute('href');
-      const accordionTarget = this.getAttribute('data-target');
-      
-      // Scroller vers la section
-      const section = document.querySelector(sectionId);
-      if (section) {
-        const offset = 150; // Offset pour la barre sticky
-        const elementPosition = section.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-        
-        // Ouvrir l'accordéon après le scroll (sans fermer les autres)
-        setTimeout(() => {
-          const accordion = document.querySelector(accordionTarget);
-          if (accordion && !accordion.classList.contains('show')) {
-            // Utiliser show() au lieu de toggle pour ne pas fermer les autres
-            const bsCollapse = new bootstrap.Collapse(accordion, {
-              toggle: false
-            });
-            bsCollapse.show();
-          }
-        }, 600);
-      }
+(function () {
+  // Recherche : filtre les cartes, masque les catégories et pôles sans résultat
+  var input = document.querySelector('[data-services-search]');
+  var empty = document.querySelector('[data-services-empty]');
+  function norm(t) { return (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  if (input) input.addEventListener('input', function () {
+    var q = norm(input.value.trim()), total = 0;
+    document.querySelectorAll('[data-services-category]').forEach(function (cat) {
+      var shown = 0;
+      cat.querySelectorAll('[data-service]').forEach(function (card) {
+        var ok = !q || norm(card.getAttribute('data-search')).indexOf(q) !== -1;
+        card.hidden = !ok; if (ok) shown++;
+      });
+      cat.hidden = shown === 0; total += shown;
     });
+    document.querySelectorAll('[data-services-pole]').forEach(function (pole) {
+      pole.hidden = !pole.querySelector('[data-services-category]:not([hidden])');
+    });
+    empty.hidden = total > 0;
   });
-});
+
+  // Catégorie en cours de lecture surlignée dans le sommaire et la barre mobile
+  var links = document.querySelectorAll('[data-spy-link]');
+  var track = document.querySelector('.services-chips-track');
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var id = entry.target.id;
+        links.forEach(function (a) {
+          var on = a.getAttribute('data-spy-link') === id;
+          a.classList.toggle('active', on);
+          if (on && track && track.contains(a)) {
+            track.scrollTo({ left: a.offsetLeft - 16, behavior: 'smooth' });
+          }
+        });
+      });
+    }, { rootMargin: '-35% 0px -60% 0px' });
+    document.querySelectorAll('[data-spy-section]').forEach(function (s) { observer.observe(s); });
+  }
+})();
 </script>
-
-<!-- Services par Catégories (Accordéons Premium) -->
-<section class="py-5 bg-premium-grid animated">
-  <div class="container">
-    <div class="accordion accordion-premium" id="servicesAccordion">
-      
-      <!-- RÉSEAUX SOCIAUX -->
-      <div id="reseaux-sociaux" class="accordion-item bg-transparent border-glass mb-4" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button glass-card border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#reseaux" style="background: rgba(37, 99, 235, 0.05);">
-            <i class="bi bi-people-fill text-blue me-3 fs-4"></i>
-            <span class="fw-bold" style="letter-spacing: 1px;">ORCHESTRATION SOCIALE & INFLUENCE</span>
-          </button>
-        </h2>
-        <div id="reseaux" class="accordion-collapse collapse show">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Community Management</h6>
-                <ul class="small list-unstyled">
-                  <li>• Gestion Facebook, Instagram, LinkedIn, TikTok</li>
-                  <li>• Création et planification de contenu</li>
-                  <li>• Calendrier éditorial</li>
-                  <li>• Modération et gestion commentaires</li>
-                  <li>• Veille concurrentielle</li>
-                  <li>• Reporting mensuel</li>
-                </ul>
-                <span class="badge bg-primary">390€/mois</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Social Ads</h6>
-                <ul class="small list-unstyled">
-                  <li>• Facebook & Instagram Ads</li>
-                  <li>• LinkedIn Ads (B2B)</li>
-                  <li>• TikTok Ads</li>
-                  <li>• A/B Testing</li>
-                  <li>• Retargeting & remarketing</li>
-                  <li>• Optimisation ROI</li>
-                </ul>
-                <span class="badge bg-primary">290€/mois</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Création Contenu</h6>
-                <ul class="small list-unstyled">
-                  <li>• Posts graphiques (carrousels, stories)</li>
-                  <li>• Vidéos courtes (Reels, TikTok)</li>
-                  <li>• Infographies</li>
-                  <li>• GIFs et animations</li>
-                  <li>• Lives et webinaires</li>
-                </ul>
-                <span class="badge bg-primary">À partir de 290€/mois</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- IDENTITÉ VISUELLE -->
-      <div id="identite-visuelle" class="accordion-item bg-transparent border-glass mb-4" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed glass-card border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#identite" style="background: rgba(var(--gold-rgb), 0.05);">
-            <i class="bi bi-palette-fill text-gold me-3 fs-4"></i>
-            <span class="fw-bold" style="letter-spacing: 1px;">DIRECTION ARTISTIQUE & PRESTIGE</span>
-          </button>
-        </h2>
-        <div id="identite" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Identité de Marque</h6>
-                <ul class="small list-unstyled">
-                  <li>• Logo professionnel</li>
-                  <li>• Charte graphique complète</li>
-                  <li>• Brand Book</li>
-                </ul>
-                <span class="badge bg-primary">À partir de 490€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Design Print</h6>
-                <ul class="small list-unstyled">
-                  <li>• Cartes de visite</li>
-                  <li>• Flyers et brochures</li>
-                  <li>• Packaging produits</li>
-                </ul>
-                <span class="badge bg-primary">À partir de 79€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Design Digital</h6>
-                <ul class="small list-unstyled">
-                  <li>• Bannières publicitaires</li>
-                  <li>• Templates réseaux sociaux</li>
-                  <li>• Emailings HTML</li>
-                </ul>
-                <span class="badge bg-primary">À partir de 99€</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- VIDÉO & MULTIMÉDIA -->
-      <div id="video-multimedia" class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed bg-primary bg-opacity-10" type="button" data-bs-toggle="collapse" data-bs-target="#video">
-            <i class="bi bi-camera-video-fill text-primary me-3 fs-4"></i>
-            <strong>Production Vidéo & Multimédia</strong>
-          </button>
-        </h2>
-        <div id="video" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Vidéos Promotionnelles</h6>
-                <ul class="small list-unstyled">
-                  <li>• Vidéos d'entreprise</li>
-                  <li>• Vidéos produits</li>
-                  <li>• Témoignages clients</li>
-                </ul>
-                <span class="badge bg-primary">À partir de 590€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Contenu Vidéo Social</h6>
-                <ul class="small list-unstyled">
-                  <li>• Reels Instagram</li>
-                  <li>• TikTok</li>
-                  <li>• YouTube Shorts</li>
-                </ul>
-                <span class="badge bg-primary">À partir de 190€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Production Avancée</h6>
-                <ul class="small list-unstyled">
-                  <li>• Motion design 2D/3D</li>
-                  <li>• Effets spéciaux (VFX)</li>
-                  <li>• Photographie pro</li>
-                </ul>
-                <span class="badge bg-primary">À partir de 1190€</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SITES WEB -->
-      <div id="sites-web" class="accordion-item bg-transparent border-glass mb-4" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed glass-card border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#sites" style="background: rgba(37, 99, 235, 0.05);">
-            <i class="bi bi-window-desktop text-blue me-3 fs-4"></i>
-            <span class="fw-bold" style="letter-spacing: 1px;">ARCHITECTURE WEB & ÉCOSYSTÈMES</span>
-          </button>
-        </h2>
-        <div id="sites" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Sites Vitrine</h6>
-                <ul class="small list-unstyled">
-                  <li>• Site responsive</li>
-                  <li>• Site multilingue</li>
-                  <li>• Portfolio en ligne</li>
-                </ul>
-                <span class="badge bg-primary">À partir de 990€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Sites E-commerce</h6>
-                <ul class="small list-unstyled">
-                  <li>• Boutique en ligne</li>
-                  <li>• Paiement sécurisé</li>
-                  <li>• Gestion des stocks</li>
-                </ul>
-                <span class="badge bg-primary">À partir de 2490€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Applications Web</h6>
-                <ul class="small list-unstyled">
-                  <li>• PWA</li>
-                  <li>• Plateforme SaaS</li>
-                  <li>• CRM/ERP sur-mesure</li>
-                </ul>
-                <span class="badge bg-primary">Sur devis</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SEO -->
-      <div id="seo" class="accordion-item bg-transparent border-glass mb-4" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed glass-card border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#seo-collapse" style="background: rgba(var(--gold-rgb), 0.05);">
-            <i class="bi bi-search text-gold me-3 fs-4"></i>
-            <span class="fw-bold" style="letter-spacing: 1px;">RÉFÉRENCEMENT STRATÉGIQUE (SEO)</span>
-          </button>
-        </h2>
-        <div id="seo-collapse" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-3">
-                <h6 class="text-primary">SEO On-Page</h6>
-                <ul class="small list-unstyled">
-                  <li>• Audit SEO</li>
-                  <li>• Optimisation balises</li>
-                  <li>• Core Web Vitals</li>
-                </ul>
-                <span class="badge bg-primary">490€/mois</span>
-              </div>
-              <div class="col-md-3">
-                <h6 class="text-primary">SEO Off-Page</h6>
-                <ul class="small list-unstyled">
-                  <li>• Netlinking</li>
-                  <li>• Guest blogging</li>
-                  <li>• Link building</li>
-                </ul>
-                <span class="badge bg-primary">390€/mois</span>
-              </div>
-              <div class="col-md-3">
-                <h6 class="text-primary">SEO Local</h6>
-                <ul class="small list-unstyled">
-                  <li>• Google My Business</li>
-                  <li>• Avis clients</li>
-                </ul>
-                <span class="badge bg-primary">390€</span>
-              </div>
-              <div class="col-md-3">
-                <h6 class="text-primary">SEO Technique</h6>
-                <ul class="small list-unstyled">
-                  <li>• Audit technique</li>
-                  <li>• Sitemap XML</li>
-                </ul>
-                <span class="badge bg-primary">490€</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PUBLICITÉ -->
-      <div id="publicite" class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed bg-primary bg-opacity-10" type="button" data-bs-toggle="collapse" data-bs-target="#publicite-collapse">
-            <i class="bi bi-megaphone-fill text-primary me-3 fs-4"></i>
-            <strong>Publicité en Ligne</strong>
-          </button>
-        </h2>
-        <div id="publicite-collapse" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Google Ads</h6>
-                <ul class="small list-unstyled">
-                  <li>• Campagnes Search</li>
-                  <li>• Campagnes Shopping</li>
-                  <li>• YouTube Ads</li>
-                </ul>
-                <span class="badge bg-primary">290€/mois</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Social Ads</h6>
-                <ul class="small list-unstyled">
-                  <li>• Facebook & Instagram Ads</li>
-                  <li>• LinkedIn Ads</li>
-                  <li>• TikTok Ads</li>
-                </ul>
-                <span class="badge bg-primary">290€/mois</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Display & Affiliation</h6>
-                <ul class="small list-unstyled">
-                  <li>• Publicité programmatique</li>
-                  <li>• Retargeting</li>
-                </ul>
-                <span class="badge bg-primary">Sur devis</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- EMAIL MARKETING -->
-      <div id="email-marketing" class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed bg-primary bg-opacity-10" type="button" data-bs-toggle="collapse" data-bs-target="#email">
-            <i class="bi bi-envelope-fill text-primary me-3 fs-4"></i>
-            <strong>Email Marketing</strong>
-          </button>
-        </h2>
-        <div id="email" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Campagnes Email</h6>
-                <ul class="small list-unstyled">
-                  <li>• Newsletters</li>
-                  <li>• Emails promotionnels</li>
-                </ul>
-                <span class="badge bg-primary">190€/mois</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Automation</h6>
-                <ul class="small list-unstyled">
-                  <li>• Scénarios automatisés</li>
-                  <li>• Lead nurturing</li>
-                </ul>
-                <span class="badge bg-primary">490€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Design Email</h6>
-                <ul class="small list-unstyled">
-                  <li>• Templates HTML</li>
-                  <li>• A/B testing</li>
-                </ul>
-                <span class="badge bg-primary">149€</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ANALYTICS -->
-      <div id="analytics" class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed bg-primary bg-opacity-10" type="button" data-bs-toggle="collapse" data-bs-target="#analytics-collapse">
-            <i class="bi bi-graph-up text-primary me-3 fs-4"></i>
-            <strong>Analytics & Data</strong>
-          </button>
-        </h2>
-        <div id="analytics-collapse" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Analyse de Données</h6>
-                <ul class="small list-unstyled">
-                  <li>• Google Analytics 4</li>
-                  <li>• Tableaux de bord</li>
-                </ul>
-                <span class="badge bg-primary">290€/mois</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Tag Management</h6>
-                <ul class="small list-unstyled">
-                  <li>• Google Tag Manager</li>
-                  <li>• Tracking événements</li>
-                </ul>
-                <span class="badge bg-primary">190€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Business Intelligence</h6>
-                <ul class="small list-unstyled">
-                  <li>• Tableaux de bord BI</li>
-                  <li>• Reporting automatisé</li>
-                </ul>
-                <span class="badge bg-primary">Sur devis</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STRATÉGIE -->
-      <div id="strategie" class="accordion-item bg-transparent border-glass mb-4" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed glass-card border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#strategie-collapse" style="background: rgba(37, 99, 235, 0.05);">
-            <i class="bi bi-lightbulb-fill text-blue me-3 fs-4"></i>
-            <span class="fw-bold" style="letter-spacing: 1px;">CONSEIL STRATÉGIQUE & CRO</span>
-          </button>
-        </h2>
-        <div id="strategie-collapse" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Conseil & Audit</h6>
-                <ul class="small list-unstyled">
-                  <li>• Audit digital</li>
-                  <li>• Plan marketing</li>
-                </ul>
-                <span class="badge bg-primary">690€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Stratégie de Contenu</h6>
-                <ul class="small list-unstyled">
-                  <li>• Content marketing</li>
-                  <li>• Planning éditorial</li>
-                </ul>
-                <span class="badge bg-primary">490€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">CRO & Growth</h6>
-                <ul class="small list-unstyled">
-                  <li>• Optimisation conversion</li>
-                  <li>• Growth hacking</li>
-                </ul>
-                <span class="badge bg-primary">490€/mois</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RÉDACTION -->
-      <div id="redaction" class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed bg-primary bg-opacity-10" type="button" data-bs-toggle="collapse" data-bs-target="#redaction-collapse">
-            <i class="bi bi-pencil-fill text-primary me-3 fs-4"></i>
-            <strong>Rédaction & Content</strong>
-          </button>
-        </h2>
-        <div id="redaction-collapse" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Rédaction Web</h6>
-                <ul class="small list-unstyled">
-                  <li>• Articles de blog SEO</li>
-                  <li>• Fiches produits</li>
-                </ul>
-                <span class="badge bg-primary">79€/article</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Copywriting</h6>
-                <ul class="small list-unstyled">
-                  <li>• Pages de vente</li>
-                  <li>• Landing pages</li>
-                </ul>
-                <span class="badge bg-primary">149€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Traduction</h6>
-                <ul class="small list-unstyled">
-                  <li>• Traduction de contenu</li>
-                  <li>• SEO multilingue</li>
-                </ul>
-                <span class="badge bg-primary">0.08€/mot</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- IA & AUTOMATION -->
-      <div id="ia-automation" class="accordion-item bg-transparent border-glass mb-4" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed glass-card border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#ia-collapse" style="background: rgba(0, 210, 255, 0.08); border-color: var(--accent-cyan, #00d2ff) !important; box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);">
-            <i class="bi bi-cpu-fill text-info me-3 fs-4" style="color: var(--accent-cyan, #00d2ff) !important;"></i>
-            <span class="fw-bold" style="letter-spacing: 1px; color: var(--accent-cyan, #00d2ff) !important;">INTELLIGENCE ARTIFICIELLE & SYSTÈMES AUTONOMES</span>
-          </button>
-        </h2>
-        <div id="ia-collapse" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Chatbots</h6>
-                <ul class="small list-unstyled">
-                  <li>• Chatbot site web</li>
-                  <li>• Chatbot WhatsApp</li>
-                </ul>
-                <span class="badge bg-primary">990€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Automation</h6>
-                <ul class="small list-unstyled">
-                  <li>• Marketing automation</li>
-                  <li>• CRM automation</li>
-                </ul>
-                <span class="badge bg-primary">490€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">IA Générative</h6>
-                <ul class="small list-unstyled">
-                  <li>• Génération contenu IA</li>
-                  <li>• Génération images IA</li>
-                </ul>
-                <span class="badge bg-primary">190€/mois</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- E-COMMERCE -->
-      <div id="ecommerce" class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed bg-primary bg-opacity-10" type="button" data-bs-toggle="collapse" data-bs-target="#ecommerce-collapse">
-            <i class="bi bi-cart-fill text-primary me-3 fs-4"></i>
-            <strong>E-commerce</strong>
-          </button>
-        </h2>
-        <div id="ecommerce-collapse" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <h6 class="text-primary">Création E-commerce</h6>
-                <ul class="small list-unstyled">
-                  <li>• Boutique en ligne</li>
-                  <li>• Programme fidélité</li>
-                </ul>
-                <span class="badge bg-primary">2490€</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Marketplaces</h6>
-                <ul class="small list-unstyled">
-                  <li>• Vente sur Amazon</li>
-                  <li>• Vente sur eBay</li>
-                </ul>
-                <span class="badge bg-primary">290€/mois</span>
-              </div>
-              <div class="col-md-4">
-                <h6 class="text-primary">Paiement</h6>
-                <ul class="small list-unstyled">
-                  <li>• Intégration paiement</li>
-                  <li>• Solutions livraison</li>
-                </ul>
-                <span class="badge bg-primary">Sur devis</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- MOBILE -->
-      <div id="mobile" class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed bg-primary bg-opacity-10" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-collapse">
-            <i class="bi bi-phone-fill text-primary me-3 fs-4"></i>
-            <strong>Applications Mobiles</strong>
-          </button>
-        </h2>
-        <div id="mobile-collapse" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <h6 class="text-primary">Développement Mobile</h6>
-                <ul class="small list-unstyled">
-                  <li>• Application iOS</li>
-                  <li>• Application Android</li>
-                  <li>• PWA</li>
-                </ul>
-                <span class="badge bg-primary">Sur devis</span>
-              </div>
-              <div class="col-md-6">
-                <h6 class="text-primary">Fonctionnalités</h6>
-                <ul class="small list-unstyled">
-                  <li>• Push notifications</li>
-                  <li>• Géolocalisation</li>
-                  <li>• Paiement in-app</li>
-                </ul>
-                <span class="badge bg-primary">Sur devis</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- FORMATION -->
-      <div id="formation" class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed bg-primary bg-opacity-10" type="button" data-bs-toggle="collapse" data-bs-target="#formation-collapse">
-            <i class="bi bi-mortarboard-fill text-primary me-3 fs-4"></i>
-            <strong>Formation</strong>
-          </button>
-        </h2>
-        <div id="formation-collapse" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <h6 class="text-primary">Formations Digitales</h6>
-                <ul class="small list-unstyled">
-                  <li>• Formation réseaux sociaux</li>
-                  <li>• Formation SEO</li>
-                  <li>• Formation Google Ads</li>
-                </ul>
-                <span class="badge bg-primary">390€/jour</span>
-              </div>
-              <div class="col-md-6">
-                <h6 class="text-primary">Coaching</h6>
-                <ul class="small list-unstyled">
-                  <li>• Coaching individuel</li>
-                  <li>• Consulting stratégique</li>
-                </ul>
-                <span class="badge bg-primary">120€/heure</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Note informative -->
-    <div class="alert alert-info mt-5 text-center" role="alert" data-aos="fade-up">
-      <i class="bi bi-info-circle me-2"></i>
-      <strong>Plus de 300 services disponibles !</strong> Consultez notre <a href="/catalogue" class="alert-link">catalogue complet</a> pour découvrir tous nos services en détail.
-    </div>
-    <p class="text-center small text-muted mt-4 mb-0">Tarifs indicatifs, TVA non applicable (art. 293 B du CGI). Devis personnalisé et gratuit sous 48h ouvrées.</p>
-  </div>
-</section>
 
 <!-- CTA Section Premium -->
 <section class="py-6 bg-premium-glow">

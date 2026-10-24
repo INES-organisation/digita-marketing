@@ -18,3 +18,390 @@
         padding-top: 100px !important;
     }
 }
+
+/* ==================== NAVIGATION DES SERVICES ====================
+   Ordinateur : sommaire collé à gauche. Mobile/tablette : barre des catégories collée sous le menu.
+   Catégories ouvertes (plus d'accordéons), cartes de services, recherche. Couleurs du thème. */
+
+.services-browser {
+    background: var(--page-bg);
+}
+
+/* Les ancres arrivent sous le menu (et sous la barre des catégories sur mobile) */
+.services-category {
+    scroll-margin-top: calc(var(--navbar-height) + 1.5rem);
+}
+
+@media (max-width: 991.98px) {
+    .services-category {
+        scroll-margin-top: calc(var(--navbar-height) + 4.5rem);
+    }
+}
+
+/* ---------- Sommaire (ordinateur) ---------- */
+.services-toc {
+    position: sticky;
+    top: calc(var(--navbar-height) + 1.5rem);
+    max-height: calc(100vh - var(--navbar-height) - 3rem);
+    overflow-y: auto;
+    padding: 1.25rem 1rem;
+    border-radius: 16px;
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    scrollbar-width: thin;
+}
+
+.services-toc-pole {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.9rem 0 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.services-toc-pole:first-child {
+    margin-top: 0;
+}
+
+.services-toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.services-toc a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    border-left: 2px solid transparent;
+    font-size: 0.86rem;
+    color: var(--content-text);
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.services-toc a span {
+    font-size: 0.72rem;
+    color: var(--content-muted);
+    white-space: nowrap;
+}
+
+.services-toc a:hover {
+    background: var(--accent-soft);
+    color: var(--content-heading);
+}
+
+.services-toc a.active {
+    background: var(--accent-soft);
+    border-left-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* ---------- Barre des catégories (mobile) ---------- */
+.services-chips {
+    position: sticky;
+    top: var(--navbar-height);
+    z-index: 900;
+    margin: -1rem -12px 1.25rem;
+    padding: 0.6rem 12px;
+    background: var(--navbar-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--content-border);
+}
+
+.services-chips-track {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.services-chips-track::-webkit-scrollbar {
+    display: none;
+}
+
+.services-chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    border: 1px solid var(--content-border);
+    background: var(--content-surface);
+    color: var(--content-text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.services-chip i {
+    color: var(--accent);
+}
+
+.services-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-gold);
+}
+
+.services-chip.active i {
+    color: var(--on-gold);
+}
+
+/* ---------- Recherche ---------- */
+.services-search {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.services-search i {
+    position: absolute;
+    left: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--content-muted);
+}
+
+.services-search input {
+    width: 100%;
+    padding: 0.85rem 1rem 0.85rem 2.8rem;
+    border-radius: 50px;
+    border: 1px solid var(--content-border);
+    background: var(--content-surface);
+    color: var(--content-heading);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.services-search input::placeholder {
+    color: var(--content-muted);
+}
+
+.services-search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ---------- Pôles et catégories ---------- */
+.services-pole + .services-pole {
+    margin-top: 3rem;
+}
+
+.services-pole-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--content-border);
+}
+
+.services-category + .services-category {
+    margin-top: 2.5rem;
+}
+
+.services-category-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.services-category-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+
+.services-category-text {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.services-category-head h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+    color: var(--content-heading);
+}
+
+.services-category-head p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--content-muted);
+}
+
+.services-category-price {
+    flex-shrink: 0;
+    text-align: right;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--content-heading);
+    white-space: nowrap;
+}
+
+.services-category-price small {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--content-muted);
+}
+
+.services-category-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.services-category-more:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Cartes de services ---------- */
+.service-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    border-radius: 16px;
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.service-card:hover {
+    border-color: rgba(var(--accent-rgb), 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.service-card h4 {
+    font-size: 1.02rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    color: var(--content-heading);
+}
+
+.service-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    display: grid;
+    gap: 0.3rem;
+}
+
+.service-card li {
+    display: flex;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--content-text);
+}
+
+.service-card li i {
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.service-card-foot {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--content-border);
+}
+
+.service-card-price {
+    font-weight: 800;
+    color: var(--content-heading);
+}
+
+.service-card-price small {
+    font-weight: 500;
+    font-size: 0.75rem;
+    color: var(--content-muted);
+}
+
+.service-card-cta {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.service-card-cta:hover {
+    text-decoration: underline;
+}
+
+.services-empty {
+    padding: 2rem;
+    text-align: center;
+    border-radius: 16px;
+    border: 1px dashed var(--content-border);
+    color: var(--content-muted);
+}
+
+.services-footnote {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--content-muted);
+}
+
+@media (max-width: 575.98px) {
+    .services-category-head {
+        flex-wrap: wrap;
+    }
+
+    .services-category-price {
+        text-align: left;
+        width: 100%;
+        padding-left: calc(48px + 1rem);
+    }
+}
+
+/* Place pour la barre de services fixée à droite (ordinateur) */
+@media (min-width: 992px) {
+    .services-browser > .container {
+        padding-right: 5rem;
+    }
+}
