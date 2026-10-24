@@ -775,3 +775,11 @@ body.agence-open {
         height: 70vh;
     }
 }
+
+/* Séparateur dans les colonnes du footer */
+.footer-separator {
+    height: 1px;
+    margin: 0.2rem 0 0.9rem;
+    max-width: 140px;
+    background: var(--shell-border);
+}

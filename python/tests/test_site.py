@@ -103,3 +103,23 @@ def test_empty_formation_cannot_be_bought(monkeypatch):
     lesson = {"content": "", "video_url": None}
     assert not Formation._lesson_has_content(lesson)
     assert Formation._lesson_has_content({"content": "Leçon 1", "video_url": None})
+
+
+def test_footer_header_and_side_menu_follow_the_same_order():
+    html = _client().get("/contact").text
+
+    def order(fragment, hrefs):
+        positions = [fragment.index(f'href="{h}"') for h in hrefs]
+        return positions == sorted(positions)
+
+    footer = html[html.index('class="footer-premium"'):]
+    agence = footer[footer.index(">Agence<"):footer.index(">Ressources<")]
+    assert order(agence, ["/a-propos", "/services", "/contact", "/solutions", "/tarifs", "/espace-client"])
+    assert "Espace membre" in agence and "footer-separator" in agence
+    ressources = footer[footer.index(">Ressources<"):footer.index(">Newsletter<")]
+    assert order(ressources, ["/blog", "/outils", "/support", "/formations", "/boutique", "/projets/brief"])
+
+    navbar = html[html.index('id="mainNavbar"'):html.index("</nav>", html.index('id="mainNavbar"'))]
+    assert order(navbar, ["/a-propos", "/services", "/contact", "/solutions", "/tarifs"])
+    side = html[html.index('class="sidebar-agence-nav"'):html.index("</aside>")]
+    assert order(side, ["/blog", "/outils", "/support", "/formations", "/boutique", "/projets/brief"])

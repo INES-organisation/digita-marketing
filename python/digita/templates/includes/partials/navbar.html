@@ -23,10 +23,10 @@
     <div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
       <ul class="navbar-nav mb-2 mb-lg-0">
         {% for link in [
-            ['/a-propos', 'A propos', 'Apprendre à nous connaître'],
+            ['/a-propos', 'À propos', 'Apprendre à nous connaître'],
             ['/services', 'Services', 'Découvrir nos services'],
             ['/contact', 'Contact', 'Prendre contact'],
-            ['/support', 'Support', 'Nous pouvons vous aider'],
+            ['/solutions', 'Solutions', 'Outils & solutions'],
             ['/tarifs', 'Tarifs', 'Trouver une offre'],
         ] %}
         {% set active = (navPath == link[0]) or navPath.startswith(link[0] ~ '/') %}
