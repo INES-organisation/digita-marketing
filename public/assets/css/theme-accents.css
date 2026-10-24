@@ -47,7 +47,7 @@
 /* Grands bandeaux bleus (héros des pages légales, catégories, formations) :
    noir et or en sombre, dégradé bleu en clair. Le texte y reste clair. */
 [data-theme] section.bg-primary,
-[data-theme] div.bg-primary:not(.badge),
+[data-theme] div.bg-primary:not(.badge):not([class*="bg-opacity"]),
 [data-theme] .hero-section,
 [data-theme] .blog-category-hero,
 [data-theme] .bg-gradient-primary,

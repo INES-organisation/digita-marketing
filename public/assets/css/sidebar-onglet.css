@@ -31,13 +31,12 @@
 .sidebar-onglet-sidebar {
   position: fixed;
   top: 50%;
-  right: 0;
+  right: 16px; /* décalée du bord : la barre de défilement ne la recouvre plus */
   transform: translateY(-50%);
   z-index: 1040;
   background: var(--onglet-bg);
   border: 1px solid var(--onglet-border);
-  border-right: none;
-  border-radius: 1.5em 0 0 1.5em;
+  border-radius: 1.5em;
   box-shadow: -2px 2px 16px rgba(0, 0, 0, 0.18);
   padding: 0.5em 0.25em;
   display: flex;
