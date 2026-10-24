@@ -119,7 +119,8 @@ def test_navigation_order_matches_footer():
     nav = html[html.index('id="mainNavbar"'):html.index('id="sidebar-agence"')]
     agence = html[html.index('id="sidebar-agence"'):html.index('id="sidebar-overlay"')]
     footer = html[html.index('class="footer-premium"'):]
-    assert order(nav, ["À propos<", "Services<", "Contact<", "Solutions<", "Tarifs<", "nav-sep", "Espace membre<"])
-    assert order(agence, [">Blog<", ">Outils<", ">Support<", ">Formations<", ">Boutique<", "<hr>", ">Lancer un projet<"])
+    assert order(nav, ["À propos<", "Services<", "Contact<", "Solutions<", "Tarifs<"])
+    assert "Espace membre" not in nav and "nav-sep" not in nav
+    assert order(agence, [">Blog<", ">Outils<", ">Support<", "<hr>", ">Formations<", ">Boutique<", ">Lancer un projet<"])
     assert order(footer, [">À propos<", ">Services<", ">Contact<", ">Solutions<", ">Tarifs<", "footer-sep", ">Espace membre<",
                           ">Blog<", ">Outils<", ">Support<", ">Formations<", ">Boutique<", "footer-sep", ">Lancer un projet<"])

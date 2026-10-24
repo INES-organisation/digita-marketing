@@ -381,15 +381,6 @@ body::before {
     white-space: nowrap;
 }
 
-/* Séparateur entre les liens de l'agence et « Espace membre » */
-.navbar-site .nav-sep {
-    align-self: center;
-    width: 1px;
-    height: 32px;
-    margin: 0 0.35rem;
-    background: var(--shell-border);
-}
-
 .navbar-site .navbar-toggler {
     width: 40px;
     height: 40px;
@@ -427,12 +418,6 @@ body::before {
     .navbar-site .nav-link {
         align-items: flex-start;
         text-align: left;
-    }
-
-    .navbar-site .nav-sep {
-        width: 100%;
-        height: 1px;
-        margin: 0.35rem 0;
     }
 }
 

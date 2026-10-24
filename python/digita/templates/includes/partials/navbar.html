@@ -28,19 +28,13 @@
             ['/contact', 'Contact', 'Prendre contact'],
             ['/solutions', 'Solutions', 'Nos offres clés en main'],
             ['/tarifs', 'Tarifs', 'Trouver une offre'],
-            ['|', '', ''],
-            ['/espace-client', 'Espace membre', 'Votre compte'],
         ] %}
-        {% if link[0] == '|' %}
-        <li class="nav-item nav-sep" role="separator" aria-hidden="true"></li>
-        {% else %}
         {% set active = (navPath == link[0]) or navPath.startswith(link[0] ~ '/') %}
         <li class="nav-item">
           <a class="nav-link{{ ' active' if active else '' }}" href="{{ link[0] }}"{{ ' aria-current="page"' if active else '' }}>
             {{ link[1] }}<span class="nav-subtitle">{{ link[2] }}</span>
           </a>
         </li>
-        {% endif %}
         {% endfor %}
       </ul>
     </div>

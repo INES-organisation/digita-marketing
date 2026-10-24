@@ -185,6 +185,25 @@
 }
 .audit-input::placeholder { color: rgba(255,255,255,0.22); }
 .audit-input option { background: #0a0f1a; color: #fff; }
+
+/* Thème clair : champs lisibles (texte foncé, fond blanc, bordure grise) */
+[data-theme="light"] .audit-label { color: #4b5563; }
+[data-theme="light"] .audit-input {
+    background: #ffffff;
+    border-color: #d1d5db;
+    color: #111827;
+}
+[data-theme="light"] .audit-input:focus {
+    background: #ffffff;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
+    color: #111827;
+}
+[data-theme="light"] .audit-input::placeholder { color: #9ca3af; }
+[data-theme="light"] .audit-input option,
+[data-theme="light"] #auditModal [style*="background:#0a0f1a"] { background: #ffffff !important; color: #111827; }
+[data-theme="light"] #auditModal [style*="background: rgba(255,255,255,0.1)"] { background: #e5e7eb !important; }
+[data-theme="light"] #auditModal .btn-close-white { filter: none; }
 </style>
 
 <!-- ============================================================
