@@ -103,3 +103,23 @@ def test_empty_formation_cannot_be_bought(monkeypatch):
     lesson = {"content": "", "video_url": None}
     assert not Formation._lesson_has_content(lesson)
     assert Formation._lesson_has_content({"content": "Leçon 1", "video_url": None})
+
+
+def test_navigation_order_matches_footer():
+    """Même ordre partout : Agence (menu horizontal + pied de page) et Ressources (menu agence + pied de page)."""
+    html = _client().get("/contact").text
+
+    def order(fragment, labels):
+        """Chaque libellé apparaît après le précédent (une chaîne absente lève une erreur)."""
+        pos = 0
+        for label in labels:
+            pos = fragment.index(label, pos) + len(label)
+        return True
+
+    nav = html[html.index('id="mainNavbar"'):html.index('id="sidebar-agence"')]
+    agence = html[html.index('id="sidebar-agence"'):html.index('id="sidebar-overlay"')]
+    footer = html[html.index('class="footer-premium"'):]
+    assert order(nav, ["À propos<", "Services<", "Contact<", "Solutions<", "Tarifs<", "nav-sep", "Espace membre<"])
+    assert order(agence, [">Blog<", ">Outils<", ">Support<", ">Formations<", ">Boutique<", "<hr>", ">Lancer un projet<"])
+    assert order(footer, [">À propos<", ">Services<", ">Contact<", ">Solutions<", ">Tarifs<", "footer-sep", ">Espace membre<",
+                          ">Blog<", ">Outils<", ">Support<", ">Formations<", ">Boutique<", "footer-sep", ">Lancer un projet<"])
