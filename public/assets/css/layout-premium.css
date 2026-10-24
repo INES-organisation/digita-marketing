@@ -827,3 +827,39 @@ body.agence-open {
     .my-6 { margin-top: 3rem; margin-bottom: 3rem; }
     .py-6 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
 }
+
+/* ---------- Bandeaux de page partagés ----------
+   .services-hero (Services, Solutions) : titre centré.
+   .page-hero.hero-blog (Blog, Outils, Support) : titre à gauche, grande icône à droite.
+   Repris ici pour que toutes les pages qui les utilisent aient le même rendu. */
+.services-hero {
+    margin-top: 0 !important;
+    padding-top: 120px !important;
+}
+
+.page-hero {
+    margin-top: 0 !important;
+    padding-top: 120px !important;
+}
+
+.page-hero.hero-blog {
+    min-height: 350px;
+    padding: 100px 0 60px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .services-hero {
+        padding-top: 100px !important;
+    }
+
+    .page-hero.hero-blog {
+        min-height: 300px;
+        padding: 80px 0 40px 0;
+    }
+
+    .page-hero h1 {
+        font-size: 2rem !important;
+    }
+}

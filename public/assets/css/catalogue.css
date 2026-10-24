@@ -19,7 +19,56 @@
     }
 }
 
-/* Les ancres du sommaire arrivent sous le menu et la barre des catégories collée */
+/* ---------- Barre des catégories : une ligne collée sous le menu ---------- */
+.catalogue-nav {
+    position: sticky;
+    top: var(--navbar-height);
+    z-index: 900;
+    padding: 0.75rem 0;
+    background: var(--navbar-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--content-border);
+}
+
+.catalogue-nav-track {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 2px;
+}
+
+.catalogue-nav-track::-webkit-scrollbar {
+    display: none;
+}
+
+.catalogue-chip {
+    flex: 0 0 auto;
+    padding: 0.4rem 0.9rem;
+    border-radius: 50px;
+    border: 1px solid var(--content-border);
+    background: var(--content-surface);
+    color: var(--content-text);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.catalogue-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.catalogue-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-gold);
+}
+
+/* Les ancres arrivent sous le menu + la barre des catégories (hauteur mesurée en JS) */
 [id^="cat-"] {
-    scroll-margin-top: calc(var(--navbar-height) + 5rem);
+    scroll-margin-top: calc(var(--navbar-height) + var(--catalogue-nav-h, 64px) + 1.5rem);
 }

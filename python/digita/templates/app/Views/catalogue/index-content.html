@@ -23,27 +23,27 @@
   </div>
 </section>
 
-<!-- Table des matières -->
-<section class="py-4 bg-white sticky-nav shadow-sm">
+<!-- Table des matières : une ligne qui défile, collée sous le menu ; catégorie lue surlignée -->
+<nav class="catalogue-nav" aria-label="Catégories du catalogue" data-catalogue-nav>
   <div class="container">
-    <div class="d-flex flex-wrap gap-2 justify-content-center">
-      <a href="#cat-web" class="btn btn-sm btn-outline-primary">Sites web & landing pages</a>
-      <a href="#cat-ecommerce" class="btn btn-sm btn-outline-primary">E-commerce</a>
-      <a href="#cat-mobile" class="btn btn-sm btn-outline-primary">Applications mobiles</a>
-      <a href="#cat-reseaux" class="btn btn-sm btn-outline-primary">Réseaux sociaux & influence</a>
-      <a href="#cat-identite" class="btn btn-sm btn-outline-primary">Identité visuelle & design</a>
-      <a href="#cat-video" class="btn btn-sm btn-outline-primary">Vidéo & multimédia</a>
-      <a href="#cat-redaction" class="btn btn-sm btn-outline-primary">Rédaction & contenus</a>
-      <a href="#cat-pub" class="btn btn-sm btn-outline-primary">Publicité en ligne</a>
-      <a href="#cat-seo" class="btn btn-sm btn-outline-primary">Référencement (SEO)</a>
-      <a href="#cat-email" class="btn btn-sm btn-outline-primary">Email marketing</a>
-      <a href="#cat-ia" class="btn btn-sm btn-outline-primary">IA & automatisation</a>
-      <a href="#cat-analytics" class="btn btn-sm btn-outline-primary">Analytics & data</a>
-      <a href="#cat-strategie" class="btn btn-sm btn-outline-primary">Conseil & stratégie</a>
-      <a href="#cat-formation" class="btn btn-sm btn-outline-primary">Formation & coaching</a>
+    <div class="catalogue-nav-track" data-catalogue-track>
+      <a href="#cat-web" class="catalogue-chip" data-catalogue-link="cat-web">Sites web & landing pages</a>
+      <a href="#cat-ecommerce" class="catalogue-chip" data-catalogue-link="cat-ecommerce">E-commerce</a>
+      <a href="#cat-mobile" class="catalogue-chip" data-catalogue-link="cat-mobile">Applications mobiles</a>
+      <a href="#cat-reseaux" class="catalogue-chip" data-catalogue-link="cat-reseaux">Réseaux sociaux & influence</a>
+      <a href="#cat-identite" class="catalogue-chip" data-catalogue-link="cat-identite">Identité visuelle & design</a>
+      <a href="#cat-video" class="catalogue-chip" data-catalogue-link="cat-video">Vidéo & multimédia</a>
+      <a href="#cat-redaction" class="catalogue-chip" data-catalogue-link="cat-redaction">Rédaction & contenus</a>
+      <a href="#cat-pub" class="catalogue-chip" data-catalogue-link="cat-pub">Publicité en ligne</a>
+      <a href="#cat-seo" class="catalogue-chip" data-catalogue-link="cat-seo">Référencement (SEO)</a>
+      <a href="#cat-email" class="catalogue-chip" data-catalogue-link="cat-email">Email marketing</a>
+      <a href="#cat-ia" class="catalogue-chip" data-catalogue-link="cat-ia">IA & automatisation</a>
+      <a href="#cat-analytics" class="catalogue-chip" data-catalogue-link="cat-analytics">Analytics & data</a>
+      <a href="#cat-strategie" class="catalogue-chip" data-catalogue-link="cat-strategie">Conseil & stratégie</a>
+      <a href="#cat-formation" class="catalogue-chip" data-catalogue-link="cat-formation">Formation & coaching</a>
     </div>
   </div>
-</section>
+</nav>
 
 <!-- Catalogue Complet -->
 <section class="py-5 bg-white">
@@ -1323,4 +1323,38 @@
   </div>
 </section>
 
+<script>
+(function () {
+  // Hauteur réelle de la barre des catégories : sert au décalage des ancres
+  var nav = document.querySelector('[data-catalogue-nav]');
+  var track = document.querySelector('[data-catalogue-track]');
+  if (!nav) return;
+  function setHeight() { document.documentElement.style.setProperty('--catalogue-nav-h', nav.offsetHeight + 'px'); }
+  setHeight();
+  window.addEventListener('resize', setHeight);
 
+  // Catégorie en cours de lecture surlignée (et ramenée dans la barre si elle est hors champ)
+  var links = document.querySelectorAll('[data-catalogue-link]');
+  var sections = document.querySelectorAll('[id^="cat-"]');
+  function activate(id) {
+    links.forEach(function (a) {
+      var on = a.getAttribute('data-catalogue-link') === id;
+      a.classList.toggle('active', on);
+      if (on) {
+        a.setAttribute('aria-current', 'true');
+        track.scrollTo({ left: a.offsetLeft - track.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' });
+      } else {
+        a.removeAttribute('aria-current');
+      }
+    });
+  }
+  function onScroll() {
+    var limit = nav.getBoundingClientRect().bottom + 80, current = null;
+    sections.forEach(function (sec) { if (sec.getBoundingClientRect().top <= limit) current = sec.id; });
+    if (current) activate(current);
+    else links.forEach(function (a) { a.classList.remove('active'); a.removeAttribute('aria-current'); });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
