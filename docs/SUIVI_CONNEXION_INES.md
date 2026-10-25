@@ -74,3 +74,4 @@ Les packs combinent des services du catalogue (`services_catalog.py`). Les prix 
 | --- | --- |
 | 25/10/2026 | État des lieux en production (§1) ; prospect du 21/10 rattrapé dans le CRM INES ; plan ouvert. |
 | 25/10/2026 | Lots A et B1-B2 livrés : tests Digita (56) et INES (test_booking_planning_sync + Planning + Booking) verts, déployés sur les deux conteneurs. |
+| 25/10/2026 | Vérifié en production de bout en bout : réservation depuis `/diagnostic` → créneau dans INES Booking, événement « appel » dans le Planning (même id), contact « Lead DIGITA » dans le CRM, créneau retiré des disponibilités ; annulation par le lien de l'e-mail → réservation annulée, événement du Planning supprimé, créneau de nouveau proposé. Données de test supprimées. Chatbot : prix réels cités. Générateur de meta : description seule. |
