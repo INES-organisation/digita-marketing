@@ -1,5 +1,6 @@
 """Pages de contenu fixe (contrôleurs About, Services, Catalogue, Contact…)."""
 from .. import services_catalog
+from .. import solutions as solutions_catalog
 from ..realisations import REALISATIONS
 from ..render import base_context, render_page, render_view
 from .common import redirect
@@ -38,9 +39,13 @@ tarifs = _simple("tarifs/index-content", "Tarifs Sites Web, Automatisation & IA 
 boutique = _simple("boutique/index-content", "Boutique : Packs et Services Digitaux | DIGITA", "/assets/css/boutique.css",
                    "Packs et services digitaux DIGITA prêts à commander : sites, visibilité, automatisation et "
                    "formations pour faire grandir votre entreprise.")
-solutions = _simple("solutions/index-content", "Solutions Digitales pour TPE et PME | DIGITA", "/assets/css/solutions.css",
-                    "Solutions digitales DIGITA pour TPE et PME : capter plus de prospects, les suivre sans effort et "
-                    "automatiser devis, RDV et relances. Diagnostic offert.")
+def solutions(request):
+    return render_view(request, "solutions/index-content", {
+        "title": "Packs Clés en Main : Acquisition, E-commerce, RDV | DIGITA",
+        "metaDescription": "Packs clés en main pour TPE/PME : système d'acquisition automatique, boutique "
+                           "e-commerce prête à vendre, prise de RDV, devis automatiques. Diagnostic offert.",
+        "extraCss": ["/assets/css/solutions.css"], "packs": solutions_catalog.PACKS,
+    })
 outils = _simple("outils/index-content", "Outils Marketing Gratuits : Audit SEO, ROI | DIGITA", "/assets/css/outils.css",
                  "Outils gratuits pour booster votre marketing digital : audit SEO, générateur de meta descriptions, "
                  "calculateur ROI, calendrier éditorial.")
@@ -75,6 +80,8 @@ def diagnostic(request):
                            "30 min avec un consultant DIGITA à La Réunion. Sans engagement.",
         "extraCss": ["/assets/css/diagnostic.css"],
         "faqSchema": DIAGNOSTIC_FAQ,
+        # Venu d'un pack de /solutions (« Parler de ce pack ») : rappelé dans le formulaire et la demande.
+        "pack": next((p for p in solutions_catalog.PACKS if p["id"] == request.query_params.get("pack")), None),
         "breadcrumbs": [{"name": "Accueil", "url": base + "/"}, {"name": "Diagnostic gratuit", "url": base + "/diagnostic"}],
     })
 

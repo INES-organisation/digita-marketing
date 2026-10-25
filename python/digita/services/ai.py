@@ -1,4 +1,5 @@
 """Service IA (équivalent de app/Services/AIService.php) : passerelle IA d'INES, audit SEO, ROI."""
+import datetime
 import ipaddress
 import json
 import math
@@ -36,11 +37,23 @@ def chat(messages, system_prompt=None):
 
 
 def generate_meta_description(page_title, page_content):
-    prompt = "Génère une meta description SEO optimisée (max 160 caractères) pour cette page:\n\n"
-    prompt += f"Titre: {page_title}\n"
-    prompt += "Contenu: " + php.substr(page_content, 0, 500) + "...\n"
-    prompt += "\nLa meta description doit être en français, attractive et contenir des mots-clés pertinents."
-    return chat([{"content": prompt}])
+    prompt = "Rédige la meta description SEO de cette page, en français, entre 120 et 155 caractères.\n\n"
+    prompt += f"Titre : {page_title}\n"
+    prompt += "Contenu : " + php.substr(page_content, 0, 500) + "\n\n"
+    prompt += ("Elle contient le mot-clé principal, un bénéfice concret et une incitation à l'action. "
+               "Réponds UNIQUEMENT par la meta description : une seule ligne, sans guillemets, sans titre, "
+               "sans commentaire ni décompte de caractères.")
+    return clean_meta(chat([{"content": prompt}]))
+
+
+def clean_meta(text):
+    """Garde la description seule si l'IA l'entoure malgré tout de Markdown ou de commentaires
+    (cas réel : titre, bloc de code, « Caractères : 158/160 ✓ », liste de points forts)."""
+    lines = [line.strip().strip('`*#>"«» ').strip() for line in (text or "").splitlines()]
+    lines = [line for line in lines if line and not re.match(r"(?i)(meta description|caract|points? forts?|✅|-\s)", line)]
+    candidates = [line for line in lines if 70 <= len(line) <= 200] or lines
+    meta = candidates[0] if candidates else ""
+    return meta if len(meta) <= 160 else meta[:157].rsplit(" ", 1)[0] + "…"
 
 
 def _json_array(text):
@@ -87,18 +100,28 @@ def extract_business_context(conversation_text):
     return _json_array(response.replace("```json", "").replace("```", "").strip())
 
 
-def generate_editorial_calendar(niche, duration="1 mois", frequency="3 par semaine"):
-    prompt = f"Génère un calendrier éditorial pour un blog dans la niche \"{niche}\".\n"
-    prompt += f"Durée : {duration}\n"
-    prompt += f"Fréquence : {frequency}\n\n"
-    prompt += "Pour chaque article, donne :\n"
-    prompt += "- Date de publication\n"
-    prompt += "- Titre de l'article (optimisé SEO)\n"
-    prompt += "- Mot-clé principal\n"
-    prompt += "- Type de contenu (guide, liste, étude de cas, tutoriel, actualité)\n"
-    prompt += "- Résumé en 1 phrase\n\n"
-    prompt += "Réponds en format structuré, clair et actionnable."
-    return chat([{"content": prompt}], None)
+CALENDAR_DAYS = {"2 semaines": 14, "1 mois": 30, "2 mois": 61, "3 mois": 91}
+CALENDAR_PER_WEEK = {"1 par semaine": 1, "2 par semaine": 2, "3 par semaine": 3, "quotidien": 7}
+
+
+def generate_editorial_calendar(niche, duration="1 mois", frequency="3 par semaine", today=None):
+    """Liste d'articles [{date, title, keyword, type, summary}] datés à partir de demain (l'IA, sans
+    date de départ, proposait janvier 2025). Texte brut si l'IA ne renvoie pas de JSON exploitable."""
+    today = today or datetime.date.today()
+    days = CALENDAR_DAYS.get(duration, 30)
+    count = max(1, round(days / 7 * CALENDAR_PER_WEEK.get(frequency, 3)))
+    start = today + datetime.timedelta(days=1)
+    prompt = f"Crée un calendrier éditorial de {count} articles de blog pour la niche « {niche} ».\n"
+    prompt += f"Publication {frequency}, du {start.isoformat()} au {(today + datetime.timedelta(days=days)).isoformat()}.\n"
+    prompt += ("Réponds UNIQUEMENT par un tableau JSON, sans texte autour : "
+               '[{"date": "AAAA-MM-JJ", "title": "titre optimisé SEO", "keyword": "mot-clé principal", '
+               '"type": "guide | liste | étude de cas | tutoriel | actualité", "summary": "résumé en une phrase"}]')
+    text = chat([{"content": prompt}], None)
+    match = re.search(r"\[.*\]", text or "", re.S)
+    items = _json_array(match.group(0)) if match else {}
+    if isinstance(items, list) and items and all(isinstance(i, dict) and i.get("title") for i in items):
+        return sorted(items, key=lambda i: str(i.get("date", "")))
+    return text
 
 
 # ---------------------------------------------------------------- audit SEO

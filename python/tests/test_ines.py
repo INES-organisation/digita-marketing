@@ -48,10 +48,15 @@ def test_lead_goes_to_ines_crm_only_with_key(monkeypatch):
 
 
 def test_ines_failure_never_breaks_the_form(monkeypatch):
+    attempts = []
+
     def boom(*a, **k):
+        attempts.append(1)
         raise httpx.ConnectError("INES arrêté")
     monkeypatch.setattr(ines.httpx, "post", boom)
-    ines._post_lead({"tags": ["DIGITA", "audit"]})  # journalise seulement
+    lead = {"name": "Jeanne", "email": "j@example.com", "tags": ["DIGITA", "audit"]}
+    assert ines._post_lead(lead, delays=(0, 0, 0)) is False  # journalise seulement
+    assert len(attempts) == 3  # nouvelles tentatives avant d'abandonner
 
 
 def test_chat_uses_ines_gateway_when_configured(monkeypatch):

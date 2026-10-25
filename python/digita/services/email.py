@@ -28,6 +28,11 @@ def send_diagnostic_confirmation(to, name):
     return send(to, "Votre diagnostic gratuit DIGITA : demande bien reçue", diagnostic_confirmation_template(name))
 
 
+def send_booking_confirmation(to, name, when, cancel_url):
+    """Confirmation d'un rendez-vous réservé dans INES Booking, avec son lien d'annulation."""
+    return send(to, f"Rendez-vous confirmé : diagnostic DIGITA le {when}", booking_confirmation_template(name, when, cancel_url))
+
+
 def send_new_contact_notification(admin_email, data):
     return send(admin_email, "Nouveau message de contact", contact_notification_template(data))
 
@@ -63,6 +68,43 @@ def diagnostic_confirmation_template(name):
                     <p>Sans attendre, vous pouvez lancer l'audit SEO automatique de votre site :</p>
                     <p style='text-align:center;'><a class='button' href='{base}/outils/audit-seo'>Lancer l'audit SEO gratuit</a></p>
                     <p>Vous préférez appeler ? 06 93 48 78 17.</p>
+                    <p>À très vite,<br>L'équipe DIGITA</p>
+                </div>
+                <div class='footer'>
+                    <p>&copy; {php.date('Y')} DIGITA · La Réunion</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+
+def booking_confirmation_template(name, when, cancel_url):
+    return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .header {{ background: #050505; color: #D4AF37; padding: 30px; text-align: center; }}
+                .content {{ padding: 30px; background: #f8f9fa; }}
+                .when {{ font-size: 1.2em; font-weight: bold; text-align: center; padding: 15px; background: #fff; border: 2px solid #D4AF37; border-radius: 8px; }}
+                .footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <h1>Rendez-vous confirmé</h1>
+                </div>
+                <div class='content'>
+                    <p>Bonjour {php.h(name)},</p>
+                    <p>Votre diagnostic gratuit de 30 minutes avec un consultant DIGITA est réservé :</p>
+                    <p class='when'>{php.h(when)} (heure de La Réunion)</p>
+                    <p>Le consultant vous appelle à l'heure prévue au numéro que vous avez indiqué. Pour en tirer le meilleur, notez vos priorités : trouver des clients, suivre vos devis, gagner du temps.</p>
+                    <p>Un empêchement ? <a href='{php.h(cancel_url)}'>Annuler ce rendez-vous</a>, puis réservez un autre créneau sur <a href='{config.APP_URL.rstrip("/")}/diagnostic'>digita.buzz/diagnostic</a>.</p>
+                    <p>Une question : 06 93 48 78 17.</p>
                     <p>À très vite,<br>L'équipe DIGITA</p>
                 </div>
                 <div class='footer'>

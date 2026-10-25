@@ -55,6 +55,9 @@ get("/facture/:id", payment.invoice)
 
 # ---------------------------------------------------------------- leads / projets
 post("/api/audit-request", leads.submit_audit)
+get("/api/booking/slots", leads.booking_slots)
+get("/rendez-vous/annuler", leads.cancel_booking_form)
+post("/rendez-vous/annuler", leads.cancel_booking)
 post("/contact", leads.submit_contact)
 post("/newsletter/subscribe", leads.subscribe_newsletter)
 get("/projets/brief", projects.brief_form)

@@ -488,8 +488,10 @@ Sans A/B test, suivre avant/après la mise en ligne (25/10/2026) : demandes de d
 
 | Canal | Réponse automatique | Détail |
 | --- | --- | --- |
-| Formulaires de diagnostic du site (home, `/diagnostic`, fenêtre des autres pages) | ✅ **E-mail immédiat** (nouveau) | E-mail « Votre diagnostic gratuit DIGITA : demande bien reçue » : étapes, rappel sous 24 h ouvrées, lien vers l'audit SEO, téléphone. Envoyé par le fournisseur d'e-mails d'INES (nécessite `INES_API_KEY`). Le lead est copié dans le CRM INES (`/api/v1/contacts/ingest`). |
+| Réservation d'un créneau (`/diagnostic`, chatbot) | ✅ **Créneau réel INES Booking** | Le visiteur choisit son heure parmi les disponibilités d'INES ; le rendez-vous apparaît dans `/booking` et `/planning`, e-mail de confirmation avec lien d'annulation (voir [SUIVI_CONNEXION_INES.md](SUIVI_CONNEXION_INES.md)). |
+| Formulaires de diagnostic du site (home, `/diagnostic`, fenêtre des autres pages) | ✅ **E-mail immédiat** | E-mail « Votre diagnostic gratuit DIGITA : demande bien reçue » : étapes, rappel sous 24 h ouvrées, lien vers l'audit SEO, téléphone. Envoyé par le fournisseur d'e-mails d'INES (nécessite `INES_API_KEY`). Le lead est copié dans le CRM INES (`/api/v1/contacts/ingest`). |
 | Messenger, Instagram, Lead Ads Meta, téléphone/SMS (Twilio) | ✅ dans INES, **à configurer** | Module **Acquisition 24/7** d'INES (`/crm/acquisition`) : agent IA qui répond aux prospects, reprise humaine possible. Il faut y rattacher la page Facebook DIGITA et un numéro Twilio. |
+| Chatbot du site | ✅ coordonnées → CRM INES | E-mail ou téléphone donné dans le chat : prospect qualifié et copié dans le CRM INES ; bouton « Réserver un appel » (créneaux INES). |
 | Formulaires du site → agent Acquisition 24/7 | ❌ pas encore | `/contacts/ingest` crée ou enrichit le contact et déclenche le webhook `crm.contact.created`, mais aucun agent ne prend la conversation en charge. |
 
 D'où la promesse affichée sur le site : **« confirmation immédiate par e-mail, rappel sous 24 h ouvrées »** — tenable aujourd'hui. Ne promettre « 24/7 » que lorsque le §21.2 est en place.

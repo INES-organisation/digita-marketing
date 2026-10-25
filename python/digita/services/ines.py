@@ -5,6 +5,7 @@ Sans INES_API_KEY, rien n'est envoyé : le site garde son comportement d'origine
 import logging
 import os
 import threading
+import time
 
 import httpx
 
@@ -26,18 +27,25 @@ def enabled():
 def push_lead(name, email, source, notes="", phone=None):
     """Copie un lead dans le CRM INES, en arrière-plan : la base locale reste la référence et une
     panne d'INES ne bloque jamais le formulaire."""
-    if not enabled() or not email:
+    if not enabled() or not (email or phone):  # un téléphone seul suffit (prospect du chatbot)
         return
-    payload = {"name": name or email, "email": email, "phone": phone or None, "category": "Lead DIGITA",
+    payload = {"name": name or email or phone, "email": email or None, "phone": phone or None, "category": "Lead DIGITA",
                "tags": ["DIGITA", source], "notes": notes or None}
     threading.Thread(target=_post_lead, args=(payload,), daemon=True).start()
 
 
-def _post_lead(payload):
-    try:
-        httpx.post(_url("/api/v1/contacts/ingest"), json=payload, headers=_headers(), timeout=10).raise_for_status()
-    except httpx.HTTPError as e:
-        log.warning("Lead non transmis à INES (%s) : %s", payload["tags"][1], e)
+def _post_lead(payload, delays=(0, 5, 30)):
+    # Un lead perdu ne se rattrape pas (cas réel du 21/10/2026) : trois tentatives espacées, puis
+    # une erreur dans le journal avec l'e-mail du prospect pour le reprendre à la main.
+    for attempt, delay in enumerate(delays, 1):
+        time.sleep(delay)
+        try:
+            httpx.post(_url("/api/v1/contacts/ingest"), json=payload, headers=_headers(), timeout=10).raise_for_status()
+            return True
+        except httpx.HTTPError as e:
+            log.warning("Lead non transmis à INES (%s, essai %d) : %s", payload["tags"][1], attempt, e)
+    log.error("Lead PERDU pour le CRM INES : %s <%s> (%s)", payload["name"], payload["email"], payload["tags"][1])
+    return False
 
 
 def generate(messages, system=None, temperature=0.7, max_tokens=500):
@@ -62,3 +70,39 @@ def send_email(to, subject, html, from_name, from_address=None):
     except httpx.HTTPError as e:
         log.error("E-mail non envoyé par INES à %s : %s", to, e)
         return False
+
+
+# ---------------------------------------------------------------- rendez-vous (INES Booking)
+# Le type de rendez-vous se règle dans INES (/booking) : jours, heures, durée, dates bloquées.
+def booking_slug():
+    return os.getenv("INES_BOOKING_SLUG", "appel-strat-gique")
+
+
+def booking_availability(year, month):
+    """{"event": {...}, "availability": {"2026-10-28": ["09:00", …]}} — créneaux libres du mois.
+    Lève httpx.HTTPError si INES ne répond pas."""
+    r = httpx.get(_url(f"/api/v1/booking/public/{booking_slug()}/availability"),
+                  params={"year": year, "month": month}, timeout=10)
+    r.raise_for_status()
+    return r.json()
+
+
+def book_slot(event_type_id, start_at, name, email, notes=""):
+    """Réserve le créneau dans INES (heure locale de La Réunion, ISO sans fuseau). Renvoie la
+    réservation (avec cancel_token) ; None si le créneau vient d'être pris (409)."""
+    r = httpx.post(_url("/api/v1/booking/slots"), json={
+        "event_type_id": event_type_id, "invitee_name": name, "invitee_email": email,
+        "invitee_notes": notes or None, "start_at": start_at}, timeout=10)
+    if r.status_code == 409:
+        return None
+    r.raise_for_status()
+    return r.json()
+
+
+def cancel_slot(cancel_token):
+    r = httpx.post(_url(f"/api/v1/booking/slots/{cancel_token}/cancel"), timeout=10)
+    if r.status_code == 404:
+        return False
+    r.raise_for_status()
+    return True
+

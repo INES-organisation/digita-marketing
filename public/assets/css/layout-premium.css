@@ -863,3 +863,49 @@ body.agence-open {
         font-size: 2rem !important;
     }
 }
+
+/* ---------- Chatbot : actions rapides et réservation ---------- */
+#chatbot-actions {
+    display: flex;
+    gap: 6px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    overflow-x: auto;
+}
+#chatbot-actions button,
+#chatbot-actions a {
+    flex-shrink: 0;
+    border: 1px solid rgba(var(--gold-rgb), 0.5);
+    background: #fff;
+    color: #020617;
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+#chatbot-actions button:hover,
+#chatbot-actions a:hover { background: rgba(var(--gold-rgb), 0.15); }
+.chat-message .message-content a { color: #1d4ed8; text-decoration: underline; }
+.chat-booking { max-width: 90% !important; }
+.chat-booking form { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.chat-booking select,
+.chat-booking input {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 13px;
+    background: #fff;
+    color: #111827;
+}
+.chat-booking button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    font-weight: 700;
+    background: var(--gold);
+    color: var(--on-gold);
+}
+.chat-booking-error { color: #b91c1c; font-size: 12px; margin: 0; }

@@ -52,6 +52,8 @@
                     </ul>
 
                     <form id="diagnosticForm" novalidate>
+                        {% if pack %}<input type="hidden" name="pack" value="{{ h(pack['title']) }}">
+                        <p class="small mb-3"><span class="badge rounded-pill px-3 py-2" style="background: var(--gold-gradient); color: var(--on-gold);">Pack : {{ h(pack['title']) }}</span></p>{% endif %}
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label text-white-50 small" for="diag-name">Prénom et nom *</label>
@@ -62,8 +64,8 @@
                                 <input type="email" class="form-control glass-card border-glass text-white p-3" id="diag-email" name="email" autocomplete="email" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label text-white-50 small" for="diag-phone">Téléphone (pour fixer le créneau)</label>
-                                <input type="tel" class="form-control glass-card border-glass text-white p-3" id="diag-phone" name="phone" autocomplete="tel">
+                                <label class="form-label text-white-50 small" for="diag-phone">Téléphone * (le consultant vous appelle)</label>
+                                <input type="tel" class="form-control glass-card border-glass text-white p-3" id="diag-phone" name="phone" autocomplete="tel" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label text-white-50 small" for="diag-company">Entreprise</label>
@@ -83,6 +85,23 @@
                                     {% for g in ['Trouver plus de clients', 'Mieux suivre mes prospects et mes devis', 'Gagner du temps grâce à l\'automatisation', 'Refaire mon site internet', 'Autre'] %}<option class="bg-dark">{{ g }}</option>{% endfor %}
                                 </select>
                             </div>
+                            <!-- Créneaux lus en direct dans INES Booking (/api/booking/slots) -->
+                            <div class="col-12" id="diag-slots">
+                                <p class="form-label text-white-50 small mb-2">Votre créneau (heure de La Réunion)</p>
+                                <div class="row g-3">
+                                    <div class="col-md-7">
+                                        <select class="form-select glass-card border-glass text-white p-3" id="diag-date" name="date" aria-label="Jour du rendez-vous" disabled>
+                                            <option value="" class="bg-dark">Chargement des disponibilités…</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <select class="form-select glass-card border-glass text-white p-3" id="diag-time" name="time_slot" aria-label="Heure du rendez-vous" disabled>
+                                            <option value="" class="bg-dark">Heure</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <p class="text-white-50 small mt-2 mb-0" id="diag-slots-note">Laissez vide pour être rappelé sous 24 h ouvrées.</p>
+                            </div>
                             <div class="col-12">
                                 <label class="form-label text-white-50 small" for="diag-website">Site ou page Facebook (facultatif)</label>
                                 <input type="text" class="form-control glass-card border-glass text-white p-3" id="diag-website" name="website" placeholder="https://…">
@@ -97,8 +116,8 @@
 
                     <div id="diagnosticSuccess" class="text-center py-4 d-none" role="status">
                         <i class="bi bi-check-circle text-gold" style="font-size: 3rem;"></i>
-                        <h3 class="h4 text-white fw-bold mt-3">Demande bien reçue !</h3>
-                        <p class="text-white-50 mb-0">Un e-mail de confirmation vient de vous être envoyé. Un consultant vous rappelle sous 24 h ouvrées pour fixer votre créneau de 30 minutes. En attendant, lancez l'<a href="#audit-seo" class="text-gold">audit SEO gratuit</a> de votre site.</p>
+                        <h3 class="h4 text-white fw-bold mt-3" id="diagnosticSuccessTitle">Demande bien reçue !</h3>
+                        <p class="text-white-50 mb-0"><span id="diagnosticSuccessText">Un e-mail de confirmation vient de vous être envoyé. Un consultant vous rappelle sous 24 h ouvrées pour fixer votre créneau de 30 minutes.</span> En attendant, lancez l'<a href="#audit-seo" class="text-gold">audit SEO gratuit</a> de votre site.</p>
                     </div>
 
                     <p class="text-white-50 small mt-4 mb-0">Vous préférez appeler ? <a href="tel:+262693487817" class="text-gold fw-bold">06 93 48 78 17</a></p>
@@ -155,6 +174,36 @@ document.addEventListener('DOMContentLoaded', function() {
         error.textContent = message || "L'envoi a échoué, réessayez ou appelez-nous au 06 93 48 78 17.";
         error.classList.remove('d-none');
     };
+    const dateSelect = document.getElementById('diag-date');
+    const timeSelect = document.getElementById('diag-time');
+    const option = (value, label) => {
+        const o = document.createElement('option');
+        o.value = value; o.textContent = label; o.className = 'bg-dark';
+        return o;
+    };
+    let days = [];
+    fetch('/api/booking/slots')
+        .then(r => r.json())
+        .then(data => {
+            days = data.days || [];
+            dateSelect.innerHTML = '';
+            if (!data.success || !days.length) {
+                document.getElementById('diag-slots').classList.add('d-none');
+                return;
+            }
+            dateSelect.appendChild(option('', 'Être rappelé (sans créneau)'));
+            days.forEach(d => dateSelect.appendChild(option(d.date, d.label)));
+            dateSelect.disabled = false;
+        })
+        .catch(() => document.getElementById('diag-slots').classList.add('d-none'));
+    dateSelect.addEventListener('change', function() {
+        const day = days.find(d => d.date === dateSelect.value);
+        timeSelect.innerHTML = '';
+        timeSelect.appendChild(option('', 'Heure'));
+        (day ? day.slots : []).forEach(s => timeSelect.appendChild(option(s, s.replace(':', ' h '))));
+        timeSelect.disabled = !day;
+        timeSelect.required = !!day;
+    });
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (!form.reportValidity()) return;
@@ -165,6 +214,10 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(r => r.json())
             .then(data => {
                 if (!data.success) return showError(data.message);
+                if (data.booked) {
+                    document.getElementById('diagnosticSuccessTitle').textContent = 'Rendez-vous confirmé !';
+                    document.getElementById('diagnosticSuccessText').textContent = data.message;
+                }
                 form.classList.add('d-none');
                 success.classList.remove('d-none');
             })

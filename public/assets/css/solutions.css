@@ -71,3 +71,18 @@
         font-size: 2rem !important;
     }
 }
+
+/* ==================== PACKS CLÉS EN MAIN ==================== */
+.solution-pack { display: flex; flex-direction: column; }
+.solution-pack-icon {
+    width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--gold-gradient); color: var(--on-gold); font-size: 1.3rem;
+}
+.solution-pack-list li {
+    display: flex; gap: 0.6rem; align-items: baseline; margin-bottom: 0.55rem;
+    color: rgba(255, 255, 255, 0.82);
+}
+.solution-pack-list li span:first-of-type { flex: 1; }
+.solution-pack-price { white-space: nowrap; font-size: 0.85rem; color: var(--gold); font-weight: 600; }
+[data-theme="light"] .solution-pack-list li { color: #374151; }

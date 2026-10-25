@@ -1,0 +1,31 @@
+<section class="diagnostic-hero py-6 bg-premium-glow">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mx-auto">
+                <div class="glass-card border-glass p-4 p-md-5 text-center">
+                    {% if state == 'done' %}
+                    <i class="bi bi-calendar-x text-gold" style="font-size: 3rem;"></i>
+                    <h1 class="h3 fw-bold text-white mt-3">Rendez-vous annulé</h1>
+                    <p class="text-white-50">Votre créneau est libéré. Vous pouvez en réserver un autre quand vous voulez.</p>
+                    <a href="/diagnostic#consultant" class="btn-premium btn-premium-gold px-4 py-3">Choisir un autre créneau</a>
+                    {% elif state == 'error' %}
+                    <i class="bi bi-exclamation-circle text-gold" style="font-size: 3rem;"></i>
+                    <h1 class="h3 fw-bold text-white mt-3">Annulation impossible</h1>
+                    <p class="text-white-50">{{ h(message) }}</p>
+                    <a href="/diagnostic#consultant" class="btn-premium btn-premium-gold px-4 py-3">Voir les créneaux</a>
+                    {% else %}
+                    <i class="bi bi-calendar-event text-gold" style="font-size: 3rem;"></i>
+                    <h1 class="h3 fw-bold text-white mt-3">Annuler votre diagnostic ?</h1>
+                    <p class="text-white-50">Le créneau sera libéré pour quelqu'un d'autre.</p>
+                    <form action="/rendez-vous/annuler" method="POST">
+                        {{ CsrfMiddleware_field() }}
+                        <input type="hidden" name="token" value="{{ h(token) }}">
+                        <button type="submit" class="btn-premium btn-premium-gold px-4 py-3">Oui, annuler le rendez-vous</button>
+                    </form>
+                    <p class="text-white-50 small mt-3 mb-0">Plutôt décaler ? Annulez, puis <a href="/diagnostic#consultant" class="text-gold">choisissez un autre créneau</a>.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

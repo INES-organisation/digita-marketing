@@ -122,7 +122,7 @@ def test_navigation_order_matches_footer():
     assert order(nav, ["À propos<", "Services<", "Contact<", "Solutions<", "Tarifs<"])
     assert "Espace membre" not in nav and "nav-sep" not in nav
     assert order(agence, [">Blog<", ">Outils<", ">Support<", "<hr>", ">Formations<", ">Boutique<", ">Lancer un projet<"])
-    assert order(footer, [">À propos<", ">Services<", ">Contact<", ">Solutions<", ">Tarifs<", "footer-sep", ">Espace membre<",
+    assert order(footer, [">À propos<", ">Services<", ">Contact<", ">Solutions<", ">Tarifs<", "footer-sep", ">Diagnostic gratuit<", ">Espace membre<",
                           ">Blog<", ">Outils<", ">Support<", ">Formations<", ">Boutique<", "footer-sep", ">Lancer un projet<"])
 
 

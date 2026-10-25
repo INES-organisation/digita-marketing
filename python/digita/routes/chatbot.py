@@ -1,17 +1,16 @@
 """Chatbot IA (ChatbotController.php)."""
 import logging
+import re
+import threading
 
+import httpx
 from starlette.concurrency import run_in_threadpool
 from starlette.responses import Response
 
-from .. import db, php, security
+from .. import booking, db, php, security
 from ..services import agents, ai, ines
 
 log = logging.getLogger("digita.chatbot")
-
-SLOTS = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "14:00", "14:30",
-         "15:00", "15:30", "16:00", "16:30", "17:00"]
-
 
 def _json(payload):
     return Response(php.json_encode(payload), media_type="application/json")
@@ -41,6 +40,8 @@ def _send_message(user_message, session_id, page, user_id, ip):
             conv_id = conv["id"]
         db.execute("INSERT INTO chatbot_messages (conversation_id, role, content) VALUES (?, 'user', ?)",
                    [conv_id, user_message])
+        if CONTACT_RX.search(user_message):  # coordonnées données dans le chat → CRM INES, sans ralentir la réponse
+            threading.Thread(target=_capture_lead, args=(conv_id, user_message), daemon=True).start()
         history = db.fetch_all("SELECT role, content FROM chatbot_messages WHERE conversation_id = ? "
                                "ORDER BY created_at DESC, id DESC LIMIT 10", [conv_id])
         history.reverse()
@@ -81,6 +82,26 @@ async def qualify(request):
     return _json({"success": True})
 
 
+# E-mail, ou téléphone français / réunionnais (0692 12 34 56, +262 692 12 34 56…).
+EMAIL_RX = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+PHONE_RX = re.compile(r"(?:\+33|\+262|0)\s?[1-9](?:[\s.-]?\d{2}){4}")
+CONTACT_RX = re.compile(EMAIL_RX.pattern + "|" + PHONE_RX.pattern)
+
+
+def _capture_lead(conv_id, user_message):
+    """Prospect du chatbot : qualifié par l'IA (lead_qualifications) puis copié dans le CRM INES.
+    Si l'IA échoue, les coordonnées lues dans le message suffisent."""
+    info = _try_qualify_lead(conv_id) or {}
+    mail = info.get("email") or (EMAIL_RX.search(user_message) or [None])[0]
+    phone = info.get("phone") or (PHONE_RX.search(user_message) or [None])[0]
+    messages = db.fetch_all("SELECT role, content FROM chatbot_messages WHERE conversation_id = ? "
+                            "ORDER BY created_at ASC, id ASC", [conv_id])
+    transcript = "".join(("Visiteur" if m["role"] == "user" else "Assistant") + " : " + m["content"] + "\n"
+                         for m in messages)
+    summary = ", ".join(f"{k} : {info[k]}" for k in ("company", "project_type", "budget", "urgency") if info.get(k))
+    ines.push_lead(info.get("name"), mail, "chatbot", (summary + "\n\n" if summary else "") + transcript[-3000:], phone)
+
+
 def _try_qualify_lead(conv_id):
     messages = db.fetch_all("SELECT role, content FROM chatbot_messages WHERE conversation_id = ? "
                             "ORDER BY created_at ASC, id ASC", [conv_id])
@@ -104,45 +125,40 @@ def _try_qualify_lead(conv_id):
             db.execute("INSERT INTO lead_qualifications (conversation_id, name, email, phone, company, project_type, "
                        "budget, urgency, score) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [conv_id] + values)
         db.execute("UPDATE chatbot_conversations SET is_qualified = 1 WHERE id = ?", [conv_id])
+        return info
     except Exception as e:  # noqa: BLE001
         log.error("Qualification lead échouée: %s", e)
 
 
 async def appointment(request):
+    """Réservation depuis le chat : créneau réel dans INES Booking (voir booking.py)."""
     form = await request.form()
     name = php.trim(form.get("name", ""))
     mail = php.trim(form.get("email", ""))
     phone = php.trim(form.get("phone", ""))
-    date = form.get("date", "")
-    slot = form.get("time_slot", "")
+    date = php.trim(form.get("date", ""))
+    slot = php.trim(form.get("time_slot", ""))
     subject = php.trim(form.get("subject", ""))
-    if php.empty(name) or php.empty(mail) or php.empty(date) or php.empty(slot):
-        return _json({"success": False, "error": "Champs obligatoires manquants (nom, email, date, créneau)"})
+    if php.empty(name) or php.empty(mail) or php.empty(phone) or php.empty(date) or php.empty(slot):
+        return _json({"success": False, "error": "Champs obligatoires manquants (nom, e-mail, téléphone, date, créneau)"})
     if not security.valid_email(mail):
         return _json({"success": False, "error": "Email invalide"})
-    user_id = request.session.get("user_id")
-    return await run_in_threadpool(_book, name, mail, phone, date, slot, subject, user_id)
+    status, message = await run_in_threadpool(booking.book, date, slot, name, mail, phone,
+                                              "Réservé depuis le chatbot" + (f" : {subject}" if subject else ""))
+    if status != booking.BOOKED:
+        return _json({"success": False, "error": message + (" Appelez-nous au 06 93 48 78 17." if status == booking.DOWN else "")})
+    return _json({"success": True, "message": message})
 
 
-def _book(name, mail, phone, date, slot, subject, user_id):
-    # Une date invalide fait échouer la requête comme en MySQL strict (erreur PHP non interceptée).
-    existing = db.fetch("SELECT id FROM appointments WHERE date = ? AND time_slot = ? AND status != 'cancelled'",
-                        [date, slot])
-    if existing:
-        return _json({"success": False, "error": "Ce créneau est déjà pris. Veuillez en choisir un autre."})
-    db.execute("INSERT INTO appointments (name, email, phone, date, time_slot, subject, user_id) "
-               "VALUES (?, ?, ?, ?, ?, ?, ?)", [name, mail, phone, date, slot, subject, user_id])
-    ines.push_lead(name, mail, "rendez-vous", f"Rendez-vous le {date} à {slot} : {subject or ''}", phone)
-    return _json({"success": True,
-                  "message": "Rendez-vous confirmé le " + php.date("d/m/Y", php.strtotime(date)) + " à " + slot})
-
-
-def slots(request):
-    date = request.query_params.get("date") if "date" in request.query_params \
-        else php.date("Y-m-d", php.strtotime("+1 day"))
-    booked = {r["time_slot"] for r in db.fetch_all(
-        "SELECT time_slot FROM appointments WHERE date = ? AND status != 'cancelled'", [date])}
-    return _json({"success": True, "date": date, "slots": [s for s in SLOTS if s not in booked]})
+async def slots(request):
+    """Créneaux libres lus dans INES Booking : tous les jours à venir (`days`), et ceux de `date`."""
+    try:
+        days, _ = await run_in_threadpool(booking.available_days)
+    except httpx.HTTPError as e:
+        log.error("Créneaux INES indisponibles : %s", e)
+        return _json({"success": False, "days": [], "slots": []})
+    date = request.query_params.get("date") or (next(iter(days), ""))
+    return _json({"success": True, "date": date, "slots": days.get(date, []), "days": booking.days_for_display(days)})
 
 
 def fallback_reply(message):

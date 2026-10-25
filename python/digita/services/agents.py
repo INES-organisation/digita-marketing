@@ -47,20 +47,45 @@ def _route_intention(message, history):
     return php.trim(ai.chat([], prompt)).lower()
 
 
+def _knowledge():
+    """Offres et prix réels du site (mêmes sources que /services, l'accueil et /solutions) : le
+    chatbot répond avec, au lieu de « le prix dépend… »."""
+    from .. import services_catalog, solutions
+    from ..realisations import REALISATIONS
+    lines = ["Services (prix d'entrée publics, page /services et /tarifs) :"]
+    lines += [f"- {c['title']} : {c['from_price']}" for c in services_catalog.categories()]
+    lines.append("Offres phares (accueil) :")
+    lines += [f"- {r['title']} : {r['price']}" + (f" ({r['price_note']})" if r.get("price_note") else "")
+              for r in REALISATIONS]
+    lines.append("Packs clés en main (page /solutions, tarif établi après le diagnostic) :")
+    lines += [f"- {s['title']} : {s['promise']}" for s in solutions.PACKS]
+    return "\n".join(lines)
+
+
 def _build_full_prompt(agent, brief):
-    prompt = f"IDENTITÉ : {agent['prompt']}\n\n"
+    prompt = f"IDENTITÉ : {agent['prompt']}\n"
+    prompt += ("Tu es l'assistant du site digita.buzz : DIGITA, agence IA et automatisation à La Réunion, pour les "
+               "dirigeants de TPE/PME (artisans, santé, beauté, immobilier, tourisme, commerces).\n\n")
     prompt += "CONTEXTE CLIENT ACTUEL :\n"
     if not brief:
-        prompt += "- Aucun brief établi. Ton objectif est de poser 1 question stratégique pour mieux comprendre leur business.\n"
+        prompt += "- Aucun brief établi. Pose 1 question pour comprendre leur activité et leur priorité.\n"
     else:
         for k, v in brief.items():
             if php.t(v):
                 prompt += f"- {k} : {php.strval(v)}\n"
-    prompt += "\nDIRECTIVES :\n"
-    prompt += "1. Reste dans ton rôle d'expert.\n"
-    prompt += "2. Sois proactif : si une info manque pour faire un devis, demande-la avec élégance.\n"
-    prompt += "3. Ton de voix : Premium, Cabinet de Conseil, Professionnel, Rassurant.\n"
-    prompt += "4. Si l'utilisateur semble prêt, propose un rendez-vous (/contact).\n"
+    prompt += "\nCE QUE DIGITA PROPOSE (seules informations chiffrées autorisées) :\n" + _knowledge() + "\n"
+    prompt += ("\nPOUR AVANCER :\n"
+               "- Diagnostic gratuit de 30 min par téléphone avec un consultant : le visiteur réserve un créneau réel "
+               "avec le bouton « Réserver un appel » de ce chat, ou sur /diagnostic.\n"
+               "- Audit SEO automatique et gratuit : /outils/audit-seo. Téléphone : 06 93 48 78 17.\n")
+    prompt += "\nRÈGLES :\n"
+    prompt += "1. Réponds en français, en 2 à 5 phrases courtes. Pas de titres ni de listes longues ; le gras avec parcimonie.\n"
+    prompt += "2. Quand on te demande un prix, donne le prix d'entrée réel ci-dessus (« à partir de »), puis propose le diagnostic.\n"
+    prompt += ("3. N'invente jamais de chiffre (résultats, pourcentages, nombre de clients, délais non listés), ni de "
+               "référence client, ni de rendez-vous : pour réserver, renvoie vers le bouton « Réserver un appel ».\n")
+    prompt += ("4. Si le visiteur donne son e-mail ou son téléphone, remercie-le et confirme qu'un consultant le "
+               "rappelle sous 24 h ouvrées.\n")
+    prompt += "5. Parle de résultats concrets (clients trouvés, devis suivis, temps gagné) plutôt que de technologie.\n"
     return prompt
 
 
