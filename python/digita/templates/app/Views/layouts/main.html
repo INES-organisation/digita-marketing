@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ h(coalesce(title, pageTitle, 'Digita Marketing - Agence Marketing Digital, Automatisation & IA')) }}</title>
+    <title>{{ h(coalesce(title, pageTitle, 'Agence IA & Automatisation à La Réunion | DIGITA')) }}</title>
     <script>try{var t=localStorage.getItem('digita-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.setAttribute('data-bs-theme',t);}}catch(e){}</script>
     <link rel="icon" type="image/png" href="/assets/images/digita.png">
     <meta name="theme-color" content="#020617">
     <link rel="manifest" href="/manifest.json">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{{ h(coalesce(metaDescription, 'Digita Marketing : agence spécialisée en marketing digital, automatisation et intelligence artificielle à La Réunion. Formations, services et solutions sur mesure.')) }}">
+    <meta name="description" content="{{ h(coalesce(metaDescription, 'DIGITA, agence IA et automatisation à La Réunion : sites qui vendent, suivi des prospects, devis et RDV automatisés pour TPE/PME. Diagnostic gratuit.')) }}">
     <meta name="keywords" content="{{ h(coalesce(metaKeywords, 'marketing digital, automatisation, intelligence artificielle, IA, formation, SEO, La Réunion')) }}">
-    <meta name="author" content="Digita Marketing">
+    <meta name="author" content="DIGITA">
     {% if const('GOOGLE_SITE_VERIFICATION') %}<meta name="google-site-verification" content="{{ h(const('GOOGLE_SITE_VERIFICATION')) }}">{% endif %}
     {% if const('BING_SITE_VERIFICATION') %}<meta name="msvalidate.01" content="{{ h(const('BING_SITE_VERIFICATION')) }}">{% endif %}
     <meta name="robots" content="{{ coalesce(metaRobots, 'index, follow') }}">
@@ -21,16 +21,16 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="{{ coalesce(ogType, 'website') }}">
     <meta property="og:url" content="{{ h(canonicalUrl) }}">
-    <meta property="og:title" content="{{ h(coalesce(ogTitle, coalesce(title, 'Digita Marketing'))) }}">
-    <meta property="og:description" content="{{ h(coalesce(ogDescription, coalesce(metaDescription, 'Digita Marketing : agence spécialisée en marketing digital, automatisation et intelligence artificielle à La Réunion.'))) }}">
+    <meta property="og:title" content="{{ h(coalesce(ogTitle, coalesce(title, 'DIGITA'))) }}">
+    <meta property="og:description" content="{{ h(coalesce(ogDescription, coalesce(metaDescription, 'DIGITA, agence IA et automatisation à La Réunion pour TPE/PME.'))) }}">
     <meta property="og:image" content="{{ h(coalesce(ogImage, (cat(cat(cat((('https' if ((isset(_SERVER['HTTPS'])) and (_SERVER['HTTPS'] == 'on')) else 'http')), '://'), (coalesce(_SERVER['HTTP_HOST'], 'digita.buzz'))), '/assets/images/digita.png')))) }}">
-    <meta property="og:site_name" content="Digita Marketing">
+    <meta property="og:site_name" content="DIGITA">
     <meta property="og:locale" content="fr_FR">
     
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="{{ coalesce(twitterCard, 'summary_large_image') }}">
-    <meta name="twitter:title" content="{{ h(coalesce(ogTitle, coalesce(title, 'Digita Marketing'))) }}">
-    <meta name="twitter:description" content="{{ h(coalesce(ogDescription, coalesce(metaDescription, 'Digita Marketing : agence spécialisée en marketing digital, automatisation et intelligence artificielle à La Réunion.'))) }}">
+    <meta name="twitter:title" content="{{ h(coalesce(ogTitle, coalesce(title, 'DIGITA'))) }}">
+    <meta name="twitter:description" content="{{ h(coalesce(ogDescription, coalesce(metaDescription, 'DIGITA, agence IA et automatisation à La Réunion pour TPE/PME.'))) }}">
     <meta name="twitter:image" content="{{ h(coalesce(ogImage, (cat(cat(cat((('https' if ((isset(_SERVER['HTTPS'])) and (_SERVER['HTTPS'] == 'on')) else 'http')), '://'), (coalesce(_SERVER['HTTP_HOST'], 'digita.buzz'))), '/assets/images/digita.png')))) }}">
     
     <!-- Bootstrap CSS -->
@@ -73,16 +73,17 @@
     {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Digita Marketing",
+        "name": "DIGITA",
+        "alternateName": "Digita Marketing",
         "url": "{{ cat(cat((('https' if ((isset(_SERVER['HTTPS'])) and (_SERVER['HTTPS'] == 'on')) else 'http')), '://'), (coalesce(_SERVER['HTTP_HOST'], 'digita.buzz'))) }}",
         "logo": "{{ cat(cat((('https' if ((isset(_SERVER['HTTPS'])) and (_SERVER['HTTPS'] == 'on')) else 'http')), '://'), (coalesce(_SERVER['HTTP_HOST'], 'digita.buzz'))) }}/assets/images/digita.png",
-        "description": "Agence spécialisée en marketing digital, automatisation et intelligence artificielle à La Réunion.",
+        "description": "Agence IA et automatisation à La Réunion : sites web, marketing digital, automatisation et conseil stratégique pour TPE/PME.",
         "address": {
             "@type": "PostalAddress",
             "addressLocality": "La Réunion",
             "addressCountry": "FR"
         },
-        "sameAs": []
+        "sameAs": ["https://www.facebook.com/profile.php?id=61593931724997"]
     }
     </script>
     
@@ -96,11 +97,11 @@
         {% if (not empty(schemaData['featured_image'])) %}        "image": "{{ h(schemaData['featured_image']) }}",
         {% endif %}        "author": {
             "@type": "Organization",
-            "name": "Digita Marketing"
+            "name": "DIGITA"
         },
         "publisher": {
             "@type": "Organization",
-            "name": "Digita Marketing",
+            "name": "DIGITA",
             "logo": {
                 "@type": "ImageObject",
                 "url": "{{ cat(cat((('https' if ((isset(_SERVER['HTTPS'])) and (_SERVER['HTTPS'] == 'on')) else 'http')), '://'), (coalesce(_SERVER['HTTP_HOST'], 'digita.buzz'))) }}/assets/images/digita.png"
@@ -124,7 +125,7 @@
         "description": "{{ h(coalesce(schemaData['meta_description'], mb_strimwidth(strip_tags(coalesce(schemaData['description'], '')), 0, 155, '...'))) }}",
         "provider": {
             "@type": "Organization",
-            "name": "Digita Marketing"
+            "name": "DIGITA"
         },
         {% if (not empty(schemaData['image'])) %}        "image": "{{ h(schemaData['image']) }}",
         {% endif %}        "educationalLevel": "{{ h(coalesce(schemaData['level'], 'debutant')) }}",

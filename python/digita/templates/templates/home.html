@@ -1,4 +1,4 @@
-{% set _ns = namespace() %}{% set pageTitle = 'DIGITA | Écosystème Digital Intelligent & Automatisé' %}{% set metaDescription = "DIGITA propulse votre croissance grâce à la convergence de l'Intelligence Artificielle générative, de l'automatisation avancée et du conseil stratégique haute performance." %}{% set metaKeywords = 'conseil stratégie digitale, automatisation IA, agents IA entreprise, cabinet conseil digital premium, transformation numérique' %}{% set extraCss = ['/assets/css/premium-preview.css', '/assets/css/home.css'] %}{% set content_ %}
+{% set _ns = namespace() %}{% set pageTitle = 'Agence IA & Automatisation à La Réunion | DIGITA' %}{% set metaDescription = "Agence IA et automatisation à La Réunion : sites qui vendent, suivi des prospects, devis et RDV automatisés pour TPE/PME. Diagnostic gratuit de 30 min." %}{% set metaKeywords = 'agence IA La Réunion, automatisation entreprise Réunion, agence web La Réunion, marketing digital Réunion, diagnostic digital gratuit' %}{% set extraCss = ['/assets/css/premium-preview.css', '/assets/css/home.css'] %}{% set content_ %}
 <!-- ============================================================
      MODAL DIAGNOSTIC PREMIUM — Bootstrap 5.3
      ============================================================ -->
@@ -46,24 +46,12 @@
                 </div>
               </li>
             </ul>
-
-            <!-- Social Proof -->
-            <div class="p-3 rounded-3" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);">
-              <div class="d-flex align-items-center gap-2 mb-2">
-                <div class="d-flex">
-                  {% for s in php_upto(0, 5, false) %}                  <i class="bi bi-star-fill" style="color:var(--gold); font-size:0.75rem;"></i>
-                  {% endfor %}                </div>
-                <span style="color:rgba(255,255,255,0.5); font-size:0.75rem;">+250 dirigeants accompagnés</span>
-              </div>
-              <p style="color:rgba(255,255,255,0.6); font-size:0.78rem; margin:0; font-style:italic;">"En 30 minutes, DIGITA a identifié 3 leviers que nous n'avions pas vus depuis 2 ans."</p>
-              <div style="color:rgba(255,255,255,0.35); font-size:0.72rem; margin-top:6px;">— Thomas M., CEO · SaaS B2B</div>
-            </div>
           </div>
 
-          <!-- Urgency indicator -->
+          <!-- Contact direct : le dirigeant préfère souvent appeler -->
           <div class="d-flex align-items-center gap-2 mt-4" style="background: rgba(var(--gold-rgb),0.08); border: 1px solid rgba(var(--gold-rgb),0.2); border-radius: 10px; padding: 10px 14px;">
-            <span class="rounded-circle" style="width:8px; height:8px; background:var(--gold); box-shadow: 0 0 6px var(--gold); animation: pulse 2s infinite; flex-shrink:0;"></span>
-            <span style="color:rgba(255,255,255,0.7); font-size:0.75rem;"><strong style="color:var(--gold);">3 créneaux disponibles</strong> cette semaine</span>
+            <i class="bi bi-telephone" style="color:var(--gold); font-size:0.85rem;"></i>
+            <span style="color:rgba(255,255,255,0.7); font-size:0.75rem;">Vous préférez appeler ? <a href="tel:+262693487817" style="color:var(--gold); font-weight:700; text-decoration:none;">06 93 48 78 17</a></span>
           </div>
         </div>
 
@@ -73,7 +61,7 @@
             <div class="d-flex justify-content-between align-items-start mb-4">
               <div>
                 <h4 class="fw-bold text-white mb-1" style="font-family:'Outfit';">Réservez votre créneau</h4>
-                <p class="mb-0" style="color:rgba(255,255,255,0.45); font-size:0.82rem;">Gratuit · Sans engagement · Réponse sous 2h</p>
+                <p class="mb-0" style="color:rgba(255,255,255,0.45); font-size:0.82rem;">Gratuit · Sans engagement · Confirmation immédiate par e-mail</p>
               </div>
               <button type="button" class="btn-close btn-close-white opacity-50" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -90,19 +78,19 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="audit-label">Prénom & Nom *</label>
-                  <input type="text" class="audit-input" placeholder="Jean Dupont" required>
+                  <input type="text" name="name" class="audit-input" placeholder="Jean Dupont" autocomplete="name" required>
                 </div>
                 <div class="col-md-6">
                   <label class="audit-label">Email Professionnel *</label>
-                  <input type="email" class="audit-input" placeholder="jean@entreprise.fr" required>
+                  <input type="email" name="email" class="audit-input" placeholder="jean@entreprise.fr" autocomplete="email" required>
                 </div>
                 <div class="col-md-6">
                   <label class="audit-label">Entreprise</label>
-                  <input type="text" class="audit-input" placeholder="Ma Société SAS">
+                  <input type="text" name="company" class="audit-input" placeholder="Ma Société SAS" autocomplete="organization">
                 </div>
                 <div class="col-md-6">
                   <label class="audit-label">Secteur d'activité</label>
-                  <select class="audit-input">
+                  <select name="sector" class="audit-input">
                     <option value="" style="background:#0a0f1a;">Choisir...</option>
                     <option value="ecommerce" style="background:#0a0f1a;">E-Commerce / Retail</option>
                     <option value="services" style="background:#0a0f1a;">Services B2B / SaaS</option>
@@ -115,7 +103,7 @@
                 </div>
                 <div class="col-12">
                   <label class="audit-label">Votre principal objectif</label>
-                  <select class="audit-input">
+                  <select name="goal" class="audit-input">
                     <option value="" style="background:#0a0f1a;">Choisir votre priorité...</option>
                     <option value="acquisition" style="background:#0a0f1a;">Augmenter mon acquisition client</option>
                     <option value="automatisation" style="background:#0a0f1a;">Automatiser mes processus</option>
@@ -129,6 +117,7 @@
                   <button type="submit" class="btn w-100 fw-black py-3" style="background: var(--gold-gradient); color: var(--on-gold); border-radius: 50px; font-size: 0.95rem; letter-spacing: 1.5px; border: none; box-shadow: 0 8px 30px rgba(var(--gold-rgb),0.35); transition: all 0.3s ease; text-transform: uppercase;">
                     <i class="bi bi-calendar-check me-2"></i>RÉSERVER MON DIAGNOSTIC GRATUIT
                   </button>
+                  <p id="auditError" class="text-danger small mt-2 mb-0 d-none" role="alert"></p>
                 </div>
               </div>
             </form>
@@ -139,7 +128,7 @@
                 <i class="bi bi-check-lg" style="color:#34d399; font-size:2.5rem;"></i>
               </div>
               <h4 class="text-white fw-bold mb-2" style="font-family:'Outfit';">Demande confirmée !</h4>
-              <p style="color:rgba(255,255,255,0.5); font-size:0.9rem; max-width:280px; margin:0 auto;">Notre équipe vous contactera dans les <strong style="color:var(--gold);">2 heures ouvrées</strong> pour finaliser votre créneau.</p>
+              <p style="color:rgba(255,255,255,0.5); font-size:0.9rem; max-width:280px; margin:0 auto;">Un e-mail de confirmation vient de vous être envoyé. Un consultant vous rappelle <strong style="color:var(--gold);">sous 24 h ouvrées</strong> pour fixer votre créneau.</p>
             </div>
 
             <div class="mt-3 text-center">
@@ -223,43 +212,43 @@
                 <!-- Slogan -->
                 <p class="hero-slogan">Faites <span class="hero-buzz">Buzzer</span> votre Business&nbsp;!</p>
 
-                <!-- Badge Prestige -->
+                <!-- Badge : requête locale dans le premier écran -->
                 <div class="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill mb-3" style="background: rgba(var(--gold-rgb),0.1); border: 1px solid rgba(var(--gold-rgb),0.3);">
                     <span class="rounded-circle d-inline-block" style="width:8px; height:8px; background:var(--gold); box-shadow: 0 0 8px var(--gold); animation: pulse 2s infinite;"></span>
-                    <span style="color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;">Cabinet de Conseil Stratégique Premium</span>
+                    <span style="color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 700;">Agence IA &amp; Automatisation — La Réunion</span>
                 </div>
 
                 <!-- Title Principal -->
                 <h1 class="fw-black mb-3" style="font-family: 'Outfit', sans-serif; font-size: clamp(2.6rem, 5.5vw, 4.6rem); line-height: 1.08; color: #fff;">
                     DIGITA —<br>
-                    Un Écosystème<br>
-                    <span style="background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 40%, #2563eb 80%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: titleShine 4s ease-in-out infinite;">Intelligent & Automatisé</span>
+                    Votre Croissance, Accélérée.<br>
+                    <span style="background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 40%, #2563eb 80%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: titleShine 4s ease-in-out infinite;">Votre Temps, Retrouvé.</span>
                 </h1>
 
                 <p class="mb-4" style="color: rgba(255,255,255,0.78); font-size: 1.12rem; line-height: 1.8; max-width: 560px;">
-                    Nous fusionnons l'<strong style="color: var(--gold);">Intelligence Artificielle</strong>, l'<strong style="color: #60a5fa;">automatisation avancée</strong> et le conseil stratégique pour propulser votre activité vers de nouveaux sommets — sans friction technique.
+                    Nous concevons des <strong style="color: var(--gold);">systèmes intelligents</strong> qui <strong style="color: #60a5fa;">captent, suivent et convertissent vos prospects</strong> — pendant que vous dirigez votre entreprise à La Réunion.
                 </p>
 
                 <!-- CTAs -->
                 <div class="d-flex flex-wrap gap-3 mb-4">
                     <button class="btn fw-bold px-5 py-3" data-bs-toggle="modal" data-bs-target="#auditModal" style="background: var(--gold-gradient); color: var(--on-gold); border-radius: 50px; font-size: 1rem; box-shadow: 0 0 30px rgba(var(--gold-rgb),0.4); transition: all 0.3s ease; border: none;">
-                        <i class="bi bi-lightning-charge-fill me-2"></i>Diagnostic Gratuit
+                        <i class="bi bi-lightning-charge-fill me-2"></i>Réserver mon diagnostic gratuit
                     </button>
                     <a href="#ecosysteme" class="btn fw-bold px-4 py-3" style="background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(0,210,255,0.2)); color: #fff; border: 1px solid rgba(37,99,235,0.5); border-radius: 50px; font-size: 1rem; transition: all 0.3s ease; text-decoration: none;">
-                        <i class="bi bi-grid-3x3-gap me-2"></i>Explorer l'Écosystème
+                        <i class="bi bi-grid-3x3-gap me-2"></i>Voir ce qu'on automatise
                     </a>
                 </div>
 
-                <!-- Trust Signals -->
+                <!-- Réassurance : uniquement des faits vérifiables -->
                 <div class="d-flex flex-wrap gap-4 align-items-center">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="fw-black" style="color: var(--gold); font-size: 1.5rem; font-family: 'Outfit';">+250</span>
-                        <span style="color: rgba(255,255,255,0.5); font-size: 0.82rem; line-height: 1.3;">Clients<br>accompagnés</span>
+                        <span class="fw-black" style="color: var(--gold); font-size: 1.5rem; font-family: 'Outfit';">974</span>
+                        <span style="color: rgba(255,255,255,0.5); font-size: 0.82rem; line-height: 1.3;">Basé à<br>La Réunion</span>
                     </div>
                     <div style="width: 1px; height: 36px; background: rgba(255,255,255,0.12);"></div>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="fw-black" style="color: var(--gold); font-size: 1.5rem; font-family: 'Outfit';">x2.5</span>
-                        <span style="color: rgba(255,255,255,0.5); font-size: 0.82rem; line-height: 1.3;">ROI moyen<br>constaté</span>
+                        <span class="fw-black" style="color: var(--gold); font-size: 1.5rem; font-family: 'Outfit';">30 min</span>
+                        <span style="color: rgba(255,255,255,0.5); font-size: 0.82rem; line-height: 1.3;">Diagnostic offert<br>sans engagement</span>
                     </div>
                     <div style="width: 1px; height: 36px; background: rgba(255,255,255,0.12);"></div>
                     <div class="d-flex align-items-center gap-2">
@@ -314,7 +303,7 @@
 <section class="py-5" style="background: linear-gradient(90deg, #030a17, #050505, #030a17); border-top: 1px solid rgba(var(--gold-rgb),0.15); border-bottom: 1px solid rgba(var(--gold-rgb),0.15);">
     <div class="container">
         <div class="row g-4 text-center">
-            {% set stats = [['+250', 'Clients Stratégiques', 'bi bi-people'], ['45%', 'Gain de Temps Moyen', 'bi bi-hourglass'], ['x2.5', 'ROI Constaté', 'bi bi-graph-up-arrow'], ['24/7', 'Automatisation Active', 'bi bi-lightning-charge']] %}{% for i, stat in php_items(stats) %}            <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="{{ (i * 100) }}">
+            {% set stats = [['974', 'Basé à La Réunion', 'bi bi-geo-alt'], ['30 min', 'Diagnostic offert', 'bi bi-calendar-check'], ['990 €', 'Site vitrine clé en main', 'bi bi-window-desktop'], ['24/7', 'Systèmes actifs en continu', 'bi bi-lightning-charge']] %}{% for i, stat in php_items(stats) %}            <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="{{ (i * 100) }}">
                 <div class="py-3">
                     <i class="{{ stat[2] }} fs-4 mb-2 d-block" style="color: var(--gold); opacity: 0.7;"></i>
                     <div class="fw-black mb-1" style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; background: var(--gold-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">{{ stat[0] }}</div>
@@ -482,7 +471,7 @@
                 <p style="color: rgba(255,255,255,0.65); font-size: 1.05rem; line-height: 1.85; margin-bottom: 2rem;">Nous ne sommes pas de simples exécutants. DIGITA devient votre partenaire de croissance. Nous co-construisons chaque solution et partageons votre vision à long terme. Votre réussite est notre seul critère de succès.</p>
 
                 <div class="row g-3">
-                    {% set vals = [['bi bi-shield-check', '#60a5fa', 'Transparence Totale', 'Reporting hebdomadaire et accès aux KPIs en temps réel.'], ['bi bi-heart-pulse', '#D4AF37', 'Proximité & Réactivité', 'Un interlocuteur dédié joignable par chat et appel.'], ['bi bi-graph-up-arrow', '#34d399', 'ROI Mesurable', 'Objectifs de performance chiffrés et garantis contractuellement.'], ['bi bi-infinity', '#a78bfa', 'Scalabilité Native', "Solutions conçues pour s'adapter à votre croissance future."]] %}{% for v in php_values(vals) %}                    <div class="col-6">
+                    {% set vals = [['bi bi-shield-check', '#60a5fa', 'Transparence Totale', 'Reporting hebdomadaire et accès aux KPIs en temps réel.'], ['bi bi-heart-pulse', '#D4AF37', 'Proximité & Réactivité', 'Un interlocuteur dédié joignable par chat et appel.'], ['bi bi-graph-up-arrow', '#34d399', 'Objectifs Chiffrés', 'Des objectifs de performance fixés ensemble et suivis à chaque étape.'], ['bi bi-infinity', '#a78bfa', 'Scalabilité Native', "Solutions conçues pour s'adapter à votre croissance future."]] %}{% for v in php_values(vals) %}                    <div class="col-6">
                         <div class="d-flex gap-3 align-items-start">
                             <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-1" style="width:38px; height:38px; background: {{ v[1] }}22; border: 1px solid {{ v[1] }}44;">
                                 <i class="{{ v[0] }}" style="color: {{ v[1] }}; font-size: 1rem;"></i>
@@ -507,25 +496,25 @@
                         </div>
                         <div class="col-6">
                             <div class="p-3 text-center rounded-3" style="background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2);">
-                                <div class="fw-black mb-1" style="color: #60a5fa; font-size: 2rem; font-family:'Outfit';">-70%</div>
-                                <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; text-transform:uppercase; letter-spacing:1px;">Tâches Manuelles</div>
+                                <div class="fw-black mb-1" style="color: #60a5fa; font-size: 2rem; font-family:'Outfit';">1</div>
+                                <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; text-transform:uppercase; letter-spacing:1px;">Interlocuteur dédié</div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="p-3 text-center rounded-3" style="background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2);">
-                                <div class="fw-black mb-1" style="color: #34d399; font-size: 2rem; font-family:'Outfit';">+40%</div>
-                                <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; text-transform:uppercase; letter-spacing:1px;">Conversions</div>
+                                <div class="fw-black mb-1" style="color: #34d399; font-size: 2rem; font-family:'Outfit';">30 min</div>
+                                <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; text-transform:uppercase; letter-spacing:1px;">Diagnostic offert</div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="p-3 text-center rounded-3" style="background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2);">
-                                <div class="fw-black mb-1" style="color: #a78bfa; font-size: 2rem; font-family:'Outfit';">x2.5</div>
-                                <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; text-transform:uppercase; letter-spacing:1px;">ROI Moyen</div>
+                                <div class="fw-black mb-1" style="color: #a78bfa; font-size: 2rem; font-family:'Outfit';">24/7</div>
+                                <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; text-transform:uppercase; letter-spacing:1px;">Systèmes actifs</div>
                             </div>
                         </div>
                     </div>
                     <div class="text-center">
-                        <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; margin: 0;">Résultats moyens constatés chez nos clients · 6 premiers mois</p>
+                        <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; margin: 0;">Nos engagements, dès le premier échange</p>
                     </div>
                 </div>
             </div>
@@ -664,7 +653,7 @@
                 <i class="bi bi-calendar-check me-2"></i>DÉMARRER MA TRANSFORMATION
             </button>
             <div>
-                <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;"><i class="bi bi-shield-check me-1" style="color:#34d399;"></i>100% Gratuit · Aucun engagement · Réponse sous 24h</span>
+                <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;"><i class="bi bi-shield-check me-1" style="color:#34d399;"></i>100% Gratuit · Aucun engagement · Rappel sous 24 h ouvrées</span>
             </div>
         </div>
     </div>
@@ -1135,13 +1124,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('auditForm');
     const success = document.getElementById('auditSuccess');
     if (form) {
+        const error = document.getElementById('auditError');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            form.style.opacity = '0';
-            setTimeout(() => {
-                form.classList.add('d-none');
-                success.classList.remove('d-none');
-            }, 300);
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true;
+            error.classList.add('d-none');
+            const showError = message => {
+                error.textContent = message || "L'envoi a échoué, réessayez ou écrivez-nous via la page Contact.";
+                error.classList.remove('d-none');
+            };
+            fetch('/api/audit-request', { method: 'POST', body: new FormData(form) })
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.success) return showError(data.message);
+                    form.style.opacity = '0';
+                    setTimeout(() => {
+                        form.classList.add('d-none');
+                        success.classList.remove('d-none');
+                    }, 300);
+                })
+                .catch(() => showError())
+                .finally(() => { button.disabled = false; });
         });
     }
 
@@ -1149,7 +1153,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('auditModal');
     if (modal) {
         modal.addEventListener('hidden.bs.modal', function() {
-            if (form) { form.style.opacity = '1'; form.classList.remove('d-none'); }
+            if (form) { form.style.opacity = '1'; form.classList.remove('d-none'); form.reset(); }
             if (success) success.classList.add('d-none');
         });
     }

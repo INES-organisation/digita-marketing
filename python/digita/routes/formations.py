@@ -4,6 +4,7 @@ import math
 from .. import db, php
 from ..models import formation as Formation
 from ..render import base_context, render_view
+from .blog import _category_description
 from .common import not_found, page_param, redirect
 
 
@@ -13,7 +14,9 @@ def index(request):
     total = Formation.count()
     return render_view(request, "formations/index-content", {
         "availableIds": Formation.available_ids(),
-        "title": "Formations - Marketing Digital | Digita",
+        "title": "Formations Marketing Digital & IA en Ligne | DIGITA",
+        "metaDescription": "Formations en ligne au marketing digital et à l'IA : SEO, réseaux sociaux, automatisation. "
+                           "Apprenez à votre rythme, avec des cas concrets pour TPE/PME.",
         "extraCss": ["/assets/css/formations.css"],
         "totalFormations": total,
         "formations": Formation.get_all_published(per_page, (page - 1) * per_page),
@@ -48,7 +51,7 @@ def show(request, slug):
     base = base_context(request)["base_url"]
     title = f.get("meta_title") if f.get("meta_title") is not None else f["title"]
     return render_view(request, "formations/show-content", {
-        "title": title + " | Formations Digita Marketing",
+        "title": title + " — Formation | DIGITA",
         "metaDescription": _description(f),
         "metaKeywords": f.get("meta_keywords") if f.get("meta_keywords") is not None else "",
         "ogType": "website",
@@ -84,7 +87,8 @@ def category(request, slug):
         return not_found(request, categorySlug=slug, formations=formations, categories=categories)
     return render_view(request, "formations/category-content", {
         "availableIds": Formation.available_ids(),
-        "title": cat["name"] + " - Formations Digita Marketing",
+        "title": cat["name"] + " — Formations | DIGITA",
+        "metaDescription": _category_description("Formations", cat),
         "extraCss": ["/assets/css/formations.css"],
         "category": cat,
         "formations": formations,
@@ -101,7 +105,7 @@ def search(request):
         return redirect("/formations")
     return render_view(request, "formations/search", {
         "availableIds": Formation.available_ids(),
-        "title": "Recherche « " + query + " » - Formations Digita Marketing", "metaRobots": "noindex, follow",
+        "title": "Recherche « " + query + " » — Formations | DIGITA", "metaRobots": "noindex, follow",
         "extraCss": ["/assets/css/formations.css"],
         "query": query,
         "formations": Formation.search(query, 50),
@@ -114,7 +118,7 @@ def landing(request, slug):
     if not f:
         return not_found(request, slug=slug, formation=f)
     return render_view(request, "payment/landing-content", {
-        "title": f["title"] + " — Formation | Digita Marketing",
+        "title": f["title"] + " — Formation | DIGITA",
         "metaDescription": _description(f),
         "extraCss": ["/assets/css/formations.css"],
         "formation": f,
@@ -132,7 +136,7 @@ def verify_certificate(request):
                FROM certificates c JOIN users u ON c.user_id = u.id JOIN formations f ON c.formation_id = f.id
                WHERE c.certificate_number = ?""", [number])
     return render_view(request, "formations/verify-certificate-content", {
-        "title": "Vérification de certificat - Digita Marketing",
+        "title": "Vérification de certificat | DIGITA",
         "certificate": cert,
         "searchNumber": number,
     })

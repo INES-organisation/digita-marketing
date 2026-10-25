@@ -8,7 +8,7 @@ le fournisseur d'INES ; sinon l'adresse par défaut d'INES avec le nom « Digita
 import logging
 import os
 
-from .. import php
+from .. import config, php
 from . import ines
 
 log = logging.getLogger("digita.email")
@@ -23,15 +23,17 @@ def send(to, subject, body):
     return ines.send_email(to, subject, body, FROM_NAME, os.getenv("MAIL_FROM") or None)
 
 
-def send_welcome(to, name):
-    return send(to, "Bienvenue chez Digita Marketing", welcome_template(name))
+def send_diagnostic_confirmation(to, name):
+    """Réponse automatique immédiate à une demande de diagnostic (accueil, /diagnostic, fenêtre des pages)."""
+    return send(to, "Votre diagnostic gratuit DIGITA : demande bien reçue", diagnostic_confirmation_template(name))
 
 
 def send_new_contact_notification(admin_email, data):
     return send(admin_email, "Nouveau message de contact", contact_notification_template(data))
 
 
-def welcome_template(name):
+def diagnostic_confirmation_template(name):
+    base = config.APP_URL.rstrip("/")
     return f"""
         <!DOCTYPE html>
         <html>
@@ -39,24 +41,32 @@ def welcome_template(name):
             <style>
                 body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
                 .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-                .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }}
+                .header {{ background: #050505; color: #D4AF37; padding: 30px; text-align: center; }}
                 .content {{ padding: 30px; background: #f8f9fa; }}
+                .button {{ display: inline-block; padding: 12px 24px; background: #D4AF37; color: #050505; text-decoration: none; border-radius: 25px; font-weight: bold; }}
                 .footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
             </style>
         </head>
         <body>
             <div class='container'>
                 <div class='header'>
-                    <h1>Bienvenue chez Digita Marketing !</h1>
+                    <h1>Demande bien reçue !</h1>
                 </div>
                 <div class='content'>
                     <p>Bonjour {php.h(name)},</p>
-                    <p>Merci de nous avoir contactés. Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
-                    <p>Notre équipe est à votre disposition pour répondre à toutes vos questions.</p>
-                    <p>Cordialement,<br>L'équipe Digita Marketing</p>
+                    <p>Merci pour votre demande de diagnostic gratuit. Voici la suite :</p>
+                    <ol>
+                        <li>Un consultant vous rappelle <strong>sous 24 h ouvrées</strong> pour fixer votre créneau de 30 minutes.</li>
+                        <li>Pendant l'échange, nous regardons votre visibilité, le suivi de vos prospects et ce qui peut être automatisé.</li>
+                        <li>Vous repartez avec un plan d'action concret et priorisé, sans engagement.</li>
+                    </ol>
+                    <p>Sans attendre, vous pouvez lancer l'audit SEO automatique de votre site :</p>
+                    <p style='text-align:center;'><a class='button' href='{base}/outils/audit-seo'>Lancer l'audit SEO gratuit</a></p>
+                    <p>Vous préférez appeler ? 06 93 48 78 17.</p>
+                    <p>À très vite,<br>L'équipe DIGITA</p>
                 </div>
                 <div class='footer'>
-                    <p>&copy; {php.date('Y')} Digita Marketing. Tous droits réservés.</p>
+                    <p>&copy; {php.date('Y')} DIGITA · La Réunion</p>
                 </div>
             </div>
         </body>

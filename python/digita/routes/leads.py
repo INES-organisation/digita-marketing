@@ -15,33 +15,41 @@ def _json(payload):
     return Response(php.json_encode(payload), media_type="application/json")
 
 
+AUDIT_DETAILS = {"company": "Entreprise", "sector": "Secteur", "goal": "Objectif", "phone": "Téléphone"}
+
+
 async def submit_audit(request):
     form = await request.form()
     name = form.get("name")
     mail = form.get("email")
-    website = form.get("website", "Non précisé")
+    website = form.get("website") or "Non précisé"
+    # Champs facultatifs des formulaires de diagnostic (accueil, /diagnostic) : qualifient le prospect.
+    details = {label: php.trim(form.get(key) or "") for key, label in AUDIT_DETAILS.items()}
 
     if not php.t(name) or not php.t(mail):
         return _json({"success": False, "message": "Veuillez remplir les champs obligatoires."})
     # Base et SMTP sont bloquants : hors de la boucle asynchrone.
-    return _json(await run_in_threadpool(_process, name, mail, website))
+    return _json(await run_in_threadpool(_process, name, mail, website, details))
 
 
-def _process(name, mail, website):
+def _process(name, mail, website, details=None):
     try:
         subject = "Demande d'Audit Stratégique - " + name
         message = "Une nouvelle demande d'audit a été soumise.\n\n"
         message += "Nom : " + name + "\n"
         message += "Email : " + mail + "\n"
         message += "Site Web : " + website + "\n"
+        for label, value in (details or {}).items():
+            if value:
+                message += label + " : " + value + "\n"
         db.execute("INSERT INTO contact_messages (name, email, phone, subject, message, status) "
-                   "VALUES (?, ?, ?, ?, ?, ?)", [name, mail, "", subject, message, "new"])
+                   "VALUES (?, ?, ?, ?, ?, ?)", [name, mail, (details or {}).get("Téléphone", ""), subject, message, "new"])
         ines.push_lead(name, mail, "audit", message)
 
         email.send_new_contact_notification(config.ADMIN_EMAIL, {
             "name": name, "email": mail, "subject": subject, "message": message, "phone": "N/A",
         })
-        email.send_welcome(mail, name)
+        email.send_diagnostic_confirmation(mail, name)
 
         return {"success": True,
                 "message": "Votre demande a été prise en compte. Un consultant vous contactera prochainement."}

@@ -26,7 +26,7 @@ def my_formations(request):
         return redirect("/connexion")
     user_id = request.session["user_id"]
     return render_view(request, "formations/my-formations-content", {
-        "title": "Mes formations - Digita Marketing",
+        "title": "Mes formations | DIGITA",
         "extraCss": ["/assets/css/formations.css"],
         "formations": Formation.get_user_formations(user_id),
         "certificates": Certificate.get_user_certificates(user_id),

@@ -1,0 +1,175 @@
+<!-- Hero Diagnostic -->
+<section class="diagnostic-hero py-6 bg-premium-glow position-relative overflow-hidden">
+    <div class="container position-relative z-2">
+        <div class="row">
+            <div class="col-lg-9 mx-auto text-center" data-aos="fade-up">
+                <span class="badge rounded-pill px-3 py-2 mb-3" style="background: var(--gold-gradient); color: var(--on-gold); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Gratuit · Sans engagement · La Réunion</span>
+                <h1 class="display-4 fw-bold mb-4 text-white" style="font-family: var(--font-heading);">Diagnostic Digital <span class="text-gradient-gold">Gratuit</span> pour votre Entreprise</h1>
+                <p class="lead mb-4 text-white-50">Deux façons de commencer : un audit SEO automatique de votre site en quelques secondes, ou 30 minutes avec un consultant pour savoir où vous perdez des clients et du temps.</p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="#consultant" class="btn-premium btn-premium-gold px-5 py-3"><i class="bi bi-calendar-check me-2"></i>Réserver mes 30 min</a>
+                    <a href="#audit-seo" class="btn-premium btn-premium-blue px-4 py-3"><i class="bi bi-speedometer2 me-2"></i>Lancer l'audit SEO gratuit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Les deux formats -->
+<section class="py-6 bg-premium-grid">
+    <div class="container">
+        <div class="row g-4">
+
+            <!-- 1. Audit SEO automatique -->
+            <div class="col-lg-5" id="audit-seo" data-aos="fade-up">
+                <div class="glass-card h-100 p-4 p-md-5 border-glass">
+                    <span class="diagnostic-tag text-blue">Immédiat · En ligne</span>
+                    <h2 class="h3 fw-bold text-white mt-2 mb-3">Audit SEO automatique</h2>
+                    <p class="text-white-50">Votre site est-il bien vu par Google ? Entrez son adresse : l'analyse se lance tout de suite.</p>
+                    <ul class="list-unstyled diagnostic-list mb-4">
+                        <li><i class="bi bi-check-circle-fill text-blue"></i>Un score SEO sur 100</li>
+                        <li><i class="bi bi-check-circle-fill text-blue"></i>Les points qui bloquent votre référencement</li>
+                        <li><i class="bi bi-check-circle-fill text-blue"></i>Des recommandations classées par priorité</li>
+                    </ul>
+                    <form action="/outils/audit-seo" method="POST">
+                        <label class="form-label text-white-50 small" for="diag-url">Adresse de votre site</label>
+                        <input type="url" class="form-control glass-card border-glass text-white p-3 mb-3" id="diag-url" name="url" placeholder="https://votre-site.re" required>
+                        <button type="submit" class="btn-premium btn-premium-blue w-100 py-3">Lancer l'audit SEO gratuit</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 2. Diagnostic stratégique de 30 min -->
+            <div class="col-lg-7" id="consultant" data-aos="fade-up" data-aos-delay="100">
+                <div class="glass-card h-100 p-4 p-md-5 border-gold">
+                    <span class="diagnostic-tag text-gold">30 min · Avec un consultant</span>
+                    <h2 class="h3 fw-bold text-white mt-2 mb-3">Diagnostic stratégique</h2>
+                    <p class="text-white-50">On regarde ensemble votre visibilité, la façon dont vous suivez vos prospects et vos devis, et ce qui peut être automatisé.</p>
+                    <ul class="list-unstyled diagnostic-list mb-4">
+                        <li><i class="bi bi-check-circle-fill text-gold"></i>Où vous perdez des prospects aujourd'hui</li>
+                        <li><i class="bi bi-check-circle-fill text-gold"></i>Les tâches répétitives à automatiser en priorité</li>
+                        <li><i class="bi bi-check-circle-fill text-gold"></i>Un plan d'action concret et priorisé</li>
+                    </ul>
+
+                    <form id="diagnosticForm" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-white-50 small" for="diag-name">Prénom et nom *</label>
+                                <input type="text" class="form-control glass-card border-glass text-white p-3" id="diag-name" name="name" autocomplete="name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-white-50 small" for="diag-email">E-mail *</label>
+                                <input type="email" class="form-control glass-card border-glass text-white p-3" id="diag-email" name="email" autocomplete="email" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-white-50 small" for="diag-phone">Téléphone (pour fixer le créneau)</label>
+                                <input type="tel" class="form-control glass-card border-glass text-white p-3" id="diag-phone" name="phone" autocomplete="tel">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-white-50 small" for="diag-company">Entreprise</label>
+                                <input type="text" class="form-control glass-card border-glass text-white p-3" id="diag-company" name="company" autocomplete="organization">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-white-50 small" for="diag-sector">Secteur</label>
+                                <select class="form-select glass-card border-glass text-white p-3" id="diag-sector" name="sector">
+                                    <option value="" class="bg-dark">Choisir…</option>
+                                    {% for s in ['Artisan / BTP', 'Santé / esthétique / bien-être', 'Immobilier / services aux entreprises', 'Hôtellerie / tourisme', 'Commerce / e-commerce', 'Coach / consultant / indépendant', 'Autre'] %}<option class="bg-dark">{{ s }}</option>{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-white-50 small" for="diag-goal">Votre priorité</label>
+                                <select class="form-select glass-card border-glass text-white p-3" id="diag-goal" name="goal">
+                                    <option value="" class="bg-dark">Choisir…</option>
+                                    {% for g in ['Trouver plus de clients', 'Mieux suivre mes prospects et mes devis', 'Gagner du temps grâce à l\'automatisation', 'Refaire mon site internet', 'Autre'] %}<option class="bg-dark">{{ g }}</option>{% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label text-white-50 small" for="diag-website">Site ou page Facebook (facultatif)</label>
+                                <input type="text" class="form-control glass-card border-glass text-white p-3" id="diag-website" name="website" placeholder="https://…">
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn-premium btn-premium-gold w-100 py-3"><i class="bi bi-calendar-check me-2"></i>Réserver mes 30 min</button>
+                                <p id="diagnosticError" class="text-danger small mt-2 mb-0 d-none" role="alert"></p>
+                                <p class="text-white-50 small mt-3 mb-0"><i class="bi bi-shield-lock me-1"></i>Vos données servent uniquement à préparer votre diagnostic. Jamais revendues.</p>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div id="diagnosticSuccess" class="text-center py-4 d-none" role="status">
+                        <i class="bi bi-check-circle text-gold" style="font-size: 3rem;"></i>
+                        <h3 class="h4 text-white fw-bold mt-3">Demande bien reçue !</h3>
+                        <p class="text-white-50 mb-0">Un e-mail de confirmation vient de vous être envoyé. Un consultant vous rappelle sous 24 h ouvrées pour fixer votre créneau de 30 minutes. En attendant, lancez l'<a href="#audit-seo" class="text-gold">audit SEO gratuit</a> de votre site.</p>
+                    </div>
+
+                    <p class="text-white-50 small mt-4 mb-0">Vous préférez appeler ? <a href="tel:+262693487817" class="text-gold fw-bold">06 93 48 78 17</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Déroulé -->
+<section class="py-6">
+    <div class="container">
+        <h2 class="display-6 fw-bold text-white text-center mb-5">Comment se passe le diagnostic de 30 minutes</h2>
+        <div class="row g-4">
+            {% set steps = [['1', 'Vous réservez', 'Deux minutes pour remplir le formulaire ci-dessus, ou un simple appel.'], ['2', 'Nous fixons le créneau', 'Confirmation immédiate par e-mail, puis un consultant vous rappelle sous 24 h ouvrées.'], ['3', 'On échange 30 minutes', 'Vous repartez avec un plan d\'action concret, que vous mettez en œuvre seul ou avec nous.']] %}{% for step in steps %}
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                <div class="glass-card h-100 p-4 border-glass text-center">
+                    <div class="diagnostic-step mx-auto mb-3">{{ step[0] }}</div>
+                    <h3 class="h5 fw-bold text-white">{{ step[1] }}</h3>
+                    <p class="text-white-50 mb-0">{{ step[2] }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- FAQ (mêmes questions que les données structurées FAQPage) -->
+<section class="py-6 bg-premium-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-6 fw-bold text-white text-center mb-5">Questions fréquentes</h2>
+                {% for faq in faqSchema %}
+                <details class="glass-card border-glass p-4 mb-3 diagnostic-faq">
+                    <summary class="fw-bold text-white">{{ h(faq['question']) }}</summary>
+                    <p class="text-white-50 mt-3 mb-0">{{ h(faq['answer']) }}</p>
+                </details>
+                {% endfor %}
+                <div class="text-center mt-5">
+                    <a href="#consultant" class="btn-premium btn-premium-gold px-5 py-3">Réserver mon diagnostic gratuit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('diagnosticForm');
+    const success = document.getElementById('diagnosticSuccess');
+    const error = document.getElementById('diagnosticError');
+    const showError = message => {
+        error.textContent = message || "L'envoi a échoué, réessayez ou appelez-nous au 06 93 48 78 17.";
+        error.classList.remove('d-none');
+    };
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+        const button = form.querySelector('button[type="submit"]');
+        button.disabled = true;
+        error.classList.add('d-none');
+        fetch('/api/audit-request', { method: 'POST', body: new FormData(form) })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) return showError(data.message);
+                form.classList.add('d-none');
+                success.classList.remove('d-none');
+            })
+            .catch(() => showError())
+            .finally(() => { button.disabled = false; });
+    });
+});
+</script>

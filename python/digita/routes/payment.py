@@ -61,7 +61,7 @@ def checkout(request, formation_id):
             discount = Order.calculate_discount(promo, final)
             final = max(0, final - php.floatval(discount))
     return render_view(request, "payment/checkout-content", {
-        "title": "Paiement - " + php.strval(f["title"]) + " | Digita Marketing",
+        "title": "Paiement - " + php.strval(f["title"]) + " | DIGITA",
         "extraCss": CSS, "formation": f, "promoCode": promo, "discount": discount, "finalPrice": final,
         "stripeConfigured": stripe.is_configured(),
     })
@@ -115,7 +115,7 @@ def success(request):
         if order:
             formation = _formation_of(order)
     return render_view(request, "payment/success-content", {
-        "title": "Paiement réussi | Digita Marketing", "extraCss": CSS, "order": order, "formation": formation,
+        "title": "Paiement réussi | DIGITA", "extraCss": CSS, "order": order, "formation": formation,
     })
 
 
@@ -129,7 +129,7 @@ def cancel(request):
         if order:
             formation = _formation_of(order)
     return render_view(request, "payment/cancel-content", {
-        "title": "Paiement annulé | Digita Marketing", "extraCss": CSS, "order": order, "formation": formation,
+        "title": "Paiement annulé | DIGITA", "extraCss": CSS, "order": order, "formation": formation,
     })
 
 
@@ -165,7 +165,7 @@ def my_orders(request):
     if "user_id" not in request.session:
         return redirect("/connexion")
     return render_view(request, "payment/my-orders-content", {
-        "title": "Mes commandes | Digita Marketing", "extraCss": CSS,
+        "title": "Mes commandes | DIGITA", "extraCss": CSS,
         "orders": Order.get_user_orders(request.session["user_id"]),
     })
 
@@ -177,7 +177,7 @@ def order_detail(request, order_id):
     if not order or not php.loose_eq(order["user_id"], request.session["user_id"]):
         return not_found(request, orderId=order_id, order=order)
     return render_view(request, "payment/order-detail-content", {
-        "title": "Commande #" + order_id + " | Digita Marketing", "extraCss": CSS,
+        "title": "Commande #" + order_id + " | DIGITA", "extraCss": CSS,
         "order": order, "invoice": Invoice.get_by_order_id(order_id),
     })
 
@@ -189,6 +189,6 @@ def invoice(request, invoice_id):
     if not inv or not php.loose_eq(inv["user_id"], request.session["user_id"]):
         return not_found(request, invoiceId=invoice_id, invoice=inv)
     return render_view(request, "payment/invoice-content", {
-        "title": "Facture " + php.strval(inv["invoice_number"]) + " | Digita Marketing", "extraCss": CSS,
+        "title": "Facture " + php.strval(inv["invoice_number"]) + " | DIGITA", "extraCss": CSS,
         "invoice": inv,
     })

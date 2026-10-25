@@ -13,8 +13,9 @@ def index(request):
     per_page = 12
     total = Article.count()
     return render_view(request, "blog/index-content", {
-        "title": "Blog - Actualités & Conseils | Digita Marketing",
-        "metaDescription": "Découvrez nos articles sur le marketing digital, l'automatisation, l'IA et les stratégies de croissance. Conseils d'experts pour développer votre activité.",
+        "title": "Blog Marketing Digital, IA & Automatisation | DIGITA",
+        "metaDescription": "Conseils pratiques en marketing digital, IA et automatisation pour TPE/PME : gagner du temps, "
+                           "trouver des clients et mieux suivre vos prospects.",
         "metaKeywords": "blog marketing digital, conseils SEO, automatisation, intelligence artificielle, stratégie digitale",
         "extraCss": ["/assets/css/blog-layout.css"],
         "totalArticles": total,
@@ -54,7 +55,7 @@ def show(request, slug):
     desc = (article.get("meta_description") or "") or php.mb_strimwidth(php.strip_tags(article["content"]), 0, 155, "...")
     title = (article.get("meta_title") or "") or article["title"]
     return render_view(request, "blog/show-content", {
-        "title": title + " | Digita Marketing",
+        "title": title + " | DIGITA",
         "metaDescription": desc,
         "metaKeywords": article.get("meta_keywords") or "",
         "ogType": "article",
@@ -85,7 +86,8 @@ def category(request, slug):
     if not cat:
         return not_found(request, categorySlug=slug, articles=articles, categories=categories)
     return render_view(request, "blog/category-content", {
-        "title": cat["name"] + " - Blog Digita Marketing",
+        "title": cat["name"] + " — Blog | DIGITA",
+        "metaDescription": _category_description("Articles", cat),
         "extraCss": ["/assets/css/blog-layout.css"],
         "category": cat,
         "articles": articles,
@@ -96,12 +98,20 @@ def category(request, slug):
     })
 
 
+def _category_description(kind, cat):
+    """Meta d'une page catégorie : sa description si elle existe, sinon une phrase générique."""
+    desc = php.strip_tags(cat.get("description") or "").strip()
+    if desc:
+        return php.mb_strimwidth(desc, 0, 155, "...")
+    return f"{kind} {cat['name']} : conseils pratiques en marketing digital, IA et automatisation pour TPE/PME, par DIGITA."
+
+
 def search(request):
     query = php.trim(request.query_params.get("q", ""))
     if php.empty(query):
         return redirect("/blog")
     return render_view(request, "blog/search", {
-        "title": "Recherche « " + query + " » - Blog Digita Marketing", "metaRobots": "noindex, follow",
+        "title": "Recherche « " + query + " » — Blog | DIGITA", "metaRobots": "noindex, follow",
         "extraCss": ["/assets/css/blog-layout.css"],
         "query": query,
         "articles": Article.search(query, 50),

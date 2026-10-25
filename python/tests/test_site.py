@@ -145,3 +145,40 @@ def test_services_page_lists_every_category_in_order():
     assert in_order(toc, [f'href="#{i}"' for i in ids])
     assert in_order(sections, [f'<div id="{i}" class="services-category"' for i in ids])
     assert in_order(bar, [f"/services#{i}" for i in ids])
+
+
+def test_home_hero_without_unsourced_figures():
+    """Accroches §18 (docs/ACCROCHES_TAGLINES_SEO.md) : pas de chiffre de résultat non documenté."""
+    html = _client().get("/").text
+    assert "<title>Agence IA &amp; Automatisation à La Réunion | DIGITA</title>" in html
+    assert "Votre Temps, Retrouvé." in html and "La Réunion</span>" in html
+    for figure in ("+250", "x2.5", "45%", "-70%", "+40%"):
+        assert figure not in html, figure
+    assert '"name": "DIGITA"' in html and '"alternateName": "Digita Marketing"' in html
+
+
+def test_page_titles_use_digita_brand():
+    c = _client()
+    for path in ("/services", "/tarifs", "/contact", "/a-propos", "/outils", "/connexion", "/mentions-legales"):
+        title = re.search(r"<title>(.*?)</title>", c.get(path).text, re.S).group(1).strip()
+        assert title.endswith("| DIGITA") and len(title.replace("&amp;", "&")) <= 60, (path, title)
+
+
+def test_diagnostic_page_offers_both_formats(monkeypatch):
+    saved, leads_sent = [], []
+    monkeypatch.setattr(leads.db, "execute", lambda sql, p=None: saved.append(p))
+    monkeypatch.setattr(ines, "push_lead", lambda *a: leads_sent.append(a))
+    monkeypatch.setattr(email, "send_new_contact_notification", lambda *a: True)
+    monkeypatch.setattr(email, "send_diagnostic_confirmation", lambda *a: True)
+    c = _client()
+    html = c.get("/diagnostic").text
+    assert "<title>Diagnostic Digital Gratuit à La Réunion | DIGITA</title>" in html
+    assert 'action="/outils/audit-seo"' in html and 'id="diagnosticForm"' in html
+    assert '"@type": "FAQPage"' in html and '"@type": "BreadcrumbList"' in html
+    assert 'href="/diagnostic"' in html  # lien du pied de page
+
+    r = c.post("/api/audit-request", data={"name": "Ana", "email": "ana@example.com", "phone": "0693000000",
+                                           "company": "Piscines Ana", "sector": "Artisan / BTP"})
+    assert r.json()["success"] is True
+    assert saved[0][2] == "0693000000" and "Entreprise : Piscines Ana" in saved[0][4]
+    assert "Secteur : Artisan / BTP" in leads_sent[0][3]

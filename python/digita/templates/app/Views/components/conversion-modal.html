@@ -8,7 +8,7 @@
                     <span class="badge bg-dark text-gold mb-3 px-2 py-1 uppercase tracking-widest small fw-bold">Executive Offer</span>
                     <h3 class="fw-black uppercase mb-4" style="line-height: 1.1;">Audit Flash Stratégique</h3>
                     <p class="small mb-4 fw-medium">
-                        Obtenez une analyse de 15 minutes sur vos leviers de croissance IA et SEO par un consultant senior.
+                        30 minutes avec un consultant pour identifier vos leviers de croissance : visibilité, suivi des prospects, automatisation.
                     </p>
                     <ul class="list-unstyled small fw-bold mb-0">
                         <li class="mb-2"><i class="bi bi-patch-check-fill me-2"></i> Analyse de stack IA</li>
@@ -22,7 +22,7 @@
                     <div class="d-flex justify-content-between align-items-start mb-4">
                         <div>
                             <h4 class="text-white fw-bold mb-1">Réservez votre créneau</h4>
-                            <p class="text-white-50 small mb-0">Disponibilité limitée cette semaine.</p>
+                            <p class="text-white-50 small mb-0">Gratuit · Sans engagement · <a href="/diagnostic" class="text-gold">Voir les 2 formats</a></p>
                         </div>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -45,6 +45,7 @@
                             SOLLICITER MON AUDIT <i class="bi bi-arrow-right ms-2"></i>
                         </button>
                         
+                        <p id="auditError" class="text-danger small mt-2 mb-0 d-none" role="alert"></p>
                         <div class="mt-4 text-center">
                             <p class="text-white-50" style="font-size: 11px;">
                                 <i class="bi bi-shield-lock me-1"></i> Vos données sont strictement confidentielles.
@@ -78,3 +79,32 @@
         font-size: 0.85rem;
     }
 </style>
+
+<script>
+// Envoi sans quitter la page : /api/audit-request répond en JSON.
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('auditForm');
+    if (!form) return;
+    const error = document.getElementById('auditError');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const button = form.querySelector('button[type="submit"]');
+        button.disabled = true;
+        error.classList.add('d-none');
+        fetch(form.action, { method: 'POST', body: new FormData(form) })
+            .then(r => r.json())
+            .then(data => {
+                error.textContent = data.message || '';
+                error.classList.toggle('text-danger', !data.success);
+                error.classList.toggle('text-success', !!data.success);
+                error.classList.remove('d-none');
+                if (data.success) form.reset();
+            })
+            .catch(() => {
+                error.textContent = "L'envoi a échoué, réessayez ou écrivez-nous via la page Contact.";
+                error.classList.remove('d-none');
+            })
+            .finally(() => { button.disabled = false; });
+    });
+});
+</script>

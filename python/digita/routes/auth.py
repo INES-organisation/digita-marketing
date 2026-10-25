@@ -19,7 +19,7 @@ def show_login(request):
     if _authenticated(request):
         return redirect("/admin/dashboard")
     resp = render_view(request, "auth/login", {
-        "title": "Connexion - Digita Marketing", "metaRobots": "noindex, follow",
+        "title": "Connexion | DIGITA", "metaRobots": "noindex, follow",
         "error": request.session.get("login_error"),
         "success": request.session.get("login_success"),
     })
@@ -32,7 +32,7 @@ def show_register(request):
     if _authenticated(request):
         return redirect("/admin/dashboard")
     resp = render_view(request, "auth/register", {
-        "title": "Inscription - Digita Marketing", "metaRobots": "noindex, follow",
+        "title": "Inscription | DIGITA", "metaRobots": "noindex, follow",
         "error": request.session.get("register_error"),
     })
     request.session.pop("register_error", None)
@@ -179,7 +179,7 @@ def reset_email_template(link):
 
 def show_forgot(request):
     resp = render_view(request, "auth/forgot", {
-        "title": "Mot de passe oublié - Digita Marketing", "metaRobots": "noindex, follow",
+        "title": "Mot de passe oublié | DIGITA", "metaRobots": "noindex, follow",
         "error": request.session.get("forgot_error"), "success": request.session.get("forgot_success"),
     })
     request.session.pop("forgot_error", None)
@@ -212,7 +212,7 @@ async def show_reset(request):
     token = request.query_params.get("token", "")
     valid = await run_in_threadpool(_find_reset, token) is not None
     resp = render_view(request, "auth/reset", {
-        "title": "Nouveau mot de passe - Digita Marketing", "metaRobots": "noindex, nofollow",
+        "title": "Nouveau mot de passe | DIGITA", "metaRobots": "noindex, nofollow",
         "token": token, "valid": valid, "error": request.session.get("reset_error"),
     })
     request.session.pop("reset_error", None)

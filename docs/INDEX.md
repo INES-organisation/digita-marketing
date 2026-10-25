@@ -10,6 +10,7 @@
 - [Stratégie Digita](DIGITA_STRATEGY.md)
 - [Stratégie de référence](STRATEGIE_REFERENCE_DIGITA.md)
 - [Manifeste](MANIFESTE_DIGITA.md)
+- [Accroches, taglines et SEO](ACCROCHES_TAGLINES_SEO.md) : hero de la home, titres et metas de toutes les pages, règles de rédaction (pas de chiffre sans source).
 - [Standards premium](STANDARDS_PREMIUM.md)
 - [Catalogue des services](services-catalogue-complet.md) et [liste complète](liste-services-complets.md)
 

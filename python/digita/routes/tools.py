@@ -13,14 +13,14 @@ log = logging.getLogger("digita.tools")
 
 def index(request):
     return render_view(request, "outils/index-content", {
-        "title": "Outils Gratuits Marketing Digital — Digita Marketing",
+        "title": "Outils Marketing Gratuits : Audit SEO, ROI | DIGITA",
         "metaDescription": "Outils gratuits pour booster votre marketing digital : audit SEO, générateur de meta descriptions, calculateur ROI, calendrier éditorial.",
     })
 
 
 def seo_audit(request):
     return render_view(request, "outils/seo-audit-content", {
-        "title": "Audit SEO Gratuit — Digita Marketing",
+        "title": "Audit SEO Gratuit de Votre Site | DIGITA",
         "metaDescription": "Analysez gratuitement le SEO de votre site web. Score, recommandations et plan d'action personnalisé.",
         "result": None, "url": "",
     })
@@ -28,7 +28,7 @@ def seo_audit(request):
 
 def meta_generator(request):
     return render_view(request, "outils/meta-generator-content", {
-        "title": "Générateur de Meta Descriptions IA — Digita Marketing",
+        "title": "Générateur de Meta Descriptions IA Gratuit | DIGITA",
         "metaDescription": "Générez des meta descriptions SEO optimisées grâce à l'IA. Gratuit et instantané.",
         "result": None, "pageTitle": "", "pageContent": "",
     })
@@ -36,7 +36,7 @@ def meta_generator(request):
 
 def roi_calculator(request):
     return render_view(request, "outils/roi-calculator-content", {
-        "title": "Calculateur de ROI Marketing — Digita Marketing",
+        "title": "Calculateur de ROI Marketing Gratuit | DIGITA",
         "metaDescription": "Calculez le retour sur investissement de vos campagnes marketing. Outil gratuit et interactif.",
         "result": None, "params": [],
     })
@@ -44,7 +44,7 @@ def roi_calculator(request):
 
 def editorial_calendar(request):
     return render_view(request, "outils/editorial-calendar-content", {
-        "title": "Générateur de Calendrier Éditorial IA — Digita Marketing",
+        "title": "Calendrier Éditorial IA Gratuit | DIGITA",
         "metaDescription": "Générez un calendrier éditorial personnalisé pour votre blog grâce à l'IA. Gratuit.",
         "result": None, "niche": "", "duration": "1 mois", "frequency": "3 par semaine",
     })
@@ -52,13 +52,13 @@ def editorial_calendar(request):
 
 # ---------------------------------------------------------------- traitement (POST)
 TITLES = {
-    "outils/seo-audit-content": ("Audit SEO Gratuit — Digita Marketing",
+    "outils/seo-audit-content": ("Audit SEO Gratuit de Votre Site | DIGITA",
                                  "Analysez gratuitement le SEO de votre site web. Score, recommandations et plan d'action personnalisé."),
-    "outils/meta-generator-content": ("Générateur de Meta Descriptions IA — Digita Marketing",
+    "outils/meta-generator-content": ("Générateur de Meta Descriptions IA Gratuit | DIGITA",
                                       "Générez des meta descriptions SEO optimisées grâce à l'IA. Gratuit et instantané."),
-    "outils/roi-calculator-content": ("Calculateur de ROI Marketing — Digita Marketing",
+    "outils/roi-calculator-content": ("Calculateur de ROI Marketing Gratuit | DIGITA",
                                       "Calculez le retour sur investissement de vos campagnes marketing. Outil gratuit et interactif."),
-    "outils/editorial-calendar-content": ("Générateur de Calendrier Éditorial IA — Digita Marketing",
+    "outils/editorial-calendar-content": ("Calendrier Éditorial IA Gratuit | DIGITA",
                                           "Générez un calendrier éditorial personnalisé pour votre blog grâce à l'IA. Gratuit."),
 }
 

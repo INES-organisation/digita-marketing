@@ -140,7 +140,7 @@ email_sequences = _cron(process_email_sequences)
 
 
 # ---------------------------------------------------------------- sitemap (était généré à 4h)
-STATIC_PAGES = [("/", "1.0", "weekly"), ("/services", "0.9", "monthly"), ("/formations", "0.9", "weekly"),
+STATIC_PAGES = [("/", "1.0", "weekly"), ("/diagnostic", "0.9", "monthly"), ("/services", "0.9", "monthly"), ("/formations", "0.9", "weekly"),
                 ("/blog", "0.9", "daily"), ("/boutique", "0.8", "monthly"), ("/solutions", "0.8", "monthly"),
                 ("/catalogue", "0.8", "monthly"), ("/tarifs", "0.8", "monthly"), ("/a-propos", "0.7", "monthly"),
                 ("/contact", "0.8", "monthly"), ("/support", "0.6", "monthly"), ("/projets/brief", "0.7", "monthly"),

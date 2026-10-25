@@ -99,16 +99,17 @@ get("/catalogue", pages.catalogue)
 get("/portfolio", pages.redirect_to("/a-propos"))
 get("/equipe", pages.redirect_to("/a-propos"))
 get("/contact", pages.contact)
+get("/diagnostic", pages.diagnostic)
 get("/support", pages.support)
 get("/tarifs", pages.tarifs)
 get("/outils", pages.outils)
 get("/formation", pages.redirect_to("/formations"))
 
 # ---------------------------------------------------------------- pages légales
-get("/mentions-legales", pages.legal("mentions-legales", "Mentions Légales - Digita Marketing"))
-get("/politique-confidentialite", pages.legal("politique-confidentialite", "Politique de Confidentialité - Digita Marketing"))
-get("/conditions-generales", pages.legal("conditions-generales", "Conditions Générales - Digita Marketing"))
-get("/cookies", pages.legal("cookies", "Politique des Cookies - Digita Marketing"))
+get("/mentions-legales", pages.legal("mentions-legales", "Mentions Légales | DIGITA"))
+get("/politique-confidentialite", pages.legal("politique-confidentialite", "Politique de Confidentialité | DIGITA"))
+get("/conditions-generales", pages.legal("conditions-generales", "Conditions Générales | DIGITA"))
+get("/cookies", pages.legal("cookies", "Politique des Cookies | DIGITA"))
 
 # ---------------------------------------------------------------- authentification
 get("/connexion", auth.show_login)

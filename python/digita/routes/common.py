@@ -9,7 +9,7 @@ def redirect(url):
 
 def not_found(request, **ctx):
     """require Views/errors/404.php avec le statut 404 (variables du contrôleur visibles)."""
-    data = {"title": "Page introuvable - Digita Marketing", "metaRobots": "noindex, follow", **ctx}
+    data = {"title": "Page introuvable | DIGITA", "metaRobots": "noindex, follow", **ctx}
     return render_view(request, "errors/404", data, status=404)
 
 

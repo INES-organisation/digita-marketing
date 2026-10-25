@@ -28,7 +28,7 @@ def _login(request, back):
 
 def brief_form(request):
     return render_view(request, "projects/brief-form-content", {
-        "title": "Créer votre projet — Digita Marketing",
+        "title": "Créer votre projet | DIGITA",
         "metaDescription": "Décrivez votre projet et recevez un devis automatique pour la création de votre "
                            "site web, e-commerce ou landing page.",
         "projectTypes": Project.TYPES,
@@ -119,7 +119,7 @@ def dashboard(request):
     projects = Project.get_client_projects(user_id)
     context = agents.get_context(security.session_id(request), user_id)
     return render_view(request, "projects/client-dashboard-content", {
-        "title": "Espace Client — Digita Marketing",
+        "title": "Espace Client | DIGITA",
         "projects": projects,
         "activeProjects": [p for p in projects if p["status"] not in ("completed", "cancelled", "draft")],
         "completedProjects": [p for p in projects if p["status"] == "completed"],

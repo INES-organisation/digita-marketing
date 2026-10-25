@@ -1,0 +1,48 @@
+/* ==================== DIAGNOSTIC GRATUIT ==================== */
+
+.diagnostic-hero {
+    margin-top: 0 !important;
+    padding-top: 120px !important;
+}
+
+/* Étiquette au-dessus du titre de chaque format */
+.diagnostic-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.diagnostic-list li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    margin-bottom: 0.6rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.diagnostic-step {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.2rem;
+    background: var(--gold-gradient);
+    color: var(--on-gold);
+}
+
+.diagnostic-faq summary {
+    cursor: pointer;
+    list-style-position: outside;
+}
+
+[data-theme="light"] .diagnostic-list li { color: #374151; }
+
+@media (max-width: 768px) {
+    .diagnostic-hero {
+        padding-top: 100px !important;
+    }
+}
