@@ -17,7 +17,8 @@ def _json(payload):
     return Response(php.json_encode(payload), media_type="application/json")
 
 
-AUDIT_DETAILS = {"company": "Entreprise", "sector": "Secteur", "goal": "Objectif", "pack": "Pack",
+# Ordre : le plus parlant d'abord (titre de l'affaire dans le CRM INES).
+AUDIT_DETAILS = {"pack": "Pack", "goal": "Objectif", "sector": "Secteur", "company": "Entreprise",
                  "phone": "Téléphone"}
 
 
@@ -68,7 +69,10 @@ def _process(name, mail, website, details=None, day="", slot=""):
         if status == booking.BOOKED:  # lead INES et e-mail de confirmation déjà envoyés par booking.book
             return {"success": True, "booked": True, "message": booking_message}
 
-        ines.push_lead(name, mail, "diagnostic", message, phone or None, outreach=True, outreach_email=False)
+        # Pour l'agent INES : l'essentiel d'abord (titre de l'affaire dans le CRM), sans l'en-tête de l'e-mail admin.
+        brief = "\n".join([f"{label} : {value}" for label, value in details.items() if value and label != "Téléphone"]
+                          + ([f"Site : {website}"] if website != "Non précisé" else [])) or "Demande de diagnostic"
+        ines.push_lead(name, mail, "diagnostic", brief, phone or None, outreach=True, outreach_email=False)
         email.send_diagnostic_confirmation(mail, name)
         return {"success": True,
                 "message": "Votre demande a été prise en compte. Un consultant vous rappelle sous 24 h ouvrées."}
@@ -124,7 +128,10 @@ def _save_contact(d):
     except Exception as e:  # noqa: BLE001
         log.error("Erreur formulaire contact : %s", e)
         return False
-    ines.push_lead(d["nom"], d["email"], "contact", message, d["telephone"], outreach=True)
+    # Pour l'agent INES : le message du prospect d'abord (il sert de titre à l'affaire dans le CRM).
+    brief = "\n".join(x for x in (d["message"], f"Expertise : {service}",
+                                   f"Organisation : {d['entreprise']}" if d["entreprise"] else "") if x)
+    ines.push_lead(d["nom"], d["email"], "contact", brief, d["telephone"], outreach=True)
     try:
         email.send_new_contact_notification(config.ADMIN_EMAIL, {
             "name": d["nom"], "email": d["email"], "subject": subject, "message": message,
