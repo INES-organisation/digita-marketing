@@ -29,7 +29,7 @@ def push_lead(name, email, source, notes="", phone=None, outreach=None, outreach
     d'INES ne bloque jamais le formulaire.
 
     Avec `outreach` (True/False), le lead passe par l'agent d'acquisition 24/7 d'INES
-    (/acquisition/web/lead) : contact + affaire + alerte du propriétaire, et premier contact du
+    (/external/acquisition/leads) : contact + affaire + alerte du propriétaire, et premier contact du
     prospect si outreach=True (par SMS seulement si outreach_email=False, le site ayant déjà écrit).
     Sans `outreach`, ou si l'agent est désactivé : simple fiche CRM (/contacts/ingest)."""
     if not enabled() or not (email or phone):  # un téléphone seul suffit (prospect du chatbot)
@@ -48,7 +48,7 @@ def _post_web_lead(web, fallback, delays=(0, 5, 30)):
     for attempt, delay in enumerate(delays, 1):
         time.sleep(delay)
         try:
-            r = httpx.post(_url("/api/v1/acquisition/web/lead"), json=web, headers=_headers(), timeout=30)
+            r = httpx.post(_url("/api/v1/external/acquisition/leads"), json=web, headers=_headers(), timeout=30)
             r.raise_for_status()
             if r.json().get("status") != "disabled":
                 return True

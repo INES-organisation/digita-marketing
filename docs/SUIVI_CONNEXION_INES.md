@@ -88,7 +88,7 @@
 
 | # | Tâche | Dépôt | Statut |
 | --- | --- | --- | --- |
-| C1 | Canal « Site web » : `POST /api/v1/acquisition/web/lead` (clé API) → contact (sans doublon, recherche par e-mail/téléphone), affaire, alerte e-mail/SMS du propriétaire | INES | ✅ |
+| C1 | Canal « Site web » : `POST /api/v1/external/acquisition/leads` (clé API) → contact (sans doublon, recherche par e-mail/téléphone), affaire, alerte e-mail/SMS du propriétaire | INES | ✅ |
 | C2 | Premier contact automatique (`outreach`) des leads web et **Lead Ads** : SMS (Twilio) + e-mail (réponse au propriétaire), lien de réservation | INES | ✅ |
 | C3 | SMS entrants (`/webhooks/twilio/sms`, branché automatiquement sur le numéro) : l'agent poursuit la qualification par SMS | INES | ✅ |
 | C4 | Devis brouillon dans `/facturation` pour chaque nouveau lead (option, TVA réglable) | INES | ✅ |
@@ -99,6 +99,7 @@
 | C9 | Newsletter : seulement le contenu de la semaine (plus d'envoi sans nouveauté), marque DIGITA, bloc diagnostic ; désinscription marquée dans le CRM (tag `newsletter-desabonne`) ; expéditeur des e-mails « DIGITA » | Digita | ✅ |
 | C10 | Page Solutions : les 3 offres d'acquisition, argumentaire vérifiable, 2 packs ; chatbot informé des offres et prix | Digita | ✅ |
 | C11 | Configuration de l'agent pour DIGITA en production (fuseau Réunion, lien `/diagnostic`, alertes e-mail, canal site web) | INES (prod) | ✅ |
+| C12 | Webhook Brevo réparé : un hard bounce, une ouverture ou un clic plantaient (date avec fuseau sur colonne sans fuseau) — adresses jamais blacklistées, suivi de délivrabilité vide. Trouvé pendant le test du 26/10 | INES | ✅ |
 
 ### 6.3 Reste à faire par vous (comptes externes)
 

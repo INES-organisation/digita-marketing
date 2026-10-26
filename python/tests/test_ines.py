@@ -83,8 +83,8 @@ def test_lead_goes_through_ines_acquisition_agent(monkeypatch):
     monkeypatch.setenv("INES_API_KEY", "ines_pro_sk_x")
     calls = _capture(monkeypatch, {"status": "created"})
     ines._post_web_lead({"source": "digita.buzz — diagnostic", "outreach": True}, {"tags": ["DIGITA", "diagnostic"]})
-    assert calls[0][0].endswith("/api/v1/acquisition/web/lead") and len(calls) == 1
+    assert calls[0][0].endswith("/api/v1/external/acquisition/leads") and len(calls) == 1
 
     calls = _capture(monkeypatch, {"status": "disabled"})
     ines._post_web_lead({"source": "x"}, {"name": "A", "email": "a@example.com", "tags": ["DIGITA", "contact"]})
-    assert [c[0].rsplit("/", 2)[-2:] for c in calls] == [["web", "lead"], ["contacts", "ingest"]]
+    assert [c[0].rsplit("/", 2)[-2:] for c in calls] == [["acquisition", "leads"], ["contacts", "ingest"]]
