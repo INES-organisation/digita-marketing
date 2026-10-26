@@ -100,6 +100,7 @@
 | C10 | Page Solutions : les 3 offres d'acquisition, argumentaire vérifiable, 2 packs ; chatbot informé des offres et prix | Digita | ✅ |
 | C11 | Configuration de l'agent pour DIGITA en production (fuseau Réunion, lien `/diagnostic`, alertes e-mail, canal site web) | INES (prod) | ✅ |
 | C12 | Webhook Brevo réparé : un hard bounce, une ouverture ou un clic plantaient (date avec fuseau sur colonne sans fuseau) — adresses jamais blacklistées, suivi de délivrabilité vide. Trouvé pendant le test du 26/10 | INES | ✅ |
+| C13 | Notifications INES réparées en production : le bloc « Projets Lab » (statut `completed` absent de l'enum PostgreSQL) invalidait la transaction et vidait silencieusement tous les blocs suivants (affaires, prospects, pages, acomptes) ; rollback + journal sur chaque bloc en échec | INES | ✅ |
 
 ### 6.3 Reste à faire par vous (comptes externes)
 
@@ -120,4 +121,5 @@
 | 25/10/2026 | État des lieux en production (§1) ; prospect du 21/10 rattrapé dans le CRM INES ; plan ouvert. |
 | 25/10/2026 | Lots A et B1-B2 livrés : tests Digita (56) et INES (test_booking_planning_sync + Planning + Booking) verts, déployés sur les deux conteneurs. |
 | 26/10/2026 | Lot C livré (§6) : tests INES (acquisition, notifications, devis, booking, planning : 76) et Digita (58) verts. |
+| 26/10/2026 | Vérifié en production : diagnostic et formulaire de contact → agent INES (contact « prospect », affaire « prospection » au titre lisible, conversation non lue), notifications in-app affichées (affaire, prospect, conversation), hard bounce Brevo blacklisté. 1er essai : 401 sur le point d'entrée (routeur réservé aux sessions) → déplacé vers `/api/v1/external/acquisition/leads` ; le repli CRM avait évité toute perte. Données de test supprimées. |
 | 25/10/2026 | Vérifié en production de bout en bout : réservation depuis `/diagnostic` → créneau dans INES Booking, événement « appel » dans le Planning (même id), contact « Lead DIGITA » dans le CRM, créneau retiré des disponibilités ; annulation par le lien de l'e-mail → réservation annulée, événement du Planning supprimé, créneau de nouveau proposé. Données de test supprimées. Chatbot : prix réels cités. Générateur de meta : description seule. |
