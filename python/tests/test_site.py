@@ -57,7 +57,7 @@ def test_home_uses_vertical_menu_anchored_on_sections():
 def test_contact_form_is_saved_and_sent_to_ines(monkeypatch):
     saved, leads_sent = [], []
     monkeypatch.setattr(db, "execute", lambda sql, p=None: saved.append(p))
-    monkeypatch.setattr(ines, "push_lead", lambda *a: leads_sent.append(a))
+    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: leads_sent.append(a))
     monkeypatch.setattr(email, "send_new_contact_notification", lambda *a: True)
     c = _client()
     token = _token(c.get("/contact").text)
@@ -79,7 +79,7 @@ def test_contact_form_is_saved_and_sent_to_ines(monkeypatch):
 def test_newsletter_subscription(monkeypatch):
     saved = []
     monkeypatch.setattr(leads.db, "execute", lambda sql, p=None: saved.append(p))
-    monkeypatch.setattr(ines, "push_lead", lambda *a: None)
+    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: None)
     c = _client()
     token = _token(c.get("/contact").text)
     assert c.post("/newsletter/subscribe", data={"_csrf_token": token, "email": "x"}).json()["success"] is False
@@ -167,7 +167,7 @@ def test_page_titles_use_digita_brand():
 def test_diagnostic_page_offers_both_formats(monkeypatch):
     saved, leads_sent = [], []
     monkeypatch.setattr(leads.db, "execute", lambda sql, p=None: saved.append(p))
-    monkeypatch.setattr(ines, "push_lead", lambda *a: leads_sent.append(a))
+    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: leads_sent.append(a))
     monkeypatch.setattr(email, "send_new_contact_notification", lambda *a: True)
     monkeypatch.setattr(email, "send_diagnostic_confirmation", lambda *a: True)
     c = _client()

@@ -86,3 +86,10 @@
 .solution-pack-list li span:first-of-type { flex: 1; }
 .solution-pack-price { white-space: nowrap; font-size: 0.85rem; color: var(--gold); font-weight: 600; }
 [data-theme="light"] .solution-pack-list li { color: #374151; }
+
+/* ==================== OFFRES D'ACQUISITION IA ==================== */
+.solution-offer-featured { border: 2px solid var(--gold) !important; box-shadow: 0 0 40px rgba(var(--gold-rgb), 0.18); }
+.solution-offer-badge { background: rgba(var(--gold-rgb), 0.12); color: var(--gold); border: 1px solid rgba(var(--gold-rgb), 0.35); }
+.solution-offer-badge-featured { background: var(--gold-gradient); color: var(--on-gold); }
+.solution-offer-price { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 1rem; }
+[data-theme="light"] .solution-offer-price { border-top-color: #e5e7eb; }

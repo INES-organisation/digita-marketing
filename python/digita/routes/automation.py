@@ -6,6 +6,7 @@ base est faite directement par INES (PROJECT_BACKUP_DATABASES). Le sitemap n'a p
 il est calculé à chaque demande. Vider le cache et OPTIMIZE TABLE (MySQL) n'ont pas d'équivalent
 utile ici (pas de cache fichier, autovacuum PostgreSQL) et sont abandonnés.
 """
+import datetime
 import hashlib
 import hmac
 import os
@@ -17,7 +18,7 @@ from starlette.responses import Response
 from .. import config, db, php
 from ..models import article as Article
 from ..models import formation as Formation
-from ..services import email
+from ..services import email, ines
 
 
 def _json(payload, status=200):
@@ -53,27 +54,40 @@ def newsletter_html(articles, formations, unsubscribe_url):
     return f"""<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
 body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
 .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-.header {{ background: #2563eb; color: white; padding: 20px; text-align: center; }}
+.header {{ background: #050505; color: #D4AF37; padding: 20px; text-align: center; }}
 .content {{ padding: 20px; background: #f9fafb; }}
 .article {{ margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; }}
 .footer {{ text-align: center; padding: 20px; font-size: 12px; color: #6b7280; }}
-a {{ color: #2563eb; text-decoration: none; }}
+a {{ color: #a16207; text-decoration: none; }}
 </style></head><body><div class="container">
-<div class="header"><h1>Newsletter Digita Marketing</h1><p>{php.date('d/m/Y')}</p></div>
-<div class="content"><h2>📚 Derniers Articles</h2>
+<div class="header"><h1>La lettre DIGITA</h1><p>{php.date('d/m/Y')}</p></div>
+<div class="content">{"<h2>📚 Nouveaux articles</h2>" if articles else ""}
 {''.join(card(a['title'], a.get('excerpt'), '/blog/' + a['slug'], 'Lire la suite') for a in articles)}
-<h2>🎓 Nouvelles Formations</h2>
+{"<h2>🎓 Nouvelles formations</h2>" if formations else ""}
 {''.join(card(f['title'], php.strip_tags(f.get('description') or ''), '/formations/' + f['slug'], 'Découvrir') for f in formations)}
+<div class='article'><h3>Diagnostic gratuit de 30 minutes</h3><p>Un consultant regarde avec vous comment trouver plus de clients et gagner du temps.</p>
+<a href='{base}/diagnostic'>Réserver mon créneau →</a></div>
 </div><div class="footer"><p>Vous recevez cet email car vous êtes abonné à notre newsletter.</p>
 <p><a href="{php.h(unsubscribe_url)}">Se désabonner</a></p></div></div></body></html>"""
 
 
+def _since(items, field, days=7):
+    """Éléments publiés dans les `days` derniers jours (dates sans fuseau, comme en base)."""
+    limit = datetime.datetime.now() - datetime.timedelta(days=days)
+    return [i for i in items if i.get(field) and php.strtotime(php.strval(i[field])) >= limit.timestamp()]
+
+
 def send_newsletter():
+    """Lundi 10 h : seulement ce qui est paru depuis une semaine — sans nouveauté, pas d'envoi
+    (l'ancienne version renvoyait chaque semaine les cinq mêmes articles)."""
     subscribers = db.fetch_all("SELECT email FROM newsletters WHERE status = 'active' ORDER BY id")
     if not subscribers:
         return {"sent": 0, "failed": 0}
-    articles, formations = Article.get_all_published(5), Formation.get_all_published(3)
-    subject = "Newsletter Digita Marketing - " + php.date("d/m/Y")
+    articles = _since(Article.get_all_published(10), "published_at")[:5]
+    formations = _since(Formation.get_all_published(10), "created_at")[:3]
+    if not articles and not formations:
+        return {"sent": 0, "failed": 0, "skipped": "aucun contenu nouveau cette semaine"}
+    subject = "La lettre DIGITA du " + php.date("d/m/Y")
     sent = 0
     for s in subscribers:
         url = (config.APP_URL.rstrip("/") + "/newsletter/unsubscribe?"
@@ -89,7 +103,8 @@ async def unsubscribe(request):
     if ok:
         await run_in_threadpool(db.execute, "UPDATE newsletters SET status = 'inactive' WHERE LOWER(email) = ?",
                                 [mail.lower()])
-    msg = "Vous êtes désabonné de la newsletter Digita Marketing." if ok else "Lien de désabonnement invalide."
+        ines.push_lead(mail, mail, "newsletter-desabonne")  # tag CRM : à exclure des campagnes INES
+    msg = "Vous êtes désabonné de la lettre DIGITA." if ok else "Lien de désabonnement invalide."
     return Response(f"<!DOCTYPE html><meta charset='utf-8'><p style='font-family:Arial;text-align:center;"
                     f"margin-top:15vh'>{msg}</p><p style='text-align:center'><a href='/'>Retour au site</a></p>",
                     status_code=200 if ok else 400, media_type="text/html")
@@ -106,7 +121,7 @@ body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
 </style></head><body><div class='container'>
 <div class='header'><h1>{php.h(title)}</h1></div>
 <div class='content'>{php.nl2br(php.h(body))}</div>
-<div class='footer'><p>&copy; {php.date('Y')} Digita Marketing. Tous droits réservés.</p>
+<div class='footer'><p>&copy; {php.date('Y')} DIGITA · La Réunion</p>
 <p><a href='{config.APP_URL}'>{config.APP_URL.split('//')[-1]}</a></p></div></div></body></html>"""
 
 

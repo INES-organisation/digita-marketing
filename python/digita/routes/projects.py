@@ -83,7 +83,7 @@ def _submit_brief(request, post):
     })
     if project_id:
         ines.push_lead(brief_data["business_name"] or title, request.session.get("user_email"), "projet",
-                       f"Brief projet #{project_id} ({project_type}) : {title}\n{brief}")
+                       f"Brief projet #{project_id} ({project_type}) : {title}\n{brief}", outreach=False)
         request.session["success_message"] = ("Votre projet a été soumis avec succès ! "
                                                "Notre équipe va l'examiner rapidement.")
         return redirect("/espace-client/projet/" + project_id)

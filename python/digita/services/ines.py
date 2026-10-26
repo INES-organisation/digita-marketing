@@ -24,14 +24,38 @@ def enabled():
     return bool(os.getenv("INES_API_KEY"))
 
 
-def push_lead(name, email, source, notes="", phone=None):
-    """Copie un lead dans le CRM INES, en arrière-plan : la base locale reste la référence et une
-    panne d'INES ne bloque jamais le formulaire."""
+def push_lead(name, email, source, notes="", phone=None, outreach=None, outreach_email=True):
+    """Copie un lead dans INES, en arrière-plan : la base locale reste la référence et une panne
+    d'INES ne bloque jamais le formulaire.
+
+    Avec `outreach` (True/False), le lead passe par l'agent d'acquisition 24/7 d'INES
+    (/acquisition/web/lead) : contact + affaire + alerte du propriétaire, et premier contact du
+    prospect si outreach=True (par SMS seulement si outreach_email=False, le site ayant déjà écrit).
+    Sans `outreach`, ou si l'agent est désactivé : simple fiche CRM (/contacts/ingest)."""
     if not enabled() or not (email or phone):  # un téléphone seul suffit (prospect du chatbot)
         return
     payload = {"name": name or email or phone, "email": email or None, "phone": phone or None, "category": "Lead DIGITA",
                "tags": ["DIGITA", source], "notes": notes or None}
-    threading.Thread(target=_post_lead, args=(payload,), daemon=True).start()
+    if outreach is None:
+        threading.Thread(target=_post_lead, args=(payload,), daemon=True).start()
+        return
+    web = {"name": name or "", "email": email or None, "phone": phone or None, "message": notes or "",
+           "source": f"digita.buzz — {source}", "outreach": bool(outreach), "outreach_email": bool(outreach_email)}
+    threading.Thread(target=_post_web_lead, args=(web, payload), daemon=True).start()
+
+
+def _post_web_lead(web, fallback, delays=(0, 5, 30)):
+    for attempt, delay in enumerate(delays, 1):
+        time.sleep(delay)
+        try:
+            r = httpx.post(_url("/api/v1/acquisition/web/lead"), json=web, headers=_headers(), timeout=30)
+            r.raise_for_status()
+            if r.json().get("status") != "disabled":
+                return True
+            break  # agent désactivé dans INES : fiche CRM simple
+        except httpx.HTTPError as e:
+            log.warning("Lead non transmis à l'agent INES (%s, essai %d) : %s", fallback["tags"][1], attempt, e)
+    return _post_lead(fallback, delays=(0,))
 
 
 def _post_lead(payload, delays=(0, 5, 30)):

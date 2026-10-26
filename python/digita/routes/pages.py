@@ -41,10 +41,11 @@ boutique = _simple("boutique/index-content", "Boutique : Packs et Services Digit
                    "formations pour faire grandir votre entreprise.")
 def solutions(request):
     return render_view(request, "solutions/index-content", {
-        "title": "Packs Clés en Main : Acquisition, E-commerce, RDV | DIGITA",
-        "metaDescription": "Packs clés en main pour TPE/PME : système d'acquisition automatique, boutique "
-                           "e-commerce prête à vendre, prise de RDV, devis automatiques. Diagnostic offert.",
-        "extraCss": ["/assets/css/solutions.css"], "packs": solutions_catalog.PACKS,
+        "title": "Agent IA 24/7 Messenger, Téléphone, Lead Ads | DIGITA",
+        "metaDescription": "Agent IA 24/7 : réponses Messenger et Instagram, accueil téléphonique, Lead Ads "
+                           "recontactés en 2 min, RDV dans votre planning. Dès 149 € HT/mois.",
+        "extraCss": ["/assets/css/solutions.css", "/assets/css/diagnostic.css"],
+        "offers": solutions_catalog.OFFERS, "packs": solutions_catalog.PACKS,
     })
 outils = _simple("outils/index-content", "Outils Marketing Gratuits : Audit SEO, ROI | DIGITA", "/assets/css/outils.css",
                  "Outils gratuits pour booster votre marketing digital : audit SEO, générateur de meta descriptions, "
@@ -81,7 +82,8 @@ def diagnostic(request):
         "extraCss": ["/assets/css/diagnostic.css"],
         "faqSchema": DIAGNOSTIC_FAQ,
         # Venu d'un pack de /solutions (« Parler de ce pack ») : rappelé dans le formulaire et la demande.
-        "pack": next((p for p in solutions_catalog.PACKS if p["id"] == request.query_params.get("pack")), None),
+        "pack": next((p for p in solutions_catalog.OFFERS + solutions_catalog.PACKS
+                      if p["id"] == request.query_params.get("pack")), None),
         "breadcrumbs": [{"name": "Accueil", "url": base + "/"}, {"name": "Diagnostic gratuit", "url": base + "/diagnostic"}],
     })
 

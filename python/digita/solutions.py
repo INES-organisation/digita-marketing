@@ -1,30 +1,75 @@
-"""Packs clés en main de la page /solutions (repris par le chatbot).
+"""Offres de la page /solutions (reprises par le chatbot et le formulaire de diagnostic).
 
-Un pack assemble des services du catalogue (`services_catalog.py`) pour régler un problème
-précis, de bout en bout. Les composants affichent le prix public de chaque service ; le prix du
-pack lui-même est établi après le diagnostic gratuit tant qu'il n'est pas fixé. Prix des composants
-= prix d'entrée (« dès ») de la ligne correspondante du catalogue ou de realisations.py
-(docs/SUIVI_CONNEXION_INES.md §3). Pour fixer un prix : renseigner « price ».
+OFFERS : les trois systèmes d'acquisition IA 24/7, construits sur l'agent d'acquisition d'INES
+(Messenger, Instagram, Lead Ads, téléphone, SMS, site web → CRM, Planning, devis brouillons).
+Prix HT fixés le 26/10/2026 (fourchette selon le paramétrage). Chaque ligne « includes » doit
+correspondre à une fonction réelle d'INES (voir docs/SUIVI_CONNEXION_INES.md §6).
+
+PACKS : autres packs clés en main, composés de services du catalogue (`services_catalog.py`) ;
+prix des composants = prix d'entrée publics, prix du pack établi après le diagnostic tant que
+« price » est vide.
 """
 
-PACKS = [
+OFFERS = [
     {
-        "id": "acquisition",
-        "title": "Système d'acquisition automatique",
-        "icon": "bi-funnel-fill",
-        "for": "TPE et PME qui veulent des demandes de clients régulières, sans dépendre du bouche-à-oreille.",
-        "promise": "des prospects qui arrivent, sont suivis et relancés tout seuls",
-        "problem": "Les demandes arrivent par à-coups, se perdent dans WhatsApp et personne n'a le temps de relancer.",
-        "components": [
-            ("Page de vente LP48, livrée en 48 h ouvrées", "997 €"),
-            ("Campagnes Facebook, Instagram ou Google Ads", "290 €/mois"),
-            ("CRM et relances automatiques par e-mail", "490 €"),
-            ("Assistant IA 24/7 sur le site ou WhatsApp", "990 €"),
-            ("Tableau de bord des demandes et du coût par prospect", "290 €/mois"),
+        "id": "standardiste",
+        "title": "Standardiste Messenger & Insta 24/7",
+        "level": "Entrée de gamme",
+        "icon": "bi-chat-dots-fill",
+        "for": "Artisans, instituts de beauté, restaurants, commerces locaux, indépendants.",
+        "promise": "répondre à chaque message Facebook et Instagram, jour et nuit, et remplir l'agenda",
+        "includes": [
+            "Réponses instantanées sur Facebook Messenger et Instagram, 24 h/24",
+            "Qualification du projet et du budget",
+            "Prise de rendez-vous directement dans votre agenda",
+            "Alerte immédiate par SMS et e-mail à chaque lead et chaque rendez-vous",
         ],
-        "price": None,
-        "anchor": "/services#ia-automation",
+        "setup": "490 € à 890 € HT",
+        "setup_note": "connexion de la page, personnalisation des réponses et des règles métier",
+        "monthly": "149 € à 249 € HT / mois",
+        "monthly_note": "maintenance, hébergement, jusqu'à 300 conversations par mois",
     },
+    {
+        "id": "commercial-ia",
+        "title": "Commercial & Standardiste IA Complet",
+        "level": "Texte + téléphone",
+        "icon": "bi-telephone-inbound-fill",
+        "featured": True,
+        "for": "BTP, promoteurs, agences immobilières, installateurs de pompes à chaleur et solaire, cabinets d'expertise.",
+        "promise": "un accueil texte et téléphone 24/7 qui qualifie, réserve et prépare le devis",
+        "includes": [
+            "Tout le Standardiste Messenger & Insta",
+            "Accueil téléphonique vocal 24/7 sur un numéro dédié",
+            "Qualification des appels et rappel des prospects par SMS",
+            "Créneaux bloqués directement dans votre planning",
+            "Fiche contact et devis brouillon créés automatiquement dans votre CRM",
+        ],
+        "setup": "1 200 € à 2 400 € HT",
+        "setup_note": "",
+        "monthly": "390 € à 590 € HT / mois",
+        "monthly_note": "500 conversations texte et jusqu'à 200 minutes d'appels qualifiés par mois",
+    },
+    {
+        "id": "machine-a-leads",
+        "title": "Machine à Leads Clé en Main",
+        "level": "Publicité + IA",
+        "icon": "bi-funnel-fill",
+        "for": "PME avec un budget publicitaire mensuel qui veulent un flux continu de clients.",
+        "promise": "des campagnes Facebook et Instagram dont chaque prospect est recontacté dans les 2 minutes",
+        "includes": [
+            "Création, gestion et optimisation de vos campagnes Meta Ads (Facebook, Instagram)",
+            "Formulaires Lead Ads intégrés aux publicités",
+            "Agent IA 24/7 : chaque prospect recontacté dans les 2 minutes par SMS et e-mail",
+            "Qualification par SMS et prise de rendez-vous dans votre planning",
+        ],
+        "setup": "1 500 € HT",
+        "setup_note": "frais de lancement",
+        "monthly": "990 € à 1 800 € HT / mois",
+        "monthly_note": "accompagnement mensuel ; budget publicitaire réglé directement par vous à Meta",
+    },
+]
+
+PACKS = [
     {
         "id": "ecommerce",
         "title": "Boutique e-commerce prête à vendre",
@@ -41,38 +86,6 @@ PACKS = [
         ],
         "price": None,
         "anchor": "/services#ecommerce",
-    },
-    {
-        "id": "rendez-vous",
-        "title": "Prise de rendez-vous automatisée",
-        "icon": "bi-calendar2-check-fill",
-        "for": "Cabinets de santé, instituts de beauté, bien-être et prestataires de services.",
-        "promise": "des rendez-vous pris en ligne, rappelés automatiquement, et des avis clients",
-        "problem": "Le téléphone sonne pendant les rendez-vous, les absences coûtent cher et les avis ne sont jamais demandés.",
-        "components": [
-            ("Site vitrine, hébergement inclus", "990 €"),
-            ("Prise de rendez-vous en ligne et rappels automatiques", "490 €"),
-            ("Demande d'avis Google automatique après la visite", "390 €"),
-            ("Assistant IA qui répond aux questions fréquentes", "990 €"),
-        ],
-        "price": None,
-        "anchor": "/services#sites-web",
-    },
-    {
-        "id": "devis",
-        "title": "Devis et relances automatiques",
-        "icon": "bi-file-earmark-check-fill",
-        "for": "Artisans, entreprises du BTP, cuisinistes, piscinistes, rénovation.",
-        "promise": "des demandes de devis qualifiées et relancées jusqu'à la signature",
-        "problem": "Les demandes de devis arrivent incomplètes, les devis partent tard et ne sont jamais relancés.",
-        "components": [
-            ("Site vitrine avec formulaire de devis qualifié", "990 €"),
-            ("CRM et relances automatiques des devis envoyés", "490 €"),
-            ("Campagnes locales Google Ads", "290 €/mois"),
-            ("Référencement local et fiche Google", "390 €"),
-        ],
-        "price": None,
-        "anchor": "/services#ia-automation",
     },
     {
         "id": "local",

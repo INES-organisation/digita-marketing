@@ -71,7 +71,8 @@ def book(day, slot, name, mail, phone="", notes=""):
     except Exception as e:  # noqa: BLE001 — la réservation INES fait foi, la copie locale est secondaire
         log.warning("Copie locale du rendez-vous non enregistrée : %s", e)
     when = format_when(day, slot)
-    ines.push_lead(name, mail, "rendez-vous", f"Diagnostic 30 min réservé le {when}\n{details}".strip(), phone or None)
+    ines.push_lead(name, mail, "rendez-vous", f"Diagnostic 30 min réservé le {when}\n{details}".strip(), phone or None,
+                   outreach=False)
     cancel_url = config.APP_URL.rstrip("/") + "/rendez-vous/annuler?token=" + booking["cancel_token"]
     email.send_booking_confirmation(mail, name, when, cancel_url)
     return BOOKED, f"Rendez-vous confirmé le {when}. Un e-mail de confirmation vous a été envoyé."

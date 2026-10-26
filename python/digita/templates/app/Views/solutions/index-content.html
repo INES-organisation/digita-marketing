@@ -4,23 +4,88 @@
     <div class="row align-items-center">
       <div class="col-lg-10 mx-auto text-center" data-aos="fade-up">
         <span class="badge rounded-pill bg-premium-gold-gradient px-3 py-2 mb-3" style="background: var(--gold-gradient); color: var(--dark); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Solutions clés en main</span>
-        <h1 class="display-3 fw-bold mb-4" style="font-family: var(--font-heading);">Des Packs Clés en Main, du Problème au Résultat</h1>
-        <p class="lead mb-0 text-white-50" style="font-size: 1.2rem;">Un service répond à un besoin (un site, une campagne). Un pack règle un problème de bout en bout : trouver des clients, vendre en ligne, remplir l'agenda, signer les devis.</p>
+        <h1 class="display-3 fw-bold mb-4" style="font-family: var(--font-heading);">Des Systèmes Clés en Main qui Trouvent vos Clients</h1>
+        <p class="lead mb-0 text-white-50" style="font-size: 1.2rem;">Un service répond à un besoin (un site, une campagne). Une solution règle un problème de bout en bout : répondre à chaque prospect, jour et nuit, et remplir votre agenda.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Packs (source : digita/solutions.py) -->
-<section class="py-6 bg-premium-grid">
+<!-- Systèmes d'acquisition IA 24/7 (source : digita/solutions.py OFFERS, moteur : agent d'acquisition INES) -->
+<section class="py-6 bg-premium-grid" id="acquisition">
     <div class="container">
+        <div class="text-center mb-5">
+            <span class="diagnostic-tag text-gold">Systèmes d'acquisition IA 24/7</span>
+            <h2 class="display-6 fw-bold text-white mt-2">Plus aucun prospect sans réponse</h2>
+            <p class="text-white-50 mx-auto" style="max-width: 680px;">Un agent IA répond à vos prospects sur Facebook, Instagram, par téléphone et par SMS, qualifie leur projet, réserve le rendez-vous dans votre planning et vous alerte aussitôt. Tout est enregistré dans votre CRM.</p>
+        </div>
+        <div class="row g-4 align-items-stretch">
+            {% for offer in offers %}
+            <div class="col-lg-4" id="{{ offer['id'] }}" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                <article class="glass-card h-100 p-4 solution-pack {{ 'solution-offer-featured' if offer.get('featured') else 'border-glass' }}">
+                    <span class="badge rounded-pill align-self-start mb-3 {{ 'solution-offer-badge-featured' if offer.get('featured') else 'solution-offer-badge' }}">{{ offer['level'] }}</span>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <span class="solution-pack-icon"><i class="bi {{ offer['icon'] }}"></i></span>
+                        <h3 class="h5 fw-bold text-white mb-0">{{ offer['title'] }}</h3>
+                    </div>
+                    <p class="text-white-50 small mb-3"><strong class="text-gold">Pour qui :</strong> {{ offer['for'] }}</p>
+                    <ul class="list-unstyled solution-pack-list mb-4">
+                        {% for item in offer['includes'] %}<li><i class="bi bi-check-circle-fill text-gold"></i><span>{{ item }}</span></li>{% endfor %}
+                    </ul>
+                    <div class="solution-offer-price mt-auto">
+                        <div><span class="text-white-50 small">Mise en service</span><strong class="d-block text-white">{{ offer['setup'] }}</strong>{% if offer['setup_note'] %}<span class="text-white-50 small">{{ offer['setup_note'] }}</span>{% endif %}</div>
+                        <div class="mt-2"><span class="text-white-50 small">Abonnement</span><strong class="d-block text-gold">{{ offer['monthly'] }}</strong><span class="text-white-50 small">{{ offer['monthly_note'] }}</span></div>
+                    </div>
+                    <a href="/diagnostic?pack={{ offer['id'] }}#consultant" class="btn-premium btn-premium-gold w-100 py-2 mt-4 text-center">Parler de cette offre</a>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+        <p class="text-white-50 small text-center mt-4 mb-0">Fourchettes selon le paramétrage (nombre de canaux, règles métier, volume). Prix définitif établi pendant le diagnostic gratuit.</p>
+    </div>
+</section>
+
+<!-- Pourquoi ça rapporte : uniquement des faits et des calculs vérifiables -->
+<section class="py-6">
+    <div class="container">
+        <h2 class="display-6 fw-bold text-white text-center mb-5">Pourquoi ça se rentabilise vite</h2>
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up">
+                <div class="glass-card border-glass h-100 p-4">
+                    <i class="bi bi-moon-stars text-gold fs-2"></i>
+                    <h3 class="h5 fw-bold text-white mt-3">Les prospects n'attendent pas</h3>
+                    <p class="text-white-50 mb-0">Ils écrivent le soir, le week-end et les jours fériés, et contactent le concurrent suivant s'ils n'ont pas de réponse. L'agent répond en quelques secondes, à toute heure.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="glass-card border-glass h-100 p-4">
+                    <i class="bi bi-clock-history text-gold fs-2"></i>
+                    <h3 class="h5 fw-bold text-white mt-3">168 heures par semaine</h3>
+                    <p class="text-white-50 mb-0">Un poste d'accueil à temps plein couvre 35 heures par semaine, hors congés et jours fériés. L'agent couvre les 168 heures de la semaine et enregistre tout directement dans votre CRM.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-card border-glass h-100 p-4">
+                    <i class="bi bi-calculator text-gold fs-2"></i>
+                    <h3 class="h5 fw-bold text-white mt-3">Un contrat suffit</h3>
+                    <p class="text-white-50 mb-0">Un seul contrat de 2 000 € signé grâce à l'agent paie plus d'un an de Standardiste (149 € HT/mois). Pour un chantier de 5 000 €, c'est un an de Commercial IA (390 € HT/mois).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Autres packs clés en main (source : digita/solutions.py PACKS) -->
+<section class="py-6 bg-premium-grid" id="packs">
+    <div class="container">
+        <h2 class="display-6 fw-bold text-white text-center mb-5">Autres packs clés en main</h2>
         <div class="row g-4">
             {% for pack in packs %}
             <div class="col-lg-6" id="{{ pack['id'] }}" data-aos="fade-up">
                 <article class="glass-card border-glass h-100 p-4 p-md-5 solution-pack">
                     <div class="d-flex align-items-center gap-3 mb-3">
                         <span class="solution-pack-icon"><i class="bi {{ pack['icon'] }}"></i></span>
-                        <h2 class="h4 fw-bold text-white mb-0">{{ pack['title'] }}</h2>
+                        <h3 class="h4 fw-bold text-white mb-0">{{ pack['title'] }}</h3>
                     </div>
                     <p class="text-white-50 small mb-2"><strong class="text-gold">Pour qui :</strong> {{ pack['for'] }}</p>
                     <p class="text-white-50 mb-3"><strong class="text-white">Le problème :</strong> {{ pack['problem'] }}</p>

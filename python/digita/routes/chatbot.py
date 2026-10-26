@@ -99,7 +99,8 @@ def _capture_lead(conv_id, user_message):
     transcript = "".join(("Visiteur" if m["role"] == "user" else "Assistant") + " : " + m["content"] + "\n"
                          for m in messages)
     summary = ", ".join(f"{k} : {info[k]}" for k in ("company", "project_type", "budget", "urgency") if info.get(k))
-    ines.push_lead(info.get("name"), mail, "chatbot", (summary + "\n\n" if summary else "") + transcript[-3000:], phone)
+    ines.push_lead(info.get("name"), mail, "chatbot", (summary + "\n\n" if summary else "") + transcript[-3000:], phone,
+                   outreach=False)
 
 
 def _try_qualify_lead(conv_id):

@@ -76,3 +76,15 @@ def test_prompt_only_call_sends_prompt_as_user_message(monkeypatch):
     assert ai.chat([], "Classe cette demande") == "projet"
     _, body, _ = calls[0]
     assert body["messages"] == [{"role": "user", "content": "Classe cette demande"}] and body["system"] is None
+
+
+def test_lead_goes_through_ines_acquisition_agent(monkeypatch):
+    """Avec `outreach`, le lead passe par l'agent 24/7 d'INES ; agent désactivé → fiche CRM simple."""
+    monkeypatch.setenv("INES_API_KEY", "ines_pro_sk_x")
+    calls = _capture(monkeypatch, {"status": "created"})
+    ines._post_web_lead({"source": "digita.buzz — diagnostic", "outreach": True}, {"tags": ["DIGITA", "diagnostic"]})
+    assert calls[0][0].endswith("/api/v1/acquisition/web/lead") and len(calls) == 1
+
+    calls = _capture(monkeypatch, {"status": "disabled"})
+    ines._post_web_lead({"source": "x"}, {"name": "A", "email": "a@example.com", "tags": ["DIGITA", "contact"]})
+    assert [c[0].rsplit("/", 2)[-2:] for c in calls] == [["web", "lead"], ["contacts", "ingest"]]

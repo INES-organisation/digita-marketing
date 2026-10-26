@@ -13,7 +13,7 @@ from . import ines
 
 log = logging.getLogger("digita.email")
 
-FROM_NAME = "Digita Marketing"
+FROM_NAME = "DIGITA"
 
 
 def send(to, subject, body):

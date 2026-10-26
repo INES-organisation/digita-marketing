@@ -57,7 +57,10 @@ def _knowledge():
     lines.append("Offres phares (accueil) :")
     lines += [f"- {r['title']} : {r['price']}" + (f" ({r['price_note']})" if r.get("price_note") else "")
               for r in REALISATIONS]
-    lines.append("Packs clés en main (page /solutions, tarif établi après le diagnostic) :")
+    lines.append("Systèmes d'acquisition IA 24/7 (page /solutions, prix HT) :")
+    lines += [f"- {o['title']} ({o['for']}) : {o['promise']} ; mise en service {o['setup']}, abonnement {o['monthly']} "
+              f"({o['monthly_note']})" for o in solutions.OFFERS]
+    lines.append("Autres packs clés en main (page /solutions, tarif établi après le diagnostic) :")
     lines += [f"- {s['title']} : {s['promise']}" for s in solutions.PACKS]
     return "\n".join(lines)
 

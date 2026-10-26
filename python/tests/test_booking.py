@@ -32,7 +32,7 @@ def ines_booking(monkeypatch):
         calls["booked"].append((event_id, start_at, name, notes))
         return {"id": "slot-1", "cancel_token": "tok"}
     monkeypatch.setattr(ines, "book_slot", book_slot)
-    monkeypatch.setattr(ines, "push_lead", lambda *a: calls["leads"].append(a))
+    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: calls["leads"].append(a))
     monkeypatch.setattr(email, "send_booking_confirmation", lambda *a: calls["mails"].append(a))
     monkeypatch.setattr(email, "send_new_contact_notification", lambda *a: True)
     monkeypatch.setattr(db, "execute", lambda sql, p=None: calls["saved"].append(p))
@@ -84,7 +84,7 @@ def test_chatbot_contact_details_reach_ines_crm(monkeypatch):
     leads_sent = []
     monkeypatch.setattr(chatbot, "_try_qualify_lead", lambda conv_id: None)  # IA indisponible
     monkeypatch.setattr(chatbot.db, "fetch_all", lambda sql, p=None: [{"role": "user", "content": "Rappelez-moi au 0692 12 34 56"}])
-    monkeypatch.setattr(ines, "push_lead", lambda *a: leads_sent.append(a))
+    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: leads_sent.append(a))
     chatbot._capture_lead(7, "Rappelez-moi au 0692 12 34 56")
     assert leads_sent[0][1] is None and leads_sent[0][2] == "chatbot" and leads_sent[0][4] == "0692 12 34 56"
     assert chatbot.CONTACT_RX.search("mon mail : ana@example.com") and not chatbot.CONTACT_RX.search("bonjour")
@@ -107,11 +107,14 @@ def test_editorial_calendar_starts_tomorrow(monkeypatch):
     assert [i["title"] for i in items] == ["A", "B"] and "2 articles" in prompts[0] and "du 2026-10-26" in prompts[0]
 
 
-def test_solutions_page_lists_turnkey_packs():
+def test_solutions_page_lists_offers_and_packs():
     from digita import solutions
     html = TestClient(app).get("/solutions").text
-    for pack in solutions.PACKS:
-        assert pack["title"] in html and f'/diagnostic?pack={pack["id"]}#consultant' in html
+    for item in solutions.OFFERS + solutions.PACKS:
+        assert item["title"] in html and f'/diagnostic?pack={item["id"]}#consultant' in html
+    for offer in solutions.OFFERS:
+        assert offer["setup"] in html and offer["monthly"] in html
     assert "Prix du pack établi après le diagnostic gratuit" in html
-    diag = TestClient(app).get("/diagnostic?pack=devis").text
-    assert 'name="pack" value="Devis et relances automatiques"' in diag
+    assert "60 %" not in html and "8 prospects sur 10" not in html  # chiffres non sourcés du pitch
+    diag = TestClient(app).get("/diagnostic?pack=commercial-ia").text
+    assert 'name="pack" value="Commercial &amp; Standardiste IA Complet"' in diag

@@ -68,7 +68,7 @@ def _process(name, mail, website, details=None, day="", slot=""):
         if status == booking.BOOKED:  # lead INES et e-mail de confirmation déjà envoyés par booking.book
             return {"success": True, "booked": True, "message": booking_message}
 
-        ines.push_lead(name, mail, "audit", message, phone or None)
+        ines.push_lead(name, mail, "diagnostic", message, phone or None, outreach=True, outreach_email=False)
         email.send_diagnostic_confirmation(mail, name)
         return {"success": True,
                 "message": "Votre demande a été prise en compte. Un consultant vous rappelle sous 24 h ouvrées."}
@@ -124,7 +124,7 @@ def _save_contact(d):
     except Exception as e:  # noqa: BLE001
         log.error("Erreur formulaire contact : %s", e)
         return False
-    ines.push_lead(d["nom"], d["email"], "contact", message, d["telephone"])
+    ines.push_lead(d["nom"], d["email"], "contact", message, d["telephone"], outreach=True)
     try:
         email.send_new_contact_notification(config.ADMIN_EMAIL, {
             "name": d["nom"], "email": d["email"], "subject": subject, "message": message,

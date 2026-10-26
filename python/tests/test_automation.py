@@ -1,5 +1,6 @@
 """E-mails et anciennes tâches cron, désormais pris en charge par INES."""
 import asyncio
+import datetime
 
 from starlette.requests import Request
 
@@ -22,15 +23,20 @@ def test_email_goes_through_ines_only_with_key(monkeypatch):
     monkeypatch.setenv("INES_API_KEY", "ines_pro_sk_test")
     monkeypatch.setenv("MAIL_FROM", "noreply@digita.buzz")
     assert email.send("a@example.com", "Sujet", "<p>x</p>") is True
-    assert calls == [("a@example.com", "Sujet", "<p>x</p>", "Digita Marketing", "noreply@digita.buzz")]
+    assert calls == [("a@example.com", "Sujet", "<p>x</p>", "DIGITA", "noreply@digita.buzz")]
 
 
 def test_cron_requires_ines_token_and_newsletter_unsubscribes(monkeypatch):
     monkeypatch.setenv("PROJECT_CRON_TOKEN", "secret-partage")
     sent = []
     monkeypatch.setattr(db, "fetch_all", lambda sql, p=None: [{"email": "Abo@Example.com"}])
-    monkeypatch.setattr(article, "get_all_published", lambda n=None: [{"title": "A<b>", "excerpt": "x", "slug": "a"}])
-    monkeypatch.setattr(formation, "get_all_published", lambda n=None: [{"title": "F", "description": "<p>d</p>", "slug": "f"}])
+    recent = datetime.datetime.now() - datetime.timedelta(days=2)
+    monkeypatch.setattr(article, "get_all_published", lambda n=None: [
+        {"title": "A<b>", "excerpt": "x", "slug": "a", "published_at": recent},
+        {"title": "Vieux", "excerpt": "x", "slug": "vieux", "published_at": recent - datetime.timedelta(days=30)}])
+    monkeypatch.setattr(formation, "get_all_published", lambda n=None: [
+        {"title": "F", "description": "<p>d</p>", "slug": "f", "created_at": recent - datetime.timedelta(days=60)}])
+    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: None)
     monkeypatch.setattr(email, "send", lambda to, subject, html: sent.append((to, html)) or True)
 
     assert asyncio.run(automation.newsletter(_request("/internal/cron/newsletter"))).status_code == 403
@@ -41,6 +47,7 @@ def test_cron_requires_ines_token_and_newsletter_unsubscribes(monkeypatch):
     assert ok.status_code == 200 and b'"sent":1' in ok.body
     to, html = sent[0]
     assert to == "Abo@Example.com" and "A&lt;b&gt;" in html and "/blog/a" in html
+    assert "/blog/vieux" not in html and "/formations/f" not in html and "/diagnostic" in html
     sig = automation.unsubscribe_sig("abo@example.com")
     assert "sig=" + sig in html
 
@@ -50,6 +57,16 @@ def test_cron_requires_ines_token_and_newsletter_unsubscribes(monkeypatch):
     assert asyncio.run(automation.unsubscribe(good)).status_code == 200 and updates == [["abo@example.com"]]
     forged = _request("/newsletter/unsubscribe", query=b"email=autre%40example.com&sig=" + sig.encode())
     assert asyncio.run(automation.unsubscribe(forged)).status_code == 400 and len(updates) == 1
+
+
+def test_newsletter_is_not_sent_without_new_content(monkeypatch):
+    sent = []
+    monkeypatch.setattr(db, "fetch_all", lambda sql, p=None: [{"email": "a@example.com"}])
+    old = datetime.datetime.now() - datetime.timedelta(days=40)
+    monkeypatch.setattr(article, "get_all_published", lambda n=None: [{"title": "A", "slug": "a", "published_at": old}])
+    monkeypatch.setattr(formation, "get_all_published", lambda n=None: [])
+    monkeypatch.setattr(email, "send", lambda *a: sent.append(a) or True)
+    assert automation.send_newsletter()["skipped"] and sent == []
 
 
 def test_sitemap_is_built_from_published_content(monkeypatch):
