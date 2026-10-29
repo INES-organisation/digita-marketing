@@ -2,8 +2,8 @@
 
 OFFERS : les trois systèmes d'acquisition IA 24/7, construits sur l'agent d'acquisition d'INES
 (Messenger, Instagram, Lead Ads, téléphone, SMS, site web → CRM, Planning, devis brouillons).
-Prix HT fixés le 26/10/2026 (fourchette selon le paramétrage). Chaque ligne « includes » doit
-correspondre à une fonction réelle d'INES (voir docs/SUIVI_CONNEXION_INES.md §6).
+Prix fixés le 26/10/2026, fourchette selon le paramétrage (TVA non applicable, art. 293 B du CGI).
+Chaque ligne « includes » doit correspondre à une fonction réelle d'INES (voir docs/SUIVI_CONNEXION_INES.md §6).
 
 PACKS : autres packs clés en main, composés de services du catalogue (`services_catalog.py`) ;
 prix des composants = prix d'entrée publics, prix du pack établi après le diagnostic tant que
@@ -24,9 +24,9 @@ OFFERS = [
             "Prise de rendez-vous directement dans votre agenda",
             "Alerte immédiate par SMS et e-mail à chaque lead et chaque rendez-vous",
         ],
-        "setup": "490 € à 890 € HT",
+        "setup": "490 € à 890 €",
         "setup_note": "connexion de la page, personnalisation des réponses et des règles métier",
-        "monthly": "149 € à 249 € HT / mois",
+        "monthly": "149 € à 249 € / mois",
         "monthly_note": "maintenance, hébergement, jusqu'à 300 conversations par mois",
     },
     {
@@ -44,9 +44,9 @@ OFFERS = [
             "Créneaux bloqués directement dans votre planning",
             "Fiche contact et devis brouillon créés automatiquement dans votre CRM",
         ],
-        "setup": "1 200 € à 2 400 € HT",
+        "setup": "1 200 € à 2 400 €",
         "setup_note": "",
-        "monthly": "390 € à 590 € HT / mois",
+        "monthly": "390 € à 590 € / mois",
         "monthly_note": "500 conversations texte et jusqu'à 200 minutes d'appels qualifiés par mois",
     },
     {
@@ -62,9 +62,9 @@ OFFERS = [
             "Agent IA 24/7 : chaque prospect recontacté dans les 2 minutes par SMS et e-mail",
             "Qualification par SMS et prise de rendez-vous dans votre planning",
         ],
-        "setup": "1 500 € HT",
+        "setup": "1 500 €",
         "setup_note": "frais de lancement",
-        "monthly": "990 € à 1 800 € HT / mois",
+        "monthly": "990 € à 1 800 € / mois",
         "monthly_note": "accompagnement mensuel ; budget publicitaire réglé directement par vous à Meta",
     },
 ]

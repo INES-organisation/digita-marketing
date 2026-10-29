@@ -182,3 +182,32 @@ def test_diagnostic_page_offers_both_formats(monkeypatch):
     assert r.json()["success"] is True
     assert saved[0][2] == "0693000000" and "Entreprise : Piscines Ana" in saved[0][4]
     assert "Secteur : Artisan / BTP" in leads_sent[0][3]
+
+
+def test_home_v2_draft_is_noindex_and_uses_real_offers():
+    """Future accueil (docs/SUIVI_REFONTE_ACCUEIL.md) : non indexée, offres et FAQ réelles, sans dépendances lourdes."""
+    import json
+
+    from digita import solutions
+    from digita.routes.pages import HOME_V2_FAQ
+
+    r = _client().get("/accueil-v2")
+    assert r.status_code == 200
+    html = r.text
+    assert '<meta name="robots" content="noindex, nofollow">' in html
+    assert html.count("<h1") == 1 and "Même à 23 h." in html
+    for offer in solutions.OFFERS:
+        assert offer["title"] in html and offer["monthly"] in html, offer["id"]
+    for dependency in ("bootstrap", "data-aos", "fonts.googleapis.com", "glass-card"):
+        assert dependency not in html, dependency
+    for figure in ("+250", "x2.5", "45%", "-70%", "+40%"):
+        assert figure not in html, figure
+    data = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
+    faq = next(node for node in data["@graph"] if node["@type"] == "FAQPage")
+    assert len(faq["mainEntity"]) == len(HOME_V2_FAQ)
+    assert "/accueil-v2" not in _client().get("/sitemap.xml").text
+    # Décisions du 29/10 : agent nommé INES, prix nets (art. 293 B), WhatsApp par offre, chatbot présent.
+    assert "INES, notre agent IA" in html and 'id="chatbot-container"' in html and "/assets/js/chatbot.js" in html
+    assert " HT" not in html and "293 B" in html
+    assert html.count("https://wa.me/262693487817") == 1 + len(solutions.OFFERS)
+    assert 'id="essai-standardiste"' in _client().get("/conditions-generales").text

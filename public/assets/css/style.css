@@ -156,7 +156,7 @@ section {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('../images/pattern.svg') repeat;
+    background: url('../images/contenu/pattern.svg') repeat;
     opacity: 0.1;
 }
 
@@ -244,7 +244,7 @@ section {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('../images/pattern.svg') repeat;
+    background: url('../images/contenu/pattern.svg') repeat;
     opacity: 0.1;
 }
 
@@ -372,7 +372,7 @@ footer p, footer a {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('../images/pattern.svg') repeat;
+    background: url('../images/contenu/pattern.svg') repeat;
     opacity: 0.1;
 }
 

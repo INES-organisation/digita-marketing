@@ -1,0 +1,24 @@
+    <!-- Chatbot INES (script : /assets/js/chatbot.js). Icônes en SVG : la page v2 n'a pas Bootstrap Icons. -->
+    <div id="chatbot-container">
+        <button id="chatbot-button" type="button" onclick="toggleChatbot()" aria-label="Écrire à INES, l'assistante DIGITA">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 6.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm5 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm5 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>
+        </button>
+        <div id="chatbot-window" role="dialog" aria-label="Conversation avec INES">
+            <div id="chatbot-header">
+                <h5>INES · assistante DIGITA</h5>
+                <button id="chatbot-close" type="button" onclick="toggleChatbot()" aria-label="Fermer">×</button>
+            </div>
+            <div id="chatbot-messages" aria-live="polite"></div>
+            <div id="chatbot-actions">
+                <button type="button" onclick="openBooking()">Réserver un appel</button>
+                <a href="/tarifs">Tarifs</a>
+                <a href="/outils/audit-seo">Audit SEO</a>
+            </div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Posez votre question..." aria-label="Votre message" onkeypress="if(event.key==='Enter') sendMessage()">
+                <button id="chatbot-send" type="button" onclick="sendMessage()" aria-label="Envoyer">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 21 23 12 2 3v7l15 2-15 2v7Z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>

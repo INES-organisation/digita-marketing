@@ -10,6 +10,39 @@ def home(request):
     return render_page(request, "templates/home.html", {"realisations": REALISATIONS})
 
 
+# Questions de la future accueil (/accueil-v2) : affichées sur la page et reprises en FAQPage.
+# Chaque réponse s'appuie sur une offre réelle (solutions.OFFERS) ou sur DIAGNOSTIC_FAQ.
+HOME_V2_FAQ = [
+    {"question": "Combien ça coûte, vraiment ?",
+     "answer": "Le Standardiste Messenger et Instagram démarre à 149 € par mois, après une mise en service de 490 € "
+               "à 890 €. Les fourchettes dépendent du nombre de canaux, des règles métier et du volume ; le prix "
+               "définitif est fixé pendant le diagnostic gratuit. Pour la Machine à Leads, le budget publicitaire est "
+               "réglé directement par vous à Meta. Prix nets : TVA non applicable, art. 293 B du CGI."},
+    {"question": "Faut-il déjà avoir un site internet ?",
+     "answer": "Non. INES répond sur votre page Facebook, sur Instagram et, avec l'offre Commercial IA, au "
+               "téléphone. Le site peut venir plus tard."},
+    {"question": "Et si INES ne m'amène aucun rendez-vous ?",
+     "answer": "Pour le Standardiste, l'essai dure 14 jours : si INES n'a posé aucun rendez-vous pendant l'essai, la "
+               "mise en service n'est pas facturée. Les conditions sont dans les conditions générales, article 5 bis."},
+    {"question": "Où arrivent mes prospects ?",
+     "answer": "Chaque contact et chaque rendez-vous sont enregistrés dans votre CRM, et le rendez-vous tombe "
+               "directement dans votre planning. Vous êtes alerté par SMS et par e-mail."},
+    {"question": "Que se passe-t-il pendant le diagnostic ?",
+     "answer": "Un échange de 30 minutes, gratuit et sans engagement, sur votre visibilité, le suivi de vos prospects, "
+               "vos devis et vos rendez-vous. Vous repartez avec un plan d'action concret et priorisé."},
+    {"question": "Je suis à La Réunion : on se voit ?",
+     "answer": "DIGITA est basé à La Réunion. Le diagnostic se fait au téléphone ou en visio, et nous pouvons nous "
+               "rencontrer pour la mise en service."},
+]
+
+
+def home_v2(request):
+    """Future page d'accueil, en travail sur /accueil-v2 (noindex) : docs/SUIVI_REFONTE_ACCUEIL.md."""
+    return render_page(request, "templates/home-v2.html", {
+        "offers": solutions_catalog.OFFERS, "faq": HOME_V2_FAQ,
+    })
+
+
 def _simple(view, title, css, description=None):
     def handler(request):
         return render_view(request, view, {"title": title, "metaDescription": description, "extraCss": [css]})
@@ -43,7 +76,7 @@ def solutions(request):
     return render_view(request, "solutions/index-content", {
         "title": "Agent IA 24/7 Messenger, Téléphone, Lead Ads | DIGITA",
         "metaDescription": "Agent IA 24/7 : réponses Messenger et Instagram, accueil téléphonique, Lead Ads "
-                           "recontactés en 2 min, RDV dans votre planning. Dès 149 € HT/mois.",
+                           "recontactés en 2 min, RDV dans votre planning. Dès 149 €/mois.",
         "extraCss": ["/assets/css/solutions.css", "/assets/css/diagnostic.css"],
         "offers": solutions_catalog.OFFERS, "packs": solutions_catalog.PACKS,
     })

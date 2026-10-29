@@ -55,9 +55,9 @@
 
 | Offre | Mise en service | Abonnement | Fonctions INES utilisées |
 | --- | --- | --- | --- |
-| Standardiste Messenger & Insta 24/7 | 490 € à 890 € HT | 149 € à 249 € HT/mois (300 conversations) | Messenger, Instagram, qualification, RDV au Planning, alertes SMS/e-mail |
-| Commercial & Standardiste IA Complet | 1 200 € à 2 400 € HT | 390 € à 590 € HT/mois (500 conversations, 200 min d'appels) | + accueil vocal Twilio, rappel par SMS, devis brouillon `/facturation` |
-| Machine à Leads Clé en Main | 1 500 € HT | 990 € à 1 800 € HT/mois + budget Meta | Lead Ads + premier contact SMS/e-mail immédiat + qualification par SMS |
+| Standardiste Messenger & Insta 24/7 | 490 € à 890 € | 149 € à 249 €/mois (300 conversations) | Messenger, Instagram, qualification, RDV au Planning, alertes SMS/e-mail |
+| Commercial & Standardiste IA Complet | 1 200 € à 2 400 € | 390 € à 590 €/mois (500 conversations, 200 min d'appels) | + accueil vocal Twilio, rappel par SMS, devis brouillon `/facturation` |
+| Machine à Leads Clé en Main | 1 500 € | 990 € à 1 800 €/mois + budget Meta | Lead Ads + premier contact SMS/e-mail immédiat + qualification par SMS |
 
 **Autres packs** (`PACKS`) : Boutique e-commerce prête à vendre, Visibilité locale 974 (prix du pack établi après diagnostic). Les packs « Système d'acquisition », « Prise de RDV » et « Devis et relances » sont retirés : couverts par les offres ci-dessus.
 

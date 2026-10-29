@@ -16,6 +16,7 @@ def post(path, fn):
 
 
 get("/", pages.home)
+get("/accueil-v2", pages.home_v2)  # future accueil, non indexée (docs/SUIVI_REFONTE_ACCUEIL.md)
 get("/sitemap.xml", automation.sitemap)
 get("/newsletter/unsubscribe", automation.unsubscribe)
 # Tâches planifiées, appelées par INES (voir routes/automation.py)

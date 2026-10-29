@@ -37,7 +37,7 @@ body {
 }
 
 #videos {
-    background-image: url('/assets/images/hero-bg.svg');
+    background-image: url('/assets/images/contenu/hero-bg.svg');
     background-position: center 80px;
     overflow: hidden;
 }
@@ -48,7 +48,7 @@ body {
 }
 
 #vitrine {
-    background-image: url('/assets/images/hero-bg.svg');
+    background-image: url('/assets/images/contenu/hero-bg.svg');
     background-position: center 180px;
     overflow: hidden;
 }
@@ -59,7 +59,7 @@ body {
 }
 
 #management {
-    background-image: url('/assets/images/hero-bg.svg');
+    background-image: url('/assets/images/contenu/hero-bg.svg');
     background-position: center 280px;
     overflow: hidden;
 }
@@ -70,7 +70,7 @@ body {
 }
 
 #publicite {
-    background-image: url('/assets/images/hero-bg.svg');
+    background-image: url('/assets/images/contenu/hero-bg.svg');
     background-position: center 320px;
     overflow: hidden;
 }
@@ -81,7 +81,7 @@ body {
 }
 
 #ia {
-    background-image: url('/assets/images/hero-bg.svg');
+    background-image: url('/assets/images/contenu/hero-bg.svg');
     background-position: center 380px;
     overflow: hidden;
 }

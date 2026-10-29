@@ -57,7 +57,7 @@ def _knowledge():
     lines.append("Offres phares (accueil) :")
     lines += [f"- {r['title']} : {r['price']}" + (f" ({r['price_note']})" if r.get("price_note") else "")
               for r in REALISATIONS]
-    lines.append("Systèmes d'acquisition IA 24/7 (page /solutions, prix HT) :")
+    lines.append("Systèmes d'acquisition IA 24/7 (page /solutions ; TVA non applicable, art. 293 B du CGI : prix nets) :")
     lines += [f"- {o['title']} ({o['for']}) : {o['promise']} ; mise en service {o['setup']}, abonnement {o['monthly']} "
               f"({o['monthly_note']})" for o in solutions.OFFERS]
     lines.append("Autres packs clés en main (page /solutions, tarif établi après le diagnostic) :")
@@ -67,7 +67,7 @@ def _knowledge():
 
 def _build_full_prompt(agent, brief):
     prompt = f"IDENTITÉ : {agent['prompt']}\n"
-    prompt += ("Tu es l'assistant du site digita.buzz : DIGITA, agence IA et automatisation à La Réunion, pour les "
+    prompt += ("Tu t'appelles INES, l'assistante du site digita.buzz : DIGITA, agence IA et automatisation à La Réunion, pour les "
                "dirigeants de TPE/PME (artisans, santé, beauté, immobilier, tourisme, commerces).\n\n")
     prompt += "CONTEXTE CLIENT ACTUEL :\n"
     if not brief:

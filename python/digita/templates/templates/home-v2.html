@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent IA 24/7 pour TPE et PME à La Réunion | DIGITA</title>
+<meta name="description" content="Un agent IA répond à vos messages Facebook, Instagram et à vos appels, qualifie le projet et pose le rendez-vous dans votre agenda. Prix affichés, diagnostic gratuit.">
+<!-- Page de travail : remplacera l'accueil à la fin de la refonte (docs/SUIVI_REFONTE_ACCUEIL.md). -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="{{ base_url }}/">
+<meta name="theme-color" content="#f7f7f4">
+<link rel="icon" type="image/png" href="/assets/images/digita.png">
+<link rel="preload" href="/assets/fonts/bricolage-grotesque-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-sans-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/v2.css?v={{ asset_v }}">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": "{{ base_url }}/#digita",
+      "name": "DIGITA",
+      "alternateName": "Digita Marketing",
+      "url": "{{ base_url }}/",
+      "telephone": "+262693487817",
+      "areaServed": {"@type": "AdministrativeArea", "name": "La Réunion"},
+      "makesOffer": [{% for o in offers %}
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": {{ o.title|tojson }}}, "description": {{ (o.monthly ~ ', mise en service ' ~ o.setup)|tojson }}}{% if not loop.last %},{% endif %}{% endfor %}
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [{% for q in faq %}
+        {"@type": "Question", "name": {{ q.question|tojson }}, "acceptedAnswer": {"@type": "Answer", "text": {{ q.answer|tojson }}}}{% if not loop.last %},{% endif %}{% endfor %}
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="draft-bar">Version de travail de la future page d'accueil, non publiée. <a href="/">Voir l'accueil actuel</a></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/accueil-v2"><img src="/assets/images/v2/logo-digita.webp" alt="DIGITA" width="130" height="34"><span class="brand-text">DIGITA<span>.</span></span></a>
+    <nav aria-label="Navigation principale">
+      <a href="#offres">Offres</a>
+      <a href="#ines">INES</a>
+      <a href="#faq">Questions</a>
+      <a href="/a-propos">À propos</a>
+    </nav>
+    <a class="btn btn-primary" href="/diagnostic">Réserver 30 min</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero" aria-labelledby="titre">
+    <div class="wrap">
+      <div>
+        <p class="kicker">Agent IA 24/7 · La Réunion</p>
+        <h1 id="titre">Chaque prospect reçoit une réponse. <em>Même à 23 h.</em></h1>
+        <p class="lead">INES, notre agent IA, répond à vos messages Facebook et Instagram et à vos appels, qualifie le projet et pose le rendez-vous dans votre agenda. Vous êtes prévenu aussitôt. Vous, vous dirigez votre entreprise.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/diagnostic">Réserver un diagnostic de 30 minutes</a>
+          <a class="btn btn-ghost" href="https://wa.me/262693487817?text={{ 'Bonjour, je voudrais que mes prospects reçoivent une réponse 24/7. Mon activité : '|urlencode }}" rel="noopener">Écrire sur WhatsApp</a>
+        </div>
+        <p class="reassure">Diagnostic gratuit et sans engagement · Prix affichés · Basé à La Réunion</p>
+      </div>
+
+      <div class="phone" role="img" aria-label="Exemple : un prospect écrit sur Messenger à 23 h 14, l'agent qualifie son projet, réserve un rendez-vous et crée sa fiche dans le CRM.">
+        <div class="phone-head step"><span>INES · Messenger de votre page</span><span>23:14</span></div>
+        <p class="msg in step">Bonjour, vous faites les devis pour une pompe à chaleur ?</p>
+        <p class="msg out step">Bonsoir ! Oui. C'est pour une maison ou un local professionnel, et dans quelle commune ?</p>
+        <p class="msg in step">Une maison à Saint-Paul, 110 m².</p>
+        <p class="msg out step">Parfait. Je vous propose un appel avec le technicien jeudi à 10 h ou vendredi à 14 h ?</p>
+        <p class="msg in step">Jeudi 10 h.</p>
+        <p class="status step">Rendez-vous posé : jeudi 10 h</p>
+        <p class="status step">Fiche créée dans le CRM, SMS envoyé au gérant</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="ou">
+    <div class="wrap">
+      <p class="kicker">Vous en êtes où ?</p>
+      <h2 class="section-title" id="ou">On part de votre situation.</h2>
+      <div class="grid grid-3">
+        <article class="card">
+          <span class="tag">Messages et appels</span>
+          <h3>Des messages restent sans réponse.</h3>
+          <p class="muted">Le soir, le week-end, pendant un chantier : le prospect écrit, personne ne répond, il contacte le suivant.</p>
+          <a class="go" href="#standardiste">Le Standardiste 24/7</a>
+        </article>
+        <article class="card">
+          <span class="tag">Acquisition</span>
+          <h3>Vous voulez plus de demandes.</h3>
+          <p class="muted">Des campagnes Facebook et Instagram dont chaque prospect est recontacté dans les 2 minutes.</p>
+          <a class="go" href="#machine-a-leads">La Machine à Leads</a>
+        </article>
+        <article class="card">
+          <span class="tag">Site internet</span>
+          <h3>Vous n'avez pas encore le bon site.</h3>
+          <p class="muted">Un site vitrine rapide et pensé pour le téléphone, qui fait appeler. Identité, site et hébergement compris.</p>
+          <a class="go" href="/services#sites-web">Le site vitrine 974, dès 990 €</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="calcul">
+    <div class="wrap">
+      <p class="kicker">Le calcul</p>
+      <h2 class="section-title" id="calcul">Vos prospects n'écrivent pas aux heures de bureau.</h2>
+      <div class="figures">
+        <div class="figure"><strong>168 h</strong><p>dans une semaine. Un poste d'accueil à temps plein en couvre 35, hors congés et jours fériés.</p></div>
+        <div class="figure"><strong>2 min</strong><p>pour recontacter un prospect venu d'une publicité, par SMS et par e-mail, avec la Machine à Leads.</p></div>
+        <div class="figure"><strong>1 contrat</strong><p>de 2 000 € signé grâce à l'agent paie plus d'un an d'abonnement au Standardiste (149 € par mois).</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="offres" aria-labelledby="titre-offres">
+    <div class="wrap">
+      <p class="kicker">Les offres</p>
+      <h2 class="section-title" id="titre-offres">Trois systèmes, des prix affichés.</h2>
+      <p class="lead">Tout est enregistré dans votre CRM. Vous êtes alerté par SMS et par e-mail à chaque prospect et à chaque rendez-vous.</p>
+      <div class="grid grid-3">
+        {% for o in offers %}
+        <article class="card offer{% if o.featured %} featured{% endif %}" id="{{ o.id }}">
+          <span class="tag">{{ o.level }}</span>
+          <h3>{{ o.title }}</h3>
+          <p class="muted">Pour : {{ o['for'] }}</p>
+          <ul>{% for line in o.includes %}<li>{{ line }}</li>{% endfor %}</ul>
+          <div class="price">
+            <div>Mise en service : <b>{{ o.setup }}</b></div>
+            <div>Abonnement : <b>{{ o.monthly }}</b></div>
+            {% if o.monthly_note %}<div class="muted">{{ o.monthly_note }}</div>{% endif %}
+          </div>
+          <a class="go" href="/diagnostic?pack={{ o.id }}">Réserver un diagnostic pour cette offre</a>
+          <a class="go" href="https://wa.me/262693487817?text={{ ('Bonjour, je voudrais parler de l\'offre « ' ~ o.title ~ ' ». Mon activité : ')|urlencode }}" rel="noopener">En parler sur WhatsApp</a>
+        </article>
+        {% endfor %}
+      </div>
+      <p class="note">Fourchettes selon le paramétrage (nombre de canaux, règles métier, volume). Le prix définitif est établi pendant le diagnostic gratuit. Prix nets : TVA non applicable, art. 293 B du CGI.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="comment">
+    <div class="wrap">
+      <p class="kicker">Comment ça se passe</p>
+      <h2 class="section-title" id="comment">Quatre étapes, un seul interlocuteur.</h2>
+      <ol class="steps">
+        <li><h3>Le diagnostic</h3><p>30 minutes, gratuites : vos canaux, vos prospects, ce qui se perd aujourd'hui.</p></li>
+        <li><h3>Le paramétrage</h3><p>Vos réponses, vos règles métier, votre agenda et votre CRM branchés.</p></li>
+        <li><h3>La mise en service</h3><p>L'agent répond à vos prospects. Vous recevez chaque alerte.</p></li>
+        <li><h3>Le suivi</h3><p>On ajuste les réponses avec vous, d'après les vraies conversations.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="garantie" aria-labelledby="titre-garantie">
+    <div class="wrap">
+      <p class="kicker">L'essai</p>
+      <h2 class="section-title" id="titre-garantie">Vous ne payez la mise en service que si INES vous amène un rendez-vous.</h2>
+      <p class="lead">Le Standardiste est branché 14 jours sur votre page Facebook et votre compte Instagram. Si INES n'a posé aucun rendez-vous pendant l'essai, vous ne payez rien.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/diagnostic?pack=standardiste">Démarrer par un diagnostic</a>
+        <a class="btn btn-ghost" href="/conditions-generales#essai-standardiste">Les conditions de l'essai</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="ines" aria-labelledby="titre-ines">
+    <div class="wrap">
+      <img class="ines-mark light" src="/assets/images/v2/ines-lettrage-clair.webp" alt="INES" width="167" height="40">
+      <img class="ines-mark dark" src="/assets/images/v2/ines-lettrage-sombre.webp" alt="" width="167" height="40">
+      <h2 class="section-title" id="titre-ines">Le premier système que nous avons construit, c'est le nôtre.</h2>
+      <p class="lead">INES répond aux prospects de DIGITA : elle qualifie la demande, propose des créneaux réels, pose le rendez-vous dans le planning et crée la fiche dans le CRM. C'est le même moteur que nous branchons chez vous.</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" type="button" onclick="toggleChatbot()">Écrire à INES maintenant</button>
+        <a class="btn btn-ghost" href="/solutions">Voir ce qu'elle sait faire</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="qui">
+    <div class="wrap founder">
+      <img src="/assets/images/v2/fondateur-anthony-legros.webp" alt="Anthony Legros, fondateur de DIGITA" width="480" height="480" loading="lazy">
+      <div>
+        <p class="kicker">Qui est derrière DIGITA</p>
+        <h2 class="section-title" id="qui">Un entrepreneur qui construit d'abord pour lui-même.</h2>
+        <p class="lead">Je dirige Tony Alpha 8.0. J'aide les particuliers et les entreprises à se lancer et à se développer : je crée du contenu, des sites, des applications, des boutiques en ligne et des automatisations, pour mes propres activités comme pour mes clients. DIGITA met ce savoir-faire au service des TPE et PME de La Réunion.</p>
+        <p class="sign">Anthony Legros, fondateur</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" aria-labelledby="titre-faq">
+    <div class="wrap">
+      <p class="kicker">En clair</p>
+      <h2 class="section-title" id="titre-faq">Les questions qu'on nous pose.</h2>
+      <div class="faq">
+        {% for q in faq %}
+        <details><summary>{{ q.question }}</summary><p>{{ q.answer }}</p></details>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-final" aria-labelledby="parler">
+    <div class="wrap">
+      <h2 class="section-title" id="parler">Le plus simple, c'est d'en parler.</h2>
+      <p class="lead">30 minutes au téléphone ou en visio. Vous repartez avec un plan d'action, que vous travailliez avec nous ou non.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/diagnostic">Choisir mon créneau</a>
+        <a class="btn btn-ghost" href="tel:+262693487817">Appeler le 06 93 48 78 17</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>DIGITA · La Réunion</span>
+    <nav aria-label="Liens légaux">
+      <a href="/solutions">Solutions</a>
+      <a href="/tarifs">Tarifs</a>
+      <a href="/contact">Contact</a>
+      <a href="/mentions-legales">Mentions légales</a>
+      <a href="/conditions-generales">Conditions générales</a>
+      <a href="/politique-confidentialite">Confidentialité</a>
+    </nav>
+  </div>
+</footer>
+
+{% include 'includes/partials/chatbot.html' %}
+<script src="/assets/js/chatbot.js?v={{ asset_v }}"></script>
+</body>
+</html>

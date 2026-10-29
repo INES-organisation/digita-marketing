@@ -4,7 +4,7 @@ Chaque catégorie présente ce que nous savons réaliser (offre, tarif indicatif
 prestations) puis les projets livrés. Pour ajouter un projet : ajouter un dictionnaire dans
 la liste « items » de sa catégorie :
     title, description, et facultativement url (lien externe), client, tag, metrics
-    (liste de couples (valeur, libellé)).
+    (liste de couples (valeur, libellé)), uniquement avec une source vérifiable (ACCROCHES §0.2).
 Une catégorie sans projet affiche « Premiers projets bientôt en ligne ».
 """
 
@@ -41,7 +41,6 @@ REALISATIONS = [
                 "client": "Commerce local, La Réunion",
                 "description": "Une page promotionnelle claire et pensée mobile pour présenter l'offre "
                                "du mois aux clients, en magasin comme en ligne.",
-                "metrics": [("< 1 semaine", "mise en ligne"), ("Réutilisable", "pour les prochaines offres")],
             },
         ],
     },
@@ -110,23 +109,18 @@ REALISATIONS = [
                 "client": "Régie publicitaire radio",
                 "description": "Les fichiers Excel et les e-mails remplacés par une plateforme unique, "
                                "du contrat signé à la facturation, avec un tableau de bord par métier.",
-                "metrics": [("≈ 40 min", "gagnées par dossier"), ("÷ 5", "erreurs de saisie"),
-                            ("4 métiers", "sur une seule plateforme")],
             },
             {
                 "title": "TTC Sales : une appli mobile pour ne plus perdre un appel commercial",
                 "client": "Force de vente terrain",
                 "description": "Application iOS et Android : contacts du jour, appel, SMS ou WhatsApp "
                                "en un geste, suivi automatique de chaque relance.",
-                "metrics": [("≈ 2 min", "délai de rappel"), ("≈ 0", "lead non traité"),
-                            ("iOS + Android", "disponible")],
             },
             {
                 "title": "TatooModel : de la candidature au contrat signé, dans un seul outil",
                 "client": "Industrie du tatouage",
                 "description": "Formulaire de candidature unique, suivi visuel de chaque dossier et "
                                "campagnes e-mail automatisées.",
-                "metrics": [("100 %", "candidatures centralisées"), ("÷ 3", "temps de traitement")],
             },
         ],
     },
