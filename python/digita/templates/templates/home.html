@@ -570,7 +570,7 @@
         <div class="text-center mb-5" data-aos="fade-up">
             <span class="d-inline-block px-3 py-1 rounded-pill mb-3" style="background: rgba(var(--gold-rgb),0.1); color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(var(--gold-rgb),0.25);">Nos Réalisations</span>
             <h2 class="fw-black text-white mb-3" style="font-family:'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem);">Ce que nous construisons</h2>
-            <p class="realisations-intro">Ce que nous savons réaliser pour vous, avec des tarifs clairs, et les projets déjà livrés. La vitrine s'enrichit au fil des nouveaux projets.</p>
+            <p class="realisations-intro">Ce que nous savons réaliser pour vous, avec des tarifs clairs et des pages de vente à visiter.</p>
         </div>
 
         <div class="realisations-carousel" data-carousel>
@@ -602,27 +602,19 @@
                         {% for cap in cat.capabilities %}<li><i class="bi bi-check2"></i>{{ cap }}</li>{% endfor %}
                     </ul>
 
-                    <h4 class="realisation-subtitle">Projets livrés</h4>
                     {% if cat['items'] %}
+                    <h4 class="realisation-subtitle">À voir en ligne</h4>
                     <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
                         {% for item in cat['items'] %}
                         <li>
-                            {% if item.url %}<a href="{{ item.url }}" class="realisation-item" target="_blank" rel="noopener">{% else %}<div class="realisation-item">{% endif %}
-                                {% if item.client %}<span class="realisation-item-client">{{ item.client }}</span>{% endif %}
-                                <span class="realisation-item-title">{{ item.title }}{% if item.url %} <i class="bi bi-box-arrow-up-right"></i>{% endif %}</span>
+                            <a href="{{ item.url }}" class="realisation-item" target="_blank" rel="noopener">
+                                <span class="realisation-item-title">{{ item.title }} <i class="bi bi-box-arrow-up-right"></i></span>
                                 <span class="realisation-item-desc">{{ item.description }}</span>
-                                {% if item.metrics %}
-                                <span class="realisation-metrics">
-                                    {% for m in item.metrics %}<span><strong>{{ m[0] }}</strong> {{ m[1] }}</span>{% endfor %}
-                                </span>
-                                {% endif %}
-                                {% if item.tag %}<span class="realisation-item-tag">{{ item.tag }}</span>{% endif %}
-                            {% if item.url %}</a>{% else %}</div>{% endif %}
+                                <span class="realisation-item-tag">{{ item.tag }}</span>
+                            </a>
                         </li>
                         {% endfor %}
                     </ul>
-                    {% else %}
-                    <p class="realisation-soon mb-0"><i class="bi bi-hourglass-split me-2"></i>Premiers projets bientôt en ligne.</p>
                     {% endif %}
 
                     <a href="/contact" class="realisation-cta">Demander un devis <i class="bi bi-arrow-right"></i></a>

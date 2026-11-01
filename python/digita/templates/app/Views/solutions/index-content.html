@@ -81,7 +81,7 @@
         <h2 class="display-6 fw-bold text-white text-center mb-5">Autres packs clés en main</h2>
         <div class="row g-4">
             {% for pack in packs %}
-            <div class="col-lg-6" id="{{ pack['id'] }}" data-aos="fade-up">
+            <div class="col-lg-4" id="{{ pack['id'] }}" data-aos="fade-up">
                 <article class="glass-card border-glass h-100 p-4 p-md-5 solution-pack">
                     <div class="d-flex align-items-center gap-3 mb-3">
                         <span class="solution-pack-icon"><i class="bi {{ pack['icon'] }}"></i></span>
@@ -91,7 +91,7 @@
                     <p class="text-white-50 mb-3"><strong class="text-white">Le problème :</strong> {{ pack['problem'] }}</p>
                     <p class="text-white mb-2 fw-bold">Ce que le pack met en place :</p>
                     <ul class="list-unstyled solution-pack-list mb-4">
-                        {% for name, price in pack['components'] %}<li><i class="bi bi-check-circle-fill text-gold"></i><span>{{ name }}</span><span class="solution-pack-price">dès {{ price }}</span></li>{% endfor %}
+                        {% for name, price in pack['components'] %}<li><i class="bi bi-check-circle-fill text-gold"></i><span>{{ name }}</span>{% if price %}<span class="solution-pack-price">dès {{ price }}</span>{% endif %}</li>{% endfor %}
                     </ul>
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-auto">
                         <span class="text-white-50 small">{{ ('Prix du pack : ' ~ pack['price']) if pack['price'] else 'Prix du pack établi après le diagnostic gratuit' }}</span>

@@ -60,8 +60,8 @@ def _knowledge():
     lines.append("Systèmes d'acquisition IA 24/7 (page /solutions ; TVA non applicable, art. 293 B du CGI : prix nets) :")
     lines += [f"- {o['title']} ({o['for']}) : {o['promise']} ; mise en service {o['setup']}, abonnement {o['monthly']} "
               f"({o['monthly_note']})" for o in solutions.OFFERS]
-    lines.append("Autres packs clés en main (page /solutions, tarif établi après le diagnostic) :")
-    lines += [f"- {s['title']} : {s['promise']}" for s in solutions.PACKS]
+    lines.append("Autres packs clés en main (page /solutions ; sans prix indiqué : tarif établi après le diagnostic) :")
+    lines += [f"- {s['title']} : {s['promise']}" + (f" ; {s['price']}" if s["price"] else "") for s in solutions.PACKS]
     return "\n".join(lines)
 
 

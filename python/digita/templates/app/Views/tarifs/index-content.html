@@ -26,26 +26,24 @@
 <section class="py-5 bg-light">
   <div class="container">
     <div class="row g-4 mb-5">
-      <!-- Starter -->
+      <!-- Pack de lancement -->
       <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
         <div class="card h-100 border-0 shadow">
           <div class="card-body p-4 text-center">
-            <h5 class="text-uppercase text-muted mb-3">Starter</h5>
+            <h5 class="text-uppercase text-muted mb-3">{{ lancement.title }}</h5>
             <div class="mb-4">
-              <span class="h2">À partir de</span>
-              <div class="display-4 fw-bold text-primary">490€</div>
+              <span class="h2">Prix fixe</span>
+              <div class="display-4 fw-bold text-primary">{{ lancement.price }}</div>
               <span class="text-muted">par projet</span>
             </div>
             <p class="text-muted mb-4">Idéal pour démarrer votre présence digitale</p>
             <ul class="list-unstyled text-start mb-4">
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Logo professionnel unique</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Charte graphique basique</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>3 propositions de design</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Révisions illimitées</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Fichiers sources (AI, SVG, PNG)</li>
+              {% for component in lancement.components %}
+              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>{{ component[0] }}</li>
+              {% endfor %}
               <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Livraison sous 1-2 semaines</li>
             </ul>
-            <a href="/contact" class="btn btn-outline-primary w-100">Choisir Starter</a>
+            <a href="/solutions#lancement" class="btn btn-outline-primary w-100">Choisir ce pack</a>
           </div>
         </div>
       </div>

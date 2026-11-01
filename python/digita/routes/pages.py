@@ -1,5 +1,7 @@
 """Pages de contenu fixe (contrôleurs About, Services, Catalogue, Contact…)."""
-from .. import services_catalog
+from starlette.responses import JSONResponse
+
+from .. import ines_feed, services_catalog
 from .. import solutions as solutions_catalog
 from ..realisations import REALISATIONS
 from ..render import base_context, render_page, render_view
@@ -10,9 +12,9 @@ def home(request):
     return render_page(request, "templates/home.html", {"realisations": REALISATIONS})
 
 
-# Questions de la future accueil (/accueil-v2) : affichées sur la page et reprises en FAQPage.
+# Questions de la page de vente Agent IA 24/7 (/agent24-7, agent24-7.digita.buzz).
 # Chaque réponse s'appuie sur une offre réelle (solutions.OFFERS) ou sur DIAGNOSTIC_FAQ.
-HOME_V2_FAQ = [
+AGENT_FAQ = [
     {"question": "Combien ça coûte, vraiment ?",
      "answer": "Le Standardiste Messenger et Instagram démarre à 149 € par mois, après une mise en service de 490 € "
                "à 890 €. Les fourchettes dépendent du nombre de canaux, des règles métier et du volume ; le prix "
@@ -21,6 +23,9 @@ HOME_V2_FAQ = [
     {"question": "Faut-il déjà avoir un site internet ?",
      "answer": "Non. INES répond sur votre page Facebook, sur Instagram et, avec l'offre Commercial IA, au "
                "téléphone. Le site peut venir plus tard."},
+    {"question": "Je n'ai pas encore de page Facebook, ni de logo.",
+     "answer": f"Le Pack de lancement est fait pour ça : logo créé ou refait, déclinaisons et page Facebook "
+               f"professionnelle, pour {solutions_catalog.LANCEMENT['price']}. INES peut ensuite y répondre à vos prospects."},
     {"question": "Et si INES ne m'amène aucun rendez-vous ?",
      "answer": "Pour le Standardiste, l'essai dure 14 jours : si INES n'a posé aucun rendez-vous pendant l'essai, la "
                "mise en service n'est pas facturée. Les conditions sont dans les conditions générales, article 5 bis."},
@@ -36,10 +41,10 @@ HOME_V2_FAQ = [
 ]
 
 
-def home_v2(request):
-    """Future page d'accueil, en travail sur /accueil-v2 (noindex) : docs/SUIVI_REFONTE_ACCUEIL.md."""
-    return render_page(request, "templates/home-v2.html", {
-        "offers": solutions_catalog.OFFERS, "faq": HOME_V2_FAQ,
+def agent_landing(request):
+    """Page de vente pour les publicités ciblées (noindex) : docs/SUIVI_REFONTE_ACCUEIL.md."""
+    return render_page(request, "templates/agent-24-7.html", {
+        "offers": solutions_catalog.OFFERS, "faq": AGENT_FAQ, "lancement": solutions_catalog.LANCEMENT,
     })
 
 
@@ -66,9 +71,18 @@ catalogue = _simple("catalogue/index-content", "Catalogue des Services Digitaux 
 support = _simple("support/index-content", "Support Client | DIGITA", "/assets/css/support.css",
                   "Support client DIGITA : aide sur votre site, vos automatisations, vos formations et votre espace "
                   "client. Une équipe joignable à La Réunion.")
-tarifs = _simple("tarifs/index-content", "Tarifs Sites Web, Automatisation & IA | DIGITA", "/assets/css/tarifs.css",
-                 "Tarifs DIGITA : sites vitrines, e-commerce, automatisation et IA pour TPE/PME à La Réunion. "
-                 "Prix affichés, sans surprise. Diagnostic gratuit offert.")
+def tarifs(request):
+    return render_view(request, "tarifs/index-content", {
+        "title": "Tarifs Sites Web, Automatisation & IA | DIGITA",
+        "metaDescription": "Tarifs DIGITA : sites vitrines, e-commerce, automatisation et IA pour TPE/PME à La Réunion. "
+                           "Prix affichés, sans surprise. Diagnostic gratuit offert.",
+        "extraCss": ["/assets/css/tarifs.css"],
+        "lancement": solutions_catalog.LANCEMENT,
+    })
+
+
+def ines_catalogue(request):
+    return JSONResponse(ines_feed.entries())
 boutique = _simple("boutique/index-content", "Boutique : Packs et Services Digitaux | DIGITA", "/assets/css/boutique.css",
                    "Packs et services digitaux DIGITA prêts à commander : sites, visibilité, automatisation et "
                    "formations pour faire grandir votre entreprise.")

@@ -10,7 +10,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from starlette.concurrency import run_in_threadpool
-from starlette.responses import FileResponse, PlainTextResponse, Response
+from starlette.responses import FileResponse, PlainTextResponse, RedirectResponse, Response
 
 from . import config
 from .routes import ROUTES
@@ -24,6 +24,11 @@ app.add_middleware(SessionMiddleware, https_only=config.APP_ENV == "production")
 log = logging.getLogger("digita")
 
 PUBLIC = config.PUBLIC_DIR.resolve()
+
+# Pages de vente sur sous-domaine (vhost : deploy/nginx-digita.conf) : `/` sert la page, les fichiers
+# statiques et le chatbot restent sur place, tout autre lien repart vers le site principal.
+LANDING_HOSTS = {"agent24-7.digita.buzz": "/agent24-7"}
+LANDING_API = "/api/chatbot/"
 
 
 def _compile(path):
@@ -67,6 +72,14 @@ async def dispatch(request: Request, full_path: str):
     if uri.startswith("/digita-marketing"):
         uri = uri[len("/digita-marketing"):]
     uri = uri or "/"
+
+    landing = LANDING_HOSTS.get(request.headers.get("host", "").split(":")[0].lower())
+    if landing:
+        if uri == "/":
+            uri = landing
+        elif not uri.startswith(LANDING_API) and not static_file(uri):
+            query = f"?{request.url.query}" if request.url.query else ""
+            return RedirectResponse(f"https://digita.buzz{uri}{query}", status_code=302)
 
     if request.method in ("GET", "HEAD"):
         f = static_file(uri)

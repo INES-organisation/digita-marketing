@@ -1,12 +1,15 @@
 """Réalisations affichées sur l'accueil (section « Réalisations »).
 
 Chaque catégorie présente ce que nous savons réaliser (offre, tarif indicatif, délai,
-prestations) puis les projets livrés. Pour ajouter un projet : ajouter un dictionnaire dans
-la liste « items » de sa catégorie :
-    title, description, et facultativement url (lien externe), client, tag, metrics
-    (liste de couples (valeur, libellé)), uniquement avec une source vérifiable (ACCROCHES §0.2).
-Une catégorie sans projet affiche « Premiers projets bientôt en ligne ».
+prestations) puis, dans « items », les pages à voir en ligne : uniquement des pages réelles,
+avec title, description, url et tag (le prix). Une catégorie sans page n'affiche pas le bloc.
+Les prix des offres en commun avec /solutions viennent de solutions.py, jamais recopiés ici.
 """
+from .solutions import LANCEMENT, LANDING, LP48, OFFERS
+
+STANDARDISTE = OFFERS[0]
+AGENT_PRICE = STANDARDISTE["monthly"].split(" à ")[0] + "/mois"  # « 149 €/mois »
+AGENT_URL = "https://agent24-7.digita.buzz"
 
 REALISATIONS = [
     {
@@ -17,10 +20,11 @@ REALISATIONS = [
         "tagline": "Des sites qui font sonner le téléphone.",
         "description": "Offre 974 : on crée, on héberge et on maintient votre site vitrine. "
                        "Vous payez votre identité visuelle une fois, puis une petite maintenance.",
-        "price": "990 €",
-        "price_note": "identité visuelle (logo, charte, photos, textes), 690 € si vous avez déjà un logo ; "
-                      "site et hébergement inclus, puis maintenance 49 €/mois (engagement 12 mois)",
-        "delay": "3 à 4 semaines",
+        "price": f"Dès {LANDING['price']}",
+        "price_note": f"{LANDING['title']} : {LANDING['scope']}. Site vitrine : 990 € d'identité visuelle (logo, "
+                      "charte, photos, textes), 690 € si vous avez déjà un logo ; site et hébergement inclus, "
+                      "puis maintenance 49 €/mois (engagement 12 mois)",
+        "delay": "5 jours ouvrés à 4 semaines",
         "capabilities": [
             "Site vitrine sur mesure, rapide et compatible mobile",
             "Landing pages et pages de vente qui convertissent",
@@ -34,13 +38,7 @@ REALISATIONS = [
                 "url": "https://lp48.digita.buzz",
                 "description": "Page de vente clé en main : copywriting, design, formulaire ou paiement "
                                "et mise en ligne inclus, livrée en 48h ouvrées.",
-                "tag": "À partir de 997 €",
-            },
-            {
-                "title": "Lurel : un point de vente digital pour les promotions du mois",
-                "client": "Commerce local, La Réunion",
-                "description": "Une page promotionnelle claire et pensée mobile pour présenter l'offre "
-                               "du mois aux clients, en magasin comme en ligne.",
+                "tag": LP48["price"],
             },
         ],
     },
@@ -52,7 +50,7 @@ REALISATIONS = [
         "tagline": "Des publications régulières, sans y passer vos soirées.",
         "description": "On crée, on planifie, on publie et on répond aux commentaires. "
                        "Vous récoltez les clients.",
-        "price": "390 €/mois",
+        "price": "Dès 390 €/mois",
         "price_note": "Essentiel : 1 réseau, 8 publications. Pro : 2 réseaux, 12 à 16 publications, 590 €/mois",
         "delay": "Engagement 3 mois minimum",
         "capabilities": [
@@ -62,7 +60,14 @@ REALISATIONS = [
             "Messages et commentaires traités tous les jours",
             "Point mensuel de 30 minutes avec les chiffres clés",
         ],
-        "items": [],
+        "items": [
+            {
+                "title": "Pack de lancement : logo et page Facebook",
+                "url": "/solutions#lancement",
+                "description": LANCEMENT["promise"].capitalize() + ".",
+                "tag": LANCEMENT["price"],
+            },
+        ],
     },
     {
         "id": "publicite",
@@ -103,26 +108,7 @@ REALISATIONS = [
             "Scénarios n8n, Make ou Zapier, testés et documentés",
             "Applications métier et applis mobiles sur mesure",
         ],
-        "items": [
-            {
-                "title": "TTC France : une plateforme pour piloter toute une régie publicitaire",
-                "client": "Régie publicitaire radio",
-                "description": "Les fichiers Excel et les e-mails remplacés par une plateforme unique, "
-                               "du contrat signé à la facturation, avec un tableau de bord par métier.",
-            },
-            {
-                "title": "TTC Sales : une appli mobile pour ne plus perdre un appel commercial",
-                "client": "Force de vente terrain",
-                "description": "Application iOS et Android : contacts du jour, appel, SMS ou WhatsApp "
-                               "en un geste, suivi automatique de chaque relance.",
-            },
-            {
-                "title": "TatooModel : de la candidature au contrat signé, dans un seul outil",
-                "client": "Industrie du tatouage",
-                "description": "Formulaire de candidature unique, suivi visuel de chaque dossier et "
-                               "campagnes e-mail automatisées.",
-            },
-        ],
+        "items": [],
     },
     {
         "id": "agents-ia",
@@ -132,17 +118,26 @@ REALISATIONS = [
         "tagline": "Un assistant qui ne dort jamais, formé sur vos informations.",
         "description": "Il répond à vos clients, prend des rendez-vous, qualifie les demandes "
                        "et transmet à un humain quand il le faut.",
-        "price": "990 €",
-        "price_note": "assistant FAQ sur votre site ; WhatsApp ou prise de rendez-vous sur devis, "
-                      "puis quelques centimes par conversation",
+        "price": AGENT_PRICE,
+        "price_note": f"{STANDARDISTE['title']} : mise en service {STANDARDISTE['setup']}, "
+                      f"puis {STANDARDISTE['monthly']} ({STANDARDISTE['monthly_note']})",
         "delay": "2 à 4 semaines",
         "capabilities": [
-            "Réponse immédiate 24h/24, sur votre site, WhatsApp ou messagerie",
+            "Réponse immédiate 24h/24 sur Messenger, Instagram et au téléphone",
             "Entraîné sur vos services, vos tarifs et votre façon de parler",
-            "Qualification des demandes de devis et prise de rendez-vous",
+            "Qualification des demandes et rendez-vous posés dans votre agenda",
+            "Alerte par SMS et e-mail, fiche créée dans votre CRM",
             "Testé à huis clos avant la mise en ligne, conversations visibles",
             "Modèles européens (Mistral) ou sous contrat strict (Claude, OpenAI)",
         ],
-        "items": [],
+        "items": [
+            {
+                "title": "INES : votre agent IA 24/7",
+                "url": AGENT_URL,
+                "description": "Elle répond à vos prospects jour et nuit, qualifie le projet et pose le "
+                               "rendez-vous dans votre agenda. Testez-la en direct sur la page.",
+                "tag": f"Dès {AGENT_PRICE}",
+            },
+        ],
     },
 ]

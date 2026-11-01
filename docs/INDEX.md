@@ -8,12 +8,15 @@
 
 ## Stratégie et contenu
 
-- [Refonte de l'accueil](SUIVI_REFONTE_ACCUEIL.md) : analyse de synaps.re, décisions à prendre, design system v2, page de travail `/accueil-v2`.
+- [Refonte et page de vente Agent IA](SUIVI_REFONTE_ACCUEIL.md) : analyse de synaps.re, décisions, page de vente `/agent24-7` (future `agent24-7.digita.buzz`), Pack de lancement, points ouverts.
 - [Stratégie Digita](DIGITA_STRATEGY.md)
 - [Stratégie de référence](STRATEGIE_REFERENCE_DIGITA.md)
 - [Manifeste](MANIFESTE_DIGITA.md)
 - [Accroches, taglines et SEO](ACCROCHES_TAGLINES_SEO.md) : hero de la home, titres et metas de toutes les pages, règles de rédaction (pas de chiffre sans source).
 - [Plan d'action optimisation IA Search](PLAN_ACTION_OPTIMISATION_IA_SEARCH.md) : guide d'optimisation pour les fonctionnalités d'IA générative de Google (Aperçus IA, RAG, E-E-A-T, Search Console).
+- [Business IA écosystème WAO](BUSINESS_IA_ECOSYSTEME_WAO.md) : cartographie des 7 projets et business IA à implémenter (employés IA, ALIAS, crédits Studio, formation, CAIO).
+- [Business IA — modèles USA](BUSINESS_IA_MODELES_USA.md) : modèles US éprouvés adaptés à WAO (Feedbird, micro-SaaS, photo IA, audits accessibilité, flipping, newsletter locale, slides).
+- [Profil & compétences WAO](PROFIL_COMPETENCES_WAO.md) : compétences démontrées par les dépôts, titres revendiquables et positionnement.
 - [Standards premium](STANDARDS_PREMIUM.md)
 - [Catalogue des services](services-catalogue-complet.md) et [liste complète](liste-services-complets.md)
 

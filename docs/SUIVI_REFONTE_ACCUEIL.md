@@ -1,8 +1,9 @@
 # Suivi — Refonte de l'accueil et du positionnement (analyse Synaps)
 
 **Ouvert le :** 28/10/2026
-**Objectif :** une page d'accueil qui dit en 5 secondes ce que DIGITA vend, à qui et à quel prix, avec des preuves vérifiables et un design sobre et rapide ; puis le même design sur les pages internes.
-**Page de travail :** `/accueil-v2` (`noindex`, absente du sitemap), qui remplacera `/` à la fin (lot 6).
+**Objectif (révisé le 01/11/2026) :** une page de vente Agent IA 24/7 pour les publicités ciblées, sur son propre sous-domaine, et un accueil actuel amélioré, qui reste l'accueil du site.
+**Page :** `/agent24-7` (`noindex`, absente du sitemap), future `agent24-7.digita.buzz`. L'ancienne adresse `/accueil-v2` y redirige.
+**Changement de cap du 01/11/2026 :** cette page **ne remplace plus** l'accueil. Le lot 6 est annulé, D1, D8 et D15 aussi (voir §2 bis). Les lots 2 à 5 restent valables pour le site, sans la bascule.
 **Lié à :** [PLAN_ACTION_OPTIMISATION_IA_SEARCH.md](PLAN_ACTION_OPTIMISATION_IA_SEARCH.md), [ACCROCHES_TAGLINES_SEO.md](ACCROCHES_TAGLINES_SEO.md) §0 (règles de rédaction), [AUDIT_SITE_2026-10.md](audits/AUDIT_SITE_2026-10.md), [SUIVI_CONNEXION_INES.md](SUIVI_CONNEXION_INES.md) §3 (offres)
 
 ---
@@ -43,6 +44,21 @@ Recommandation en gras. Toutes les décisions ont été prises le 29/10/2026 (de
 | D13 | `llms.txt` et versions `.md` | Faire ou non | **Non pour l'instant** (ignorés par Google, voir §1) ; à revoir au lot 5. | ✅ 29/10 : non |
 | D14 | Chatbot sur la nouvelle accueil | Absent de la page v2 pour l'instant | **Le remettre, restylé v2, comme démo en direct** : « écrivez à notre agent maintenant ». C'est la preuve que Synaps ne peut pas donner. | ✅ 29/10 : fait |
 | D15 | Date de bascule de `/` | — | Après les lots 1 à 3 et les décisions D1 à D5 ; pas un vendredi. | ✅ 29/10 : après les lots 2 et 3 |
+
+## 2 bis. Décisions du 01/11/2026
+
+| # | Sujet | Décision | État |
+| --- | --- | --- | --- |
+| D16 | Rôle de la page | Page de vente en sous-domaine, destination des pubs ciblées, comme `lp48.digita.buzz`. L'accueil actuel reste et sera amélioré. Annule D1, D8 (la page est sombre, comme lp48) et D15. | ✅ code ; ⏳ sous-domaine |
+| D17 | Design | Dégradés cyan → indigo → violet → or, aurore, conversation animée, animations au défilement. **Remplace les règles 3 et 4 du §4 pour cette page uniquement.** | ✅ |
+| D18 | Cartes Réalisations | Projets sans page dédiée retirés (Lurel, TTC France, TTC Sales, TatooModel) ; seules restent des pages réelles et liées. | ✅ |
+| D19 | Marque sur les sous-domaines | « DIGITA.buzz » dans l'en-tête, à la place de « DIGITA. » | ✅ lp48 ; ✅ agent24-7 |
+| D20 | Pack de lancement à 499 € | Logo créé ou refait + page Facebook, même périmètre que le devis NADAL (DEV-2026-001, accepté, 500 €). | ✅ sur /solutions ; ⏳ conflit avec le logo à 490 € (§6) |
+| D21 | digita.buzz fait foi sur les prix | INES relit `/api/catalogue` chaque heure (prix et unité). 40 lignes alignées et 2 offres créées en production le 01/11/2026 ; 18 lignes sans équivalent sur le site restent telles quelles. | ✅ prix en base ; synchro à déployer |
+| D22 | Landing Essentielle à 499 € | Vos textes, modèle INES, formulaire, 5 jours ouvrés, 3 h de production au maximum. LP48 reste à 997 € (rédaction, paiement, 48 h). Carte Sites web : « Dès 499 € ». | ✅ local |
+| D23 | Prix corrigés sur le site | Starter remplacé par le Pack de lancement (2 séries de révisions) ; Chatbots 990 → dès 490 € ; Design Email 149 € → 290 €/template ; Coaching 149 €/session → 120 €/heure ; Réseaux sociaux « Dès 390 €/mois ». | ✅ local |
+| D24 | Studio Social | À partir de 290 €/mois, plus 149 € (`BUSINESS_IA_MODELES_USA.md` §1). | ✅ |
+| D25 | Publicité et Automatisation | Pas de page de vente en sous-domaine tant qu'agent24-7 et lp48 n'ont pas de résultat mesuré. | ✅ |
 
 ## 3. Plan et avancement
 
@@ -96,6 +112,20 @@ Recommandation en gras. Toutes les décisions ont été prises le 29/10/2026 (de
 | 4.6 | `noindex` des fiches de formation minces, réécriture des 10 à 20 prioritaires | ⏳ D11 |
 | 4.7 | Mesure avant/après : PageSpeed mobile (LCP, INP, CLS), poids de page, de l'accueil actuel et de la v2 | ⏳ (quota PageSpeed épuisé le 28/10) |
 
+### Lot 7 — Page de vente Agent IA 24/7 (01/11/2026)
+
+| # | Tâche | Statut |
+| --- | --- | --- |
+| 7.1 | `templates/agent-24-7.html`, `assets/css/agent247.css`, `assets/js/agent247.js` (aucune bibliothèque) : aurore, conversation jouée en boucle, confirmations, grille des 168 h, compteurs, halo au pointeur, liseré en rotation, orbe INES ; contenu complet sans JavaScript, animations coupées si « réduire les animations » | ✅ |
+| 7.2 | Liens de la page recentrés : plus de menu vers le site, 3e situation vers le Pack de lancement | ✅ |
+| 7.3 | Routage par hôte (`main.py`) : sur `agent24-7.digita.buzz`, `/` sert la page, le chatbot reste sur place, les autres liens repartent vers digita.buzz | ✅ testé |
+| 7.4 | Carte Agents IA de l'accueil liée à la page ; ses prix viennent de `solutions.py` (149 €/mois au lieu de 990 €, WhatsApp retiré) ; test de synchronisation | ✅ |
+| 7.5 | **DNS** : `A agent24-7 → 37.187.219.225` chez OVH | ⏳ vous |
+| 7.6 | Certificat (`scripts/add-custom-domain.sh agent24-7.digita.buzz`), vhost de `deploy/nginx-digita.conf` à reporter dans `monitoring/nginx/nginx.conf` d'INES | ⏳ après 7.5 |
+| 7.7 | `AGENT_URL` de `realisations.py` : passer à `https://agent24-7.digita.buzz` | ⏳ après 7.6 |
+| 7.8 | Pixel Meta et conversion sur `/diagnostic` : rien n'est mesuré aujourd'hui | ⏳ identifiant du pixel |
+| 7.9 | Facebook connecté à INES, app Meta en mode Live, Twilio : **à faire avant toute pub** (§6) | ⏳ vous |
+
 ### Lot 5 — Pages internes au design v2
 
 | # | Tâche | Statut |
@@ -105,7 +135,7 @@ Recommandation en gras. Toutes les décisions ont été prises le 29/10/2026 (de
 | 5.3 | Chatbot restylé v2 (D14) | ⏳ |
 | 5.4 | Suppression des CSS devenus orphelins (`premium-preview.css`, `layout-premium.css`, `theme-accents.css`…) | ⏳ |
 
-### Lot 6 — Bascule de l'accueil
+### Lot 6 — ~~Bascule de l'accueil~~ (annulé le 01/11/2026, D16)
 
 | # | Tâche | Statut |
 | --- | --- | --- |
@@ -119,8 +149,8 @@ Recommandation en gras. Toutes les décisions ont été prises le 29/10/2026 (de
 
 1. Aucun chiffre de résultat sans source ; aucun superlatif (ACCROCHES §0.2).
 2. Les prix viennent des fichiers de données (`solutions.py`, `realisations.py`, `services_catalog.py`), jamais recopiés à la main dans un gabarit.
-3. Une encre, un fond, un accent. Pas de verre dépoli, de particules, d'émojis dans les titres ni de nouvelle police.
-4. Une animation doit montrer le produit (un message, un RDV posé), pas décorer. Le contenu reste lisible sans elle.
+3. Pages du site : une encre, un fond, un accent. Pas de verre dépoli, de particules, d'émojis dans les titres ni de nouvelle police. Les pages de vente en sous-domaine ont leur propre style (D17).
+4. Le contenu reste lisible sans animation et avec « réduire les animations ».
 5. Mots du client, pas jargon : « répondre à vos messages », pas « orchestration des flux ».
 
 ## 5. Journal
@@ -128,10 +158,15 @@ Recommandation en gras. Toutes les décisions ont été prises le 29/10/2026 (de
 | Date | Fait |
 | --- | --- |
 | 28/10/2026 | Analyse de synaps.re ; ouverture du suivi ; lot 1 (1.1 à 1.6) : design system v2, page `/accueil-v2`, test. |
+| 01/11/2026 | Changement de cap (D16 à D20) : la page devient une page de vente en sous-domaine (`/agent24-7`), redessinée ; Réalisations nettoyées et liées ; carte Agents IA synchronisée ; Pack de lancement ajouté ; « DIGITA.buzz » dans l'en-tête de lp48 (base INES et modèle `starter-templates.ts`). |
 | 29/10/2026 | Toutes les décisions prises. « HT » retiré (art. 293 B) ; essai de 14 jours dans les CGV ; agent nommé INES ; WhatsApp par offre ; bloc fondateur et section INES ; chatbot partagé et restylé ; chiffres non sourcés retirés de `realisations.py` (D5). Déployé en aperçu sur `/accueil-v2`. |
 
 ## 6. Points ouverts
 
-- **Nom affiché du fondateur** : « Anthony Legros », tiré du nom du fichier photo. À confirmer (ou « Tony Legros »).
-- **Accueil actuel** : les projets « TTC France », « TTC Sales », « TatooModel » et « Lurel » y restent affichés (sans leurs chiffres). D5 dit qu'il n'y a pas encore de référence client : à confirmer s'il faut les retirer avant la bascule.
+- **Avant toute pub : INES n'est pas branchée sur Messenger.** Au 01/11/2026, aucune connexion Facebook dans INES ; le chatbot du site est la seule INES en service. Le passage de l'app Meta en mode Live (vérification d'entreprise, App Review) est le prérequis pour répondre aux pages des clients ; Twilio pour le SMS et le téléphone.
+- **Sous-domaine agent24-7** : DNS et certificat en place le 01/11/2026. Reste à déployer le vhost (`monitoring/nginx/nginx.conf` d'INES) ; d'ici là il affiche l'accueil INES.
+- **18 lignes du catalogue INES sans prix sur le site** (Pack Starter 2 499 €, Pack Business 5 999 €, Inbound 1 299 €…) : à publier sur le site ou à désactiver dans INES.
+- **Landing Essentielle** : modèle dédié à préparer ; à suivre pour vérifier les 3 h de production et qu'elle ne remplace pas LP48.
 - **Logo SVG** à fournir (1.7).
+
+Levé le 01/11/2026 : le nom affiché est bien Anthony Legros (`PROFIL_COMPETENCES_WAO.md`, mentions légales) ; les projets non liés sont retirés (D18).

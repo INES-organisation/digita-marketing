@@ -6,8 +6,8 @@ Prix fixés le 26/10/2026, fourchette selon le paramétrage (TVA non applicable,
 Chaque ligne « includes » doit correspondre à une fonction réelle d'INES (voir docs/SUIVI_CONNEXION_INES.md §6).
 
 PACKS : autres packs clés en main, composés de services du catalogue (`services_catalog.py`) ;
-prix des composants = prix d'entrée publics, prix du pack établi après le diagnostic tant que
-« price » est vide.
+prix des composants = prix d'entrée publics (None : compris dans le prix du pack), prix du pack
+établi après le diagnostic tant que « price » est vide.
 """
 
 OFFERS = [
@@ -71,6 +71,21 @@ OFFERS = [
 
 PACKS = [
     {
+        # Même périmètre que le devis NADAL accepté (DEV-2026-001 dans INES, 04/09/2026).
+        "id": "lancement",
+        "title": "Pack de lancement",
+        "icon": "bi-rocket-takeoff-fill",
+        "for": "Entreprises qui démarrent, ou dont le logo et la page Facebook ne les représentent plus.",
+        "promise": "un logo créé ou refait et une page Facebook professionnelle, prête à recevoir vos premiers clients",
+        "problem": "Sans logo ni page Facebook soignée, un prospect qui vous cherche ne sait pas à qui il a affaire.",
+        "components": [
+            ("Création ou refonte de votre logo : 3 propositions, 2 séries de révisions", None),
+            ("Déclinaisons du logo pour le web et l'impression, fichiers sources", None),
+            ("Mise en place de votre page Facebook professionnelle", None),
+        ],
+        "price": "499 €",
+    },
+    {
         "id": "ecommerce",
         "title": "Boutique e-commerce prête à vendre",
         "icon": "bi-bag-check-fill",
@@ -85,7 +100,6 @@ PACKS = [
             ("E-mails automatiques (panier abandonné, relance client)", "490 €"),
         ],
         "price": None,
-        "anchor": "/services#ecommerce",
     },
     {
         "id": "local",
@@ -100,6 +114,18 @@ PACKS = [
             ("Publications régulières sur les réseaux sociaux", "390 €/mois"),
         ],
         "price": None,
-        "anchor": "/services#seo",
     },
 ]
+
+LANCEMENT = next(p for p in PACKS if p["id"] == "lancement")
+
+# Pages de vente à prix fixe. Landing Essentielle : modèle du Page Builder INES et textes fournis
+# par le client, 3 h de production au maximum pour rester rentable à 499 € ; rédiger, encaisser
+# ou livrer en 48 h relève de LP48.
+LANDING = {
+    "title": "Landing Essentielle",
+    "price": "499 €",
+    "scope": "une page à partir de vos textes et visuels, formulaire de contact, 1 cycle de modifications, "
+             "livrée en 5 jours ouvrés",
+}
+LP48 = {"title": "Landing Page en 48h", "price": "997 €"}

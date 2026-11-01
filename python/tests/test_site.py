@@ -5,6 +5,7 @@ import pytest
 from starlette.testclient import TestClient
 
 from digita import db, sessions
+from digita.realisations import REALISATIONS
 from digita.main import app
 from digita.routes import leads
 from digita.services import email, ines
@@ -49,8 +50,12 @@ def test_home_uses_vertical_menu_anchored_on_sections():
     for category in ("Sites web et landing", "Réseaux sociaux", "Publicité", "Automatisation", "Agents IA"):
         assert category in r.text, category
     # Offres et tarifs par catégorie, projets livrés
-    for text in ("990 €", "390 €/mois", "290 €/mois", "490 €", "49 €/mois", "Ce que nous réalisons", "TTC France", "TatooModel"):
+    for text in ("990 €", "390 €/mois", "290 €/mois", "490 €", "49 €/mois", "Ce que nous réalisons", "À voir en ligne"):
         assert text in r.text, text
+    # Les cartes ne montrent que des pages réelles, toutes liées.
+    for client in ("Projets livrés", "Lurel", "TTC France", "TTC Sales", "TatooModel"):
+        assert client not in r.text, client
+    assert all(item["url"] for cat in REALISATIONS for item in cat["items"])
     assert "Connexion" in r.text and "data-theme-toggle" in r.text and "Diagnostic gratuit" in r.text
 
 
@@ -184,14 +189,12 @@ def test_diagnostic_page_offers_both_formats(monkeypatch):
     assert "Secteur : Artisan / BTP" in leads_sent[0][3]
 
 
-def test_home_v2_draft_is_noindex_and_uses_real_offers():
-    """Future accueil (docs/SUIVI_REFONTE_ACCUEIL.md) : non indexée, offres et FAQ réelles, sans dépendances lourdes."""
-    import json
-
+def test_agent_landing_is_noindex_and_uses_real_offers():
+    """Page de vente Agent IA 24/7 (docs/SUIVI_REFONTE_ACCUEIL.md) : hors index, offres et FAQ réelles, légère."""
     from digita import solutions
-    from digita.routes.pages import HOME_V2_FAQ
+    from digita.routes.pages import AGENT_FAQ
 
-    r = _client().get("/accueil-v2")
+    r = _client().get("/agent24-7")
     assert r.status_code == 200
     html = r.text
     assert '<meta name="robots" content="noindex, nofollow">' in html
@@ -202,12 +205,75 @@ def test_home_v2_draft_is_noindex_and_uses_real_offers():
         assert dependency not in html, dependency
     for figure in ("+250", "x2.5", "45%", "-70%", "+40%"):
         assert figure not in html, figure
-    data = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
-    faq = next(node for node in data["@graph"] if node["@type"] == "FAQPage")
-    assert len(faq["mainEntity"]) == len(HOME_V2_FAQ)
-    assert "/accueil-v2" not in _client().get("/sitemap.xml").text
-    # Décisions du 29/10 : agent nommé INES, prix nets (art. 293 B), WhatsApp par offre, chatbot présent.
+    assert html.count("<details>") == len(AGENT_FAQ)
+    assert "/agent24-7" not in _client().get("/sitemap.xml").text
+    # Agent nommé INES, prix nets (art. 293 B), WhatsApp par offre, chatbot présent, marque DIGITA.buzz.
     assert "INES, notre agent IA" in html and 'id="chatbot-container"' in html and "/assets/js/chatbot.js" in html
     assert " HT" not in html and "293 B" in html
     assert html.count("https://wa.me/262693487817") == 1 + len(solutions.OFFERS)
+    assert 'DIGITA<span>.buzz</span>' in html
+    assert solutions.LANCEMENT["price"] in html
+    # L'ancienne adresse d'aperçu mène à la page.
+    old = _client().get("/accueil-v2", follow_redirects=False)
+    assert old.status_code == 302 and old.headers["location"] == "/agent24-7"
     assert 'id="essai-standardiste"' in _client().get("/conditions-generales").text
+
+
+def test_agent_subdomain_serves_landing_and_sends_other_links_to_main_site():
+    host = {"host": "agent24-7.digita.buzz"}
+    client = _client()
+    assert "Même à 23 h." in client.get("/", headers=host).text
+    assert client.get("/assets/css/agent247.css", headers=host).status_code == 200
+    link = client.get("/diagnostic?pack=standardiste", headers=host, follow_redirects=False)
+    assert link.status_code == 302 and link.headers["location"] == "https://digita.buzz/diagnostic?pack=standardiste"
+    # Le chatbot répond sur le sous-domaine (pas de redirection, un POST la perdrait).
+    assert client.get("/api/chatbot/slots", headers=host, follow_redirects=False).status_code != 302
+
+
+def test_agent_card_prices_are_synced_with_solutions():
+    from digita import solutions
+    from digita.realisations import AGENT_URL
+
+    card = next(c for c in REALISATIONS if c["id"] == "agents-ia")
+    standardiste = solutions.OFFERS[0]
+    assert card["price"] == "149 €/mois" and standardiste["monthly"].startswith("149 €")
+    assert standardiste["setup"] in card["price_note"] and standardiste["monthly"] in card["price_note"]
+    assert "WhatsApp" not in " ".join(card["capabilities"]) + card["price_note"]
+    assert card["items"][0]["url"] == AGENT_URL
+    assert solutions.LANCEMENT["price"] == "499 €" and solutions.LANCEMENT["price"] in _client().get("/solutions").text
+
+
+def test_ines_catalogue_publishes_the_site_prices():
+    from digita import ines_feed, services_catalog, solutions
+
+    response = _client().get("/api/catalogue")
+    assert response.status_code == 200
+    feed = {row["name"]: row for row in response.json()}
+    assert ines_feed.parse_price("2 490 €") == (2490.0, "forfait")
+    assert ines_feed.parse_price("0,08 €/mot") == (0.08, "mot")
+    assert ines_feed.parse_price("Sur devis") == (0.0, "forfait")
+    assert feed["Sites Vitrine"]["base_price"] == 990
+    assert feed["Community Management"]["unit"] == "mois"
+    assert feed["Chatbots & Assistants Virtuels"]["base_price"] == 490
+    assert feed[solutions.LANCEMENT["title"]]["category"] == "Packs & Formules"
+    # Un service présent dans deux catégories doit y avoir le même prix.
+    for (category_id, name), ines_names in ines_feed.INES_NAMES.items():
+        service = next(s for c in services_catalog.categories() if c["id"] == category_id
+                       for s in c["services"] if s["name"] == name)
+        assert all(feed[n]["base_price"] == ines_feed.parse_price(service["price"])[0] for n in ines_names)
+
+
+def test_prices_are_coherent_across_pages():
+    from digita import solutions
+
+    client = _client()
+    tarifs, catalogue = client.get("/tarifs").text, client.get("/catalogue").text
+    assert solutions.LANCEMENT["title"] in tarifs and "Choisir Starter" not in tarifs
+    assert "Révisions illimitées" not in tarifs.split("Business")[0]
+    assert "2 séries de révisions" in tarifs
+    assert "À partir de 499€" in catalogue and "149€/session" not in catalogue
+    chatbots = catalogue[catalogue.rindex("Chatbots Intelligents"):][:900]
+    assert "À partir de 490€" in chatbots
+    sites, social = REALISATIONS[0], REALISATIONS[1]
+    assert sites["price"] == "Dès 499 €" and sites["items"][0]["tag"] == solutions.LP48["price"]
+    assert social["price"] == "Dès 390 €/mois"
