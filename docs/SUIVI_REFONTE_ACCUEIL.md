@@ -54,9 +54,9 @@ Recommandation en gras. Toutes les décisions ont été prises le 29/10/2026 (de
 | D18 | Cartes Réalisations | Projets sans page dédiée retirés (Lurel, TTC France, TTC Sales, TatooModel) ; seules restent des pages réelles et liées. | ✅ |
 | D19 | Marque sur les sous-domaines | « DIGITA.buzz » dans l'en-tête, à la place de « DIGITA. » | ✅ lp48 ; ✅ agent24-7 |
 | D20 | Pack de lancement à 499 € | Logo créé ou refait + page Facebook, même périmètre que le devis NADAL (DEV-2026-001, accepté, 500 €). | ✅ sur /solutions ; ⏳ conflit avec le logo à 490 € (§6) |
-| D21 | digita.buzz fait foi sur les prix | INES relit `/api/catalogue` chaque heure (prix et unité). 40 lignes alignées et 2 offres créées en production le 01/11/2026 ; 18 lignes sans équivalent sur le site restent telles quelles. | ✅ prix en base ; synchro à déployer |
-| D22 | Landing Essentielle à 499 € | Vos textes, modèle INES, formulaire, 5 jours ouvrés, 3 h de production au maximum. LP48 reste à 997 € (rédaction, paiement, 48 h). Carte Sites web : « Dès 499 € ». | ✅ local |
-| D23 | Prix corrigés sur le site | Starter remplacé par le Pack de lancement (2 séries de révisions) ; Chatbots 990 → dès 490 € ; Design Email 149 € → 290 €/template ; Coaching 149 €/session → 120 €/heure ; Réseaux sociaux « Dès 390 €/mois ». | ✅ local |
+| D21 | digita.buzz fait foi sur les prix | INES relit `/api/catalogue` chaque heure (prix et unité). 40 lignes alignées et 2 offres créées en production le 01/11/2026 ; 18 lignes sans équivalent sur le site restent telles quelles. | ✅ prix en base ; synchro active au prochain déploiement INES |
+| D22 | Landing Essentielle à 499 € | Vos textes, modèle INES, formulaire, 5 jours ouvrés, 3 h de production au maximum. LP48 reste à 997 € (rédaction, paiement, 48 h). Carte Sites web : « Dès 499 € ». | ✅ en ligne |
+| D23 | Prix corrigés sur le site | Starter remplacé par le Pack de lancement (2 séries de révisions) ; Chatbots 990 → dès 490 € ; Design Email 149 € → 290 €/template ; Coaching 149 €/session → 120 €/heure ; Réseaux sociaux « Dès 390 €/mois ». | ✅ en ligne |
 | D24 | Studio Social | À partir de 290 €/mois, plus 149 € (`BUSINESS_IA_MODELES_USA.md` §1). | ✅ |
 | D25 | Publicité et Automatisation | Pas de page de vente en sous-domaine tant qu'agent24-7 et lp48 n'ont pas de résultat mesuré. | ✅ |
 
@@ -164,7 +164,7 @@ Recommandation en gras. Toutes les décisions ont été prises le 29/10/2026 (de
 ## 6. Points ouverts
 
 - **Avant toute pub : INES n'est pas branchée sur Messenger.** Au 01/11/2026, aucune connexion Facebook dans INES ; le chatbot du site est la seule INES en service. Le passage de l'app Meta en mode Live (vérification d'entreprise, App Review) est le prérequis pour répondre aux pages des clients ; Twilio pour le SMS et le téléphone.
-- **Sous-domaine agent24-7** : DNS et certificat en place le 01/11/2026. Reste à déployer le vhost (`monitoring/nginx/nginx.conf` d'INES) ; d'ici là il affiche l'accueil INES.
+- **Synchro horaire des tarifs** : code en place dans INES (commit 42b7f40a), active au prochain déploiement du backend INES (image du 28/10, les commits Octave du 30/10 partiront avec). D'ici là, un changement de prix sur le site n'atteint pas INES tout seul.
 - **18 lignes du catalogue INES sans prix sur le site** (Pack Starter 2 499 €, Pack Business 5 999 €, Inbound 1 299 €…) : à publier sur le site ou à désactiver dans INES.
 - **Landing Essentielle** : modèle dédié à préparer ; à suivre pour vérifier les 3 h de production et qu'elle ne remplace pas LP48.
 - **Logo SVG** à fournir (1.7).
