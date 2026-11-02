@@ -181,7 +181,7 @@ h1 em {
 
 /* Bandeau des canaux */
 .ribbon { display: flex; overflow: hidden; padding-block: 18px; border-block: 1px solid var(--rule); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
-.ribbon ul { flex: none; display: flex; margin: 0; padding: 0; list-style: none; animation: slide 34s linear infinite; }
+.ribbon ul { flex: none; display: flex; margin: 0; padding: 0; list-style: none; animation: slide 120s linear infinite; }
 .ribbon li { padding-inline: 30px; color: var(--ink-70); font: 500 1.08rem var(--font-title); white-space: nowrap; }
 .ribbon li::after { content: "✦"; margin-left: 60px; color: var(--indigo); font-size: .7em; }
 @keyframes slide { to { transform: translateX(-100%); } }
