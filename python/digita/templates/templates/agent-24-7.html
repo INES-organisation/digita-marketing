@@ -72,8 +72,9 @@
 
   {% set channels = ['Messenger', 'Instagram', 'Lead Ads', 'Téléphone', 'SMS', 'Agenda', 'CRM', 'Alertes e-mail'] %}
   <div class="ribbon">
-    <ul>{% for c in channels %}<li>{{ c }}</li>{% endfor %}</ul>
-    <ul aria-hidden="true">{% for c in channels %}<li>{{ c }}</li>{% endfor %}</ul>
+    {# Chaque liste répète les canaux trois fois : plus large que l'écran, la boucle ne laisse jamais de vide. #}
+    <ul>{% for c in channels * 3 %}<li{% if loop.index > channels|length %} aria-hidden="true"{% endif %}>{{ c }}</li>{% endfor %}</ul>
+    <ul aria-hidden="true">{% for c in channels * 3 %}<li>{{ c }}</li>{% endfor %}</ul>
   </div>
 
   <section class="section" aria-labelledby="ou">
@@ -88,16 +89,16 @@
           <a class="go" href="#standardiste">Le Standardiste 24/7</a>
         </article>
         <article class="card spot rv" style="--d:.08s">
+          <span class="tag">Téléphone et devis</span>
+          <h3>Vous ratez des appels, les devis traînent.</h3>
+          <p>En chantier ou en rendez-vous, le téléphone sonne dans le vide. L'agent décroche 24/7, qualifie l'appel, bloque le créneau et prépare le devis brouillon dans votre CRM.</p>
+          <a class="go" href="#commercial-ia">Le Commercial & Standardiste IA</a>
+        </article>
+        <article class="card spot rv" style="--d:.16s">
           <span class="tag">Acquisition</span>
           <h3>Vous voulez plus de demandes.</h3>
           <p>Des campagnes Facebook et Instagram dont chaque prospect est recontacté dans les 2 minutes.</p>
           <a class="go" href="#machine-a-leads">La Machine à Leads</a>
-        </article>
-        <article class="card spot rv" style="--d:.16s">
-          <span class="tag">Vous démarrez</span>
-          <h3>Vous n'avez pas encore de page Facebook.</h3>
-          <p>Un logo créé ou refait et une page professionnelle, prête à recevoir vos premiers clients. INES peut ensuite y répondre.</p>
-          <a class="go" href="/solutions#{{ lancement.id }}">Le {{ lancement.title }}, {{ lancement.price }}</a>
         </article>
       </div>
     </div>
