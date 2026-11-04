@@ -6,7 +6,7 @@ import bcrypt
 from starlette.concurrency import run_in_threadpool
 
 from .. import config, db, php, security
-from ..services import email, ines
+from ..services import email, ines, ines_sso
 from ..render import render_view
 from .common import redirect
 
@@ -22,6 +22,7 @@ def show_login(request):
         "title": "Connexion | DIGITA", "metaRobots": "noindex, follow",
         "error": request.session.get("login_error"),
         "success": request.session.get("login_success"),
+        "inesSso": ines_sso.enabled(),
     })
     request.session.pop("login_error", None)
     request.session.pop("login_success", None)
@@ -34,6 +35,7 @@ def show_register(request):
     resp = render_view(request, "auth/register", {
         "title": "Inscription | DIGITA", "metaRobots": "noindex, follow",
         "error": request.session.get("register_error"),
+        "inesSso": ines_sso.enabled(),
     })
     request.session.pop("register_error", None)
     return resp
@@ -114,6 +116,51 @@ async def register(request):
         return redirect("/inscription")
 
     _login_session(request, await run_in_threadpool(_create_user, mail, password))
+    return redirect("/admin/dashboard")
+
+
+# ---------------------------------------------------------------- « Se connecter avec INES »
+# Connexion unique WAO (04/11/2026). Compte retrouvé par son identifiant INES, sinon lié par e-mail
+# (INES ne transmet que des e-mails vérifiés), sinon créé sans mot de passe utilisable.
+_sso_ready = False
+
+
+def _ensure_sso_column():
+    global _sso_ready
+    if not _sso_ready:
+        db.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS ines_sub VARCHAR(64)")
+        db.execute("CREATE UNIQUE INDEX IF NOT EXISTS users_ines_sub_key ON users (ines_sub)")
+        _sso_ready = True
+
+
+def _user_from_ines(info):
+    _ensure_sso_column()
+    user = db.fetch("SELECT * FROM users WHERE ines_sub = ?", [info["sub"]])
+    if user:
+        return user
+    user = _find_user(info["email"])
+    if user:
+        db.execute("UPDATE users SET ines_sub = ? WHERE id = ?", [info["sub"], user["id"]])
+        return user
+    db.execute("INSERT INTO users (email, password, role, ines_sub) VALUES (?, ?, ?, ?)",
+               [info["email"], _hash(secrets.token_urlsafe(32)), "user", info["sub"]])
+    ines.push_lead(info.get("name") or info["email"], info["email"], "inscription", "Compte créé via INES (compte WAO)")
+    return _find_user(info["email"])
+
+
+def ines_start(request):
+    if not ines_sso.enabled():
+        return redirect("/connexion")
+    return redirect(ines_sso.authorize_url(request.session, config.APP_URL.rstrip("/") + "/auth/ines/callback"))
+
+
+async def ines_callback(request):
+    try:
+        info, _ = await run_in_threadpool(ines_sso.fetch_identity, request.session, request.query_params)
+    except ines_sso.SSOError as e:
+        request.session["login_error"] = str(e)
+        return redirect("/connexion")
+    _login_session(request, await run_in_threadpool(_user_from_ines, info))
     return redirect("/admin/dashboard")
 
 
