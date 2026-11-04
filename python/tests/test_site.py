@@ -277,3 +277,15 @@ def test_prices_are_coherent_across_pages():
     sites, social = REALISATIONS[0], REALISATIONS[1]
     assert sites["price"] == "Dès 499 €" and sites["items"][0]["tag"] == solutions.LP48["price"]
     assert social["price"] == "Dès 390 €/mois"
+
+
+def test_tarifs_show_three_levels():
+    from digita import grille
+
+    tarifs = _client().get("/tarifs").text
+    assert "Prix par Niveau" in tarifs and "Essentiel" in tarifs and "Premium" in tarifs
+    landing = next(r for r in grille.GRILLE if r["id"] == "landing-page")
+    assert [landing["levels"][k]["price"] for k in grille.LEVELS] == [499, 790, 1190]
+    assert "499\u00a0€" in tarifs and "1\u202f190\u00a0€" in tarifs
+    assert grille.price_label(next(r for r in grille.GRILLE if r["id"] == "agent-ia-24-7")["levels"]["essentiel"]) \
+        == "490\u00a0€ + 149\u00a0€/mois"

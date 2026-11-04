@@ -1,7 +1,7 @@
 """Pages de contenu fixe (contrôleurs About, Services, Catalogue, Contact…)."""
 from starlette.responses import JSONResponse
 
-from .. import ines_feed, services_catalog
+from .. import grille, ines_feed, services_catalog
 from .. import solutions as solutions_catalog
 from ..realisations import REALISATIONS
 from ..render import base_context, render_page, render_view
@@ -78,6 +78,9 @@ def tarifs(request):
                            "Prix affichés, sans surprise. Diagnostic gratuit offert.",
         "extraCss": ["/assets/css/tarifs.css"],
         "lancement": solutions_catalog.LANCEMENT,
+        "grille": grille.GRILLE,
+        "grille_levels": grille.LEVELS,
+        "price_label": grille.price_label,
     })
 
 
