@@ -209,19 +209,12 @@ def _apply_reset(reset, password):
 
 
 def reset_email_template(link):
-    return f"""
-    <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #111827;">
-        <h2 style="color: #0d6efd;">Réinitialisation de votre mot de passe</h2>
-        <p>Vous avez demandé à changer le mot de passe de votre compte Digita Marketing.</p>
-        <p style="margin: 28px 0;">
-            <a href="{link}" style="background: #0d6efd; color: #ffffff; padding: 12px 22px;
-               border-radius: 8px; text-decoration: none; font-weight: bold;">Choisir un nouveau mot de passe</a>
-        </p>
-        <p>Ce lien est valable 1 heure et ne fonctionne qu'une seule fois.</p>
-        <p style="color: #6b7280; font-size: 13px;">Si vous n'êtes pas à l'origine de cette demande, ignorez cet
-        e-mail : votre mot de passe reste inchangé.</p>
-    </div>
-    """
+    content = (email.p("Vous avez demandé à changer le mot de passe de votre compte DIGITA.")
+               + email.button("Choisir un nouveau mot de passe", link)
+               + email.box("Ce lien est valable <strong>1 heure</strong> et ne fonctionne qu'une seule fois. "
+                           "Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail : "
+                           "votre mot de passe reste inchangé."))
+    return email.layout("Réinitialisation de votre mot de passe", content, "Lien valable 1 heure.")
 
 
 def show_forgot(request):
@@ -249,7 +242,7 @@ async def forgot(request):
         token = await run_in_threadpool(_create_reset, user["id"])
         link = f"{config.APP_URL.rstrip('/')}/reinitialiser-mot-de-passe?token={token}"
         await run_in_threadpool(email.send, user["email"], "Réinitialisation de votre mot de passe",
-                                reset_email_template(link))
+                                reset_email_template(link), "mot-de-passe")
     # Même réponse que le compte existe ou non, pour ne pas révéler les adresses inscrites.
     request.session["forgot_success"] = RESET_SENT
     return redirect("/mot-de-passe-oublie")

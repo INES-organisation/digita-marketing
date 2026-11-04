@@ -48,27 +48,26 @@ def unsubscribe_sig(mail):
 
 def newsletter_html(articles, formations, unsubscribe_url):
     base = config.APP_URL.rstrip("/")
+
     def card(title, text, url, label):
-        return (f"<div class='article'><h3>{php.h(title)}</h3><p>{php.h((text or '')[:150])}...</p>"
-                f"<a href='{base}{url}'>{label} →</a></div>")
-    return f"""<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
-body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-.container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-.header {{ background: #050505; color: #D4AF37; padding: 20px; text-align: center; }}
-.content {{ padding: 20px; background: #f9fafb; }}
-.article {{ margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; }}
-.footer {{ text-align: center; padding: 20px; font-size: 12px; color: #6b7280; }}
-a {{ color: #a16207; text-decoration: none; }}
-</style></head><body><div class="container">
-<div class="header"><h1>La lettre DIGITA</h1><p>{php.date('d/m/Y')}</p></div>
-<div class="content">{"<h2>📚 Nouveaux articles</h2>" if articles else ""}
-{''.join(card(a['title'], a.get('excerpt'), '/blog/' + a['slug'], 'Lire la suite') for a in articles)}
-{"<h2>🎓 Nouvelles formations</h2>" if formations else ""}
-{''.join(card(f['title'], php.strip_tags(f.get('description') or ''), '/formations/' + f['slug'], 'Découvrir') for f in formations)}
-<div class='article'><h3>Diagnostic gratuit de 30 minutes</h3><p>Un consultant regarde avec vous comment trouver plus de clients et gagner du temps.</p>
-<a href='{base}/diagnostic'>Réserver mon créneau →</a></div>
-</div><div class="footer"><p>Vous recevez cet email car vous êtes abonné à notre newsletter.</p>
-<p><a href="{php.h(unsubscribe_url)}">Se désabonner</a></p></div></div></body></html>"""
+        return email.box(f'<div style="font-size:16px;font-weight:700;margin-bottom:6px;">{php.h(title)}</div>'
+                         f'<div style="color:{email.MUTED};margin-bottom:8px;">{php.h((text or "")[:150])}…</div>'
+                         f'<a href="{base}{url}" style="color:{email.GOLD};font-weight:600;text-decoration:none;">{label} →</a>')
+
+    def section(title):
+        return f'<h2 style="margin:24px 0 12px;font-size:17px;color:{email.INK};">{title}</h2>'
+
+    content = (email.p(f"Les nouveautés DIGITA de la semaine, au {php.date('d/m/Y')}.")
+               + (section("Nouveaux articles") if articles else "")
+               + "".join(card(a["title"], a.get("excerpt"), "/blog/" + a["slug"], "Lire la suite") for a in articles)
+               + (section("Nouvelles formations") if formations else "")
+               + "".join(card(f["title"], php.strip_tags(f.get("description") or ""), "/formations/" + f["slug"], "Découvrir")
+                         for f in formations)
+               + section("Diagnostic gratuit de 30 minutes")
+               + email.p("Un consultant regarde avec vous comment trouver plus de clients et gagner du temps.")
+               + email.button("Réserver mon créneau", f"{base}/diagnostic")
+               + email.p('<span style="font-size:12px;">Vous recevez cet e-mail car vous êtes abonné à la lettre DIGITA.</span>'))
+    return email.layout("La lettre DIGITA", content, "Les nouveautés de la semaine.", unsubscribe_url)
 
 
 def _since(items, field, days=7):
@@ -92,7 +91,7 @@ def send_newsletter():
     for s in subscribers:
         url = (config.APP_URL.rstrip("/") + "/newsletter/unsubscribe?"
                + urllib.parse.urlencode({"email": s["email"], "sig": unsubscribe_sig(s["email"])}))
-        sent += bool(email.send(s["email"], subject, newsletter_html(articles, formations, url)))
+        sent += bool(email.send(s["email"], subject, newsletter_html(articles, formations, url), "newsletter"))
     return {"sent": sent, "failed": len(subscribers) - sent}
 
 
@@ -112,17 +111,7 @@ async def unsubscribe(request):
 
 # ---------------------------------------------------------------- séquences après achat (9h)
 def sequence_html(title, body):
-    return f"""<!DOCTYPE html><html><head><style>
-body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-.container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-.header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }}
-.content {{ padding: 30px; background: #f8f9fa; }}
-.footer {{ text-align: center; padding: 20px; color: #666; font-size: 12px; }}
-</style></head><body><div class='container'>
-<div class='header'><h1>{php.h(title)}</h1></div>
-<div class='content'>{php.nl2br(php.h(body))}</div>
-<div class='footer'><p>&copy; {php.date('Y')} DIGITA · La Réunion</p>
-<p><a href='{config.APP_URL}'>{config.APP_URL.split('//')[-1]}</a></p></div></div></body></html>"""
+    return email.layout(title, email.p(php.nl2br(php.h(body))) + email.signature())
 
 
 def process_email_sequences():
@@ -143,7 +132,7 @@ def process_email_sequences():
             formation = o.get("items_summary") or "votre formation"
             subject = seq["subject"].replace("{formation}", formation)
             body = seq["body"].replace("{username}", o.get("username") or "Apprenant").replace("{formation}", formation)
-            ok = email.send(o["email"], subject, sequence_html(subject, body))
+            ok = email.send(o["email"], subject, sequence_html(subject, body), "sequence")
             db.execute("INSERT INTO email_logs (user_id, sequence_id, email_to, subject, status) VALUES (?, ?, ?, ?, ?)",
                        [o["user_id"], seq["id"], o["email"], f"{subject} #{o['id']}", "sent" if ok else "failed"])
             sent, failed = sent + ok, failed + (not ok)

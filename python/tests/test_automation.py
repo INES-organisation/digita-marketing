@@ -17,7 +17,7 @@ def _request(path, headers=None, query=b""):
 
 def test_email_goes_through_ines_only_with_key(monkeypatch):
     calls = []
-    monkeypatch.setattr(ines, "send_email", lambda *a: calls.append(a) or True)
+    monkeypatch.setattr(ines, "send_email", lambda *a, **k: calls.append(a) or True)
     monkeypatch.delenv("INES_API_KEY", raising=False)
     assert email.send("a@example.com", "Sujet", "<p>x</p>") is False and calls == []
     monkeypatch.setenv("INES_API_KEY", "ines_pro_sk_test")
@@ -37,7 +37,7 @@ def test_cron_requires_ines_token_and_newsletter_unsubscribes(monkeypatch):
     monkeypatch.setattr(formation, "get_all_published", lambda n=None: [
         {"title": "F", "description": "<p>d</p>", "slug": "f", "created_at": recent - datetime.timedelta(days=60)}])
     monkeypatch.setattr(ines, "push_lead", lambda *a, **k: None)
-    monkeypatch.setattr(email, "send", lambda to, subject, html: sent.append((to, html)) or True)
+    monkeypatch.setattr(email, "send", lambda to, subject, html, template=None: sent.append((to, html)) or True)
 
     assert asyncio.run(automation.newsletter(_request("/internal/cron/newsletter"))).status_code == 403
     bad = {"Authorization": "Bearer faux"}

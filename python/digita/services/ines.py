@@ -85,9 +85,11 @@ def generate(messages, system=None, temperature=0.7, max_tokens=500):
     return r.json().get("text") or ""
 
 
-def send_email(to, subject, html, from_name, from_address=None):
-    """E-mail envoyé par le fournisseur d'INES (POST /api/v1/emails/transactional). Renvoie False sur échec."""
-    body = {"to": to, "subject": subject, "html": html, "from_name": from_name, "from_address": from_address}
+def send_email(to, subject, html, from_name, from_address=None, template=None):
+    """E-mail envoyé par le fournisseur d'INES (POST /api/v1/emails/transactional). Renvoie False sur échec.
+    Visible dans INES (Communications › Journal) sous « digita/<template> »."""
+    body = {"to": to, "subject": subject, "html": html, "from_name": from_name, "from_address": from_address,
+            "site": "digita", "template": template}
     try:
         httpx.post(_url("/api/v1/emails/transactional"), json=body, headers=_headers(), timeout=30).raise_for_status()
         return True
