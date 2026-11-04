@@ -104,6 +104,36 @@
   </div>
 </section>
 
+<!-- Prix par niveau (grille commune avec les missions de Tony Alpha 8.0 : digita/grille.py) -->
+<section class="py-5 bg-white" id="niveaux">
+  <div class="container">
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-8 text-center" data-aos="fade-up">
+        <h2 class="mb-3">Prix par Niveau</h2>
+        <p class="text-muted mb-0">Chaque prestation existe en trois niveaux. Essentiel : 1 révision, contenus fournis par vous. Pro : 2 révisions, rédaction incluse. Premium : révisions jusqu'à validation, rédaction et visuels inclus, 1 mois de suivi.</p>
+      </div>
+    </div>
+    <div class="table-responsive shadow-sm rounded" data-aos="fade-up">
+      <table class="table align-middle mb-0 grille-niveaux">
+        <thead class="table-light">
+          <tr><th scope="col">Prestation</th>{% for key, label in grille_levels.items() %}<th scope="col" class="text-center">{{ label }}</th>{% endfor %}</tr>
+        </thead>
+        <tbody>
+          {% for row in grille %}
+          <tr>
+            <th scope="row"><span class="d-block">{{ row.title }}</span><small class="text-muted fw-normal">{{ row.summary }} Délai : {{ row.delay_days }} jours.</small></th>
+            {% for key in grille_levels %}{% set lv = row.levels[key] %}
+            <td class="text-center"><span class="fw-bold text-primary d-block text-nowrap">{{ price_label(lv) }}</span><small class="text-muted">{{ lv.note }}</small></td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="small text-muted text-center mt-3 mb-0">Prix nets, TVA non applicable (art. 293 B du CGI). Option express : délai divisé par deux, +30 %.</p>
+  </div>
+</section>
+
 <!-- Services à la carte -->
 <section class="py-5 bg-white">
   <div class="container">
