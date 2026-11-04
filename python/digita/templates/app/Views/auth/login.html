@@ -22,6 +22,11 @@
             
             <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
         </form>
+        {% if inesSso %}
+        <div class="auth-sep"><span>ou</span></div>
+        <a href="/auth/ines" class="btn btn-ines btn-block">Se connecter avec INES</a>
+        <p class="auth-ines-note">Un seul compte WAO pour INES, DIGITA, MultiProShop et Tony Alpha.</p>
+        {% endif %}
         
         <div class="auth-footer">
             <a href="/inscription">Créer un compte</a>
