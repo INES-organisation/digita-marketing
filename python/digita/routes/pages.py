@@ -1,11 +1,13 @@
 """Pages de contenu fixe (contrôleurs About, Services, Catalogue, Contact…)."""
+from urllib.parse import urlencode
+
 from starlette.responses import JSONResponse
 
 from .. import grille, ines_feed, php, services_catalog
 from .. import solutions as solutions_catalog
 from ..realisations import REALISATIONS
 from ..render import base_context, render_page, render_view
-from .common import redirect
+from .common import moved, redirect
 
 
 def home(request):
@@ -167,4 +169,14 @@ def legal(view, title):
 
 def redirect_to(url):
     return lambda request: redirect(url)
+
+
+def moved_to(url):
+    """301 : ancienne adresse que Google connaît encore (Search Console, 404 du 24/10/2026)."""
+    return lambda request, *_: moved(url)
+
+
+def boutique_search(request):
+    q = request.query_params.get("q", "")
+    return moved("/formations/search" + (f"?{urlencode({'q': q})}" if q else ""))
 

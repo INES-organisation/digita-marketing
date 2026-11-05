@@ -328,3 +328,17 @@ def test_tarifs_show_three_levels():
     assert "499\u00a0€" in tarifs and "1\u202f190\u00a0€" in tarifs
     assert grille.price_label(next(r for r in grille.GRILLE if r["id"] == "agent-ia-24-7")["levels"]["essentiel"]) \
         == "490\u00a0€ + 149\u00a0€/mois"
+
+
+def test_old_shop_and_solution_addresses_are_moved_permanently():
+    # 404 relevées par la Search Console (24/10/2026) : liens de l'ancienne boutique PHP.
+    c = _client()
+    for old, new in [("/solutions/categorie/mobile", "/solutions"), ("/solutions/site-web", "/solutions"),
+                     ("/boutique/categorie/outils", "/outils"), ("/boutique/categorie/services", "/services"),
+                     ("/boutique/categorie/templates", "/solutions"), ("/boutique/pack-formation-marketing", "/formations"),
+                     ("/boutique/template-ecommerce", "/solutions"), ("/boutique/search?q=seo", "/formations/search?q=seo"),
+                     ("/favicon.ico", "/assets/images/digita.png")]:
+        r = c.get(old, follow_redirects=False)
+        assert (r.status_code, r.headers["location"]) == (301, new), old
+    html = c.get("/boutique").text
+    assert not re.findall(r'(?:href|action)="/boutique/', html)
