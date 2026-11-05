@@ -114,6 +114,23 @@
 - L'agent réserve dans le Planning en évitant les chevauchements, mais ne lit pas les horaires du type de rendez-vous Booking : préciser les horaires dans « Activité, horaires… » de `/crm/acquisition` (fait pour DIGITA).
 - Un e-mail de réponse du prospect arrive dans votre boîte (Reply-To), pas dans la conversation de l'agent ; seuls les SMS poursuivent la conversation automatiquement.
 
+## 7. Lot D — leads lisibles et SEO (05/11/2026)
+
+**Déclencheur :** démarchage SEO reçu le 02/11/2026 par /contact (« Radhika »). L'e-mail de premier contact était bien parti (Brevo : délivré 22 h 45, non ouvert), mais sans trace dans INES ; la notification ouvrait /crm ; la fiche ne disait ni le site ni le formulaire ; le spam avait eu une affaire et un devis brouillon.
+
+| # | Tâche | Dépôt | Statut |
+| --- | --- | --- | --- |
+| D1 | E-mail de premier contact écrit dans la conversation (« Accueil ») et dans email_logs (statut suivi par le webhook Brevo) | INES | ✅ |
+| D2 | Tags du site sur la fiche et l'affaire (`DIGITA.buzz`, `form:<formulaire>`, expertise, `pack:…`), note datée par demande, `\r` retirés du titre | INES + Digita | ✅ |
+| D3 | Notifications : prospect → `/crm/contacts/{id}`, conversation → `/crm/acquisition?conversation={id}` (ouverte directement) | INES | ✅ |
+| D4 | /contact : piège à robots, délai minimum 3 s, formules de démarchage → objet « [Spam ?] », fiche CRM simple taguée `spam?` (notification « Message suspect »), sans premier contact, affaire ni devis | Digita | ✅ |
+| D5 | Lead Radhika reclassé : tagué `spam?`, affaire supprimée, devis DEV-2026-009 annulé, e-mail du 02/11 tracé | INES (prod) | ✅ |
+| D6 | Slugs : 139 articles et 127 formations à l'adresse sans accents corrigés, 90 articles en double archivés (le plus long gardé), 291 redirections 301 (table `slug_redirects`, aussi après un changement de titre dans l'admin). Sauvegarde : `/opt/digita/backups/avant_fix_slugs_20261105.sql.gz` | Digita | ✅ |
+| D7 | Sitemap : `lastmod` réel (le déclencheur `updated_at` et le compteur de vues le remettaient au jour) ; 822 adresses, toutes en 200, aucun titre ni description en double | Digita | ✅ |
+| D8 | Metas propres aux pages légales et aux catégories blog/formations ; Open Graph sur agent24-7 ; l'outil d'audit accepte `alt=""` (image décorative) | Digita | ✅ |
+
+**Reste (contenu, à faire par vous) :** 382 formations sous 300 mots, 472 articles générés en 25 s le 26/10/2025 (risque « contenu à grande échelle ») ; lp48 (Page Builder INES) : titre de 29 caractères, sans données structurées.
+
 ## 5. Journal
 
 | Date | Étape |
@@ -123,3 +140,4 @@
 | 26/10/2026 | Lot C livré (§6) : tests INES (acquisition, notifications, devis, booking, planning : 76) et Digita (58) verts. |
 | 26/10/2026 | Vérifié en production : diagnostic et formulaire de contact → agent INES (contact « prospect », affaire « prospection » au titre lisible, conversation non lue), notifications in-app affichées (affaire, prospect, conversation), hard bounce Brevo blacklisté. 1er essai : 401 sur le point d'entrée (routeur réservé aux sessions) → déplacé vers `/api/v1/external/acquisition/leads` ; le repli CRM avait évité toute perte. Données de test supprimées. |
 | 25/10/2026 | Vérifié en production de bout en bout : réservation depuis `/diagnostic` → créneau dans INES Booking, événement « appel » dans le Planning (même id), contact « Lead DIGITA » dans le CRM, créneau retiré des disponibilités ; annulation par le lien de l'e-mail → réservation annulée, événement du Planning supprimé, créneau de nouveau proposé. Données de test supprimées. Chatbot : prix réels cités. Générateur de meta : description seule. |
+| 05/11/2026 | Lot D livré (§7) : tests Digita (70) et INES (acquisition, contacts, notifications : 52) verts, déployés ; vérifié en production (301, sitemap, lead de test supprimé). |
