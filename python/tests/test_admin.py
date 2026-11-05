@@ -1,12 +1,13 @@
-from digita import config, php
+from digita import config, php, redirects
 from digita.models import article
 from digita.routes import admin
 
 
-def test_slug_matches_php_byte_classes():
-    # Sans /u, [àáâãäå] remplace chaque octet UTF-8 : « é » (C3 A9) devient « ae » (valeur vérifiée avec php -r).
-    assert article.php_slug(" Été à La Réunion : ça déçoit ? ") == "a-tae-aa-la-raeunion-aca-daeacoit"
-    assert article.php_slug("SEO & Ads 2024") == "seo-ads-2024"
+def test_slug_keeps_accented_letters():
+    # Le PHP supprimait ou décomposait les accents (« stratgie », « a-tae-… ») : 236 adresses cassées.
+    assert redirects.slugify(" Été à La Réunion : ça déçoit ? ") == "ete-a-la-reunion-ca-decoit"
+    assert redirects.slugify("SEO & Ads 2024") == "seo-ads-2024"
+    assert redirects.slugify("Twitter/X Ads") == "twitter-x-ads"
 
 
 def test_fputcsv_quotes_like_php():
@@ -30,3 +31,32 @@ def test_strict_and_loose_comparisons():
     assert php.same(0, False) is False and php.same(False, False)
     assert php.loose_eq("3", 3) and not php.loose_eq("abc", 0)
     assert php.to_array(None) == [] and php.to_array("x") == ["x"] and php.to_array(["a"]) == ["a"]
+
+
+def test_old_article_and_formation_addresses_redirect_permanently(monkeypatch):
+    from starlette.testclient import TestClient
+    from digita.main import app
+    from digita import sessions
+    from digita.models import formation
+    monkeypatch.setattr(sessions, "_load", lambda sid: None)
+    monkeypatch.setattr(sessions, "_save", lambda sid, data, touch: None)
+    monkeypatch.setattr(article, "get_by_slug", lambda slug: None)
+    monkeypatch.setattr(formation, "get_full_formation", lambda slug: None)
+    table = {("article", "stratgie-nft"): "strategie-nft", ("formation", "formation-effets-spciaux"): "formation-effets-speciaux"}
+    monkeypatch.setattr(redirects.db, "fetch", lambda sql, p: {"new_slug": table[tuple(p)]} if tuple(p) in table else None)
+    c = TestClient(app, base_url="https://digita.buzz")
+    r = c.get("/blog/stratgie-nft", follow_redirects=False)
+    assert r.status_code == 301 and r.headers["location"] == "/blog/strategie-nft"
+    r = c.get("/formations/formation-effets-spciaux", follow_redirects=False)
+    assert r.status_code == 301 and r.headers["location"] == "/formations/formation-effets-speciaux"
+    assert c.get("/blog/inconnu", follow_redirects=False).status_code == 404
+
+
+def test_redirect_chains_are_shortened(monkeypatch):
+    calls = []
+    monkeypatch.setattr(redirects.db, "execute", lambda sql, p: calls.append((sql.split()[0], p)))
+    redirects.record("article", "a", "a")
+    assert calls == []
+    redirects.record("article", "b", "c")
+    assert [c[0] for c in calls] == ["DELETE", "UPDATE", "INSERT"]
+    assert calls[1][1] == ["c", "article", "b"]  # x → b devient x → c

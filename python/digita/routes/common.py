@@ -7,6 +7,11 @@ def redirect(url):
     return RedirectResponse(url, status_code=302)
 
 
+def moved(url):
+    """Redirection permanente (ancienne adresse d'un article ou d'une formation)."""
+    return RedirectResponse(url, status_code=301)
+
+
 def not_found(request, **ctx):
     """require Views/errors/404.php avec le statut 404 (variables du contrôleur visibles)."""
     data = {"title": "Page introuvable | DIGITA", "metaRobots": "noindex, follow", **ctx}

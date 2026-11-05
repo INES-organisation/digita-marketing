@@ -2,7 +2,7 @@
 import math
 import re
 
-from .. import db, php
+from .. import db, php, redirects
 from . import key, like_ci, rand_order, sort_by_name
 
 SELECT = """SELECT a.*, c.name as category_name, c.slug as category_slug{icon}
@@ -61,8 +61,9 @@ def get_related(article_id, category_id, limit=3):
 
 
 def increment_views(article_id):
-    # MySQL mettait updated_at à jour automatiquement (ON UPDATE CURRENT_TIMESTAMP).
-    db.execute("UPDATE blog_articles SET views = views + 1, updated_at = NOW() WHERE id = ?", [article_id])
+    # Sans toucher updated_at : il donne le <lastmod> du sitemap, et chaque visite (robots compris)
+    # le remettait à la date du jour sur les 472 articles (05/11/2026), date que Google cesse de croire.
+    db.execute("UPDATE blog_articles SET views = views + 1 WHERE id = ?", [article_id])
 
 
 def count(category_slug=None):
@@ -205,7 +206,7 @@ def get_all_categories():
 
 
 def generate_slug(title, exclude_id=None, table="blog_articles"):
-    slug = php_slug(title)
+    slug = redirects.slugify(title)
     base, counter = slug, 1
     while True:
         sql, params = f"SELECT id FROM {table} WHERE slug = ?", [slug]
@@ -216,21 +217,6 @@ def generate_slug(title, exclude_id=None, table="blog_articles"):
             return slug
         slug = f"{base}-{counter}"
         counter += 1
-
-
-_SLUG_CLASSES = [("àáâãäå", b"a"), ("èéêë", b"e"), ("ìíîï", b"i"), ("òóôõö", b"o"), ("ùúûü", b"u"), ("ç", b"c")]
-
-
-def php_slug(title):
-    """generateSlug() PHP : ses classes [àáâ…] sans /u portent sur les octets UTF-8, pas les lettres."""
-    s = php.trim(title).encode("utf-8")
-    s = bytes(c + 32 if 65 <= c <= 90 else c for c in s)  # strtolower : ASCII seulement
-    for chars, rep in _SLUG_CLASSES:
-        byteset = set(chars.encode("utf-8"))
-        s = b"".join(rep if c in byteset else bytes([c]) for c in s)
-    s = re.sub(rb"[^a-z0-9-]", b"-", s)
-    s = re.sub(rb"-+", b"-", s)
-    return s.strip(b"-").decode("ascii")
 
 
 def get_stats():

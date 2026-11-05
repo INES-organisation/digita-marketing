@@ -4,8 +4,8 @@ import math
 from ..models import article as Article
 from ..models import formation as Formation
 from ..render import render_view
-from .common import not_found, page_param, redirect
-from .. import db, php
+from .common import moved, not_found, page_param, redirect
+from .. import db, php, redirects
 
 
 def index(request):
@@ -31,6 +31,8 @@ def index(request):
 def show(request, slug):
     article = Article.get_by_slug(slug)
     if not article:
+        if new := redirects.target("article", slug):
+            return moved("/blog/" + new)
         return not_found(request, slug=slug, article=article)
     related = Article.get_related(article["id"], article["category_id"], 3)
     popular = Article.get_popular(5)
@@ -87,7 +89,7 @@ def category(request, slug):
         return not_found(request, categorySlug=slug, articles=articles, categories=categories)
     return render_view(request, "blog/category-content", {
         "title": cat["name"] + " — Blog | DIGITA",
-        "metaDescription": _category_description("Articles", cat),
+        "metaDescription": category_meta("Articles", cat),
         "extraCss": ["/assets/css/blog-layout.css"],
         "category": cat,
         "articles": articles,
@@ -104,6 +106,15 @@ def _category_description(kind, cat):
     if desc:
         return php.mb_strimwidth(desc, 0, 155, "...")
     return f"{kind} {cat['name']} : conseils pratiques en marketing digital, IA et automatisation pour TPE/PME, par DIGITA."
+
+
+def category_meta(kind, cat):
+    """Blog et formations ont les mêmes catégories et leur description : la meta précise lequel."""
+    lead = {"Articles": "Articles du blog DIGITA", "Formations": "Formations en ligne DIGITA"}[kind]
+    desc = php.strip_tags(cat.get("description") or "").strip()
+    if not desc:
+        return _category_description(kind, cat)
+    return php.mb_strimwidth(f"{lead} — {cat['name']} : {desc[0].lower() + desc[1:]}", 0, 158, "...")
 
 
 def search(request):

@@ -1,5 +1,6 @@
 """Formulaires de prospects : demande d'audit, contact, newsletter."""
 import logging
+import re
 
 import httpx
 from starlette.concurrency import run_in_threadpool
@@ -72,7 +73,8 @@ def _process(name, mail, website, details=None, day="", slot=""):
         # Pour l'agent INES : l'essentiel d'abord (titre de l'affaire dans le CRM), sans l'en-tête de l'e-mail admin.
         brief = "\n".join([f"{label} : {value}" for label, value in details.items() if value and label != "Téléphone"]
                           + ([f"Site : {website}"] if website != "Non précisé" else [])) or "Demande de diagnostic"
-        ines.push_lead(name, mail, "diagnostic", brief, phone or None, outreach=True, outreach_email=False)
+        ines.push_lead(name, mail, "diagnostic", brief, phone or None, outreach=True, outreach_email=False,
+                       tags=(f"pack:{details['Pack']}",) if details.get("Pack") else ())
         email.send_diagnostic_confirmation(mail, name)
         return {"success": True,
                 "message": "Votre demande a été prise en compte. Un consultant vous rappelle sous 24 h ouvrées."}
@@ -98,6 +100,31 @@ SERVICES = {
 }
 
 
+# Démarchage reçu le 02/11/2026 (« ranking is not good on Google… SEO Packages… Can I send? ») : il a
+# déclenché le premier contact, une affaire et un devis brouillon. Formules des offres non sollicitées
+# (SEO, liens, refonte, sous-traitance), en anglais surtout.
+PITCH_RX = re.compile(
+    r"\b(seo (packages?|services?|strateg\w*|expert)|rank(ing)? (is not|on|your|higher)|first page of google"
+    r"|page (1|one) of google|back ?links?|guest post|can i send|link building|web ?traffic|more traffic"
+    r"|redesign (of )?your (web)?site|white ?label|outsourc\w*|virtual assistant|i checked your website)\b", re.I)
+MIN_FILL_SECONDS = 3
+
+
+def spam_reason(form, d, session):
+    """Raison de classer le message en spam, ou None. « robot » : piège rempli, le message n'ira pas
+    plus loin que la base. Les autres : enregistré et signalé, sans réponse automatique ni affaire."""
+    if php.trim(form.get("site_web", "")):
+        return "robot"
+    shown = session.pop("contact_form_at", None)
+    if shown is not None and php.time() - shown < MIN_FILL_SECONDS:
+        return f"envoyé {php.time() - shown} s après l'ouverture de la page"
+    if m := PITCH_RX.search(d["message"]):
+        return f"démarchage (« {m.group(0)} »)"
+    if len(re.findall(r"https?://", d["message"])) > 2:
+        return "plus de 2 liens"
+    return None
+
+
 async def submit_contact(request):
     """Formulaire de /contact : il n'avait pas de route POST (ni en PHP ni en Python), les messages
     se perdaient. Enregistré dans contact_messages, copié dans le CRM INES, notifié à l'admin."""
@@ -110,17 +137,19 @@ async def submit_contact(request):
         request.session["contact_flash"] = {"ok": False, "message": "Merci d'indiquer votre nom, une adresse e-mail valide et votre message."}
         return redirect("/contact#formulaire")
 
-    ok = await run_in_threadpool(_save_contact, data)
+    # Même réponse au visiteur : un robot ou un démarcheur ne doit pas savoir qu'il a été repéré.
+    ok = await run_in_threadpool(_save_contact, data, spam_reason(form, data, request.session))
     request.session["contact_flash"] = {"ok": ok, "message": (
         "Merci, votre message a bien été envoyé. Nous vous répondons sous 48 h." if ok
         else "Une erreur technique est survenue. Merci de réessayer ou d'utiliser le chat.")}
     return redirect("/contact#formulaire")
 
 
-def _save_contact(d):
+def _save_contact(d, spam=None):
     service = SERVICES.get(d["service"], d["service"] or "Non précisé")
-    subject = "Contact site - " + service
-    message = (f"Organisation : {d['entreprise'] or 'Non précisée'}\nExpertise : {service}\n\n{d['message']}")
+    subject = ("[Spam ?] " if spam else "") + "Contact site - " + service
+    message = (f"Organisation : {d['entreprise'] or 'Non précisée'}\nExpertise : {service}\n\n{d['message']}"
+               + (f"\n\nClassé spam : {spam}" if spam else ""))
     try:
         db.execute("INSERT INTO contact_messages (name, email, phone, subject, message, status) "
                    "VALUES (?, ?, ?, ?, ?, ?)", [d["nom"][:100], d["email"][:100], d["telephone"][:20],
@@ -128,10 +157,16 @@ def _save_contact(d):
     except Exception as e:  # noqa: BLE001
         log.error("Erreur formulaire contact : %s", e)
         return False
+    if spam == "robot":
+        return True
     # Pour l'agent INES : le message du prospect d'abord (il sert de titre à l'affaire dans le CRM).
     brief = "\n".join(x for x in (d["message"], f"Expertise : {service}",
                                    f"Organisation : {d['entreprise']}" if d["entreprise"] else "") if x)
-    ines.push_lead(d["nom"], d["email"], "contact", brief, d["telephone"], outreach=True)
+    if spam:  # fiche CRM simple, signalée : ni premier contact, ni affaire, ni devis brouillon
+        ines.push_lead(d["nom"], d["email"], "contact", f"{brief}\nClassé spam : {spam}", d["telephone"],
+                       tags=("spam?", service))
+    else:
+        ines.push_lead(d["nom"], d["email"], "contact", brief, d["telephone"], outreach=True, tags=(service,))
     try:
         email.send_new_contact_notification(config.ADMIN_EMAIL, {
             "name": d["nom"], "email": d["email"], "subject": subject, "message": message,

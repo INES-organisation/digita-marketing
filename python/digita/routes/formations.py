@@ -1,11 +1,11 @@
 """Formations (équivalent de FormationController.php, partie publique)."""
 import math
 
-from .. import db, php
+from .. import db, php, redirects
 from ..models import formation as Formation
 from ..render import base_context, render_view
-from .blog import _category_description
-from .common import not_found, page_param, redirect
+from .blog import category_meta
+from .common import moved, not_found, page_param, redirect
 
 
 def index(request):
@@ -35,6 +35,8 @@ def _description(f):
 def show(request, slug):
     f = Formation.get_full_formation(slug)
     if not f:
+        if new := redirects.target("formation", slug):
+            return moved("/formations/" + new)
         return not_found(request, slug=slug, formation=f)
     related = Formation.get_related(f["id"], f["category_id"], 3)
     session = request.session
@@ -88,7 +90,7 @@ def category(request, slug):
     return render_view(request, "formations/category-content", {
         "availableIds": Formation.available_ids(),
         "title": cat["name"] + " — Formations | DIGITA",
-        "metaDescription": _category_description("Formations", cat),
+        "metaDescription": category_meta("Formations", cat),
         "extraCss": ["/assets/css/formations.css"],
         "category": cat,
         "formations": formations,
@@ -116,6 +118,8 @@ def search(request):
 def landing(request, slug):
     f = Formation.get_full_formation(slug)
     if not f:
+        if new := redirects.target("formation", slug):
+            return moved(f"/formations/{new}/landing")
         return not_found(request, slug=slug, formation=f)
     return render_view(request, "payment/landing-content", {
         "title": f["title"] + " — Formation | DIGITA",

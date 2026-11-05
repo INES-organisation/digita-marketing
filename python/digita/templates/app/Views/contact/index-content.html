@@ -80,6 +80,11 @@
                         <div class="col-lg-8 p-5">
                             <form action="/contact" method="POST" class="premium-form" id="formulaire">
                                 {{ CsrfMiddleware_field() }}
+                                {# Piège à robots : invisible et ignoré des lecteurs d'écran, seul un robot le remplit. #}
+                                <div style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+                                    <label for="contact-site-web">Ne pas remplir</label>
+                                    <input type="text" id="contact-site-web" name="site_web" tabindex="-1" autocomplete="off">
+                                </div>
                                 {% if contactFlash %}<div class="alert {{ 'alert-success' if contactFlash['ok'] else 'alert-danger' }} mb-4" role="status">{{ h(contactFlash['message']) }}</div>{% endif %}
                                 <div class="row g-4">
                                     <div class="col-md-6">

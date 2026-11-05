@@ -1,7 +1,7 @@
 """Pages de contenu fixe (contrôleurs About, Services, Catalogue, Contact…)."""
 from starlette.responses import JSONResponse
 
-from .. import grille, ines_feed, services_catalog
+from .. import grille, ines_feed, php, services_catalog
 from .. import solutions as solutions_catalog
 from ..realisations import REALISATIONS
 from ..render import base_context, render_page, render_view
@@ -139,6 +139,7 @@ def diagnostic(request):
 
 
 def contact(request):
+    request.session["contact_form_at"] = php.time()  # anti-robot : délai de remplissage (leads.spam_reason)
     return render_view(request, "contact/index-content", {
         "title": "Contact : Agence Digitale à La Réunion | DIGITA",
         "metaDescription": "Contactez DIGITA, agence IA et digitale à La Réunion : un projet de site, d'automatisation "
@@ -148,8 +149,20 @@ def contact(request):
     })
 
 
+LEGAL_DESCRIPTIONS = {  # elles reprenaient toutes la description de l'accueil (audit du 05/11/2026)
+    "mentions-legales": "Mentions légales de DIGITA, agence IA et digitale à La Réunion : éditeur du site, "
+                        "hébergement, propriété intellectuelle et contact.",
+    "politique-confidentialite": "Politique de confidentialité de DIGITA : données collectées par les formulaires "
+                                 "et le chat, finalités, durée de conservation et vos droits RGPD.",
+    "conditions-generales": "Conditions générales de DIGITA : commandes de prestations et de formations, prix, "
+                            "paiement, délais, rétractation et responsabilités.",
+    "cookies": "Politique des cookies de DIGITA : cookies utilisés sur digita.buzz, leur rôle, leur durée et "
+               "comment les accepter ou les refuser.",
+}
+
+
 def legal(view, title):
-    return _simple(f"legal/{view}", title, "/assets/css/legal.css")
+    return _simple(f"legal/{view}", title, "/assets/css/legal.css", LEGAL_DESCRIPTIONS[view])
 
 
 def redirect_to(url):

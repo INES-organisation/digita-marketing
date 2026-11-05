@@ -43,7 +43,7 @@ def test_lead_goes_to_ines_crm_only_with_key(monkeypatch):
     _join_threads()
     url, body, headers = calls[0]
     assert url == "http://ines-backend:8000/api/v1/contacts/ingest"
-    assert body["tags"] == ["DIGITA", "audit"] and body["email"] == "j@example.com"
+    assert body["tags"] == ["DIGITA.buzz", "form:audit"] and body["email"] == "j@example.com"
     assert headers["Authorization"] == "Bearer ines_pro_sk_x"
 
 
@@ -54,7 +54,7 @@ def test_ines_failure_never_breaks_the_form(monkeypatch):
         attempts.append(1)
         raise httpx.ConnectError("INES arrêté")
     monkeypatch.setattr(ines.httpx, "post", boom)
-    lead = {"name": "Jeanne", "email": "j@example.com", "tags": ["DIGITA", "audit"]}
+    lead = {"name": "Jeanne", "email": "j@example.com", "tags": ["DIGITA.buzz", "form:audit"]}
     assert ines._post_lead(lead, delays=(0, 0, 0)) is False  # journalise seulement
     assert len(attempts) == 3  # nouvelles tentatives avant d'abandonner
 
@@ -82,9 +82,9 @@ def test_lead_goes_through_ines_acquisition_agent(monkeypatch):
     """Avec `outreach`, le lead passe par l'agent 24/7 d'INES ; agent désactivé → fiche CRM simple."""
     monkeypatch.setenv("INES_API_KEY", "ines_pro_sk_x")
     calls = _capture(monkeypatch, {"status": "created"})
-    ines._post_web_lead({"source": "digita.buzz — diagnostic", "outreach": True}, {"tags": ["DIGITA", "diagnostic"]})
+    ines._post_web_lead({"source": "digita.buzz — diagnostic", "outreach": True}, {"tags": ["DIGITA.buzz", "form:diagnostic"]})
     assert calls[0][0].endswith("/api/v1/external/acquisition/leads") and len(calls) == 1
 
     calls = _capture(monkeypatch, {"status": "disabled"})
-    ines._post_web_lead({"source": "x"}, {"name": "A", "email": "a@example.com", "tags": ["DIGITA", "contact"]})
+    ines._post_web_lead({"source": "x"}, {"name": "A", "email": "a@example.com", "tags": ["DIGITA.buzz", "form:contact"]})
     assert [c[0].rsplit("/", 2)[-2:] for c in calls] == [["acquisition", "leads"], ["contacts", "ingest"]]

@@ -244,7 +244,8 @@ def audit_seo(url):
     max_points += 10
     imgs = re.findall(r"<img[^>]*>", html, re.S | re.I)
     total_images = len(imgs)
-    with_alt = sum(1 for i in imgs if re.search(r"alt=[\"'][^\"']+[\"']", i, re.I))
+    # alt="" est voulu pour une image décorative (logo à côté du nom, WCAG H67) : seul l'attribut absent compte.
+    with_alt = sum(1 for i in imgs if re.search(r"\balt\s*=", i, re.I))
     if total_images == 0:
         points += 10
         check("Images Alt", "good", "Aucune image trouvée")
@@ -256,7 +257,7 @@ def audit_seo(url):
         points += php.php_round(with_alt / total_images * 10)
         check("Images Alt", "warning" if ratio > 50 else "error",
               f"{with_alt}/{total_images} images avec alt ({php.strval(ratio)}%)")
-        recs.append("Ajoutez des attributs alt descriptifs à toutes les images.")
+        recs.append("Ajoutez un attribut alt à chaque image : descriptif, ou alt=\"\" si elle est décorative.")
 
     # 5. HTTPS
     max_points += 10

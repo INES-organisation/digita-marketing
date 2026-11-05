@@ -24,23 +24,27 @@ def enabled():
     return bool(os.getenv("INES_API_KEY"))
 
 
-def push_lead(name, email, source, notes="", phone=None, outreach=None, outreach_email=True):
+def push_lead(name, email, source, notes="", phone=None, outreach=None, outreach_email=True, tags=()):
     """Copie un lead dans INES, en arrière-plan : la base locale reste la référence et une panne
     d'INES ne bloque jamais le formulaire.
 
     Avec `outreach` (True/False), le lead passe par l'agent d'acquisition 24/7 d'INES
     (/external/acquisition/leads) : contact + affaire + alerte du propriétaire, et premier contact du
     prospect si outreach=True (par SMS seulement si outreach_email=False, le site ayant déjà écrit).
-    Sans `outreach`, ou si l'agent est désactivé : simple fiche CRM (/contacts/ingest)."""
+    Sans `outreach`, ou si l'agent est désactivé : simple fiche CRM (/contacts/ingest).
+
+    Tags de la fiche : « DIGITA.buzz » (site d'origine), « form:<source> » (formulaire), puis `tags`
+    (expertise choisie, « spam? »…), pour trier les prospects dans le CRM."""
     if not enabled() or not (email or phone):  # un téléphone seul suffit (prospect du chatbot)
         return
     payload = {"name": name or email or phone, "email": email or None, "phone": phone or None, "category": "Lead DIGITA",
-               "tags": ["DIGITA", source], "notes": notes or None}
+               "tags": ["DIGITA.buzz", f"form:{source}", *tags], "notes": notes or None}
     if outreach is None:
         threading.Thread(target=_post_lead, args=(payload,), daemon=True).start()
         return
     web = {"name": name or "", "email": email or None, "phone": phone or None, "message": notes or "",
-           "source": f"digita.buzz — {source}", "outreach": bool(outreach), "outreach_email": bool(outreach_email)}
+           "source": f"digita.buzz — {source}", "outreach": bool(outreach), "outreach_email": bool(outreach_email),
+           "tags": payload["tags"]}
     threading.Thread(target=_post_web_lead, args=(web, payload), daemon=True).start()
 
 

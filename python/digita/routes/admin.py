@@ -12,7 +12,7 @@ import time as _time
 from starlette.concurrency import run_in_threadpool
 from starlette.responses import Response
 
-from .. import config, php
+from .. import config, php, redirects
 from ..forms import php_post
 from ..models import admin as Admin
 from ..models import article as Article
@@ -358,6 +358,7 @@ def article_update(request, article_id):
         data["featured_image"] = article["featured_image"]
     try:
         Article.update(article_id, data)
+        redirects.record("article", article["slug"], data["slug"])  # l'ancienne adresse reste valable
         _flash(request, "success", "Article mis à jour avec succès.")
     except Exception as exc:  # noqa: BLE001
         _flash(request, "error", "Erreur lors de la mise à jour : " + _db_error(exc))
@@ -470,6 +471,7 @@ def formation_update(request, formation_id):
         data["image"] = php.coalesce(formation.get("image"), "")
     try:
         Formation.update(formation_id, data)
+        redirects.record("formation", formation["slug"], data["slug"])
         _flash(request, "success", "Formation mise à jour avec succès.")
     except Exception as exc:  # noqa: BLE001
         _flash(request, "error", "Erreur lors de la mise à jour : " + _db_error(exc))

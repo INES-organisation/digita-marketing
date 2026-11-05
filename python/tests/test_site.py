@@ -62,7 +62,8 @@ def test_home_uses_vertical_menu_anchored_on_sections():
 def test_contact_form_is_saved_and_sent_to_ines(monkeypatch):
     saved, leads_sent = [], []
     monkeypatch.setattr(db, "execute", lambda sql, p=None: saved.append(p))
-    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: leads_sent.append(a))
+    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: leads_sent.append(a + (k,)))
+    monkeypatch.setattr(leads, "MIN_FILL_SECONDS", 0)  # le test envoie aussitôt la page ouverte
     monkeypatch.setattr(email, "send_new_contact_notification", lambda *a: True)
     c = _client()
     token = _token(c.get("/contact").text)
@@ -78,7 +79,45 @@ def test_contact_form_is_saved_and_sent_to_ines(monkeypatch):
     assert r.status_code == 302
     assert saved[0][:2] == ["Ana", "ana@example.com"] and "Intelligence Artificielle" in saved[0][3]
     assert leads_sent[0][:3] == ("Ana", "ana@example.com", "contact")
+    assert leads_sent[0][-1] == {"outreach": True, "tags": ("Intelligence Artificielle",)}
     assert "bien été envoyé" in c.get("/contact").text
+
+
+def test_contact_spam_is_flagged_without_auto_reply(monkeypatch):
+    """Démarchage SEO du 02/11/2026 : il recevait le premier contact, une affaire et un devis brouillon."""
+    saved, leads_sent = [], []
+    monkeypatch.setattr(db, "execute", lambda sql, p=None: saved.append(p))
+    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: leads_sent.append(a + (k,)))
+    monkeypatch.setattr(email, "send_new_contact_notification", lambda *a: True)
+    clock = [1_000_000]
+    monkeypatch.setattr(leads.php, "time", lambda: clock[0])
+    c = _client()
+    pitch = ("Hello http://www.digita.buzz/,\r\n\r\nI checked your website. You have an impressive site but "
+             "ranking is not good on Google, Yahoo and Bing.\r\n\r\nCan I send?\r\n\r\nWarm regards,\r\nRadhika")
+    form = {"nom": "Radhika", "email": "r@example.com", "service": "strategie", "message": pitch}
+
+    token = _token(c.get("/contact").text)
+    clock[0] += 60
+    r = c.post("/contact", data={"_csrf_token": token, **form}, follow_redirects=False)
+    assert r.status_code == 302 and "bien été envoyé" in c.get("/contact").text  # même réponse au visiteur
+    assert saved[-1][3].startswith("[Spam ?]") and "démarchage" in saved[-1][4]
+    assert leads_sent[-1][-1] == {"tags": ("spam?", "Conseil & Stratégie")}  # pas d'outreach : fiche simple
+
+    token = _token(c.get("/contact").text)  # envoyé en 1 s : suspect même sans mot-clé
+    clock[0] += 1
+    c.post("/contact", data={"_csrf_token": token, **form, "message": "Bonjour, un site vitrine ?"})
+    assert "après l'ouverture" in saved[-1][4]
+
+    token = _token(c.get("/contact").text)  # piège rempli : enregistré, rien vers INES
+    clock[0] += 60
+    n = len(leads_sent)
+    c.post("/contact", data={"_csrf_token": token, **form, "message": "Bonjour", "site_web": "http://x"})
+    assert "robot" in saved[-1][4] and len(leads_sent) == n
+
+    token = _token(c.get("/contact").text)  # vrai prospect
+    clock[0] += 60
+    c.post("/contact", data={"_csrf_token": token, **form, "message": "Bonjour, je voudrais un devis pour mon site."})
+    assert not saved[-1][3].startswith("[Spam") and leads_sent[-1][-1]["outreach"] is True
 
 
 def test_newsletter_subscription(monkeypatch):
