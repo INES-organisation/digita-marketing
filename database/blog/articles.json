@@ -63,5 +63,70 @@
     "pole": "Agents IA",
     "icon": "robot",
     "visual_title": "Un agent IA qui répond 24 h/24"
+  },
+  {
+    "slug": "fiche-google-reunion",
+    "title": "Fiche Google : apparaître sur Google Maps à La Réunion en 7 étapes",
+    "meta_title": "Fiche Google : apparaître sur Maps à La Réunion",
+    "meta_description": "Créer et optimiser sa fiche Google à La Réunion : les 3 critères de classement, les 7 étapes d'une fiche complète et les erreurs qui la font disparaître.",
+    "excerpt": "Quand un client tape « plombier Saint-Pierre », trois entreprises sortent sur la carte. Voici comment en faire partie, en 7 étapes, gratuitement.",
+    "category": "seo",
+    "service_name": "Référencement local",
+    "meta_keywords": "fiche Google Réunion, Google Business Profile, référencement local 974, apparaître sur Google Maps",
+    "pole": "Référencement",
+    "icon": "geo-alt",
+    "visual_title": "Apparaître sur Google Maps"
+  },
+  {
+    "slug": "site-vitrine-ou-page-facebook",
+    "title": "Site vitrine ou page Facebook : que choisir pour une entreprise à La Réunion ?",
+    "meta_title": "Site vitrine ou page Facebook : que choisir en 974 ?",
+    "meta_description": "Votre page Facebook suffit-elle ? Ce que permet chaque outil, ce qu'il coûte, et les signes qui montrent qu'il est temps de créer un site vitrine.",
+    "excerpt": "Votre page Facebook suffit-elle ? Ce que chacun permet, ce qu'il coûte, et le moment où le site devient indispensable pour trouver de nouveaux clients.",
+    "category": "creation-web",
+    "service_name": "Sites web et landing",
+    "meta_keywords": "site vitrine Réunion, page Facebook entreprise, créer un site internet 974, site ou Facebook",
+    "pole": "Sites web",
+    "icon": "window-desktop",
+    "visual_title": "Site vitrine ou page Facebook ?"
+  },
+  {
+    "slug": "gite-reunion-haute-saison",
+    "title": "Gîte à La Réunion : 6 réglages pour remplir la haute saison",
+    "meta_title": "Gîte à La Réunion : 6 réglages pour la haute saison",
+    "meta_description": "Fiche Google, photos, avis, réservation directe, réponses rapides et conditions cycloniques : la liste pour remplir votre gîte pendant les vacances.",
+    "excerpt": "Décembre et janvier se jouent maintenant. Fiche Google, photos, avis, réservation directe : la liste à cocher avant les vacances australes.",
+    "category": "seo",
+    "service_name": "Tourisme",
+    "meta_keywords": "gîte Réunion, location saisonnière 974, réservation directe gîte, chambre d'hôtes La Réunion",
+    "pole": "Tourisme",
+    "icon": "house-heart",
+    "visual_title": "Remplir son gîte en haute saison"
+  },
+  {
+    "slug": "repondre-clients-pendant-les-fetes",
+    "title": "Répondre aux clients pendant les fêtes sans y passer ses soirées",
+    "meta_title": "Répondre aux clients pendant les fêtes",
+    "meta_description": "Messages d'absence, réponses préparées, agent IA : trois niveaux pour rester joignable pendant les fêtes de fin d'année sans travailler le soir.",
+    "excerpt": "Messages d'absence, réponses rapides, agent IA : trois niveaux pour rester joignable quand l'entreprise est fermée, avec des modèles prêts à copier.",
+    "category": "intelligence-artificielle",
+    "service_name": "Agents IA",
+    "meta_keywords": "message d'absence WhatsApp Business, réponse automatique clients, fermeture fêtes entreprise, agent IA",
+    "pole": "Automatisation",
+    "icon": "chat-dots",
+    "visual_title": "Rester joignable pendant les fêtes"
+  },
+  {
+    "slug": "avis-google-entreprise",
+    "title": "Avis Google : en obtenir plus et répondre aux mauvais",
+    "meta_title": "Avis Google : en obtenir plus et répondre aux mauvais",
+    "meta_description": "Comment obtenir plus d'avis Google en respectant les règles, et comment répondre aux avis négatifs. Méthode, interdits et modèles de réponse.",
+    "excerpt": "Un avis sans réponse se lit comme un aveu. La routine pour collecter des avis chaque semaine, ce que Google interdit, et des modèles de réponse.",
+    "category": "seo",
+    "service_name": "Référencement local",
+    "meta_keywords": "avis Google entreprise, obtenir des avis clients, répondre avis négatif, e-réputation Réunion",
+    "pole": "Référencement",
+    "icon": "star",
+    "visual_title": "Plus d'avis Google, mieux gérés"
   }
 ]
