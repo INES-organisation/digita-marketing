@@ -118,7 +118,8 @@ def generate_table_of_contents(content):
     return {"toc": toc, "content": out}
 
 
-FAQ_RX = re.compile(r"<h[23][^>]*>([^<]*\?[^<]*)</h[23]>\s*<p>([^<]+(?:<[^/][^>]*>[^<]*</[^>]+>)*[^<]*)</p>", re.S | re.I)
+# Questions en <h3> seulement : les <h2> en forme de question sont des sections, pas une FAQ.
+FAQ_RX = re.compile(r"<h3[^>]*>([^<]*\?[^<]*)</h3>\s*<p>([^<]+(?:<[^/][^>]*>[^<]*</[^>]+>)*[^<]*)</p>", re.S | re.I)
 
 
 def extract_faq(content):

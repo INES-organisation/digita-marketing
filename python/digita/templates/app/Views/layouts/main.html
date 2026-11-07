@@ -91,14 +91,22 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": "{{ h(coalesce(schemaData['meta_title'], coalesce(schemaData['title'], ''))) }}",
-        "description": "{{ h(coalesce(schemaData['meta_description'], '')) }}",
-        {% if (not empty(schemaData['featured_image'])) %}        "image": "{{ h(schemaData['featured_image']) }}",
-        {% endif %}        "author": {
+        "@type": "BlogPosting",
+        "headline": {{ coalesce(schemaData['meta_title'], coalesce(schemaData['title'], ''))|tojson }},
+        "description": {{ coalesce(schemaData['meta_description'], '')|tojson }},
+        {% if (not empty(schemaData['featured_image'])) %}        "image": "{{ h(coalesce(ogImage, schemaData['featured_image'])) }}",
+        {% endif %}{% if isset(author) %}        "author": {
+            "@type": "Person",
+            "name": "{{ h(author['name']) }}",
+            "jobTitle": "{{ h(author['role']) }}",
+            "image": "{{ h(authorPhoto) }}",
+            "url": "{{ h(authorUrl) }}"
+        },
+        {% else %}        "author": {
             "@type": "Organization",
             "name": "DIGITA"
         },
+        {% endif %}
         "publisher": {
             "@type": "Organization",
             "name": "DIGITA",
@@ -163,10 +171,10 @@
         "mainEntity": [
             {% for fi, faq in php_items(faqSchema) %}            {
                 "@type": "Question",
-                "name": "{{ h(faq['question']) }}",
+                "name": {{ faq['question']|tojson }},
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "{{ h(faq['answer']) }}"
+                    "text": {{ faq['answer']|tojson }}
                 }
             }{{ (',' if (fi < (count(faqSchema) - 1)) else '') }}            {% endfor %}        ]
     }
