@@ -690,30 +690,6 @@ body.v2-cta-visible #chatbot-container {
    émeraude, cyan). --c est posée sur chaque carte, étape, engagement et icône de l'orbite.
    En thème clair, les couleurs sont assombries pour rester lisibles sur fond blanc. */
 
-[data-theme="dark"] .v2-hero {
-    background:
-        radial-gradient(ellipse at 12% 55%, rgba(37, 99, 235, 0.16) 0%, transparent 50%),
-        radial-gradient(ellipse at 85% 20%, rgba(212, 175, 55, 0.13) 0%, transparent 45%),
-        radial-gradient(ellipse at 70% 95%, rgba(167, 139, 250, 0.08) 0%, transparent 45%),
-        linear-gradient(160deg, #050505 0%, #030a17 60%, #050505 100%);
-}
-
-[data-theme="light"] .v2-hero {
-    background:
-        radial-gradient(ellipse at 12% 55%, rgba(37, 99, 235, 0.10) 0%, transparent 50%),
-        radial-gradient(ellipse at 85% 20%, rgba(212, 175, 55, 0.14) 0%, transparent 45%),
-        #f7f9ff;
-}
-
-/* Grille qui dérive lentement, comme sur l'accueil d'origine */
-.v2-hero-grid {
-    animation: v2GridShift 24s linear infinite;
-}
-
-@keyframes v2GridShift {
-    to { background-position: 64px 64px; }
-}
-
 /* Titre : dégradé or → bleu de l'accueil d'origine */
 [data-theme="dark"] .v2-title span {
     background: linear-gradient(110deg, #D4AF37 0%, #f0d060 35%, #60a5fa 80%);
@@ -774,6 +750,3 @@ body.v2-cta-visible #chatbot-container {
     border-color: color-mix(in srgb, var(--cc) 40%, transparent);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .v2-hero-grid { animation: none; }
-}
