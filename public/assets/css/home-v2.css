@@ -686,3 +686,186 @@ body.v2-cta-visible #chatbot-container {
         transition: none;
     }
 }
+
+/* ==================== COULEURS DE L'ACCUEIL D'ORIGINE ====================
+   Fond marine, lueurs bleue et dorée, une couleur par métier (or, bleu, violet, corail,
+   émeraude, cyan). --c est posée sur chaque carte, étape, engagement et icône de l'orbite.
+   En thème clair, les couleurs sont assombries pour rester lisibles sur fond blanc. */
+
+[data-theme="dark"] .v2-hero {
+    background:
+        radial-gradient(ellipse at 12% 55%, rgba(37, 99, 235, 0.16) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 20%, rgba(212, 175, 55, 0.13) 0%, transparent 45%),
+        radial-gradient(ellipse at 70% 95%, rgba(167, 139, 250, 0.08) 0%, transparent 45%),
+        linear-gradient(160deg, #050505 0%, #030a17 60%, #050505 100%);
+}
+
+[data-theme="light"] .v2-hero {
+    background:
+        radial-gradient(ellipse at 12% 55%, rgba(37, 99, 235, 0.10) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 20%, rgba(212, 175, 55, 0.14) 0%, transparent 45%),
+        #f7f9ff;
+}
+
+/* Grille qui dérive lentement, comme sur l'accueil d'origine */
+.v2-hero-grid {
+    animation: v2GridShift 24s linear infinite;
+}
+
+@keyframes v2GridShift {
+    to { background-position: 64px 64px; }
+}
+
+/* Titre : dégradé or → bleu de l'accueil d'origine */
+[data-theme="dark"] .v2-title span {
+    background: linear-gradient(110deg, #D4AF37 0%, #f0d060 35%, #60a5fa 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+[data-theme="light"] .v2-title span {
+    background: linear-gradient(110deg, #9a7a16 0%, #1d4ed8 70%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Sections alternées : marine profond en sombre */
+[data-theme="dark"] .v2-section-alt {
+    background: linear-gradient(135deg, #050505 0%, #030a17 50%, #050505 100%);
+    border-color: rgba(37, 99, 235, 0.12);
+}
+
+[data-theme="dark"] #besoins,
+[data-theme="dark"] #engagements {
+    background:
+        radial-gradient(ellipse at 90% 10%, rgba(37, 99, 235, 0.07) 0%, transparent 45%),
+        radial-gradient(ellipse at 5% 90%, rgba(212, 175, 55, 0.06) 0%, transparent 45%),
+        #050505;
+}
+
+[data-theme="light"] .v2-section-alt {
+    background: linear-gradient(135deg, #f8fafc 0%, #eef4ff 100%);
+}
+
+/* Couleur propre à chaque élément (repli : couleur du thème) */
+.v2-need,
+.v2-step,
+.v2-promise,
+.v2-planet {
+    --cc: var(--c, var(--accent));
+}
+
+[data-theme="light"] .v2-need,
+[data-theme="light"] .v2-step,
+[data-theme="light"] .v2-promise,
+[data-theme="light"] .v2-planet {
+    --cc: color-mix(in srgb, var(--c, var(--accent)) 62%, #000);
+}
+
+.v2-need .v2-icon,
+.v2-step .v2-icon,
+.v2-promise .v2-icon {
+    color: var(--cc);
+    background: color-mix(in srgb, var(--cc) 14%, transparent);
+    border-color: color-mix(in srgb, var(--cc) 35%, transparent);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--cc) 22%, transparent);
+}
+
+.v2-need {
+    position: relative;
+    overflow: hidden;
+    border-top: 3px solid var(--cc);
+}
+
+/* Halo coloré dans le coin, renforcé au survol */
+.v2-need::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--cc) 20%, transparent), transparent 70%);
+    transition: transform 0.35s ease, opacity 0.35s ease;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.v2-need:hover::before {
+    transform: scale(1.35);
+    opacity: 1;
+}
+
+.v2-need:hover {
+    border-color: color-mix(in srgb, var(--cc) 55%, transparent);
+    border-top-color: var(--cc);
+    box-shadow: 0 18px 44px color-mix(in srgb, var(--cc) 18%, transparent);
+}
+
+.v2-need .v2-link {
+    color: var(--cc);
+}
+
+/* Méthode : numéro et liseré à la couleur de l'étape, fil or → bleu entre les étapes */
+.v2-steps {
+    position: relative;
+}
+
+@media (min-width: 1200px) {
+    .v2-steps::before {
+        content: "";
+        position: absolute;
+        top: 48px;
+        left: 6%;
+        right: 6%;
+        height: 2px;
+        background: linear-gradient(90deg, #D4AF37, #60a5fa, #a78bfa, #34d399);
+        opacity: 0.35;
+    }
+}
+
+.v2-step {
+    border-bottom: 3px solid var(--cc);
+}
+
+.v2-step-num {
+    color: color-mix(in srgb, var(--cc) 45%, transparent);
+}
+
+.v2-step:hover {
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--cc) 16%, transparent);
+}
+
+/* Engagements */
+.v2-promise:hover {
+    border-color: color-mix(in srgb, var(--cc) 50%, transparent);
+}
+
+/* Orbite : chaque métier a sa couleur, anneaux or / bleu */
+.v2-planet i {
+    color: var(--cc);
+    border-color: color-mix(in srgb, var(--cc) 45%, transparent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--cc) 30%, transparent), 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+.v2-ring-1 { border-color: rgba(212, 175, 55, 0.35); }
+.v2-ring-2 { border-color: rgba(96, 165, 250, 0.35); }
+.v2-ring-3 { border-color: rgba(167, 139, 250, 0.25); }
+
+.v2-orbit-core {
+    box-shadow: 0 0 60px rgba(212, 175, 55, 0.25), 0 0 120px rgba(37, 99, 235, 0.18);
+}
+
+/* Appel final : lueurs or et bleue */
+[data-theme="dark"] .v2-final-card {
+    background:
+        radial-gradient(circle at 20% 0%, rgba(212, 175, 55, 0.16), transparent 55%),
+        radial-gradient(circle at 85% 100%, rgba(37, 99, 235, 0.18), transparent 55%),
+        #070d1c;
+    box-shadow: 0 0 60px rgba(212, 175, 55, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .v2-hero-grid { animation: none; }
+}
