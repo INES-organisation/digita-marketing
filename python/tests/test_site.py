@@ -342,3 +342,21 @@ def test_old_shop_and_solution_addresses_are_moved_permanently():
         assert (r.status_code, r.headers["location"]) == (301, new), old
     html = c.get("/boutique").text
     assert not re.findall(r'(?:href|action)="/boutique/', html)
+
+
+def test_home_preview_is_noindex_with_clean_seo():
+    """Aperçu de l'accueil amélioré : non indexé, H1 en premier titre, données structurées valides."""
+    import json
+    r = _client().get("/apercu-accueil")
+    assert r.status_code == 200
+    html = r.text
+    assert 'name="robots" content="noindex, nofollow"' in html
+    titles = re.findall(r"<h([1-6])[^>]*>", html)
+    assert titles[0] == "1" and titles.count("1") == 1
+    blocks = [json.loads(b) for b in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)]
+    types = [g["@type"] for b in blocks for g in b.get("@graph", [b])]
+    assert types == ["ProfessionalService", "WebSite", "FAQPage"]
+    # Pas d'image lourde, pas de fond animé en canvas, pas de barre de services de droite
+    assert "logo.png" not in html and "<canvas" not in html and "sidebar-onglet" not in html
+    for anchor in ("#besoins", "#realisations", "#methode", "#engagements", "#faq"):
+        assert f'href="{anchor}"' in html, anchor

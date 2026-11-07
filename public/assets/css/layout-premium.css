@@ -805,7 +805,7 @@ body.agence-open {
     background: #020617;
 }
 
-#chatbot-header h5 {
+#chatbot-header .chatbot-title {
     color: var(--gold);
 }
 

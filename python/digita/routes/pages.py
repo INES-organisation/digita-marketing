@@ -5,6 +5,7 @@ from starlette.responses import JSONResponse
 
 from .. import grille, ines_feed, php, services_catalog
 from .. import solutions as solutions_catalog
+from .. import accueil
 from ..realisations import REALISATIONS
 from ..render import base_context, render_page, render_view
 from .common import moved, redirect
@@ -12,6 +13,13 @@ from .common import moved, redirect
 
 def home(request):
     return render_page(request, "templates/home.html", {"realisations": REALISATIONS})
+
+
+def home_v2(request):
+    """Aperçu de l'accueil v2 (non indexé) avant publication."""
+    return render_page(request, "templates/home_v2.html", {
+        "realisations": REALISATIONS, "faq": accueil.FAQ, "structuredData": accueil.structured_data(),
+    })
 
 
 # Questions de la page de vente Agent IA 24/7 (/agent24-7, agent24-7.digita.buzz).
