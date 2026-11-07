@@ -128,5 +128,70 @@
     "pole": "Référencement",
     "icon": "star",
     "visual_title": "Plus d'avis Google, mieux gérés"
+  },
+  {
+    "slug": "lexique-ia-tpe",
+    "title": "L'IA expliquée simplement : 20 mots pour s'y retrouver",
+    "meta_title": "Lexique de l'IA : 20 mots expliqués simplement aux TPE",
+    "meta_description": "IA générative, prompt, agent IA, hallucination, RGPD : 20 mots de l'intelligence artificielle expliqués simplement, avec un exemple concret pour une TPE.",
+    "excerpt": "Prompt, agent, hallucination, LLM : on vous parle d'IA avec des mots que personne n'explique. Les 20 termes utiles, en une phrase chacun, avec un exemple d'usage.",
+    "category": "intelligence-artificielle",
+    "service_name": "Intelligence artificielle",
+    "meta_keywords": "lexique intelligence artificielle, définition IA générative, prompt définition, agent IA, IA pour TPE",
+    "pole": "Intelligence artificielle",
+    "icon": "book",
+    "visual_title": "20 mots de l'IA, enfin clairs"
+  },
+  {
+    "slug": "saison-cyclonique-entreprise",
+    "title": "Saison cyclonique : préparer son entreprise côté numérique",
+    "meta_title": "Saison cyclonique : préparer son entreprise côté numérique",
+    "meta_description": "Alerte orange, alerte rouge : sauvegardes, fiche Google, messages aux clients et télétravail. La check-list numérique pour traverser la saison cyclonique.",
+    "excerpt": "Quand l'alerte rouge tombe, il est trop tard pour chercher le mot de passe de la fiche Google. Ce qu'il faut préparer dès décembre pour rester joignable et ne rien perdre.",
+    "category": "creation-web",
+    "service_name": "Présence en ligne",
+    "meta_keywords": "saison cyclonique entreprise Réunion, alerte rouge cyclone entreprise, plan de continuité TPE, sauvegarde données",
+    "pole": "Présence en ligne",
+    "icon": "cloud-lightning-rain",
+    "visual_title": "Cyclone : votre entreprise reste joignable"
+  },
+  {
+    "slug": "chatgpt-tpe-usages",
+    "title": "ChatGPT pour une TPE : 8 usages utiles et 4 pièges à éviter",
+    "meta_title": "ChatGPT pour une TPE : 8 usages utiles et 4 pièges",
+    "meta_description": "Devis, publications, e-mails, FAQ : 8 usages concrets de ChatGPT pour une petite entreprise, les erreurs à éviter et les précautions RGPD à prendre.",
+    "excerpt": "ChatGPT ne remplacera pas votre savoir-faire, mais il peut vous rendre une heure par jour. Huit usages qui marchent dès demain, et les quatre erreurs qui coûtent cher.",
+    "category": "intelligence-artificielle",
+    "service_name": "Intelligence artificielle",
+    "meta_keywords": "ChatGPT TPE, ChatGPT entreprise usages, IA générative petite entreprise, prompt ChatGPT exemple, ChatGPT RGPD",
+    "pole": "Intelligence artificielle",
+    "icon": "stars",
+    "visual_title": "ChatGPT au service de votre TPE"
+  },
+  {
+    "slug": "relances-automatiques-devis-factures",
+    "title": "Relances automatiques : ne plus courir après vos devis et factures",
+    "meta_title": "Relances automatiques de devis et factures : la méthode",
+    "meta_description": "Un devis sans relance est souvent un devis perdu. Le calendrier de relance, les modèles de messages et les règles légales sur les retards de paiement.",
+    "excerpt": "Relancer un client, personne n'aime ça, alors on oublie. Un calendrier simple, des messages prêts à l'emploi et un outil qui relance à votre place, sans être lourd.",
+    "category": "intelligence-artificielle",
+    "service_name": "Automatisation",
+    "meta_keywords": "relance devis automatique, relance facture impayée, pénalités de retard 40 euros, automatisation TPE Réunion",
+    "pole": "Automatisation",
+    "icon": "arrow-repeat",
+    "visual_title": "Des relances qui partent toutes seules"
+  },
+  {
+    "slug": "chatbot-whatsapp-entreprise",
+    "title": "Chatbot WhatsApp : ce qu'une entreprise peut faire (et ne pas faire)",
+    "meta_title": "Chatbot WhatsApp pour entreprise : le guide 2026",
+    "meta_description": "WhatsApp Business ou API, messages automatiques, chatbot IA : ce qui est possible pour une entreprise en 2026, ce que Meta interdit et ce que ça coûte.",
+    "excerpt": "À La Réunion, vos clients sont sur WhatsApp. Application gratuite ou API, réponses automatiques ou chatbot IA : ce qui est permis en 2026 et par où commencer.",
+    "category": "intelligence-artificielle",
+    "service_name": "Chatbot",
+    "meta_keywords": "chatbot WhatsApp entreprise, WhatsApp Business API, WhatsApp Business Réunion, réponse automatique WhatsApp",
+    "pole": "Chatbot",
+    "icon": "chat-text",
+    "visual_title": "WhatsApp qui répond pour vous"
   }
 ]
