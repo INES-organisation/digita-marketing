@@ -7,6 +7,22 @@ from ..render import render_view
 from .common import moved, not_found, page_param, redirect
 from .. import db, php, redirects
 
+# Auteur affiché sous chaque article et dans les données structurées (BlogPosting).
+AUTHOR = {
+    "name": "Anthony Legros",
+    "role": "Fondateur de DIGITA",
+    "photo": "/assets/images/v2/fondateur-anthony-legros.webp",
+    "url": "/agent24-7#qui",
+    "bio": "J'aide les TPE et PME de La Réunion à gagner du temps et des clients grâce au web, "
+           "aux réseaux sociaux et à l'automatisation. Je crée des sites, des contenus et des "
+           "automatisations pour mes propres activités comme pour mes clients.",
+}
+
+
+def absolute(base, url):
+    """URL absolue pour Open Graph et schema.org (les images d'articles sont stockées en /assets/...)."""
+    return base + url if url and url.startswith("/") else url
+
 
 def index(request):
     page = page_param(request)
@@ -63,7 +79,7 @@ def show(request, slug):
         "ogType": "article",
         "ogTitle": title,
         "ogDescription": desc,
-        "ogImage": article["featured_image"] if php.t(article.get("featured_image")) else None,
+        "ogImage": absolute(base, article["featured_image"]) if php.t(article.get("featured_image")) else None,
         "schemaType": "article",
         "schemaData": article,
         "breadcrumbs": crumbs,
@@ -75,6 +91,10 @@ def show(request, slug):
         "relatedFormation": related_formation,
         "relatedArticles": related,
         "popularArticles": popular,
+        "author": AUTHOR,
+        "authorUrl": base + AUTHOR["url"],
+        "authorPhoto": base + AUTHOR["photo"],
+        "articleUrl": base + "/blog/" + article["slug"],
     })
 
 
