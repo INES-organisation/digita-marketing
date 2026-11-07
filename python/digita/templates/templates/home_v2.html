@@ -78,11 +78,11 @@
 <!-- ===================== VOS BESOINS ===================== -->
 <section id="besoins" class="v2-section" aria-labelledby="besoins-title">
     <div class="container-fluid v2-container">
-        <header class="v2-head" data-aos="fade-up">
+        <div class="v2-head" data-aos="fade-up">
             <p class="v2-kicker">Vos besoins</p>
             <h2 id="besoins-title">Vous vous reconnaissez&nbsp;?</h2>
             <p>Les difficultés que nous entendons le plus souvent chez les entreprises de l'île, et ce que nous y répondons.</p>
-        </header>
+        </div>
         <div class="row g-4">
             {% for b in besoins %}
             <div class="col-md-6 col-xl-4">
@@ -104,11 +104,11 @@
 <!-- ===================== MÉTHODE ===================== -->
 <section id="methode" class="v2-section v2-section-alt" aria-labelledby="methode-title">
     <div class="container-fluid v2-container">
-        <header class="v2-head" data-aos="fade-up">
+        <div class="v2-head" data-aos="fade-up">
             <p class="v2-kicker">Méthode</p>
             <h2 id="methode-title">Quatre étapes, sans mauvaise surprise</h2>
             <p>Vous savez toujours où on en est, ce qui reste à faire et ce que ça vous coûte.</p>
-        </header>
+        </div>
         <ol class="v2-steps">
             {% for step in [
                 ['bi-chat-dots', 'Diagnostic gratuit', "30 minutes pour comprendre votre activité, vos clients et ce qui vous fait perdre du temps."],
@@ -132,10 +132,10 @@
     <div class="container-fluid v2-container">
         <div class="row g-5 align-items-center">
             <div class="col-lg-5">
-                <header class="v2-head v2-head-left" data-aos="fade-up">
+                <div class="v2-head v2-head-left" data-aos="fade-up">
                     <p class="v2-kicker">Qui est derrière DIGITA</p>
                     <h2 id="engagements-title">Un entrepreneur qui construit d'abord pour lui-même</h2>
-                </header>
+                </div>
                 <figure class="v2-founder">
                     <img src="/assets/images/v2/fondateur-anthony-legros.webp" alt="Anthony Legros, fondateur de DIGITA" width="480" height="480" loading="lazy">
                     <figcaption>
@@ -186,10 +186,10 @@
 <!-- ===================== FAQ ===================== -->
 <section id="faq" class="v2-section v2-section-alt" aria-labelledby="faq-title">
     <div class="container-fluid v2-container v2-narrow">
-        <header class="v2-head" data-aos="fade-up">
+        <div class="v2-head" data-aos="fade-up">
             <p class="v2-kicker">Questions fréquentes</p>
             <h2 id="faq-title">Vos questions, nos réponses franches</h2>
-        </header>
+        </div>
         <div class="v2-faq">
             {% for q in faq %}
             <details class="v2-faq-item"{% if loop.first %} open{% endif %}>
