@@ -5,7 +5,7 @@ database/blog/<slug>.html. Le HTML est mis sur une seule ligne : le gabarit de l
 transforme les lignes vides en paragraphes, et tools/apply_sql.py coupe aux « ; » de fin de ligne.
 Les articles existants (même slug) ne sont pas modifiés ; on les publie depuis l'admin.
 
-    python tools/build_blog_sql.py <fichier.sql>
+    python tools/build_blog_sql.py <fichier.sql> [slug ...]   (sans slug : tous les articles)
     python tools/apply_sql.py <url SQLAlchemy> <fichier.sql>
 """
 import json
@@ -40,8 +40,12 @@ def statement(a):
             "ON CONFLICT (slug) DO NOTHING;\n")
 
 
-def main(out):
+def main(out, slugs=None):
     articles = json.loads((BLOG / "articles.json").read_text(encoding="utf-8"))
+    if slugs:
+        unknown = set(slugs) - {a["slug"] for a in articles}
+        assert not unknown, f"slugs inconnus : {unknown}"
+        articles = [a for a in articles if a["slug"] in slugs]
     for a in articles:
         assert len(a["meta_title"]) <= 60 and len(a["meta_description"]) <= 160, a["slug"]
     header = ("-- Articles du blog en brouillon, générés par python/tools/build_blog_sql.py depuis database/blog/.\n"
@@ -51,4 +55,4 @@ def main(out):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2:])
