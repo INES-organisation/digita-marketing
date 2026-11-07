@@ -1,4 +1,4 @@
-"""Contenus de l'accueil v2 qui servent deux fois : la FAQ (affichée et en données structurées)."""
+"""Contenus de l'accueil qui servent deux fois : la FAQ (affichée et en données structurées)."""
 import json
 
 FAQ = [

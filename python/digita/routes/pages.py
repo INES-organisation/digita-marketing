@@ -12,12 +12,7 @@ from .common import moved, redirect
 
 
 def home(request):
-    return render_page(request, "templates/home.html", {"realisations": REALISATIONS})
-
-
-def home_v2(request):
-    """Aperçu de l'accueil v2 (non indexé) avant publication."""
-    return render_page(request, "templates/home_v2.html", {
+    return render_page(request, "templates/home.html", {
         "realisations": REALISATIONS, "faq": accueil.FAQ, "structuredData": accueil.structured_data(),
     })
 

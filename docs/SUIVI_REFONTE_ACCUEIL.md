@@ -170,3 +170,15 @@ Recommandation en gras. Toutes les décisions ont été prises le 29/10/2026 (de
 - **Logo SVG** à fournir (1.7).
 
 Levé le 01/11/2026 : le nom affiché est bien Anthony Legros (`PROFIL_COMPETENCES_WAO.md`, mentions légales) ; les projets non liés sont retirés (D18).
+
+### Lot 8 — Accueil amélioré, publié le 07/11/2026
+
+| # | Tâche | Statut |
+| --- | --- | --- |
+| 8.1 | Analyse complète de l'accueil (vitesse, contenu, héro, animations, SEO, accessibilité) et plan en 3 lots (A technique, B héro, C contenu) | ✅ 07/11 |
+| 8.2 | Lot A : logo WebP 25 Ko (au lieu de 465 Ko), icône 11 Ko, favicon 37 Ko, image de partage 1200×630 (`og-digita.jpg`), polices ramenées à 11 graisses, barre de services de droite non chargée sur l'accueil, titre du chat en paragraphe (il passait avant le H1 sur toutes les pages), règle `header { position: fixed }` limitée à `body > header` | ✅ |
+| 8.3 | Lot B : H1 « Plus de clients, moins de tâches. L'agence IA & automatisation de La Réunion », slogan conservé, 3 garanties, orbite animée en CSS (pause hors écran, coupée si « animations réduites »), bouton visible dès l'arrivée sur mobile, barre d'action mobile | ✅ |
+| 8.4 | Lot C : sections Vos besoins, Offres & tarifs (carrousel existant), Méthode (seule section en couleurs vives), Qui est derrière DIGITA (fondateur, démos LP48 et INES, 6 engagements), FAQ de 9 questions (`digita/accueil.py`), appel final (diagnostic + WhatsApp, sans téléphone) ; aucune référence ni chiffre client (D5) | ✅ |
+| 8.5 | Données structurées `ProfessionalService` + `WebSite` + `FAQPage` sur l'accueil (le bloc `Organization` générique n'y est plus) | ✅ |
+| 8.6 | Validation des couleurs avec Anthony : couleurs vives seulement dans Méthode (icônes cerclées), le reste à la couleur du thème ; WhatsApp en contour vert ; « Voir les offres et tarifs » au style de l'ancien « Voir ce qu'on automatise » | ✅ |
+| 8.7 | Mesure PageSpeed avant/après | ⏳ quota Google épuisé le 07/11 |

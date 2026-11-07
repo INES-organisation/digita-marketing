@@ -44,7 +44,7 @@ def test_home_uses_vertical_menu_anchored_on_sections():
     r = _client().get("/")
     assert 'class="sidebar-premium"' in r.text and 'class="footer-premium"' in r.text
     assert "navbar-site" not in r.text and "sidebar-onglet-sidebar" not in r.text
-    for anchor in ("#enjeux", "#ecosysteme", "#collaboration", "#methode", "#realisations", "#hero-premium"):
+    for anchor in ("#besoins", "#realisations", "#methode", "#engagements", "#faq", "#hero-premium"):
         assert f'href="{anchor}"' in r.text, anchor
     assert 'id="realisations"' in r.text and "https://lp48.digita.buzz" in r.text
     for category in ("Sites web et landing", "Réseaux sociaux", "Publicité", "Automatisation", "Agents IA"):
@@ -195,7 +195,7 @@ def test_home_hero_without_unsourced_figures():
     """Accroches §18 (docs/ACCROCHES_TAGLINES_SEO.md) : pas de chiffre de résultat non documenté."""
     html = _client().get("/").text
     assert "<title>Agence IA &amp; Automatisation à La Réunion | DIGITA</title>" in html
-    assert "Votre Temps, Retrouvé." in html and "La Réunion</span>" in html
+    assert "Plus de clients, moins de tâches." in html and "L'agence IA &amp; automatisation de La Réunion</span>" in html
     for figure in ("+250", "x2.5", "45%", "-70%", "+40%"):
         assert figure not in html, figure
     assert '"name": "DIGITA"' in html and '"alternateName": "Digita Marketing"' in html
@@ -344,13 +344,15 @@ def test_old_shop_and_solution_addresses_are_moved_permanently():
     assert not re.findall(r'(?:href|action)="/boutique/', html)
 
 
-def test_home_preview_is_noindex_with_clean_seo():
-    """Aperçu de l'accueil amélioré : non indexé, H1 en premier titre, données structurées valides."""
+def test_home_seo_is_clean_and_preview_redirects():
+    """Accueil publié : indexable, H1 en premier titre, données structurées valides ; l'ancien aperçu redirige."""
     import json
-    r = _client().get("/apercu-accueil")
+    c = _client()
+    assert c.get("/apercu-accueil", follow_redirects=False).headers["location"] == "/"
+    r = c.get("/")
     assert r.status_code == 200
     html = r.text
-    assert 'name="robots" content="noindex, nofollow"' in html
+    assert 'name="robots" content="index, follow"' in html
     titles = re.findall(r"<h([1-6])[^>]*>", html)
     assert titles[0] == "1" and titles.count("1") == 1
     blocks = [json.loads(b) for b in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)]
