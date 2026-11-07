@@ -18,12 +18,12 @@
     ['#faq', 'bi-chat-left-text', 'Questions'],
 ] %}
 {% set besoins = [
-    ['bi-search', "Personne ne vous trouve sur Google", "Un site rapide, bien référencé, et une fiche Google soignée pour apparaître quand on cherche votre métier.", '/services#sites-web', 'Sites web & SEO', '#60a5fa'],
-    ['bi-people', "Vos réseaux sociaux sont à l'abandon", "Des publications régulières, pensées pour votre métier, sans y passer vos soirées.", '/services#reseaux-sociaux', 'Réseaux sociaux', '#a78bfa'],
-    ['bi-megaphone', "Vous payez de la pub sans savoir ce qu'elle rapporte", "Des campagnes Google et Meta pilotées au résultat, avec des chiffres clairs chaque mois.", '/services#publicite', 'Publicité', '#ff6b6b'],
-    ['bi-arrow-repeat', "Vos soirées passent dans les devis et les relances", "Des automatisations qui font le travail répétitif à votre place : devis, factures, rappels.", '/services#ia-automation', 'Automatisation', '#34d399'],
-    ['bi-robot', "Des demandes restent sans réponse", "Un assistant IA qui répond jour et nuit, qualifie la demande et vous transmet les vrais prospects.", '/services#ia-automation', 'Agents IA', '#00d2ff'],
-    ['bi-signpost-split', "Vous ne savez pas par où commencer", "Un diagnostic gratuit de 30 minutes pour faire le point et choisir les 2 ou 3 actions qui comptent vraiment.", '#diagnostic', 'Diagnostic gratuit', '#D4AF37'],
+    ['bi-search', "Personne ne vous trouve sur Google", "Un site rapide, bien référencé, et une fiche Google soignée pour apparaître quand on cherche votre métier.", '/services#sites-web', 'Sites web & SEO'],
+    ['bi-people', "Vos réseaux sociaux sont à l'abandon", "Des publications régulières, pensées pour votre métier, sans y passer vos soirées.", '/services#reseaux-sociaux', 'Réseaux sociaux'],
+    ['bi-megaphone', "Vous payez de la pub sans savoir ce qu'elle rapporte", "Des campagnes Google et Meta pilotées au résultat, avec des chiffres clairs chaque mois.", '/services#publicite', 'Publicité'],
+    ['bi-arrow-repeat', "Vos soirées passent dans les devis et les relances", "Des automatisations qui font le travail répétitif à votre place : devis, factures, rappels.", '/services#ia-automation', 'Automatisation'],
+    ['bi-robot', "Des demandes restent sans réponse", "Un assistant IA qui répond jour et nuit, qualifie la demande et vous transmet les vrais prospects.", '/services#ia-automation', 'Agents IA'],
+    ['bi-signpost-split', "Vous ne savez pas par où commencer", "Un diagnostic gratuit de 30 minutes pour faire le point et choisir les 2 ou 3 actions qui comptent vraiment.", '#diagnostic', 'Diagnostic gratuit'],
 ] %}
 
 {% set content_ %}
@@ -58,16 +58,16 @@
                 <div class="v2-orbit" data-orbit aria-hidden="true">
                     <div class="v2-orbit-core"><img src="/assets/images/digita-192.webp" alt="" width="120" height="120"></div>
                     <div class="v2-ring v2-ring-1">
-                        <span class="v2-planet" style="--a: 0deg; --c: #60a5fa"><i class="bi bi-window-desktop"></i></span>
-                        <span class="v2-planet" style="--a: 180deg; --c: #00d2ff"><i class="bi bi-robot"></i></span>
+                        <span class="v2-planet" style="--a: 0deg"><i class="bi bi-window-desktop"></i></span>
+                        <span class="v2-planet" style="--a: 180deg"><i class="bi bi-robot"></i></span>
                     </div>
                     <div class="v2-ring v2-ring-2">
-                        <span class="v2-planet" style="--a: 60deg; --c: #a78bfa"><i class="bi bi-people"></i></span>
-                        <span class="v2-planet" style="--a: 240deg; --c: #ff6b6b"><i class="bi bi-megaphone"></i></span>
+                        <span class="v2-planet" style="--a: 60deg"><i class="bi bi-people"></i></span>
+                        <span class="v2-planet" style="--a: 240deg"><i class="bi bi-megaphone"></i></span>
                     </div>
                     <div class="v2-ring v2-ring-3">
-                        <span class="v2-planet" style="--a: 120deg; --c: #34d399"><i class="bi bi-diagram-3"></i></span>
-                        <span class="v2-planet" style="--a: 300deg; --c: #D4AF37"><i class="bi bi-search"></i></span>
+                        <span class="v2-planet" style="--a: 120deg"><i class="bi bi-diagram-3"></i></span>
+                        <span class="v2-planet" style="--a: 300deg"><i class="bi bi-search"></i></span>
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@
         <div class="row g-4">
             {% for b in besoins %}
             <div class="col-md-6 col-xl-4">
-                <a href="{{ '#auditModal' if b[3] == '#diagnostic' else b[3] }}" class="v2-card v2-need" style="--c: {{ b[5] }}"{% if b[3] == '#diagnostic' %} data-bs-toggle="modal" data-bs-target="#auditModal"{% endif %}>
+                <a href="{{ '#auditModal' if b[3] == '#diagnostic' else b[3] }}" class="v2-card v2-need"{% if b[3] == '#diagnostic' %} data-bs-toggle="modal" data-bs-target="#auditModal"{% endif %}>
                     <span class="v2-icon"><i class="bi {{ b[0] }}" aria-hidden="true"></i></span>
                     <h3>{{ b[1] }}</h3>
                     <p>{{ b[2] }}</p>
@@ -116,7 +116,7 @@
                 ['bi-tools', 'Réalisation', "Vous validez chaque étape. Vous voyez l'avancement, sans jargon technique."],
                 ['bi-graph-up-arrow', 'Suivi & mesure', "On regarde les chiffres ensemble : on garde ce qui marche, on corrige le reste."],
             ] %}
-            <li class="v2-step" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}" style="--c: {{ ['#D4AF37', '#60a5fa', '#a78bfa', '#34d399'][loop.index0] }}">
+            <li class="v2-step" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}" style="--c: {{ ['#f59e0b', '#3b82f6', '#a855f7', '#10b981'][loop.index0] }}">
                 <span class="v2-step-num" aria-hidden="true">{{ '%02d' % loop.index }}</span>
                 <span class="v2-icon"><i class="bi {{ step[0] }}" aria-hidden="true"></i></span>
                 <h3>{{ step[1] }}</h3>
@@ -168,7 +168,7 @@
                         ['bi-cpu', "L'IA utile, pas gadget", "Des outils modernes appliqués à votre métier, expliqués simplement."],
                     ] %}
                     <div class="col-sm-6" data-aos="fade-up" data-aos-delay="{{ (loop.index0 % 2) * 80 }}">
-                        <div class="v2-card v2-promise" style="--c: {{ ['#D4AF37', '#60a5fa', '#34d399', '#a78bfa', '#ff6b6b', '#00d2ff'][loop.index0] }}">
+                        <div class="v2-card v2-promise">
                             <span class="v2-icon"><i class="bi {{ e[0] }}" aria-hidden="true"></i></span>
                             <div>
                                 <h3>{{ e[1] }}</h3>
@@ -212,7 +212,7 @@
                 <button type="button" class="v2-btn v2-btn-primary" data-bs-toggle="modal" data-bs-target="#auditModal">
                     <i class="bi bi-calendar-check" aria-hidden="true"></i> Réserver mon diagnostic gratuit
                 </button>
-                <a href="https://wa.me/262693487817?text={{ 'Bonjour, je voudrais parler de mon projet avec DIGITA.' | urlencode }}" class="v2-btn v2-btn-ghost" target="_blank" rel="noopener"><i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp</a>
+                <a href="https://wa.me/262693487817?text={{ 'Bonjour, je voudrais parler de mon projet avec DIGITA.' | urlencode }}" class="v2-btn v2-btn-whatsapp" target="_blank" rel="noopener"><i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp</a>
                 <a href="tel:+262693487817" class="v2-btn v2-btn-ghost"><i class="bi bi-telephone" aria-hidden="true"></i> 06 93 48 78 17</a>
             </div>
             <p class="v2-small">Gratuit · Sans engagement · Rappel sous 24 h ouvrées</p>
