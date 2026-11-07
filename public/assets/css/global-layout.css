@@ -283,7 +283,7 @@ section.py-5:first-of-type:not(#hero):not(.bg-primary) {
     align-items: center;
 }
 
-#chatbot-header h5 {
+#chatbot-header .chatbot-title {
     margin: 0;
     font-size: 16px;
     font-weight: 600;

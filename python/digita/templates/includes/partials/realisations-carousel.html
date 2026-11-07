@@ -1,0 +1,67 @@
+{# Section « Réalisations » en carrousel (données : digita/realisations.py, styles : realisations.css).
+   Partagée par l'accueil et l'accueil v2. #}
+<section id="realisations" class="realisations-section position-relative">
+    <div class="container position-relative" style="z-index: 1;">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <span class="d-inline-block px-3 py-1 rounded-pill mb-3" style="background: rgba(var(--gold-rgb),0.1); color: var(--gold); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; border: 1px solid rgba(var(--gold-rgb),0.25);">Nos Réalisations</span>
+            <h2 class="fw-black text-white mb-3" style="font-family:'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem);">Ce que nous construisons</h2>
+            <p class="realisations-intro">Ce que nous savons réaliser pour vous, avec des tarifs clairs et des pages de vente à visiter.</p>
+        </div>
+
+        <div class="realisations-carousel" data-carousel>
+            <button type="button" class="carousel-arrow carousel-prev" data-carousel-prev aria-label="Réalisations précédentes"><i class="bi bi-chevron-left"></i></button>
+            <div class="realisations-track" data-carousel-track tabindex="0" role="region" aria-label="Réalisations par catégorie (faire défiler horizontalement)">
+            {% for cat in realisations %}
+            <div class="realisations-slide">
+                <article class="realisation-category h-100" id="realisations-{{ cat.id }}">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <span class="realisation-icon"><i class="bi {{ cat.icon }}"></i></span>
+                        <div>
+                            <h3 class="realisation-title mb-0">{{ cat.title }}</h3>
+                            <p class="realisation-tagline mb-0">{{ cat.tagline }}</p>
+                        </div>
+                    </div>
+                    <p class="realisation-desc">{{ cat.description }}</p>
+
+                    <div class="realisation-offer">
+                        <div>
+                            <span class="realisation-offer-label">À partir de</span>
+                            <span class="realisation-price">{{ cat.price }}</span>
+                            <span class="realisation-price-note">{{ cat.price_note }}</span>
+                        </div>
+                        <span class="realisation-delay"><i class="bi bi-clock me-1"></i>{{ cat.delay }}</span>
+                    </div>
+
+                    <h4 class="realisation-subtitle">Ce que nous réalisons</h4>
+                    <ul class="realisation-capabilities">
+                        {% for cap in cat.capabilities %}<li><i class="bi bi-check2"></i>{{ cap }}</li>{% endfor %}
+                    </ul>
+
+                    {% if cat['items'] %}
+                    <h4 class="realisation-subtitle">À voir en ligne</h4>
+                    <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
+                        {% for item in cat['items'] %}
+                        <li>
+                            <a href="{{ item.url }}" class="realisation-item" target="_blank" rel="noopener">
+                                <span class="realisation-item-title">{{ item.title }} <i class="bi bi-box-arrow-up-right"></i></span>
+                                <span class="realisation-item-desc">{{ item.description }}</span>
+                                <span class="realisation-item-tag">{{ item.tag }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    <a href="/contact" class="realisation-cta">Demander un devis <i class="bi bi-arrow-right"></i></a>
+                </article>
+            </div>
+            {% endfor %}
+            </div>
+            <button type="button" class="carousel-arrow carousel-next" data-carousel-next aria-label="Réalisations suivantes"><i class="bi bi-chevron-right"></i></button>
+        </div>
+        <div class="realisations-dots" data-carousel-dots aria-hidden="true">
+            {% for cat in realisations %}<button type="button" tabindex="-1" data-index="{{ loop.index0 }}" title="{{ cat.title }}"></button>{% endfor %}
+        </div>
+        <p class="realisations-footnote text-center mt-4 mb-0">Tarifs indicatifs, TVA non applicable (art. 293 B du CGI). Devis personnalisé et gratuit sous 48h ouvrées.</p>
+    </div>
+</section>

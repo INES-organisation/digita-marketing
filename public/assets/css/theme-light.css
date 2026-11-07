@@ -237,7 +237,7 @@
     background: #2563eb;
 }
 
-[data-theme="light"] #chatbot-header h5 {
+[data-theme="light"] #chatbot-header .chatbot-title {
     color: #ffffff;
 }
 

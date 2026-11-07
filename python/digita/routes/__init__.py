@@ -16,6 +16,7 @@ def post(path, fn):
 
 
 get("/", pages.home)
+get("/apercu-accueil", pages.home_v2)  # aperçu de l'accueil amélioré (non indexé), avant publication
 get("/agent24-7", pages.agent_landing)
 get("/accueil-v2", pages.redirect_to("/agent24-7"))  # future accueil, non indexée (docs/SUIVI_REFONTE_ACCUEIL.md)
 get("/sitemap.xml", automation.sitemap)
