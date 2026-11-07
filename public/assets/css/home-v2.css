@@ -596,9 +596,7 @@
     text-align: center;
     padding: clamp(2rem, 5vw, 3.5rem);
     border-radius: 28px;
-    background:
-        radial-gradient(circle at 50% 0%, rgba(var(--accent-rgb), 0.14), transparent 65%),
-        var(--content-surface);
+    background: var(--content-surface);
     border: 1px solid rgba(var(--accent-rgb), 0.3);
 }
 
@@ -693,25 +691,25 @@ body.v2-cta-visible #chatbot-container {
 }
 
 .v2-step {
-    border-top: 4px solid var(--c);
     transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
+/* Icône : pictogramme et bordure à la couleur de l'étape, fond transparent */
 .v2-step .v2-icon {
-    color: #0a0a0a; /* lisible sur les quatre fonds vifs (contraste 5 à 10) */
-    background: var(--c);
-    border-color: var(--c);
-}
-
-.v2-step-num {
     color: var(--c);
-    opacity: 0.85;
+    background: transparent;
+    border: 2px solid var(--c);
 }
 
 .v2-step:hover {
     border-color: var(--c);
-    border-top-color: var(--c);
     transform: translateY(-3px);
+}
+
+/* Thème clair : couleurs un peu assombries pour rester lisibles sur fond blanc */
+[data-theme="light"] .v2-step .v2-icon {
+    color: color-mix(in srgb, var(--c) 72%, #000);
+    border-color: color-mix(in srgb, var(--c) 72%, #000);
 }
 
 /* WhatsApp : vert de la marque */
