@@ -712,16 +712,41 @@ body.v2-cta-visible #chatbot-container {
     border-color: color-mix(in srgb, var(--c) 72%, #000);
 }
 
-/* WhatsApp : vert de la marque */
+/* WhatsApp : contour, icône et texte verts, fond transparent */
 .v2-btn-whatsapp {
-    background: #25d366;
+    background: transparent;
     border-color: #25d366;
-    color: #06371d;
+    color: #25d366;
 }
 
 .v2-btn-whatsapp:hover {
-    background: #1ebe5a;
-    border-color: #1ebe5a;
-    color: #06371d;
+    background: rgba(37, 211, 102, 0.1);
+    border-color: #25d366;
+    color: #25d366;
     transform: translateY(-2px);
+}
+
+[data-theme="light"] .v2-btn-whatsapp,
+[data-theme="light"] .v2-btn-whatsapp:hover {
+    border-color: #128c4a;
+    color: #128c4a;   /* vert assombri : lisible sur fond blanc */
+}
+
+/* « Voir les offres et tarifs » : même style que « Voir ce qu'on automatise » de l'accueil actuel */
+.v2-btn-blue {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(0, 210, 255, 0.2));
+    border-color: rgba(37, 99, 235, 0.5);
+    color: #ffffff;
+}
+
+.v2-btn-blue:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.32), rgba(0, 210, 255, 0.32));
+    border-color: rgba(37, 99, 235, 0.8);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+[data-theme="light"] .v2-btn-blue,
+[data-theme="light"] .v2-btn-blue:hover {
+    color: #1e3a8a;
 }
