@@ -212,3 +212,15 @@
         overflow-x: auto;
     }
 }
+
+/* Titre de carte de niveau h2 (pages sans sous-section) : même apparence qu'un h3 de carte */
+.v2-card h2.h3 {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: var(--content-heading);
+    margin: 0 0 0.5rem;
+}
+
+.v2-small a {
+    color: var(--accent);
+}

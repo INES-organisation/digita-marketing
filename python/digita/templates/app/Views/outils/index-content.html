@@ -1,135 +1,30 @@
-<!-- Hero Section Premium (même en-tête que /blog) -->
-<section class="page-hero hero-blog py-6 bg-premium-glow position-relative overflow-hidden">
-    <div class="container position-relative z-2">
-        <div class="row align-items-center">
-            <div class="col-lg-8" data-aos="fade-right">
-                <span class="badge rounded-pill bg-premium-gold-gradient px-3 py-2 mb-3" style="background: var(--gold-gradient); color: var(--dark); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Gratuit & propulsé par l'IA</span>
-                <h1 class="display-3 fw-bold mb-3 text-white" style="font-family: var(--font-heading);">🛠️ Outils <span class="text-gradient-gold">Gratuits</span></h1>
-                <p class="lead mb-0 text-white-50" style="font-size: 1.15rem; max-width: 600px;">Boostez votre marketing digital avec nos outils gratuits propulsés par l'IA : audit SEO, meta descriptions, ROI, calendrier éditorial.</p>
-            </div>
-            <div class="col-lg-4 text-center d-none d-lg-block" data-aos="zoom-in">
-                <div class="position-absolute" style="top: 20%; right: 10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(var(--gold-rgb), 0.1) 0%, transparent 70%);"></div>
-                <i class="bi bi-tools text-gradient-gold" style="font-size: 12rem; filter: drop-shadow(0 0 20px rgba(var(--gold-rgb), 0.2));"></i>
-            </div>
-        </div>
-    </div>
-</section>
+{% set hero_kicker = 'Outils gratuits' %}{% set hero_title = 'Quatre outils gratuits pour votre visibilité' %}
+{% set hero_lead = "Analysez votre site, rédigez vos méta-descriptions, calculez la rentabilité d'une campagne et planifiez vos publications. Sans inscription, en quelques secondes." %}
+{% include 'includes/partials/page-hero.html' %}
 
-<!-- Outils Gratuits -->
-<section class="py-5">
-    <div class="container">
+<section class="v2-section">
+    <div class="container-fluid v2-container">
         <div class="row g-4">
-            <!-- Audit SEO -->
-            <div class="col-md-6 col-lg-3">
-                <div class="card h-100 shadow-sm border-0 text-center">
-                    <div class="card-body d-flex flex-column">
-                        <div class="mb-3">
-                            <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-                                <i class="bi bi-search fs-2 text-primary"></i>
-                            </div>
-                        </div>
-                        <h5 class="card-title fw-bold">Audit SEO Gratuit</h5>
-                        <p class="card-text text-muted small flex-grow-1">Analysez le SEO de votre site en 10 points : title, meta, H1, images, HTTPS, vitesse, mobile, Open Graph, liens, Schema.org.</p>
-                        <span class="badge bg-success mb-3">100% Gratuit</span>
-                        <a href="/outils/audit-seo" class="btn btn-primary">
-                            <i class="bi bi-search"></i> Lancer l'audit
-                        </a>
-                    </div>
-                </div>
+            {% for t in [
+                ['bi-search', 'Audit SEO', "Un score sur 100, les points qui bloquent votre référencement et les corrections à faire en priorité.", '/outils/audit-seo', "Analyser mon site", 'Gratuit'],
+                ['bi-file-earmark-text', 'Générateur de méta-descriptions', "Le texte qui s'affiche sous votre lien dans Google, rédigé par l'IA à partir de votre page.", '/outils/meta-generator', 'Générer', 'Avec IA'],
+                ['bi-calculator', 'Calculateur de ROI', "Ce qu'une campagne publicitaire vous rapporte vraiment, une fois son coût déduit.", '/outils/roi-calculator', 'Calculer', 'Gratuit'],
+                ['bi-calendar3', 'Calendrier éditorial', "Un mois de sujets de publications adaptés à votre activité, prêt à suivre.", '/outils/calendrier-editorial', 'Créer mon calendrier', 'Avec IA'],
+            ] %}
+            <div class="col-md-6" data-aos="fade-up" data-aos-delay="{{ (loop.index0 % 2) * 80 }}">
+                <a href="{{ t[3] }}" class="v2-card v2-need">
+                    <span class="pg-tag">{{ t[5] }}</span>
+                    <span class="v2-icon"><i class="bi {{ t[0] }}" aria-hidden="true"></i></span>
+                    <h2 class="h3">{{ t[1] }}</h2>
+                    <p>{{ t[2] }}</p>
+                    <span class="v2-link">{{ t[4] }} <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
             </div>
-
-            <!-- Générateur Meta -->
-            <div class="col-md-6 col-lg-3">
-                <div class="card h-100 shadow-sm border-0 text-center">
-                    <div class="card-body d-flex flex-column">
-                        <div class="mb-3">
-                            <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-                                <i class="bi bi-file-earmark-text fs-2 text-success"></i>
-                            </div>
-                        </div>
-                        <h5 class="card-title fw-bold">Générateur Meta IA</h5>
-                        <p class="card-text text-muted small flex-grow-1">Générez des meta descriptions SEO optimisées pour vos pages grâce à l'intelligence artificielle.</p>
-                        <span class="badge bg-info mb-3">Propulsé par IA</span>
-                        <a href="/outils/meta-generator" class="btn btn-success">
-                            <i class="bi bi-magic"></i> Générer
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Calculateur ROI -->
-            <div class="col-md-6 col-lg-3">
-                <div class="card h-100 shadow-sm border-0 text-center">
-                    <div class="card-body d-flex flex-column">
-                        <div class="mb-3">
-                            <div class="rounded-circle bg-warning bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-                                <i class="bi bi-calculator fs-2 text-warning"></i>
-                            </div>
-                        </div>
-                        <h5 class="card-title fw-bold">Calculateur ROI</h5>
-                        <p class="card-text text-muted small flex-grow-1">Estimez le retour sur investissement de vos campagnes marketing : clics, conversions, revenus, ROAS.</p>
-                        <span class="badge bg-success mb-3">100% Gratuit</span>
-                        <a href="/outils/roi-calculator" class="btn btn-warning text-dark">
-                            <i class="bi bi-calculator"></i> Calculer
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Calendrier Éditorial -->
-            <div class="col-md-6 col-lg-3">
-                <div class="card h-100 shadow-sm border-0 text-center">
-                    <div class="card-body d-flex flex-column">
-                        <div class="mb-3">
-                            <div class="rounded-circle bg-danger bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
-                                <i class="bi bi-calendar3 fs-2 text-danger"></i>
-                            </div>
-                        </div>
-                        <h5 class="card-title fw-bold">Calendrier Éditorial IA</h5>
-                        <p class="card-text text-muted small flex-grow-1">Générez un planning de publication complet pour votre blog avec titres, mots-clés et types de contenu.</p>
-                        <span class="badge bg-info mb-3">Propulsé par IA</span>
-                        <a href="/outils/calendrier-editorial" class="btn btn-danger">
-                            <i class="bi bi-calendar3"></i> Générer
-                        </a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
+        <p class="v2-small text-center mt-4">Les résultats sont indicatifs. Pour aller plus loin, lisez nos <a href="/blog">guides</a> ou découvrez le <a href="/services#seo">référencement par DIGITA</a>.</p>
     </div>
 </section>
 
-<!-- Pourquoi nos outils -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center fw-bold mb-5">Pourquoi utiliser nos outils ?</h2>
-        <div class="row g-4 text-center">
-            <div class="col-md-4">
-                <i class="bi bi-lightning-charge fs-1 text-primary mb-3 d-block"></i>
-                <h5 class="fw-bold">Instantané</h5>
-                <p class="text-muted">Résultats en quelques secondes, sans inscription obligatoire.</p>
-            </div>
-            <div class="col-md-4">
-                <i class="bi bi-robot fs-1 text-success mb-3 d-block"></i>
-                <h5 class="fw-bold">Propulsé par l'IA</h5>
-                <p class="text-muted">Nos outils utilisent l'intelligence artificielle pour des résultats précis.</p>
-            </div>
-            <div class="col-md-4">
-                <i class="bi bi-gift fs-1 text-danger mb-3 d-block"></i>
-                <h5 class="fw-bold">100% Gratuit</h5>
-                <p class="text-muted">Aucun frais caché. Utilisez nos outils autant que vous le souhaitez.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- CTA -->
-<section class="py-5 bg-primary text-white text-center">
-    <div class="container">
-        <h2 class="fw-bold mb-3">Besoin d'un accompagnement personnalisé ?</h2>
-        <p class="lead mb-4 opacity-75">Nos experts en marketing digital sont là pour vous aider à atteindre vos objectifs.</p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="/projets/brief" class="btn btn-light btn-lg"><i class="bi bi-rocket"></i> Créer un projet</a>
-            <a href="/contact" class="btn btn-outline-light btn-lg"><i class="bi bi-envelope"></i> Nous contacter</a>
-        </div>
-    </div>
-</section>
+{% set cta_title = 'Envie d\'un regard humain sur votre site ?' %}{% set cta_text = "Les outils donnent une première idée. En 30 minutes, gratuitement, je vous dis ce qui compte vraiment pour votre activité et par quoi commencer." %}
+{% include 'includes/partials/page-cta.html' %}

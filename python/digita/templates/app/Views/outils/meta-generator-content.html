@@ -1,10 +1,10 @@
 <!-- Générateur Meta Descriptions IA -->
-<section class="py-5" style="padding-top: 120px;">
+<section class="py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="text-center mb-5">
-                    <h1 class="display-5 fw-bold"><i class="bi bi-file-earmark-text text-success"></i> Générateur Meta IA</h1>
+                    <h1 class="display-5 fw-bold"><i class="bi bi-file-earmark-text text-gold"></i> Générateur Meta IA</h1>
                     <p class="lead text-muted">Générez des meta descriptions SEO optimisées grâce à l'intelligence artificielle</p>
                 </div>
 
@@ -25,15 +25,15 @@
                                 <textarea name="page_content" id="page_content" class="form-control" rows="4" placeholder="Collez un extrait du contenu de votre page pour une meta description plus pertinente...">{{ h(coalesce(pageContent, '')) }}</textarea>
                                 <small class="text-muted">Plus vous fournissez de contexte, meilleure sera la meta description.</small>
                             </div>
-                            <button type="submit" class="btn btn-success btn-lg w-100">
+                            <button type="submit" class="v2-btn v2-btn-primary btn-lg w-100">
                                 <i class="bi bi-magic"></i> Générer la meta description
                             </button>
                         </form>
                     </div>
                 </div>
 
-                {% if (not empty(result)) %}                    <div class="card shadow-sm border-success mb-4">
-                        <div class="card-header bg-success text-white">
+                {% if (not empty(result)) %}                    <div class="card shadow-sm border-accent mb-4">
+                        <div class="card-header bg-accent-soft">
                             <h5 class="mb-0"><i class="bi bi-check-circle"></i> Meta description générée</h5>
                         </div>
                         <div class="card-body">
@@ -71,7 +71,7 @@
                 <!-- Conseils -->
                 <div class="card shadow-sm">
                     <div class="card-header">
-                        <h5 class="mb-0"><i class="bi bi-lightbulb text-warning"></i> Conseils pour une bonne meta description</h5>
+                        <h5 class="mb-0"><i class="bi bi-lightbulb text-gold"></i> Conseils pour une bonne meta description</h5>
                     </div>
                     <div class="card-body">
                         <ul class="mb-0">

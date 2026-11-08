@@ -108,7 +108,7 @@ def _meta_generator(request, page_title, page_content):
             result = ai.generate_meta_description(page_title, page_content)
             _track(request, "meta_generator", {"title": page_title}, php.mb_strimwidth(result, 0, 100, "..."))
         except Exception:  # noqa: BLE001
-            request.session["error_message"] = "Erreur lors de la génération. Vérifiez votre clé API OpenAI."
+            request.session["error_message"] = "La génération n'a pas abouti. Merci de réessayer dans quelques instants."
     return _render(request, "outils/meta-generator-content",
                  result=result, pageTitle=page_title, pageContent=page_content)
 
@@ -152,6 +152,6 @@ def _editorial_calendar(request, niche, duration, frequency):
             result = ai.generate_editorial_calendar(niche, duration, frequency)
             _track(request, "editorial_calendar", {"niche": niche, "duration": duration}, "Calendrier généré")
         except Exception:  # noqa: BLE001
-            request.session["error_message"] = "Erreur lors de la génération. Vérifiez votre clé API OpenAI."
+            request.session["error_message"] = "La génération n'a pas abouti. Merci de réessayer dans quelques instants."
     return _render(request, "outils/editorial-calendar-content",
                  result=result, niche=niche, duration=duration, frequency=frequency)

@@ -5,9 +5,9 @@
     --gold: #D4AF37;
     --gold-glow: rgba(212, 175, 55, 0.4);
     --blue: var(--accent);
-    --blue-glow: rgba(37, 99, 235, 0.4);
+    --blue-glow: rgba(var(--accent-rgb), 0.35);  /* ancien bleu : une seule couleur d'accent sur le site */
     --dark: #050505;
-    --dark-alt: #0a0f1a;
+    --dark-alt: #0d0d0d;
     
     /* Typographie */
     --font-heading: 'Plus Jakarta Sans', sans-serif;
@@ -84,13 +84,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bg-premium-dark-blue {
-    background: linear-gradient(135deg, #020617 0%, #0a0f1a 100%);
+    background: var(--content-surface-alt);
     position: relative;
 }
 
 .bg-premium-glow {
     background: var(--dark);
-    background-image: radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
+    background-image: radial-gradient(circle at 50% -20%, rgba(var(--accent-rgb), 0.12) 0%, transparent 70%);
 }
 
 /* Texte Lueur Or */
@@ -148,7 +148,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-premium-blue {
     background: var(--blue);
-    color: white !important;
+    color: var(--on-gold) !important;
     box-shadow: 0 4px 15px var(--blue-glow);
 }
 
@@ -471,4 +471,23 @@ section.py-5:first-of-type:not(#hero):not(.bg-primary) {
 
 .icon-xxl {
     font-size: 5rem !important;
+}
+
+/* Anciennes classes « bleues » encore présentes dans quelques gabarits : couleur d'accent du thème */
+.text-blue {
+    color: var(--accent) !important;
+}
+
+.border-blue {
+    border-color: rgba(var(--accent-rgb), 0.4) !important;
+}
+
+/* En-têtes de résultats des outils : fond d'accent léger (remplace vert, jaune et rouge) */
+.bg-accent-soft {
+    background: var(--accent-soft) !important;
+    color: var(--content-heading) !important;
+}
+
+.border-accent {
+    border-color: rgba(var(--accent-rgb), 0.45) !important;
 }

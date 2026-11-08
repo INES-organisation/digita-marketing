@@ -355,8 +355,9 @@ def calculate_roi(params):
     clicks = float(math.floor(budget / cpc))
     conversions = float(math.floor(clicks * conversion_rate))
     revenue = conversions * avg_order_value
-    profit = revenue * margin
-    roi = php.php_round((profit - budget) / budget * 100, 1)
+    # Bénéfice net : marge sur les ventes moins le coût de la campagne (même signe que le ROI affiché à côté)
+    profit = revenue * margin - budget
+    roi = php.php_round(profit / budget * 100, 1)
     cpa = php.php_round(budget / conversions, 2) if conversions > 0 else 0
     return {
         "budget": budget, "clicks": clicks, "conversions": conversions,

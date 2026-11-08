@@ -5,7 +5,7 @@ from digita.services import ai
 def test_calculate_roi_matches_php():
     # Valeurs relevées sur AIService::calculateROI (PHP 8.3)
     assert ai.calculate_roi({"budget": "1000", "cpc": "1.3"}) == {
-        "budget": 1000.0, "clicks": 769.0, "conversions": 15.0, "revenue": 1500.0, "profit": 450.0,
+        "budget": 1000.0, "clicks": 769.0, "conversions": 15.0, "revenue": 1500.0, "profit": -550.0,
         "roi": -55.0, "cpa": 66.67, "roas": 1.5}
     assert ai.calculate_roi({"budget": "0"}) == {"error": "Budget et CPC doivent être supérieurs à 0"}
 

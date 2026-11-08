@@ -36,16 +36,9 @@
                         </div>
                     {% endif %}
                     <div class="p-4 p-md-5 content-premium">
-                        <nav aria-label="Fil d'Ariane" class="mb-5 pb-3 border-bottom border-glass">
-                            <ol class="breadcrumb mb-0">
-                                <li class="breadcrumb-item"><a href="/" class="text-white-50 text-decoration-none hover-gold">Accueil</a></li>
-                                <li class="breadcrumb-item"><a href="/blog" class="text-white-50 text-decoration-none hover-gold">Blog</a></li>
-                                {% if (not empty(article['category_name'])) %}                                <li class="breadcrumb-item"><a href="/blog/categorie/{{ h(article['category_slug']) }}" class="text-white-50 text-decoration-none hover-gold">{{ h(article['category_name']) }}</a></li>
-                                {% endif %}                            </ol>
-                        </nav>
 
                         {% if (not empty(tableOfContents)) %}                            <nav class="article-toc glass-card p-4 mb-5 d-lg-none" aria-labelledby="sommaire-titre" data-toc-inline>
-                                <p class="fw-bold mb-3 text-blue" id="sommaire-titre"><i class="bi bi-list-nested me-2"></i>Sommaire</p>
+                                <p class="fw-bold mb-3 text-gold" id="sommaire-titre"><i class="bi bi-list-nested me-2"></i>Sommaire</p>
                                 {{ toc_list() }}
                             </nav>
                         {% endif %}
@@ -98,7 +91,7 @@
                     {# Bloc collant : le sommaire reste visible pendant toute la lecture (grand écran) #}
                     <div class="article-sidebar-sticky">
                         {% if (not empty(tableOfContents)) %}                        <nav class="article-toc article-toc-side glass-card p-4 mb-4 d-none d-lg-flex" aria-labelledby="sommaire-titre-side">
-                            <p class="fw-bold mb-3 text-blue" id="sommaire-titre-side"><i class="bi bi-list-nested me-2"></i>Sommaire</p>
+                            <p class="fw-bold mb-3 text-gold" id="sommaire-titre-side"><i class="bi bi-list-nested me-2"></i>Sommaire</p>
                             {{ toc_list() }}
                         </nav>
                         {% endif %}                        <div class="glass-card p-4 mb-4 border-gold article-sidebar-cta">

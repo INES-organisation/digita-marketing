@@ -1,10 +1,10 @@
 <!-- Générateur Calendrier Éditorial IA -->
-<section class="py-5" style="padding-top: 120px;">
+<section class="py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="text-center mb-5">
-                    <h1 class="display-5 fw-bold"><i class="bi bi-calendar3 text-danger"></i> Calendrier Éditorial IA</h1>
+                    <h1 class="display-5 fw-bold"><i class="bi bi-calendar3 text-gold"></i> Calendrier Éditorial IA</h1>
                     <p class="lead text-muted">Générez un planning de publication complet pour votre blog</p>
                 </div>
 
@@ -40,15 +40,15 @@
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-danger btn-lg w-100">
+                            <button type="submit" class="v2-btn v2-btn-primary btn-lg w-100">
                                 <i class="bi bi-calendar3"></i> Générer le calendrier
                             </button>
                         </form>
                     </div>
                 </div>
 
-                {% if (not empty(result)) %}                    <div class="card shadow-sm border-success mb-4">
-                        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                {% if (not empty(result)) %}                    <div class="card shadow-sm border-accent mb-4">
+                        <div class="card-header bg-accent-soft d-flex justify-content-between align-items-center">
                             <h5 class="mb-0"><i class="bi bi-check-circle"></i> Calendrier généré</h5>
                             <button class="btn btn-sm btn-light" onclick="navigator.clipboard.writeText(document.getElementById('calendarResult').innerText); this.innerHTML='<i class=\'bi bi-check\'></i> Copié !';">
                                 <i class="bi bi-clipboard"></i> Copier

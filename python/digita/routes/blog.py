@@ -12,7 +12,7 @@ AUTHOR = {
     "name": "Anthony Legros",
     "role": "Fondateur de DIGITA",
     "photo": "/assets/images/v2/fondateur-anthony-legros.webp",
-    "url": "/agent24-7#qui",
+    "url": "/a-propos",
     "bio": "J'aide les TPE et PME de La Réunion à gagner du temps et des clients grâce au web, "
            "aux réseaux sociaux et à l'automatisation. Je crée des sites, des contenus et des "
            "automatisations pour mes propres activités comme pour mes clients.",
