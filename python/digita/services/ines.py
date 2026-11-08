@@ -136,3 +136,40 @@ def cancel_slot(cancel_token):
     r.raise_for_status()
     return True
 
+
+
+# ---------------------------------------------------------------- ventes → livre des recettes INES
+def sale_payload(invoice):
+    """Vente payée sur digita.buzz, au format de POST /api/v1/external/sales (livre des recettes INES)."""
+    import json
+
+    snap = json.loads(invoice["snapshot"]) if invoice.get("snapshot") else {}
+    buyer = snap.get("buyer", {})
+    lines = [{"label": i.get("product_name") or "Vente", "quantity": int(i.get("quantity") or 1),
+              "unit_price": float(i.get("price") or 0),
+              # micro-entreprise : « ventes » = marchandises ; formations en ligne, contenus numériques et
+              # installations sont des prestations de services (plafond et taux URSSAF des prestations)
+              "nature": "prestation"} for i in snap.get("items", [])]
+    return {"external_id": f"digita-invoice-{invoice['id']}", "kind": "sale",
+            "date": str(invoice.get("paid_at") or invoice.get("created_at")).replace(" ", "T"),
+            "invoice_number": invoice["invoice_number"],
+            "customer": {"name": buyer.get("name") or invoice.get("billing_name") or invoice.get("billing_email"),
+                         "email": buyer.get("email") or invoice.get("billing_email"),
+                         "address": buyer.get("address"), "siren": buyer.get("siret")},
+            "lines": lines, "total": float(invoice["amount_ttc"]), "currency": "EUR",
+            "payment_method": "carte bancaire (Stripe)", "refund_of": None}
+
+
+def push_sale(invoice):
+    """Enregistre la vente dans INES. Renvoie True si INES l'a (créée ou déjà connue) ; sinon elle sera
+    renvoyée par le rattrapage nocturne (automation.reconcile_pending_orders)."""
+    if not enabled():
+        return False
+    try:
+        r = httpx.post(_url("/api/v1/external/sales"), json=sale_payload(invoice), headers=_headers(), timeout=20)
+        if r.status_code == 200 and r.json().get("status") in ("created", "exists"):
+            return True
+        log.warning("Vente %s non enregistrée dans INES : HTTP %s %s", invoice.get("invoice_number"), r.status_code, r.text[:200])
+    except (httpx.HTTPError, ValueError) as e:
+        log.warning("Vente %s non enregistrée dans INES : %s", invoice.get("invoice_number"), e)
+    return False

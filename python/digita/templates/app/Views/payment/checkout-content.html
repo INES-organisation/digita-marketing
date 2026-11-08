@@ -80,8 +80,18 @@
                                 <h5 class="fw-bold mb-3 text-center"><i class="bi bi-shield-check text-success"></i> Paiement sécurisé</h5>
 
                                 {% if t(stripeConfigured) %}                                    <form method="POST" action="/formations/checkout/{{ formation['id'] }}" id="checkoutForm">
+                                        {{ CsrfMiddleware_field() }}
                                         <input type="hidden" name="promo_code" id="promoCodeHidden" value="{{ h(coalesce(promoCode['code'], '')) }}">
-                                        
+                                        {% if checkoutError %}<div class="alert alert-danger small">{{ h(checkoutError) }}</div>{% endif %}
+                                        {% include 'includes/partials/billing-fields.html' %}
+                                        <div class="form-check mt-3 small">
+                                            <input class="form-check-input" type="checkbox" id="cgv" name="cgv" value="1" required>
+                                            <label class="form-check-label" for="cgv">J'ai lu et j'accepte les <a href="/conditions-generales" target="_blank">conditions générales de vente</a>.</label>
+                                        </div>
+                                        <div class="form-check mt-2 mb-3 small">
+                                            <input class="form-check-input" type="checkbox" id="consent" name="consent" value="1" required>
+                                            <label class="form-check-label" for="consent">{{ consentText }}</label>
+                                        </div>
                                         <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
                                             <i class="bi bi-credit-card"></i> Payer {{ number_format(finalPrice, 2) }} €
                                         </button>

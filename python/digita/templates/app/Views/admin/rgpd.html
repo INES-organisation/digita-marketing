@@ -1,0 +1,55 @@
+<div class="container-fluid px-4 py-4">
+    <div class="mb-4">
+        <h1 class="h3 mb-1"><i class="bi bi-shield-lock text-primary"></i> RGPD : demandes des personnes</h1>
+        <p class="text-muted mb-0">Accès, export et effacement des données d'une personne à partir de son adresse e-mail. Réponse due sous un mois.</p>
+    </div>
+
+    {% if erased and erased.get('error') %}<div class="alert alert-danger">{{ h(erased['error']) }}</div>{% endif %}
+    {% if erased and erased.get('email') %}
+    <div class="alert alert-success">
+        Données de <strong>{{ h(erased['email']) }}</strong> effacées :
+        {% for t, n in erased['done'].items() %}{{ t }} ({{ n }}){{ ', ' if not loop.last else '.' }}{% else %}rien à effacer.{% endfor %}
+        <br><small>À faire aussi : supprimer le contact dans le CRM INES. Les commandes et factures sont conservées 10 ans (obligation comptable), détachées du compte.</small>
+    </div>
+    {% endif %}
+
+    <form method="get" action="/admin/rgpd" class="card card-body mb-4">
+        <label for="email" class="form-label">Adresse e-mail de la personne</label>
+        <div class="input-group">
+            <input type="email" id="email" name="email" class="form-control" required value="{{ h(email) }}">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Rechercher</button>
+        </div>
+    </form>
+
+    {% if email %}
+        {% if data %}
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <strong>Données trouvées pour {{ h(email) }}</strong>
+                <a href="/admin/rgpd/export?email={{ email | urlencode }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-download"></i> Exporter (JSON) pour la personne</a>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for table, rows in data.items() %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>{{ table }}{% if table in kept %} <span class="badge bg-secondary">conservé 10 ans</span>{% endif %}</span>
+                    <span class="badge bg-primary rounded-pill">{{ count(rows) }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <form method="post" action="/admin/rgpd/effacer" class="card card-body border-danger">
+            <h2 class="h6 text-danger"><i class="bi bi-exclamation-triangle"></i> Effacer les données de cette personne</h2>
+            <p class="small mb-2">Suppression définitive du compte, des messages, rendez-vous, conversations, inscriptions aux formations et projets. Les commandes et factures sont conservées (obligation comptable de 10 ans) mais détachées du compte. Pour confirmer, recopiez l'adresse e-mail.</p>
+            <input type="hidden" name="email" value="{{ h(email) }}">
+            <div class="input-group">
+                <input type="text" name="confirm" class="form-control" placeholder="{{ h(email) }}" required autocomplete="off">
+                <button class="btn btn-danger" type="submit"><i class="bi bi-trash"></i> Effacer définitivement</button>
+            </div>
+        </form>
+        {% else %}
+        <div class="alert alert-info">Aucune donnée trouvée pour {{ h(email) }} sur digita.buzz. Pensez à vérifier aussi le CRM INES.</div>
+        {% endif %}
+    {% endif %}
+
+    <p class="small text-muted mt-4 mb-0">Durées de conservation appliquées automatiquement chaque nuit : prospects (messages, rendez-vous, conversations du chat) 3 ans, journaux techniques 12 mois, comptes sans connexion ni commande depuis 3 ans.</p>
+</div>

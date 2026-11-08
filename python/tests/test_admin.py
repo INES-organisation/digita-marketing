@@ -114,3 +114,30 @@ def test_admin_can_open_a_message_and_preview_the_newsletter(monkeypatch):
     monkeypatch.setattr(automation, "next_newsletter", lambda: ([{"title": "Article test", "excerpt": "Résumé", "slug": "a"}], []))
     preview = c.get("/admin/newsletters/apercu").text
     assert "La lettre DIGITA" in preview and "Article test" in preview
+
+
+def test_admin_privacy_page_exports_and_erases_with_confirmation(monkeypatch):
+    import re
+    from starlette.testclient import TestClient
+    from digita import sessions
+    from digita.main import app
+    from digita.models import privacy
+
+    store = {"9" * 64: {"user_id": 1, "user_role": "admin"}}
+    monkeypatch.setattr(sessions, "_load", lambda k: store.get(k))
+    monkeypatch.setattr(sessions, "_save", lambda k, data, touch: store.__setitem__(k, data))
+    monkeypatch.setattr(admin.Admin, "find_user", lambda uid: {"email": "admin@digita.buzz"})
+    monkeypatch.setattr(privacy, "export", lambda e: {"contact_messages": [{"id": 1, "email": e}], "orders": [{"id": 4}]})
+    erased = []
+    monkeypatch.setattr(privacy, "erase", lambda e: erased.append(e) or {"contact_messages": 1})
+    c = TestClient(app, base_url="https://digita.buzz")
+    c.cookies.set(sessions.COOKIE, "9" * 64)
+    page = c.get("/admin/rgpd?email=a@b.fr").text
+    assert "contact_messages" in page and "conservé 10 ans" in page
+    exp = c.get("/admin/rgpd/export?email=a@b.fr")
+    assert exp.headers["content-type"].startswith("application/json") and '"a@b.fr"' in exp.text
+    c.post("/admin/rgpd/effacer", data={"email": "a@b.fr", "confirm": "autre@b.fr"})
+    assert not erased  # confirmation incorrecte : rien n'est effacé
+    r = c.post("/admin/rgpd/effacer", data={"email": "a@b.fr", "confirm": "A@B.fr"})
+    assert erased == ["a@b.fr"] and "effacées" in r.text
+    assert c.get("/admin/campaigns", follow_redirects=False).headers["location"] == "/admin/newsletters"

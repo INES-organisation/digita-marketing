@@ -19,11 +19,11 @@
                         <!-- En-tête -->
                         <div class="row mb-5">
                             <div class="col-6">
-                                <h2 class="fw-bold text-primary mb-1">DIGITA MARKETING</h2>
-                                <p class="text-muted small mb-0">Agence de Marketing Digital</p>
-                                <p class="text-muted small mb-0">TONY ALPHA 8.0 — Anthony Legros, EI</p>
-                                <p class="text-muted small mb-0">8 bis impasse des Jonquilles, 97430 Le Tampon</p>
-                                <p class="text-muted small mb-0">SIREN 844 384 198 — contact@digita.buzz</p>
+                                <h2 class="fw-bold text-primary mb-1">DIGITA</h2>
+                                <p class="text-muted small mb-0">{{ h(invoice['seller']['name']) }}</p>
+                                <p class="text-muted small mb-0">{{ h(invoice['seller']['owner']) }}</p>
+                                <p class="text-muted small mb-0">{{ h(invoice['seller']['address']) }}</p>
+                                <p class="text-muted small mb-0">SIREN {{ h(invoice['seller']['siren']) }} — {{ h(invoice['seller']['email']) }}</p>
                             </div>
                             <div class="col-6 text-end">
                                 <h3 class="fw-bold text-uppercase mb-1">Facture</h3>
@@ -64,7 +64,7 @@
                             <tbody>
                                 {% if (not empty(invoice['items'])) %}                                    {% for item in php_values(invoice['items']) %}                                        <tr>
                                             <td>
-                                                {{ h(coalesce(item['product_name'], 'Formation')) }}                                                <br><small class="text-muted">{{ ucfirst(coalesce(item['product_type'], 'formation')) }}</small>
+                                                {{ h(coalesce(item['product_name'], 'Formation')) }}                                                <br><small class="text-muted">{{ {'formation': 'Formation en ligne', 'pack': 'Produit de la boutique'}.get(item['product_type'], ucfirst(coalesce(item['product_type'], ''))) }}</small>
                                             </td>
                                             <td class="text-center">{{ coalesce(item['quantity'], 1) }}</td>
                                             <td class="text-end">{{ number_format(item['price'], 2) }} €</td>
@@ -82,7 +82,7 @@
                                             <td class="text-end text-success fw-bold">-{{ number_format(invoice['discount_amount'], 2) }} €</td>
                                         </tr>
                                     {% endif %}                                    <tr>
-                                        <td class="text-end">Sous-total HT</td>
+                                        <td class="text-end">Total hors taxes</td>
                                         <td class="text-end fw-bold">{{ number_format(invoice['amount_ht'], 2) }} €</td>
                                     </tr>
                                     {% if (invoice['tax_rate'] > 0) %}                                        <tr>
@@ -94,7 +94,7 @@
                                             <td class="text-end text-muted small">0,00 €</td>
                                         </tr>
                                     {% endif %}                                    <tr class="table-primary">
-                                        <td class="text-end fw-bold fs-5">Total TTC</td>
+                                        <td class="text-end fw-bold fs-5">Net à payer</td>
                                         <td class="text-end fw-bold fs-5">{{ number_format(invoice['amount_ttc'], 2) }} €</td>
                                     </tr>
                                 </table>
@@ -104,9 +104,10 @@
                         <!-- Mentions légales -->
                         <hr class="mt-5">
                         <div class="text-muted small">
-                            <p class="mb-1">TVA non applicable, art. 293 B du CGI (auto-entrepreneur / DOM-TOM).</p>
-                            <p class="mb-1">Conditions de paiement : paiement immédiat par carte bancaire via Stripe.</p>
-                            <p class="mb-0">Digita Marketing (TONY ALPHA 8.0, EI) — SIREN 844 384 198 — 8 bis impasse des Jonquilles, 97430 Le Tampon — contact@digita.buzz</p>
+                            <p class="mb-1">{{ h(invoice['seller']['vat']) }}.</p>
+                            <p class="mb-1">Conditions de paiement : paiement comptant à la commande par carte bancaire (Stripe) ; aucun escompte pour paiement anticipé.</p>
+                            <p class="mb-1">Clients professionnels : en cas de retard de paiement, pénalités au taux de trois fois le taux d'intérêt légal et indemnité forfaitaire pour frais de recouvrement de 40 € (art. L441-10 du Code de commerce).</p>
+                            <p class="mb-0">{{ h(invoice['seller']['name']) }} — SIREN {{ h(invoice['seller']['siren']) }} — {{ h(invoice['seller']['address']) }} — {{ h(invoice['seller']['email']) }}</p>
                         </div>
                     </div>
                 </div>

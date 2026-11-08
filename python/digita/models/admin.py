@@ -181,3 +181,12 @@ def analytics(date_from):
     }
     return {"traffic": traffic, "conversions": conversions, "revenue": revenue, "formations": formations,
             "tools": tools, "chatbot": chatbot, "leads": leads}
+
+
+def revenue_stats():
+    """Ventes en ligne encaissées (factures DIGITA) : mois et année en cours."""
+    row = db.fetch("""SELECT COALESCE(SUM(amount_ttc) FILTER (WHERE date_trunc('month', paid_at) = date_trunc('month', LOCALTIMESTAMP)), 0) AS month,
+                             COALESCE(SUM(amount_ttc) FILTER (WHERE date_trunc('year', paid_at) = date_trunc('year', LOCALTIMESTAMP)), 0) AS year,
+                             COUNT(*) FILTER (WHERE date_trunc('month', paid_at) = date_trunc('month', LOCALTIMESTAMP)) AS orders_month
+                      FROM invoices WHERE status = 'paid'""")
+    return {"month": float(row["month"]), "year": float(row["year"]), "orders_month": int(row["orders_month"])}

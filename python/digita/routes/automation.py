@@ -193,7 +193,16 @@ def reconcile_pending_orders():
     fixed = sum(bool(stripe.complete(o["stripe_session_id"])) for o in db.fetch_all(
         "SELECT stripe_session_id FROM orders WHERE status = 'pending' AND stripe_session_id LIKE 'cs_%' "
         "AND created_at > NOW() - INTERVAL '30 days'"))
-    return {"success": True, "fixed": fixed}
+    # Factures pas encore enregistrées dans le livre des recettes d'INES (INES indisponible au moment du paiement)
+    from ..models import invoice as Invoice
+    synced = 0
+    for inv in Invoice.unsynced():
+        stripe.sync_sale(inv["id"])
+        synced += 1
+    # Durées de conservation annoncées dans la politique de confidentialité
+    from ..models import privacy
+    purged = privacy.purge_expired()
+    return {"success": True, "fixed": fixed, "sales_sent": synced, "purged": purged}
 
 
 reconcile_orders = _cron(reconcile_pending_orders)

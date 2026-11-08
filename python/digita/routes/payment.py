@@ -4,7 +4,7 @@ import json
 from starlette.concurrency import run_in_threadpool
 from starlette.responses import Response
 
-from .. import php
+from .. import php, security
 from ..models import formation as Formation
 from ..models import invoice as Invoice
 from ..models import order as Order
@@ -65,13 +65,20 @@ def checkout(request, formation_id):
         "title": "Paiement - " + php.strval(f["title"]) + " | DIGITA",
         "extraCss": CSS, "formation": f, "promoCode": promo, "discount": discount, "finalPrice": final,
         "stripeConfigured": stripe.is_configured(),
+        "checkoutError": request.session.pop("checkout_error", None), "billing": request.session.get("billing"),
+        "consentText": FORMATION_CONSENT,
     })
+
+
+FORMATION_CONSENT = ("Je demande l'accès immédiat à la formation en ligne après le paiement et je reconnais perdre ainsi "
+                     "mon droit de rétractation (article L221-28, 13° du Code de la consommation).")
 
 
 async def process_checkout(request, formation_id):
     if "user_id" not in request.session:
         return redirect("/connexion")
     form = await request.form()
+    security.check_csrf(request, form)
     return await run_in_threadpool(_process_checkout, request, formation_id, form)
 
 
@@ -83,11 +90,19 @@ def _process_checkout(request, formation_id, form):
         return redirect("/formations/" + f["slug"])
     promo = Order.validate_promo_code(form["promo_code"]) if php.t(form.get("promo_code")) else None
     session = request.session
-    order_id = Order.create_formation_order(session["user_id"], f, promo, session.get("user_email"))
+    billing = Order.billing_from_form(form)
+    if not billing or not form.get("cgv") or not form.get("consent"):
+        session["checkout_error"] = ("Merci d'indiquer votre nom et votre adresse (ils figurent sur la facture) "
+                                     "et de cocher les deux cases.")
+        return redirect("/formations/checkout/" + formation_id)
+    session["billing"] = billing
+    ip = request.headers.get("x-real-ip") or (request.client.host if request.client else "")
+    order_id = Order.create_formation_order(session["user_id"], f, promo, session.get("user_email"), billing,
+                                            "J'ai lu et j'accepte les conditions générales de vente.\n" + FORMATION_CONSENT, ip)
     order = Order.find(order_id)
     if php.floatval(order["amount"]) <= 0:
         Order.fulfill_order(order_id, "free_promo", None)
-        Invoice.create_from_order(order)
+        stripe.sync_sale(Invoice.create_from_order(Order.find(order_id)))
         session["success_message"] = "Formation offerte ! Vous êtes inscrit."
         return redirect("/formations/" + f["slug"] + "/learn")
     if not stripe.is_configured():

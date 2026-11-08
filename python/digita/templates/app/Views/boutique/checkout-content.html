@@ -17,6 +17,7 @@
             </div>
             <div class="checkout-total"><span>Total à payer</span><strong>{{ shop.euros(product.price) }}</strong></div>
             <p class="v2-small">TVA non applicable, art. 293 B du CGI. Facture disponible dans « Mes commandes » dès le paiement.</p>
+            {% include 'includes/partials/billing-fields.html' %}
             <div class="form-check mt-4">
                 <input class="form-check-input" type="checkbox" id="cgv" name="cgv" value="1" required>
                 <label class="form-check-label" for="cgv">{{ cgvText | replace('conditions générales de vente', '<a href="/conditions-generales" target="_blank">conditions générales de vente</a>') }}</label>

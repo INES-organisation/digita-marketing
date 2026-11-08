@@ -9,15 +9,18 @@ from datetime import datetime, timedelta
 
 from .. import boutique, db
 from . import key
-from .order import generate_invoice_number
 
 
-def create_order(user_id, product, user_email, consent_text, consent_ip):
+def create_order(user_id, product, user_email, consent_text, consent_ip, billing=None):
+    b = billing or {}
+    # Pas de numéro de facture ici : il est attribué au paiement (models/invoice.py)
     row = db.fetch(
-        """INSERT INTO orders (user_id, amount, currency, status, customer_email, invoice_number, discount_amount,
+        """INSERT INTO orders (user_id, amount, currency, status, customer_email, discount_amount,
+                               billing_name, billing_address, billing_company, billing_siret,
                                consent_text, consent_at, consent_ip)
-           VALUES (?, ?, 'EUR', 'pending', ?, ?, 0, ?, NOW(), ?) RETURNING id""",
-        [user_id, product["price"], user_email, generate_invoice_number(), consent_text, (consent_ip or "")[:45]])
+           VALUES (?, ?, 'EUR', 'pending', ?, 0, ?, ?, ?, ?, ?, NOW(), ?) RETURNING id""",
+        [user_id, product["price"], user_email, b.get("name"), b.get("address"), b.get("company"), b.get("siret"),
+         consent_text, (consent_ip or "")[:45]])
     order_id = str(row["id"])
     db.execute("""INSERT INTO order_items (order_id, product_id, product_type, product_slug, product_name, quantity, price)
                   VALUES (?, 0, 'pack', ?, ?, 1, ?)""", [order_id, product["slug"], product["title"], product["price"]])

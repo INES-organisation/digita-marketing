@@ -19,21 +19,21 @@
     <!-- Quick Actions -->
     <div class="row g-3 mb-4">
         <div class="col-md-3 col-sm-6">
-            <a href="/admin/campaigns?action=new" class="quick-action-card">
+            <a href="/admin/boutique" class="quick-action-card">
                 <div class="icon-wrapper bg-primary-subtle">
-                    <i class="bi bi-plus-circle-fill text-primary"></i>
+                    <i class="bi bi-bag-fill text-primary"></i>
                 </div>
-                <h6 class="mt-3 mb-0">Nouvelle campagne</h6>
-                <p class="text-muted small mb-0">Créer une campagne marketing</p>
+                <h6 class="mt-3 mb-0">Boutique</h6>
+                <p class="text-muted small mb-0">Produits, ventes et commandes</p>
             </a>
         </div>
         <div class="col-md-3 col-sm-6">
-            <a href="/admin/webhooks" class="quick-action-card">
+            <a href="/admin/rgpd" class="quick-action-card">
                 <div class="icon-wrapper bg-info-subtle">
-                    <i class="bi bi-gear-fill text-info"></i>
+                    <i class="bi bi-shield-lock-fill text-info"></i>
                 </div>
-                <h6 class="mt-3 mb-0">Webhooks</h6>
-                <p class="text-muted small mb-0">Configurer les notifications</p>
+                <h6 class="mt-3 mb-0">RGPD</h6>
+                <p class="text-muted small mb-0">Export ou effacement des données</p>
             </a>
         </div>
         <div class="col-md-3 col-sm-6">
@@ -136,18 +136,18 @@
             </div>
         </div>
 
-        <!-- Taux de conversion -->
+        <!-- Chiffre d'affaires encaissé en ligne (factures DIGITA) -->
         <div class="col-lg-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon bg-warning-subtle">
-                    <i class="bi bi-graph-up-arrow text-warning"></i>
+                    <i class="bi bi-cash-coin text-warning"></i>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-label">Taux de conversion</div>
-                    <div class="stat-value">{{ stats['conversion_rate'] }}%</div>
+                    <div class="stat-label">Ventes en ligne du mois</div>
+                    <div class="stat-value">{{ number_format(stats['revenue']['month'], 0, ',', ' ') }} €</div>
                     <div class="stat-details">
                         <span class="badge bg-warning">
-                            <i class="bi bi-activity"></i> Performance
+                            <i class="bi bi-calendar3"></i> {{ number_format(stats['revenue']['year'], 0, ',', ' ') }} € depuis janvier · {{ stats['revenue']['orders_month'] }} commande(s) ce mois
                         </span>
                     </div>
                     <div class="stat-footer">

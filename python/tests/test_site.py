@@ -404,12 +404,16 @@ def test_boutique_checkout_requires_login_and_both_consents(monkeypatch):
     page = c.get("/boutique/commander/pack-immobilier")
     assert page.status_code == 200 and "perdre ainsi mon droit de rétractation" in page.text
     token = _token(page.text)
-    r = c.post("/boutique/commander/pack-immobilier", data={"_csrf_token": token, "cgv": "1"}, follow_redirects=False)
+    billing = {"billing_name": "Marie Hoarau", "billing_address": "1 rue de Paris, 97400 Saint-Denis"}
+    r = c.post("/boutique/commander/pack-immobilier", data={"_csrf_token": token, "cgv": "1", **billing}, follow_redirects=False)
     assert r.headers["location"] == "/boutique/commander/pack-immobilier" and not created
     r = c.post("/boutique/commander/pack-immobilier", data={"_csrf_token": token, "cgv": "1", "consent": "1"},
                follow_redirects=False)
+    assert r.headers["location"] == "/boutique/commander/pack-immobilier" and not created  # nom et adresse obligatoires
+    r = c.post("/boutique/commander/pack-immobilier", data={"_csrf_token": token, "cgv": "1", "consent": "1", **billing},
+               follow_redirects=False)
     assert r.headers["location"] == "https://checkout.stripe.test/cs"
-    assert created and "L221-28" in created[0][3]
+    assert created and "L221-28" in created[0][3] and created[0][5]["name"] == "Marie Hoarau"
     page = c.get("/boutique/commander/devis-ia")  # service : exécution anticipée, pas de renonciation
     assert "L221-25" in page.text and "perdre ainsi" not in page.text
 

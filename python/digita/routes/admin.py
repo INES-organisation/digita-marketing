@@ -8,6 +8,8 @@ la vue de contenu (Controller::viewWithLayout).
 import mimetypes
 import os
 import logging
+import urllib.parse
+import json
 import time as _time
 
 from starlette.concurrency import run_in_threadpool
@@ -133,8 +135,7 @@ def dashboard(request):
         "articles": Article.get_stats(),
         "formations": Formation.get_formation_stats(),
         "projects": project_stats,
-        "conversion_rate": php.php_round(newsletter["active"] / contact["total"] * 100, 1)
-        if contact["total"] > 0 else 0,
+        "revenue": Admin.revenue_stats(),
     }
     return _view(request, "admin/dashboard", {
         "pageTitle": "Dashboard",
@@ -235,61 +236,6 @@ def export_newsletters(request):
 def logout(request):
     request.session.clear()
     return redirect("/connexion")
-
-
-@admin_only
-def webhooks(request):
-    return _view(request, "admin/webhooks", {
-        "pageTitle": "Webhooks",
-        "webhooks": {"contact_url": "", "contact_enabled": False, "newsletter_url": "",
-                     "newsletter_enabled": False, "system_url": "", "system_enabled": False},
-        "currentUser": request.session,
-    })
-
-
-@admin_only
-def save_webhooks(request):
-    return redirect("/admin/webhooks")
-
-
-@admin_only
-def test_webhook(request, _type):
-    return _json({"success": True, "message": "Webhook de test envoyé"})
-
-
-CAMPAIGNS = [
-    {"id": 1, "name": "Newsletter Octobre 2025", "description": "Newsletter mensuelle avec les dernières actualités",
-     "type": "newsletter", "recipients": 150, "sent": 150, "opened": 98, "clicked": 45, "open_rate": 65,
-     "click_rate": 30, "status": "completed", "created_at": "2025-10-01 10:00:00"},
-    {"id": 2, "name": "Promotion Spéciale", "description": "Offre limitée sur nos services", "type": "promotion",
-     "recipients": 200, "sent": 200, "opened": 145, "clicked": 78, "open_rate": 72, "click_rate": 39,
-     "status": "active", "created_at": "2025-10-15 14:30:00"},
-    {"id": 3, "name": "Nouvelle Campagne", "description": "En cours de préparation", "type": "newsletter",
-     "recipients": 0, "sent": 0, "opened": 0, "clicked": 0, "open_rate": 0, "click_rate": 0, "status": "draft",
-     "created_at": "2025-10-25 09:00:00"},
-]
-
-
-@admin_only
-def campaigns(request):
-    # Données de démonstration écrites en dur dans le contrôleur PHP.
-    return _view(request, "admin/campaigns", {
-        "pageTitle": "Campagnes Marketing",
-        "campaigns": [dict(c) for c in CAMPAIGNS],
-        "stats": {"total": len(CAMPAIGNS), "active": sum(c["status"] == "active" for c in CAMPAIGNS),
-                  "draft": sum(c["status"] == "draft" for c in CAMPAIGNS), "open_rate": 68},
-        "currentUser": request.session,
-    })
-
-
-@admin_only
-def new_campaign(request):
-    return redirect("/admin/campaigns")
-
-
-@admin_only
-def delete_campaign(request, _id):
-    return _json({"success": True, "message": "Campagne supprimée"})
 
 
 # ---------------------------------------------------------------- articles
@@ -787,3 +733,41 @@ def newsletter_preview(request):
         articles = Article.get_all_published(3)
     html = newsletter_html(articles, formations, config.APP_URL.rstrip("/") + "/newsletter/unsubscribe")
     return Response(html, media_type="text/html")
+
+
+# ---------------------------------------------------------------- RGPD : accès, export, effacement
+@admin_only
+def privacy(request):
+    from ..models import privacy as Privacy
+    email = php.trim(request.query_params.get("email", ""))
+    data = Privacy.export(email) if email else None
+    return _view(request, "admin/rgpd", {
+        "pageTitle": "RGPD", "email": email, "data": data, "erased": request.session.pop("rgpd_erased", None),
+        "kept": [t for t, _ in Privacy.KEPT], "currentUser": _current_user(request),
+    })
+
+
+@admin_only
+def privacy_export(request):
+    from ..models import privacy as Privacy
+    email = php.trim(request.query_params.get("email", ""))
+    if not email:
+        return redirect("/admin/rgpd")
+    body = json.dumps({"email": email, "export_du": php.date("Y-m-d H:i:s"), "donnees": Privacy.export(email)},
+                      ensure_ascii=False, indent=2, default=str)
+    name = "donnees-" + "".join(c if c.isalnum() else "-" for c in email) + ".json"
+    return Response(body, media_type="application/json",
+                    headers={"Content-Disposition": f'attachment; filename="{name}"', "Cache-Control": "no-store"})
+
+
+@admin_only
+def privacy_erase(request):
+    from ..models import privacy as Privacy
+    post = request.state.post
+    email = php.trim(post.get("email", ""))
+    if not email or php.trim(post.get("confirm", "")).lower() != email.lower():
+        request.session["rgpd_erased"] = {"error": "Pour confirmer, recopiez exactement l'adresse e-mail."}
+        return redirect("/admin/rgpd?email=" + urllib.parse.quote(email))
+    request.session["rgpd_erased"] = {"email": email, "done": Privacy.erase(email)}
+    log.warning("RGPD : données de %s effacées par l'admin %s", email, request.session.get("user_id"))
+    return redirect("/admin/rgpd")

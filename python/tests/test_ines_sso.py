@@ -49,7 +49,7 @@ def test_login_with_ines(setup):
     r = c.get("/auth/ines", follow_redirects=False)
     state = parse_qs(urlsplit(r.headers["location"]).query)["state"][0]
     r = c.get("/auth/ines/callback", params={"code": "c", "state": state}, follow_redirects=False)
-    assert r.headers["location"] == "/admin/dashboard"
+    assert r.headers["location"] == "/espace-client"  # un client va dans son espace, plus dans l'admin
     assert linked[-1]["email"] == "ana@site.test" and calls[-1]["data"]["code_verifier"]
 
 

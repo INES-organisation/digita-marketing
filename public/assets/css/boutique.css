@@ -101,3 +101,21 @@
     text-transform: uppercase;
     color: var(--accent);
 }
+
+.billing-fields .form-label {
+    color: var(--content-text);
+    font-size: 0.88rem;
+}
+
+.billing-fields .form-control {
+    padding: 0.7rem 0.9rem;
+    border-radius: 12px;
+    border: 1px solid var(--content-border);
+    background-color: var(--page-bg);
+    color: var(--content-heading);
+}
+
+.billing-fields legend {
+    color: var(--content-heading);
+    font-weight: 700;
+}

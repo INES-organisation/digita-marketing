@@ -1,0 +1,22 @@
+{# Coordonnées de facturation (obligatoires sur une facture : nom et adresse de l'acheteur). Variable : billing (dict, facultatif) #}
+<fieldset class="billing-fields mt-4">
+    <legend class="h6 mb-3">Coordonnées de facturation</legend>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label" for="billing_name">Nom et prénom *</label>
+            <input type="text" class="form-control" id="billing_name" name="billing_name" required maxlength="150" autocomplete="name" value="{{ h(coalesce((billing or {}).get('name'), '')) }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="billing_company">Entreprise (facultatif)</label>
+            <input type="text" class="form-control" id="billing_company" name="billing_company" maxlength="150" autocomplete="organization" value="{{ h(coalesce((billing or {}).get('company'), '')) }}">
+        </div>
+        <div class="col-md-8">
+            <label class="form-label" for="billing_address">Adresse postale complète *</label>
+            <input type="text" class="form-control" id="billing_address" name="billing_address" required maxlength="400" autocomplete="street-address" placeholder="N°, rue, code postal, ville" value="{{ h(coalesce((billing or {}).get('address'), '')) }}">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="billing_siret">SIRET (professionnels)</label>
+            <input type="text" class="form-control" id="billing_siret" name="billing_siret" maxlength="20" inputmode="numeric" value="{{ h(coalesce((billing or {}).get('siret'), '')) }}">
+        </div>
+    </div>
+</fieldset>

@@ -58,7 +58,7 @@ def checkout(request, slug):
     return render_view(request, "boutique/checkout-content", {
         "title": f"Commander : {product['title']} | DIGITA", "metaRobots": "noindex, nofollow", "extraCss": CSS,
         "product": product, "shop": boutique, "cgvText": CGV_TEXT, "consentText": CONSENT[product["kind"]],
-        "checkoutError": request.session.pop("checkout_error", None),
+        "checkoutError": request.session.pop("checkout_error", None), "billing": request.session.get("billing"),
         "stripeConfigured": stripe.is_configured(),
     })
 
@@ -74,6 +74,11 @@ def _process(request, slug, form):
     if stop:
         return stop
     session = request.session
+    billing = Order.billing_from_form(form)
+    if not billing:
+        session["checkout_error"] = "Merci d'indiquer votre nom et votre adresse : ils figurent sur la facture."
+        return redirect(f"/boutique/commander/{slug}")
+    session["billing"] = billing  # pré-remplissage des prochaines commandes
     if not form.get("cgv") or not form.get("consent"):
         session["checkout_error"] = "Merci de cocher les deux cases pour valider la commande."
         return redirect(f"/boutique/commander/{slug}")
@@ -82,7 +87,7 @@ def _process(request, slug, form):
         return redirect(f"/boutique/commander/{slug}")
     consent = f"{CGV_TEXT}\n{CONSENT[product['kind']]}"
     ip = request.headers.get("x-real-ip") or (request.client.host if request.client else "")
-    order_id = Shop.create_order(session["user_id"], product, session.get("user_email"), consent, ip)
+    order_id = Shop.create_order(session["user_id"], product, session.get("user_email"), consent, ip, billing)
     base = base_context(request)["base_url"]
     try:
         checkout_session = stripe.create_checkout(

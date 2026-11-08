@@ -91,7 +91,8 @@ def complete(session_id):
         return None
     if order["status"] != "paid":
         Order.fulfill_order(order["id"], session_id, result["payment_intent"])
-        Invoice.create_from_order(Order.find(order["id"]))
+        invoice_id = Invoice.create_from_order(Order.find(order["id"]))
+        sync_sale(invoice_id)
         products = Shop.order_products(order["id"])
         if products:  # boutique : liens de téléchargement, e-mail de livraison, fiche client dans INES
             _deliver_shop_order(order, products)
@@ -114,3 +115,13 @@ def _deliver_shop_order(order, products):
     titles = ", ".join(p["title"] for p in products)
     ines.push_lead(mail, mail, "boutique", f"Achat boutique : {titles} — commande #{order['id']} ({order['amount']} €)",
                    tags=("client", *(f"boutique:{p['slug']}" for p in products)))
+
+
+def sync_sale(invoice_id):
+    """Envoie la facture au livre des recettes d'INES ; en cas d'échec, le rattrapage nocturne réessaie."""
+    try:
+        invoice = Invoice.get_by_id(invoice_id)
+        if invoice and ines.push_sale(invoice):
+            Invoice.mark_synced(invoice["id"])
+    except Exception as e:  # noqa: BLE001 — la vente est faite, l'envoi comptable sera rejoué
+        log.error("Envoi de la facture %s à INES : %s", invoice_id, e)

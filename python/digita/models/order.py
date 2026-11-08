@@ -32,7 +32,7 @@ def get_by_stripe_session(session_id):
     return db.fetch("SELECT * FROM orders WHERE stripe_session_id = ? ORDER BY id LIMIT 1", [session_id])
 
 
-def create_formation_order(user_id, formation, promo, user_email):
+def create_formation_order(user_id, formation, promo, user_email, billing=None, consent_text=None, consent_ip=None):
     amount = php.floatval(formation["price"])
     discount = 0
     promo_id = None
@@ -40,11 +40,15 @@ def create_formation_order(user_id, formation, promo, user_email):
         discount = calculate_discount(promo, amount)
         promo_id = promo["id"]
         amount = max(0, amount - discount)
+    b = billing or {}
+    # Pas de numéro de facture ici : il est attribué au paiement (models/invoice.py)
     row = db.fetch(
-        """INSERT INTO orders (user_id, amount, currency, status, customer_email, invoice_number,
-                               promo_code_id, discount_amount)
-           VALUES (?, ?, 'EUR', 'pending', ?, ?, ?, ?) RETURNING id""",
-        [user_id, amount, user_email, generate_invoice_number(), promo_id, discount])
+        """INSERT INTO orders (user_id, amount, currency, status, customer_email, promo_code_id, discount_amount,
+                               billing_name, billing_address, billing_company, billing_siret,
+                               consent_text, consent_at, consent_ip)
+           VALUES (?, ?, 'EUR', 'pending', ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?) RETURNING id""",
+        [user_id, amount, user_email, promo_id, discount, b.get("name"), b.get("address"), b.get("company"),
+         b.get("siret"), consent_text, (consent_ip or "")[:45]])
     order_id = str(row["id"])  # lastInsertId()
     db.execute("""INSERT INTO order_items (order_id, product_id, product_type, product_name, quantity, price)
                   VALUES (?, ?, 'formation', ?, 1, ?)""", [order_id, formation["id"], formation["title"], formation["price"]])
@@ -101,7 +105,8 @@ def calculate_discount(promo, amount):
     return promo["discount_value"] if float(promo["discount_value"]) <= amount else amount
 
 
-def generate_invoice_number():
-    ym = php.date("Ym")
-    n = db.fetch("SELECT COUNT(*) as count FROM orders WHERE invoice_number LIKE ?", [f"DM-{ym}-%"])["count"]
-    return "DM-%s-%04d" % (ym, (n or 0) + 1)
+def billing_from_form(form):
+    """Coordonnées de facturation saisies au paiement (nom et adresse obligatoires, société et SIRET facultatifs)."""
+    clean = {k: php.trim(form.get(f"billing_{k}", ""))[:limit] for k, limit in
+             (("name", 150), ("address", 400), ("company", 150), ("siret", 20))}
+    return clean if clean["name"] and clean["address"] else None

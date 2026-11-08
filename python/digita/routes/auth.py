@@ -15,9 +15,17 @@ def _authenticated(request):
     return "user_id" in request.session
 
 
+def _home_after_login(request):
+    """Page d'origine (commande, formation, projet…) si elle a été mémorisée, sinon l'espace de la personne."""
+    target = request.session.pop("redirect_after_login", None)
+    if isinstance(target, str) and target.startswith("/") and not target.startswith("//"):
+        return redirect(target)
+    return redirect("/admin/dashboard" if request.session.get("user_role") == "admin" else "/espace-client")
+
+
 def show_login(request):
     if _authenticated(request):
-        return redirect("/admin/dashboard")
+        return _home_after_login(request)
     resp = render_view(request, "auth/login", {
         "title": "Connexion | DIGITA", "metaRobots": "noindex, follow",
         "error": request.session.get("login_error"),
@@ -31,7 +39,7 @@ def show_login(request):
 
 def show_register(request):
     if _authenticated(request):
-        return redirect("/admin/dashboard")
+        return _home_after_login(request)
     resp = render_view(request, "auth/register", {
         "title": "Inscription | DIGITA", "metaRobots": "noindex, follow",
         "error": request.session.get("register_error"),
@@ -66,6 +74,10 @@ def _create_user(mail, password):
 
 
 def _login_session(request, user):
+    try:  # dernière connexion : purge des comptes inactifs depuis 3 ans (models/privacy.py)
+        db.execute("UPDATE users SET last_login_at = NOW() WHERE id = ?", [user["id"]])
+    except Exception:  # noqa: BLE001 — la connexion ne doit jamais échouer pour ça
+        pass
     request.session["user_id"] = user["id"]
     request.session["user_email"] = user["email"]
     request.session["user_role"] = user.get("role") or "user"
@@ -86,7 +98,7 @@ async def login(request):
     if user and await run_in_threadpool(_verify, password, user["password"]):
         _login_session(request, user)
         security.reset_rate(request, "login")
-        return redirect("/admin/dashboard")
+        return _home_after_login(request)
     request.session["login_error"] = "Identifiants incorrects."
     return redirect("/connexion")
 
@@ -116,7 +128,7 @@ async def register(request):
         return redirect("/inscription")
 
     _login_session(request, await run_in_threadpool(_create_user, mail, password))
-    return redirect("/admin/dashboard")
+    return _home_after_login(request)
 
 
 # ---------------------------------------------------------------- « Se connecter avec INES »
@@ -161,7 +173,7 @@ async def ines_callback(request):
         request.session["login_error"] = str(e)
         return redirect("/connexion")
     _login_session(request, await run_in_threadpool(_user_from_ines, info))
-    return redirect("/admin/dashboard")
+    return _home_after_login(request)
 
 
 # ---------------------------------------------------------------- mot de passe oublié
