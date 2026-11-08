@@ -258,5 +258,70 @@
     "pole": "Automatisation",
     "icon": "stopwatch",
     "visual_title": "Le vrai coût de vos tâches répétitives"
+  },
+  {
+    "slug": "nom-de-domaine-entreprise",
+    "title": "Nom de domaine : bien le choisir et le garder à votre nom",
+    "meta_title": "Nom de domaine d'entreprise : le choisir et le garder",
+    "meta_description": ".re, .fr ou .com ? Comment choisir le nom de domaine de votre entreprise à La Réunion, le déposer à votre nom et ne jamais le perdre.",
+    "excerpt": "Votre nom de domaine, c'est l'adresse de votre site et de vos e-mails. Mal choisi ou déposé au nom d'un prestataire, il peut vous coûter cher. Le guide pour bien faire.",
+    "category": "creation-web",
+    "service_name": "Sites web et landing",
+    "meta_keywords": "nom de domaine entreprise, nom de domaine .re, choisir nom de domaine, adresse mail professionnelle, Réunion",
+    "pole": "Sites web",
+    "icon": "globe2",
+    "visual_title": "Votre nom de domaine, bien à vous"
+  },
+  {
+    "slug": "newsletter-tpe",
+    "title": "Newsletter : faut-il en envoyer une quand on est une TPE ?",
+    "meta_title": "Newsletter pour TPE : utile ou pas, et comment s'y prendre",
+    "meta_description": "Fréquence, contenu, consentement, outils : comment lancer une newsletter utile pour une petite entreprise, sans spammer vos clients ni enfreindre le RGPD.",
+    "excerpt": "Vos clients vous oublient entre deux achats. Une newsletter simple, une fois par mois, peut les faire revenir. Ce qu'il faut y mettre, et les règles à respecter.",
+    "category": "reseaux-sociaux",
+    "service_name": "E-mail marketing",
+    "meta_keywords": "newsletter TPE, e-mail marketing petite entreprise, consentement newsletter RGPD, fidéliser clients e-mail",
+    "pole": "E-mail marketing",
+    "icon": "envelope-paper",
+    "visual_title": "La newsletter qui fait revenir vos clients"
+  },
+  {
+    "slug": "idees-publications-reseaux-sociaux",
+    "title": "30 idées de publications pour les réseaux sociaux d'une TPE",
+    "meta_title": "30 idées de publications Facebook et Instagram pour TPE",
+    "meta_description": "En panne d'inspiration ? 30 idées de publications Facebook et Instagram classées par thème, pour une TPE réunionnaise, et la méthode pour planifier un mois.",
+    "excerpt": "« Je ne sais pas quoi publier. » Voici 30 idées concrètes, classées en six familles, et une méthode pour préparer un mois de publications en une heure.",
+    "category": "reseaux-sociaux",
+    "service_name": "Réseaux sociaux",
+    "meta_keywords": "idées publications Facebook, idées posts Instagram, quoi publier réseaux sociaux, calendrier éditorial TPE",
+    "pole": "Réseaux sociaux",
+    "icon": "lightbulb",
+    "visual_title": "30 idées pour ne plus sécher"
+  },
+  {
+    "slug": "landing-page-definition",
+    "title": "Landing page : à quoi ça sert, et quand en faire une ?",
+    "meta_title": "Landing page : définition, usages et erreurs à éviter",
+    "meta_description": "Une landing page est une page unique avec un seul objectif. Quand en créer une, ce qu'elle doit contenir et en quoi elle diffère d'un site vitrine.",
+    "excerpt": "Une page, un message, une action. La landing page est souvent le meilleur point de départ pour une offre précise ou une campagne publicitaire. Mode d'emploi.",
+    "category": "creation-web",
+    "service_name": "Sites web et landing",
+    "meta_keywords": "landing page définition, page d'atterrissage, landing page publicité, créer landing page, landing page Réunion",
+    "pole": "Sites web",
+    "icon": "window-stack",
+    "visual_title": "Une page, un objectif"
+  },
+  {
+    "slug": "page-facebook-piratee",
+    "title": "Page Facebook piratée : prévenir, réagir, récupérer",
+    "meta_title": "Page Facebook piratée : prévenir, réagir et la récupérer",
+    "meta_description": "Faux messages de Meta, mot de passe volé, administrateur inconnu : comment protéger la page Facebook de votre entreprise et quoi faire si elle est piratée.",
+    "excerpt": "Un faux message « Meta Support », un clic, et la page de l'entreprise n'est plus à vous. Les réglages qui protègent, et les bons réflexes si c'est déjà arrivé.",
+    "category": "reseaux-sociaux",
+    "service_name": "Réseaux sociaux",
+    "meta_keywords": "page Facebook piratée, compte Facebook piraté entreprise, sécuriser page Facebook, double authentification, phishing Meta",
+    "pole": "Sécurité",
+    "icon": "shield-lock",
+    "visual_title": "Votre page Facebook, verrouillée"
   }
 ]
