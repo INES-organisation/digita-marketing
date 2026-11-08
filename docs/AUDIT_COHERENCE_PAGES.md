@@ -238,3 +238,11 @@ Reste à faire :
 - nommer le médiateur de la consommation dans les CGV (art. 18) ;
 - brancher la vente en ligne des produits numériques (table de commandes de produits, fichiers privés, liens de téléchargement) avant de passer `boutique.OPEN` à True ;
 - pages catégorie et recherche du blog encore dans l'ancien style.
+
+## 6. Suite (8 novembre 2026, après-midi)
+
+- Boutique ouverte et payable sur digita.buzz : packs de master prompts (PDF mis en page + texte), 10 workflows INES installés, admin Boutique. Voir [SUIVI_BOUTIQUE_FACTURATION_RGPD.md](SUIVI_BOUTIQUE_FACTURATION_RGPD.md).
+- CGV : adhésion à CM2C en cours (art. 18), coordonnées à ajouter dès le contrat signé.
+- Pages catégorie et recherche du blog au style du site (gabarits `_article-card.html` et `_category-nav.html`).
+- Workflows INES : les 10 « Workflows Entreprise » ouvrent directement l'éditeur (pas de page de détail, rien de cassé). La page de détail et le bouton « Cloner » appartiennent aux « Templates communautaires », vraisemblablement obsolètes : le clonage ouvre un workflow vide. Côté INES, Anthony s'en occupe.
+

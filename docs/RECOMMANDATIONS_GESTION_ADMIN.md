@@ -1,5 +1,7 @@
 # Gestion professionnelle de DIGITA, connectée à INES : état et recommandations (8 novembre 2026)
 
+> **État au 08/11/2026 (soir) :** P1 1, 2, 3, 6, 7 et 8 livrés dans DIGITA ; P1 4 et 5 livrés (route des ventes, livre des recettes, plafonds et déclarations dans INES, PR INES #83, et envoi depuis DIGITA). Détail : [SUIVI_BOUTIQUE_FACTURATION_RGPD.md](SUIVI_BOUTIQUE_FACTURATION_RGPD.md). Restent les P2 et P3.
+
 Revue en lecture seule du code de DIGITA (admin, espace client, paiements) et d'INES. Aucune modification n'a été faite pendant la revue.
 
 ## Principe de répartition proposé

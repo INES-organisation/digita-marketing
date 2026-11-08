@@ -4,7 +4,10 @@
 
 - [Conversion PHP → Python et mise en ligne](migrations/SUIVI_CONVERSION_PYTHON.md) : architecture, déploiement sur le VPS INES, historique.
 - [Audit du site](audits/AUDIT_SITE_2026-10.md) : état du site en ligne et priorités d'amélioration.
-- [Connexion à INES](SUIVI_CONNEXION_INES.md) : rendez-vous (Booking, Planning), CRM, chatbot, outils, packs Solutions.
+- [Connexion à INES](SUIVI_CONNEXION_INES.md) : rendez-vous (Booking, Planning), CRM, chatbot, outils, packs Solutions, ventes vers le livre des recettes.
+- [Boutique, facturation et RGPD](SUIVI_BOUTIQUE_FACTURATION_RGPD.md) : produits et fichiers, paiement et téléchargements, factures conformes, outils RGPD, admin, migrations du 08/11/2026.
+- [Recommandations de gestion](RECOMMANDATIONS_GESTION_ADMIN.md) : revue de l'admin et de la cohérence avec INES, priorités P1 à P3.
+- [Audit de cohérence des pages](AUDIT_COHERENCE_PAGES.md) : contenu, couleurs et conversion de toutes les pages, 6 lots réalisés.
 
 ## Stratégie et contenu
 

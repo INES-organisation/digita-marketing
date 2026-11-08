@@ -131,6 +131,17 @@
 
 **Reste (contenu, à faire par vous) :** 382 formations sous 300 mots, 472 articles générés en 25 s le 26/10/2025 (risque « contenu à grande échelle ») ; lp48 (Page Builder INES) : titre de 29 caractères, sans données structurées.
 
+## 8. Lot E — ventes vers le livre des recettes INES (08/11/2026)
+
+| # | Tâche | Dépôt | Statut |
+| --- | --- | --- | --- |
+| E1 | `POST /api/v1/external/sales` : vente ou remboursement d'un site, clé API du site (le nom de la clé = le site), idempotent par `external_id`, total contrôlé par les lignes, date avec fuseau, client rattaché à sa fiche CRM existante | INES (PR #83) | ✅ |
+| E2 | Livre des recettes réel (factures INES payées + ventes des sites), filtres, export CSV ; plafonds de CA et franchise de TVA (alerte à 80 %) ; déclarations sociales par mois et trimestre avec estimation des cotisations (21,2 % prestations BIC, 12,3 % ventes, choix d'Anthony) | INES (PR #83) | ✅ |
+| E3 | Factures INES : numéro FAC définitif à l'émission seulement (brouillons en numéro provisoire), numéro suivant = plus grand + 1, plus de suppression d'une facture numérotée (avoir) | INES (PR #83) | ✅ |
+| E4 | Chaque facture DIGITA payée est envoyée à E1 (`external_id` = `digita-invoice-<id>`, nature « prestation », remise répartie sur les lignes) ; `invoices.ines_synced_at` ; renvoi nocturne de ce qui a échoué | Digita | ✅ |
+
+Détail côté DIGITA : [SUIVI_BOUTIQUE_FACTURATION_RGPD.md](SUIVI_BOUTIQUE_FACTURATION_RGPD.md). Vérifié en production le 08/11/2026 : la route répond 422 (contrôle du contenu) et non 401/403 à la clé de DIGITA, donc l'authentification passe ; aucune vente fictive enregistrée. Premier envoi réel : au premier achat.
+
 ## 5. Journal
 
 | Date | Étape |
@@ -141,3 +152,4 @@
 | 26/10/2026 | Vérifié en production : diagnostic et formulaire de contact → agent INES (contact « prospect », affaire « prospection » au titre lisible, conversation non lue), notifications in-app affichées (affaire, prospect, conversation), hard bounce Brevo blacklisté. 1er essai : 401 sur le point d'entrée (routeur réservé aux sessions) → déplacé vers `/api/v1/external/acquisition/leads` ; le repli CRM avait évité toute perte. Données de test supprimées. |
 | 25/10/2026 | Vérifié en production de bout en bout : réservation depuis `/diagnostic` → créneau dans INES Booking, événement « appel » dans le Planning (même id), contact « Lead DIGITA » dans le CRM, créneau retiré des disponibilités ; annulation par le lien de l'e-mail → réservation annulée, événement du Planning supprimé, créneau de nouveau proposé. Données de test supprimées. Chatbot : prix réels cités. Générateur de meta : description seule. |
 | 05/11/2026 | Lot D livré (§7) : tests Digita (70) et INES (acquisition, contacts, notifications : 52) verts, déployés ; vérifié en production (301, sitemap, lead de test supprimé). |
+| 08/11/2026 | Lot E livré (§8) : PR INES #83 fusionnée et déployée, envoi des ventes depuis Digita en place (tests Digita 116, INES 151 en local et CI verte). |
