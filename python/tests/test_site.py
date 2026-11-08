@@ -303,16 +303,24 @@ def test_ines_catalogue_publishes_the_site_prices():
 
 
 def test_prices_are_coherent_across_pages():
-    from digita import solutions
+    from digita import grille, services_catalog, solutions
 
     client = _client()
-    tarifs, catalogue = client.get("/tarifs").text, client.get("/catalogue").text
-    assert solutions.LANCEMENT["title"] in tarifs and "Choisir Starter" not in tarifs
-    assert "Révisions illimitées" not in tarifs.split("Business")[0]
-    assert "2 séries de révisions" in tarifs
-    assert "À partir de 499€" in catalogue and "149€/session" not in catalogue
-    chatbots = catalogue[catalogue.rindex("Chatbots Intelligents"):][:900]
-    assert "À partir de 490€" in chatbots
+    tarifs, services = client.get("/tarifs").text, client.get("/services").text
+    # /tarifs et la barre de droite viennent des données : plus d'offres fantômes ni de prix en dur
+    assert solutions.LANCEMENT["title"] in tarifs and solutions.LP48["price"] in tarifs
+    for gone in ("2990€", "1490€", "Le plus populaire", "24/7 support", "Support dédié 24/7", "2 à 4 fois"):
+        assert gone not in tarifs, gone
+    for offer in solutions.OFFERS:
+        assert offer["title"] in tarifs and offer["monthly"] in tarifs
+    assert "Essai gratuit 14 jours" in tarifs
+    seo = next(c for c in services_catalog.categories() if c["id"] == "seo")
+    on_page = next(s for s in seo["services"] if s["name"] == "SEO On-Page")
+    assert on_page["price"] == grille.euros(next(r for r in grille.GRILLE if r["id"] == "seo")["levels"]["pro"]["price"]).replace("\u202f", " ").replace("\u00a0", " ")
+    for cat in services_catalog.categories():
+        for s in cat["services"]:
+            assert s["name"] in services
+    assert "149€/session" not in services and "text-success" not in services.split('aria-label="Nos services"')[1][:20000]
     sites, social = REALISATIONS[0], REALISATIONS[1]
     assert sites["price"] == "Dès 499 €" and sites["items"][0]["tag"] == solutions.LP48["price"]
     assert social["price"] == "Dès 390 €/mois"
@@ -322,12 +330,18 @@ def test_tarifs_show_three_levels():
     from digita import grille
 
     tarifs = _client().get("/tarifs").text
-    assert "Prix par Niveau" in tarifs and "Essentiel" in tarifs and "Premium" in tarifs
+    assert "Trois niveaux pour chaque prestation" in tarifs and "Essentiel" in tarifs and "Premium" in tarifs
     landing = next(r for r in grille.GRILLE if r["id"] == "landing-page")
     assert [landing["levels"][k]["price"] for k in grille.LEVELS] == [499, 790, 1190]
     assert "499\u00a0€" in tarifs and "1\u202f190\u00a0€" in tarifs
     assert grille.price_label(next(r for r in grille.GRILLE if r["id"] == "agent-ia-24-7")["levels"]["essentiel"]) \
         == "490\u00a0€ + 149\u00a0€/mois"
+    assert '"@type": "FAQPage"' in tarifs
+
+
+def test_catalogue_is_merged_into_services():
+    r = _client().get("/catalogue", follow_redirects=False)
+    assert (r.status_code, r.headers["location"]) == (301, "/services")
 
 
 def test_old_shop_and_solution_addresses_are_moved_permanently():

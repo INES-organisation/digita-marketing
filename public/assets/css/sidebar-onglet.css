@@ -4,12 +4,12 @@
    ======================================== */
 
 :root {
-  --onglet-bg: rgba(2, 6, 23, 0.94);
+  --onglet-bg: rgba(10, 10, 10, 0.94);
   --onglet-border: rgba(var(--gold-rgb), 0.25);
   --onglet-icon: var(--gold);
   --onglet-accent: var(--gold);
-  --onglet-accent-text: #020617;
-  --onglet-popup-bg: #0b1222;
+  --onglet-accent-text: #050505;
+  --onglet-popup-bg: var(--content-surface);
   --onglet-popup-text: rgba(255, 255, 255, 0.85);
   --onglet-popup-title: #ffffff;
   --onglet-arrow-bg: rgba(255, 255, 255, 0.08);
@@ -374,4 +374,30 @@
     width: 280px;
     max-width: calc(100vw - 80px);
   }
+}
+
+/* Liste des services générée depuis le catalogue (sidebar-onglet.html) */
+.sidebar-onglet-popup-content .popup-price {
+  margin: 0.5rem 0 0;
+  font-weight: 700;
+  color: var(--onglet-accent);
+}
+
+.sidebar-onglet-popup-content .popup-services li {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.sidebar-onglet-popup-content .popup-services i {
+  flex-shrink: 0;
+  color: var(--onglet-accent);
+}
+
+.sidebar-onglet-popup-content .popup-services em {
+  display: block;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--onglet-popup-title);
 }

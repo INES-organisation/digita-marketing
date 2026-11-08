@@ -112,7 +112,7 @@ get("/boutique/suite-outils-marketing", pages.moved_to("/outils"))
 get("/boutique/:slug", pages.moved_to("/solutions"))
 get("/a-propos", pages.about)
 get("/services", pages.services)
-get("/catalogue", pages.catalogue)
+get("/catalogue", pages.moved_to("/services"))  # catalogue en dur supprimé le 08/11/2026 : /services fait foi
 # Pages jamais livrées en PHP (templates absents) : renvoyées vers « À propos » en attendant.
 get("/portfolio", pages.redirect_to("/a-propos"))
 get("/equipe", pages.redirect_to("/a-propos"))

@@ -1,20 +1,69 @@
-/* ==================== TARIFS STYLES ==================== */
-
-/* Hero Section - Bleu (conservé) */
-.tarifs-hero {
-    margin-top: 0 !important;
-    padding-top: 120px !important;
+/* ==================== TARIFS ====================
+   Cartes et sections : home-v2.css et pages-v2.css. Ici, seulement le tableau des niveaux. */
+.tarifs-table-wrap {
+    overflow-x: auto;
+    border-radius: 18px;
+    border: 1px solid var(--content-border);
+    background: var(--content-surface);
 }
 
-/* Tarifs Icon Circle - Remplace style inline */
-.tarifs-icon-circle {
-    width: 60px;
-    height: 60px;
+.tarifs-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .tarifs-hero {
-        padding-top: 100px !important;
-    }
+.tarifs-table th,
+.tarifs-table td {
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid var(--content-border);
+    vertical-align: top;
+}
+
+.tarifs-table tbody tr:last-child th,
+.tarifs-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.tarifs-table thead th {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--content-surface-alt);
+    text-align: center;
+}
+
+.tarifs-table thead th:first-child {
+    text-align: left;
+}
+
+.tarifs-table tbody th span {
+    display: block;
+    font-weight: 700;
+    color: var(--content-heading);
+}
+
+.tarifs-table small {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--content-muted);
+}
+
+.tarifs-table td {
+    text-align: center;
+}
+
+.tarifs-table td strong {
+    display: block;
+    white-space: nowrap;
+    color: var(--content-heading);
+}
+
+.tarifs-table tbody tr:hover {
+    background: rgba(var(--accent-rgb), 0.04);
 }

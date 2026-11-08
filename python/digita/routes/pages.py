@@ -70,12 +70,37 @@ def services(request):
         "extraCss": ["/assets/css/services.css"],
         "poles": services_catalog.POLES, "categories": services_catalog.categories(),
     })
-catalogue = _simple("catalogue/index-content", "Catalogue des Services Digitaux | DIGITA", "/assets/css/catalogue.css",
-                    "Le catalogue complet des services DIGITA : création de sites, marketing digital, automatisation, "
-                    "IA et formations. Trouvez l'offre adaptée à votre projet.")
-support = _simple("support/index-content", "Support Client | DIGITA", "/assets/css/support.css",
-                  "Support client DIGITA : aide sur votre site, vos automatisations, vos formations et votre espace "
-                  "client. Une équipe joignable à La Réunion.")
+
+support = _simple("support/index-content", "Aide et support client | DIGITA", "/assets/css/support.css",
+                  "Aide DIGITA : contacter le support (chat, WhatsApp, e-mail, téléphone), accéder à votre espace client "
+                  "et réponses aux questions fréquentes sur votre site, vos automatisations et vos formations.")
+
+
+TARIFS_FAQ = [
+    {"question": "Les prix incluent-ils la TVA ?",
+     "answer": "La TVA n'est pas applicable (article 293 B du CGI) : le prix affiché est le prix que vous payez."},
+    {"question": "Comment se passe le paiement ?",
+     "answer": "Pour une prestation sur devis : un acompte de 30 à 50 % à la commande, le solde à la livraison. "
+               "Les abonnements se paient chaque mois, d'avance. Les formations et produits numériques se paient en "
+               "ligne par carte bancaire, via Stripe."},
+    {"question": "Y a-t-il un engagement ?",
+     "answer": "La publicité est sans engagement au-delà d'un mois, les réseaux sociaux demandent 3 mois minimum et le "
+               "site vitrine comprend 12 mois de maintenance. Les agents IA se résilient chaque mois. Tout est écrit "
+               "dans le devis et dans les conditions générales."},
+    {"question": "Qu'est-ce qui peut s'ajouter au prix affiché ?",
+     "answer": "Seulement ce qui ne dépend pas de DIGITA et que vous réglez directement : budget publicitaire versé à "
+               "Meta ou Google, abonnements à des outils tiers si votre projet en demande. C'est indiqué dans le devis "
+               "avant toute commande."},
+    {"question": "Comment fonctionne l'essai de 14 jours du Standardiste ?",
+     "answer": "INES est branché sur votre page Facebook et votre compte Instagram pendant 14 jours. S'il a obtenu au "
+               "moins un rendez-vous avec un prospect, la mise en service est facturée et l'abonnement démarre ; sinon, "
+               "vous ne payez rien."},
+    {"question": "Comment obtenir un devis ?",
+     "answer": "Réservez le diagnostic gratuit de 30 minutes : on fait le point sur votre besoin et vous recevez un "
+               "devis détaillé, aux prix publics de cette page."},
+]
+
+
 def tarifs(request):
     return render_view(request, "tarifs/index-content", {
         "title": "Tarifs Sites Web, Automatisation & IA | DIGITA",
@@ -83,6 +108,10 @@ def tarifs(request):
                            "Prix affichés, sans surprise. Diagnostic gratuit offert.",
         "extraCss": ["/assets/css/tarifs.css"],
         "lancement": solutions_catalog.LANCEMENT,
+        "offers": solutions_catalog.OFFERS,
+        "landing": solutions_catalog.LANDING,
+        "lp48": solutions_catalog.LP48,
+        "faqSchema": TARIFS_FAQ,
         "grille": grille.GRILLE,
         "grille_levels": grille.LEVELS,
         "price_label": grille.price_label,

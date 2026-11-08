@@ -11,9 +11,11 @@ TYPES = {
     "website": "Site vitrine", "ecommerce": "E-commerce", "landing": "Landing page",
     "app": "Application web", "seo": "Audit SEO", "marketing": "Stratégie marketing",
 }
-# Alignés sur la grille tarifaire du site (identité + site vitrine 990 €, LP48 997 €, boutique 2 490 €…)
-BASE_PRICES = {"website": 990, "ecommerce": 2490, "landing": 997, "app": 2990, "seo": 690, "marketing": 990}
-ESTIMATED_DAYS = {"website": 7, "ecommerce": 14, "landing": 3, "app": 21, "seo": 5, "marketing": 7}
+# Prix d'entrée et délais de la grille /tarifs (digita/grille.py) : site vitrine 990 €/15 j, boutique 2 490 €/30 j,
+# Landing Essentielle 499 €/5 j, SEO local 390 €/10 j, conseil 490 €. L'application web est sur devis : estimation indicative.
+BASE_PRICES = {"website": 990, "ecommerce": 2490, "landing": 499, "app": 2990, "seo": 390, "marketing": 490}
+ESTIMATED_DAYS = {"website": 15, "ecommerce": 30, "landing": 5, "app": 30, "seo": 10, "marketing": 7}
+EXPRESS = 1.3  # option express de /tarifs : délai divisé par deux, +30 %
 
 
 def calculate_quote(project_type, brief):
@@ -24,7 +26,7 @@ def calculate_quote(project_type, brief):
     if not php.empty(brief.get("multilingual")):
         price *= 1.3
     if not php.empty(brief.get("urgent")):
-        price *= 1.5
+        price *= EXPRESS
     return php.php_round(price, 2)
 
 

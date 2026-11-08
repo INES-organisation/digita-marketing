@@ -4,7 +4,7 @@ import time
 from jinja2 import ChainableUndefined, Environment, FileSystemLoader
 from starlette.responses import HTMLResponse
 
-from . import config, php
+from . import config, php, services_catalog
 from .csrf import csrf_field
 
 env = Environment(
@@ -18,6 +18,8 @@ env = Environment(
 env.globals.update(php.GLOBALS)
 env.globals["const"] = lambda name: config.CONSTANTS.get(name, name)
 env.globals["defined"] = lambda name: name in config.CONSTANTS
+# Barre des services à droite : générée depuis la source unique des services et de leurs prix
+env.globals["service_categories"] = services_catalog.categories
 # Version des fichiers statiques (?v=…) : change à chaque démarrage, donc à chaque déploiement,
 # au lieu de time() qui empêchait toute mise en cache par le navigateur.
 env.globals["asset_v"] = str(int(time.time()))

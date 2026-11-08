@@ -85,8 +85,7 @@
     // ---------- Arrivée sur une ancre depuis une autre page ----------
     // Le navigateur saute à l'ancre avant la fin du chargement (polices, images) : le contenu
     // se décale ensuite et la cible finit sous la barre fixe. On la recale une fois tout chargé.
-    // (Le catalogue a son propre calage, plus fin : on le laisse faire.)
-    if (location.hash.length > 1 && !document.querySelector('[data-catalogue-nav]')) {
+    if (location.hash.length > 1) {
         var realignHash = function () {
             var target;
             try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { return; }

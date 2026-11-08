@@ -1,324 +1,108 @@
-<!-- Hero Section -->
-<section class="tarifs-hero py-5 bg-primary text-white">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-        <h1 class="display-4 fw-bold mb-4">Nos Tarifs</h1>
-        <p class="lead mb-0">Trouver une offre</p>
-      </div>
+{# Tous les prix viennent des données : solutions.py (agents IA, packs, landing), grille.py (niveaux). Aucun prix en dur ici. #}
+{% set hero_kicker = 'Tarifs' %}{% set hero_title = 'Des prix affichés, sans surprise' %}
+{% set hero_lead = "Le prix affiché est le prix payé : TVA non applicable (art. 293 B du CGI). Devis gratuit et détaillé, engagements écrits et courts." %}{% set hero_cta = true %}
+{% include 'includes/partials/page-hero.html' %}
+
+<!-- Agents IA 24/7 -->
+<section class="v2-section" id="agents-ia" aria-labelledby="agents-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Agents IA 24/7</p>
+            <h2 id="agents-title">Un agent qui répond, qualifie et remplit votre agenda</h2>
+            <p>Une mise en service, puis un abonnement mensuel. Le Standardiste s'essaie 14 jours : vous ne payez que s'il vous a obtenu au moins un rendez-vous.</p>
+        </div>
+        <div class="row g-4">
+            {% for o in offers %}
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}">
+                <div class="v2-card pg-price{{ ' is-featured' if o.id == 'standardiste' else '' }}">
+                    <span class="pg-tag">{{ 'Essai gratuit 14 jours' if o.id == 'standardiste' else o.level }}</span>
+                    <span class="v2-icon"><i class="bi {{ o.icon }}" aria-hidden="true"></i></span>
+                    <h3>{{ o.title }}</h3>
+                    <div class="pg-amount">{{ o.monthly }}</div>
+                    <p>Mise en service : {{ o.setup }}{% if o.setup_note %} ({{ o.setup_note }}){% endif %}. {{ o.monthly_note | capitalize }}.</p>
+                    <ul>{% for item in o.includes %}<li>{{ item }}</li>{% endfor %}</ul>
+                    <a href="/solutions#{{ o.id }}" class="v2-btn v2-btn-ghost">Voir le détail <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-  </div>
 </section>
 
-<!-- Intro -->
-<section class="py-5 bg-white">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h2 class="mb-4">Des Tarifs Transparents et Adaptés</h2>
-        <p class="lead text-muted">Choisissez la formule qui correspond le mieux à vos besoins et à votre budget. Tous nos tarifs incluent un accompagnement personnalisé et un support dédié.</p>
-      </div>
+<!-- Pages de vente et packs à prix fixe -->
+<section class="v2-section v2-section-alt" id="prix-fixes" aria-labelledby="fixes-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Prix fixes</p>
+            <h2 id="fixes-title">Pour démarrer vite</h2>
+            <p>Trois offres au prix fixe, sans devis à attendre.</p>
+        </div>
+        <div class="row g-4">
+            {% for f in [
+                ['bi-file-earmark-richtext', landing.title, landing.price, landing.scope | capitalize ~ '.', '/diagnostic#consultant', 'La commander'],
+                ['bi-lightning-charge', lp48.title, lp48.price, "Rédaction, page de vente optimisée pour convertir, livrée en 48 h. Voir la démonstration en ligne.", 'https://lp48.digita.buzz', 'Découvrir LP48'],
+                ['bi-rocket-takeoff', lancement.title, lancement.price, lancement.promise | capitalize ~ '.', '/solutions#lancement', 'Voir le pack'],
+            ] %}
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}">
+                <div class="v2-card pg-price">
+                    <span class="v2-icon"><i class="bi {{ f[0] }}" aria-hidden="true"></i></span>
+                    <h3>{{ f[1] }}</h3>
+                    <div class="pg-amount">{{ f[2] }}</div>
+                    <p>{{ f[3] }}</p>
+                    <a href="{{ f[4] }}" class="v2-btn v2-btn-ghost"{% if f[4].startswith('http') %} target="_blank" rel="noopener"{% endif %}>{{ f[5] }} <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-  </div>
-</section>
-
-<!-- Pricing Cards -->
-<section class="py-5 bg-light">
-  <div class="container">
-    <div class="row g-4 mb-5">
-      <!-- Pack de lancement -->
-      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-        <div class="card h-100 border-0 shadow">
-          <div class="card-body p-4 text-center">
-            <h5 class="text-uppercase text-muted mb-3">{{ lancement.title }}</h5>
-            <div class="mb-4">
-              <span class="h2">Prix fixe</span>
-              <div class="display-4 fw-bold text-primary">{{ lancement.price }}</div>
-              <span class="text-muted">par projet</span>
-            </div>
-            <p class="text-muted mb-4">Idéal pour démarrer votre présence digitale</p>
-            <ul class="list-unstyled text-start mb-4">
-              {% for component in lancement.components %}
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>{{ component[0] }}</li>
-              {% endfor %}
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Livraison sous 1-2 semaines</li>
-            </ul>
-            <a href="/solutions#lancement" class="btn btn-outline-primary w-100">Choisir ce pack</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Business (Popular) -->
-      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
-        <div class="card h-100 border-primary border-2 shadow-lg position-relative overflow-visible">
-          <div class="position-absolute top-0 start-50 translate-middle">
-            <span class="badge bg-primary px-4 py-2">Le plus populaire</span>
-          </div>
-          <div class="card-body p-4 text-center mt-3">
-            <h5 class="text-uppercase text-muted mb-3">Business</h5>
-            <div class="mb-4">
-              <span class="h2">À partir de</span>
-              <div class="display-4 fw-bold text-primary">990€</div>
-              <span class="text-muted">par projet</span>
-            </div>
-            <p class="text-muted mb-4">La solution complète pour votre entreprise</p>
-            <ul class="list-unstyled text-start mb-4">
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Site web complet (5-10 pages)</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Design responsive moderne</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Optimisation SEO incluse</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Hébergement inclus, maintenance 49 €/mois (12 mois)</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Formation à la gestion</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Support prioritaire 3 mois</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Livraison sous 3-4 semaines</li>
-            </ul>
-            <a href="/contact" class="btn btn-primary w-100">Choisir Business</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Premium -->
-      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
-        <div class="card h-100 border-0 shadow">
-          <div class="card-body p-4 text-center">
-            <h5 class="text-uppercase text-muted mb-3">Premium</h5>
-            <div class="mb-4">
-              <span class="h2">À partir de</span>
-              <div class="display-4 fw-bold text-primary">2990€</div>
-              <span class="text-muted">par projet</span>
-            </div>
-            <p class="text-muted mb-4">Solution sur-mesure haut de gamme</p>
-            <ul class="list-unstyled text-start mb-4">
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Solution digitale complète</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>E-commerce avancé illimité</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Tunnel de vente automatisé</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Automatisation marketing</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Stratégie digitale complète</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Support dédié 24/7</li>
-              <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Accompagnement continu</li>
-            </ul>
-            <a href="/contact" class="btn btn-outline-primary w-100">Choisir Premium</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- Prix par niveau (grille commune avec les missions de Tony Alpha 8.0 : digita/grille.py) -->
-<section class="py-5 bg-white" id="niveaux">
-  <div class="container">
-    <div class="row justify-content-center mb-4">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h2 class="mb-3">Prix par Niveau</h2>
-        <p class="text-muted mb-0">Chaque prestation existe en trois niveaux. Essentiel : 1 révision, contenus fournis par vous. Pro : 2 révisions, rédaction incluse. Premium : révisions jusqu'à validation, rédaction et visuels inclus, 1 mois de suivi.</p>
-      </div>
+<section class="v2-section" id="niveaux" aria-labelledby="niveaux-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Toutes les prestations</p>
+            <h2 id="niveaux-title">Trois niveaux pour chaque prestation</h2>
+            <p>Essentiel : 1 révision, contenus fournis par vous. Pro : 2 révisions, rédaction incluse. Premium : révisions jusqu'à validation, rédaction et visuels inclus, 1 mois de suivi.</p>
+        </div>
+        <div class="tarifs-table-wrap" data-aos="fade-up">
+            <table class="tarifs-table">
+                <thead>
+                    <tr><th scope="col">Prestation</th>{% for key, label in grille_levels.items() %}<th scope="col">{{ label }}</th>{% endfor %}</tr>
+                </thead>
+                <tbody>
+                    {% for row in grille %}
+                    <tr id="{{ row.id }}">
+                        <th scope="row"><span>{{ row.title }}</span><small>{{ row.summary }} Délai : {{ row.delay_days }} jours.</small></th>
+                        {% for key in grille_levels %}{% set lv = row.levels[key] %}
+                        <td><strong>{{ price_label(lv) }}</strong><small>{{ lv.note }}</small></td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p class="v2-small text-center mt-3">Prix nets, TVA non applicable (art. 293 B du CGI). Option express : délai divisé par deux, +30 %. Le détail de chaque service est sur la page <a href="/services">Services</a>.</p>
     </div>
-    <div class="table-responsive shadow-sm rounded" data-aos="fade-up">
-      <table class="table align-middle mb-0 grille-niveaux">
-        <thead class="table-light">
-          <tr><th scope="col">Prestation</th>{% for key, label in grille_levels.items() %}<th scope="col" class="text-center">{{ label }}</th>{% endfor %}</tr>
-        </thead>
-        <tbody>
-          {% for row in grille %}
-          <tr>
-            <th scope="row"><span class="d-block">{{ row.title }}</span><small class="text-muted fw-normal">{{ row.summary }} Délai : {{ row.delay_days }} jours.</small></th>
-            {% for key in grille_levels %}{% set lv = row.levels[key] %}
-            <td class="text-center"><span class="fw-bold text-primary d-block text-nowrap">{{ price_label(lv) }}</span><small class="text-muted">{{ lv.note }}</small></td>
+</section>
+
+<!-- FAQ -->
+<section class="v2-section v2-section-alt" id="faq" aria-labelledby="faq-title">
+    <div class="container-fluid v2-container v2-narrow">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Questions fréquentes</p>
+            <h2 id="faq-title">Vos questions sur les prix</h2>
+        </div>
+        <div class="v2-faq">
+            {% for q in faqSchema %}
+            <details class="v2-faq-item"{% if loop.first %} open{% endif %}>
+                <summary>{{ q.question }}<i class="bi bi-plus-lg" aria-hidden="true"></i></summary>
+                <p>{{ q.answer }}</p>
+            </details>
             {% endfor %}
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+        </div>
     </div>
-    <p class="small text-muted text-center mt-3 mb-0">Prix nets, TVA non applicable (art. 293 B du CGI). Option express : délai divisé par deux, +30 %.</p>
-  </div>
 </section>
 
-<!-- Services à la carte -->
-<section class="py-5 bg-white">
-  <div class="container">
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h2 class="mb-4">Services à la Carte</h2>
-        <p class="text-muted">Vous préférez composer votre propre offre ? Découvrez nos services individuels.</p>
-      </div>
-    </div>
-
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <h5 class="card-title mb-1">Création de Logo</h5>
-                <p class="text-muted small mb-0">Identité visuelle</p>
-              </div>
-              <span class="badge bg-primary">490€</span>
-            </div>
-            <p class="card-text text-muted small">Logo professionnel avec charte graphique et fichiers sources</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <h5 class="card-title mb-1">Production Vidéo</h5>
-                <p class="text-muted small mb-0">Contenu vidéo</p>
-              </div>
-              <span class="badge bg-primary">590€</span>
-            </div>
-            <p class="card-text text-muted small">Montage professionnel, motion design et effets spéciaux</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <h5 class="card-title mb-1">Site E-commerce</h5>
-                <p class="text-muted small mb-0">Boutique en ligne</p>
-              </div>
-              <span class="badge bg-primary">2490€</span>
-            </div>
-            <p class="card-text text-muted small">Plateforme complète avec paiement sécurisé et gestion catalogue</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <h5 class="card-title mb-1">Tunnel de Vente</h5>
-                <p class="text-muted small mb-0">Automatisation</p>
-              </div>
-              <span class="badge bg-primary">1490€</span>
-            </div>
-            <p class="card-text text-muted small">Landing pages optimisées avec automatisation marketing</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <h5 class="card-title mb-1">Management Social</h5>
-                <p class="text-muted small mb-0">Réseaux sociaux</p>
-              </div>
-              <span class="badge bg-primary">390€/mois</span>
-            </div>
-            <p class="card-text text-muted small">Gestion complète de vos réseaux sociaux et community management</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="600">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <h5 class="card-title mb-1">SEO & Référencement</h5>
-                <p class="text-muted small mb-0">Visibilité Google</p>
-              </div>
-              <span class="badge bg-primary">490€/mois</span>
-            </div>
-            <p class="card-text text-muted small">Optimisation SEO complète avec suivi et reporting mensuel</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ Tarifs -->
-<section class="py-5 bg-light">
-  <div class="container">
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h2 class="mb-4">Questions sur les Tarifs</h2>
-        <p class="text-muted">Tout ce que vous devez savoir sur nos prix</p>
-      </div>
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="accordion" id="pricingFaqAccordion">
-          <div class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up" data-aos-delay="100">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq1">
-                Les tarifs incluent-ils la TVA ?
-              </button>
-            </h2>
-            <div id="pricing-faq1" class="accordion-collapse collapse show" data-bs-parent="#pricingFaqAccordion">
-              <div class="accordion-body">
-                Non : TVA non applicable, article 293 B du CGI. Le prix affiché est le prix que vous payez.
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up" data-aos-delay="200">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq2">
-                Proposez-vous des facilités de paiement ?
-              </button>
-            </h2>
-            <div id="pricing-faq2" class="accordion-collapse collapse" data-bs-parent="#pricingFaqAccordion">
-              <div class="accordion-body">
-                Oui, nous proposons un paiement échelonné en 2 à 4 fois sans frais pour les projets supérieurs à 1500€. Contactez-nous pour établir un plan de paiement adapté.
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up" data-aos-delay="300">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq3">
-                Y a-t-il des frais cachés ?
-              </button>
-            </h2>
-            <div id="pricing-faq3" class="accordion-collapse collapse" data-bs-parent="#pricingFaqAccordion">
-              <div class="accordion-body">
-                Non, nos tarifs sont transparents et incluent tout ce qui est mentionné dans l'offre. Les seuls frais supplémentaires possibles sont les services optionnels que vous choisiriez d'ajouter.
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item border-0 shadow-sm" data-aos="fade-up" data-aos-delay="400">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq4">
-                Puis-je obtenir un devis personnalisé ?
-              </button>
-            </h2>
-            <div id="pricing-faq4" class="accordion-collapse collapse" data-bs-parent="#pricingFaqAccordion">
-              <div class="accordion-body">
-                Absolument ! Chaque projet est unique. Contactez-nous pour discuter de vos besoins spécifiques et recevoir un devis détaillé et personnalisé sous 48h.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="tarifs-hero py-5 bg-primary text-white">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h3 class="mb-4">Prêt à Démarrer Votre Projet ?</h3>
-        <p class="lead mb-4">Obtenez un devis gratuit et personnalisé en moins de 48h. Sans engagement.</p>
-        <a href="/contact" class="btn btn-light btn-lg px-5">Demander un devis gratuit</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-
+{% set cta_title = 'Un devis précis en 30 minutes' %}{% set cta_text = "Lors du diagnostic gratuit, on choisit ensemble le bon niveau pour votre besoin. Vous recevez ensuite un devis détaillé, aux prix de cette page." %}
+{% include 'includes/partials/page-cta.html' %}
