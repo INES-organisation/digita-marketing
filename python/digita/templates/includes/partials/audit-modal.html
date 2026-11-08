@@ -92,26 +92,26 @@
                 <div class="col-md-6">
                   <label class="audit-label">Secteur d'activité</label>
                   <select name="sector" class="audit-input">
-                    <option value="" style="background:#0a0f1a;">Choisir...</option>
-                    <option value="ecommerce" style="background:#0a0f1a;">E-Commerce / Retail</option>
-                    <option value="services" style="background:#0a0f1a;">Services B2B / SaaS</option>
-                    <option value="conseil" style="background:#0a0f1a;">Conseil / Coaching</option>
-                    <option value="industrie" style="background:#0a0f1a;">Industrie / BTP</option>
-                    <option value="sante" style="background:#0a0f1a;">Santé / Bien-être</option>
-                    <option value="immobilier" style="background:#0a0f1a;">Immobilier</option>
-                    <option value="autre" style="background:#0a0f1a;">Autre</option>
+                    <option value="">Choisir...</option>
+                    <option value="ecommerce">E-Commerce / Retail</option>
+                    <option value="services">Services B2B / SaaS</option>
+                    <option value="conseil">Conseil / Coaching</option>
+                    <option value="industrie">Industrie / BTP</option>
+                    <option value="sante">Santé / Bien-être</option>
+                    <option value="immobilier">Immobilier</option>
+                    <option value="autre">Autre</option>
                   </select>
                 </div>
                 <div class="col-12">
                   <label class="audit-label">Votre principal objectif</label>
                   <select name="goal" class="audit-input">
-                    <option value="" style="background:#0a0f1a;">Choisir votre priorité...</option>
-                    <option value="acquisition" style="background:#0a0f1a;">Augmenter mon acquisition client</option>
-                    <option value="automatisation" style="background:#0a0f1a;">Automatiser mes processus</option>
-                    <option value="ia" style="background:#0a0f1a;">Intégrer l'IA dans mon business</option>
-                    <option value="visibilite" style="background:#0a0f1a;">Améliorer ma visibilité digitale</option>
-                    <option value="roi" style="background:#0a0f1a;">Optimiser mon ROI marketing</option>
-                    <option value="scale" style="background:#0a0f1a;">Scaler mon activité</option>
+                    <option value="">Choisir votre priorité...</option>
+                    <option value="acquisition">Augmenter mon acquisition client</option>
+                    <option value="automatisation">Automatiser mes processus</option>
+                    <option value="ia">Intégrer l'IA dans mon business</option>
+                    <option value="visibilite">Améliorer ma visibilité digitale</option>
+                    <option value="roi">Optimiser mon ROI marketing</option>
+                    <option value="scale">Scaler mon activité</option>
                   </select>
                 </div>
                 <div class="col-12 mt-2">
@@ -175,7 +175,7 @@
     color: #fff;
 }
 .audit-input::placeholder { color: rgba(255,255,255,0.22); }
-.audit-input option { background: #0a0f1a; color: #fff; }
+.audit-input option { background: var(--content-surface); color: var(--content-heading); }
 
 /* Thème clair : champs lisibles (texte foncé, fond blanc, bordure grise) */
 [data-theme="light"] .audit-label { color: #4b5563; }
