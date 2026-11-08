@@ -323,5 +323,70 @@
     "pole": "Sécurité",
     "icon": "shield-lock",
     "visual_title": "Votre page Facebook, verrouillée"
+  },
+  {
+    "slug": "bilan-digital-fin-annee",
+    "title": "Bilan digital de fin d'année : la checklist TPE en 20 points",
+    "meta_title": "Bilan digital de fin d'année : checklist TPE en 20 points",
+    "meta_description": "Site, fiche Google, réseaux sociaux, contacts clients, accès : la checklist en 20 points pour faire le bilan digital de votre TPE en une heure.",
+    "excerpt": "Une heure en décembre pour vérifier votre site, votre fiche Google, vos réseaux, vos contacts et vos accès. Vingt points à cocher, et trois priorités pour l'année.",
+    "category": "creation-web",
+    "service_name": "Stratégie digitale",
+    "meta_keywords": "bilan digital, checklist digitale TPE, audit présence en ligne, fiche Google horaires fêtes, Réunion",
+    "pole": "Stratégie",
+    "icon": "clipboard-check",
+    "visual_title": "Le bilan digital de fin d'année"
+  },
+  {
+    "slug": "lexique-marketing-digital",
+    "title": "SEO, CTR, CRM : 15 mots du digital expliqués simplement",
+    "meta_title": "SEO, CTR, CRM : 15 mots du digital expliqués simplement",
+    "meta_description": "SEO, SEA, CTR, taux de conversion, CRM, landing page : le lexique du marketing digital pour comprendre vos devis et vos rapports, sans jargon.",
+    "excerpt": "Votre prestataire parle une autre langue ? Le petit lexique pour comprendre vos devis, poser les bonnes questions et ne plus signer à l'aveugle.",
+    "category": "seo",
+    "service_name": "Stratégie digitale",
+    "meta_keywords": "lexique marketing digital, définition SEO, CTR définition, CRM définition, taux de conversion",
+    "pole": "Marketing digital",
+    "icon": "book",
+    "visual_title": "Le digital, sans jargon"
+  },
+  {
+    "slug": "audit-seo-lire-rapport",
+    "title": "Audit SEO gratuit : lire son rapport pas à pas",
+    "meta_title": "Audit SEO gratuit : lire son rapport pas à pas",
+    "meta_description": "Title, meta description, H1, HTTPS, vitesse, mobile : les 10 lignes de l'audit SEO gratuit de DIGITA expliquées, et par quoi commencer pour progresser.",
+    "excerpt": "Vous avez lancé l'audit et obtenu une note. Que veut dire chaque ligne, et par quoi commencer pour gagner des places sur Google ?",
+    "category": "seo",
+    "service_name": "SEO",
+    "meta_keywords": "audit SEO gratuit, rapport SEO, balise title, meta description, référencement site Réunion",
+    "pole": "Référencement",
+    "icon": "search",
+    "visual_title": "Lire son audit SEO"
+  },
+  {
+    "slug": "creer-logo-entreprise",
+    "title": "Créer un logo professionnel : la méthode en 5 étapes",
+    "meta_title": "Créer un logo professionnel : la méthode en 5 étapes",
+    "meta_description": "Brief, vérification de l'existant, pistes, tests en petit, fichiers sources : la méthode pour un logo d'entreprise qui dure, et comment le protéger à l'INPI.",
+    "excerpt": "Un logo ne se choisit pas sur un coup de cœur. Brief, pistes, tests en petit format, fichiers à récupérer et dépôt à l'INPI : la méthode complète.",
+    "category": "creation-web",
+    "service_name": "Identité visuelle",
+    "meta_keywords": "créer un logo, logo entreprise Réunion, logo professionnel, déposer logo INPI, charte graphique",
+    "pole": "Identité visuelle",
+    "icon": "vector-pen",
+    "visual_title": "Un logo qui tient la route"
+  },
+  {
+    "slug": "facture-electronique-tpe",
+    "title": "Facture électronique : ce qui change pour les TPE en 2026 et 2027",
+    "meta_title": "Facture électronique : ce qui change pour les TPE",
+    "meta_description": "Réception obligatoire depuis septembre 2026, émission en septembre 2027 : le calendrier de la facture électronique pour les TPE, et comment s'y préparer.",
+    "excerpt": "La réception est déjà obligatoire, l'émission arrive en septembre 2027. Calendrier, plateformes agréées, nouvelles mentions : ce qu'une petite entreprise doit faire.",
+    "category": "intelligence-artificielle",
+    "service_name": "Automatisation",
+    "meta_keywords": "facture électronique TPE, facturation électronique 2026, plateforme agréée, e-reporting, micro-entreprise facture électronique",
+    "pole": "Gestion",
+    "icon": "receipt",
+    "visual_title": "La facture électronique, sans panique"
   }
 ]

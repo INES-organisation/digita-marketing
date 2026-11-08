@@ -1,6 +1,6 @@
 # Suivi du blog : nouveaux articles
 
-État au 8 novembre 2026. Le plan éditorial (mots-clés, calendrier, structure d'un article, design) se trouve
+État au 8 novembre 2026 (lot 6 rédigé le même jour). Le plan éditorial (mots-clés, calendrier, structure d'un article, design) se trouve
 dans le Claude Doc « Plan éditorial du blog DIGITA ». Ce fichier décrit ce qui a été fait dans le dépôt et
 comment ajouter un lot.
 
@@ -15,6 +15,7 @@ comment ajouter un lot.
 | 3 | #16 | `lexique-ia-tpe`, `saison-cyclonique-entreprise`, `chatgpt-tpe-usages`, `relances-automatiques-devis-factures`, `chatbot-whatsapp-entreprise` |
 | 4 | #17 | `rgpd-tpe-essentiel`, `prise-rendez-vous-en-ligne`, `site-internet-artisan`, `boutique-en-ligne-reunion`, `temps-perdu-taches-repetitives` |
 | 5 | #18 | `nom-de-domaine-entreprise`, `newsletter-tpe`, `idees-publications-reseaux-sociaux`, `landing-page-definition`, `page-facebook-piratee` |
+| 6 (brouillon, en attente de validation) | à venir | `bilan-digital-fin-annee`, `lexique-marketing-digital`, `audit-seo-lire-rapport`, `creer-logo-entreprise`, `facture-electronique-tpe` |
 
 Les anciens articles (472 de l'ère PHP) n'ont pas été modifiés.
 
@@ -31,7 +32,11 @@ Les anciens articles (472 de l'ère PHP) n'ont pas été modifiés.
 - **Pas de promesse non vérifiée sur les pratiques de DIGITA**, par exemple « le domaine est toujours déposé
   à votre nom ». On décrit ce que l'offre contient, rien de plus.
 - **Sujets écartés pour l'instant** : Kap Numérik (à vérifier), l'étude de cas du logo (accord du client
-  nécessaire), le financement des formations IA (les fonds exigent Qualiopi, que DIGITA n'a pas).
+  nécessaire), le financement des formations IA (les fonds exigent Qualiopi, que DIGITA n'a pas). Le logo est
+  traité au lot 6 comme une méthode générale, avec un exemple fictif, sans parler d'un projet réel.
+- **Sujets réglementaires** (facture électronique, RGPD) : uniquement ce que disent impots.gouv.fr, Service
+  Public Entreprendre ou la CNIL, et renvoi vers l'expert-comptable pour les cas particuliers (par exemple les
+  règles propres aux départements d'outre-mer, non confirmées par les pages officielles lues).
 - **Auteur** : Anthony Legros, avec la photo de la page `/agent24-7`
   (`/assets/images/v2/fondateur-anthony-legros.webp`). Il est défini dans `AUTHOR` de
   `python/digita/routes/blog.py` et repris dans les données structurées `BlogPosting`.
@@ -74,8 +79,12 @@ Depuis `python/` :
    `cover-<slug>.png` pour chaque article (fond noir, anneaux dorés, icône Bootstrap, titre du visuel).
    Convertir ensuite en WebP qualité 82 (Pillow) dans `public/assets/images/blog/<slug>.webp`.
 3. SQL : `python tools/build_blog_sql.py ../database/migrations/<date>_blog_articles_lotN.sql <slug> …`.
-   Les articles sont insérés en brouillon (`ON CONFLICT (slug) DO NOTHING`).
-4. Tests : `python -m pytest -q`. `tests/test_blog.py` vérifie les longueurs des metas, la couverture, les
+   Les articles sont insérés en brouillon (`ON CONFLICT (slug) DO NOTHING`). La catégorie doit exister dans
+   `service_categories` (catégories utilisées jusqu'ici : `creation-web`, `seo`, `reseaux-sociaux`, `publicite-en-ligne`,
+   `intelligence-artificielle`, `crm`), sinon l'article n'a pas de catégorie. Si un article contient « % »,
+   `tools/apply_sql.py` échoue (psycopg2 lit « % » comme un paramètre) : appliquer le fichier avec `psql -f`,
+   comme sur le serveur.
+4. Tests : `python -m pytest -q` (121 tests au lot 6). `tests/test_blog.py` vérifie les longueurs des metas, la couverture, les
    `h2`, « En bref », les sources, l'absence de lignes vides et la mention « fictif » des exemples.
 5. PR, validation d'Anthony, fusion.
 6. Mise en ligne sur le VPS (`ssh ines-vps`, depuis l'iMac) :
@@ -100,7 +109,8 @@ Claude Code, ou lancer le bloc à la main.
 
 ## Reste à faire
 
-- Calendrier : les articles suivants du plan éditorial (hors sujets écartés ci-dessus).
+- Calendrier : après le lot 6, tous les sujets du plan éditorial sont traités, sauf Kap Numérik et le
+  financement des formations. Les prochains lots demandent de nouveaux sujets.
 - Nettoyage des 472 anciens articles (garder, fusionner, `noindex`, redirections 301) avec un export Search
   Console.
 - Google Search Console : sitemap et suivi des clics par article vers `/diagnostic`.
