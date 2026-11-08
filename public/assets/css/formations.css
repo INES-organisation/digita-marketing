@@ -1,13 +1,13 @@
 /* Styles spécifiques aux formations */
 
 :root {
-    --formations-hero-bg: linear-gradient(135deg, #0a0f1a 0%, #1e1b4b 100%);
+    --formations-hero-bg: radial-gradient(ellipse at 80% 20%, rgba(var(--accent-rgb), 0.12) 0%, transparent 55%), var(--page-bg);
     --formations-accent: var(--accent);
 }
 
 [data-theme="light"] {
-    --formations-hero-bg: linear-gradient(135deg, #ffffff 0%, #c8cdfc 100%);
-    --formations-accent: #a21caf;
+    --formations-hero-bg: radial-gradient(ellipse at 80% 20%, rgba(var(--accent-rgb), 0.12) 0%, transparent 55%), var(--page-bg);
+    --formations-accent: var(--accent);
 }
 
 /* Textes du contenu : couleurs du thème actif (variables définies dans layout-premium.css) */
@@ -263,17 +263,12 @@ section.bg-gradient .lead {
     box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
 }
 
-/* Badges de niveau */
-.badge.bg-success {
-    background-color: #48bb78 !important;
-}
-
-.badge.bg-warning {
-    background-color: #ed8936 !important;
-}
-
+/* Badges de niveau : une seule couleur, celle du thème */
+.badge.bg-success,
+.badge.bg-warning,
 .badge.bg-danger {
-    background-color: #f56565 !important;
+    background-color: var(--accent-soft) !important;
+    color: var(--accent) !important;
 }
 
 /* Prix */
@@ -288,8 +283,8 @@ section.bg-gradient .lead {
 
 /* Accordion */
 .accordion-button:not(.collapsed) {
-    background-color: #a21caf;
-    color: white;
+    background-color: var(--accent-soft);
+    color: var(--content-heading);
 }
 
 .accordion-button:focus {
@@ -299,16 +294,16 @@ section.bg-gradient .lead {
 
 /* Progress bar */
 .progress {
-    background-color: #e2e8f0;
+    background-color: var(--content-border);
 }
 
 .progress-bar {
-    background-color: #48bb78;
+    background-color: var(--accent);
 }
 
 /* Module cards */
 .accordion-item {
-    border-color: #e2e8f0;
+    border-color: var(--content-border);
     margin-bottom: 0.5rem;
 }
 
@@ -319,7 +314,7 @@ section.bg-gradient .lead {
 
 /* Liste des leçons */
 .list-group-item {
-    border-color: #e2e8f0;
+    border-color: var(--content-border);
 }
 
 .list-group-item i.bi-play-circle {
@@ -328,7 +323,8 @@ section.bg-gradient .lead {
 
 /* CTA Button */
 .btn-primary {
-    background: linear-gradient(135deg, #a21caf 0%, #e11d48 100%);
+    background: var(--accent-gradient);
+    color: var(--on-gold);
     border: none;
 }
 
@@ -356,4 +352,61 @@ section.bg-gradient .lead {
 /* Gradient backgrounds */
 .bg-gradient {
     background: var(--hero-gradient);
+}
+
+/* Liste des formations (index) */
+.formations-search {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.formations-search input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.85rem 1.25rem;
+    border-radius: 50px;
+    border: 1px solid var(--content-border);
+    background: var(--content-surface);
+    color: var(--content-heading);
+}
+
+.formations-cats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.formations-cats a {
+    padding: 0.45rem 1rem;
+    border-radius: 50px;
+    border: 1px solid var(--content-border);
+    color: var(--content-text);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.formations-cats a:hover,
+.formations-cats a.is-active {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.formations-cats span {
+    color: var(--content-muted);
+}
+
+.formation-card .formation-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.88rem;
+    color: var(--content-muted);
+}
+
+.formation-card .formation-meta strong {
+    font-size: 1.1rem;
+    color: var(--content-heading);
 }

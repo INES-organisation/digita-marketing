@@ -1,5 +1,5 @@
 <!-- Landing Page Formation - Optimisée Conversion -->
-<section class="landing-hero text-white" style="padding-top: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 60vh;">
+<section class="landing-hero text-white" style="padding-top: 100px; background: radial-gradient(ellipse at 80% 20%, rgba(var(--accent-rgb), 0.25) 0%, transparent 60%), #0a0a0a; min-height: 60vh;">
     <div class="container py-5">
         <div class="row align-items-center">
             <div class="col-lg-7">
@@ -10,7 +10,7 @@
                 <div class="d-flex gap-4 mb-4 flex-wrap">
                     <div><i class="bi bi-clock"></i> <strong>{{ coalesce(formation['duration_hours'], '—') }} heures</strong></div>
                     <div><i class="bi bi-bar-chart"></i> <strong>{{ ucfirst(coalesce(formation['level'], 'Tous niveaux')) }}</strong></div>
-                    <div><i class="bi bi-people"></i> <strong>{{ coalesce(formation['enrolled_count'], 0) }} inscrits</strong></div>
+                    {% if coalesce(formation['enrolled_count'], 0) >= 10 %}<div><i class="bi bi-people"></i> <strong>{{ formation['enrolled_count'] }} inscrits</strong></div>{% endif %}
                     {% if ((coalesce(formation['rating'], 0)) > 0) %}                        <div><i class="bi bi-star-fill text-warning"></i> <strong>{{ number_format(formation['rating'], 1) }}/5</strong></div>
                     {% endif %}                </div>
 
@@ -18,11 +18,11 @@
                     {% if not formation['available'] %}                        <button type="button" class="btn btn-secondary btn-lg fw-bold px-4" disabled>
                             <i class="bi bi-hourglass-split"></i> Bientôt disponible — {{ number_format(formation['price'], 2) }} €
                         </button>
-                    {% elif (floatval((coalesce(formation['price'], 0))) > 0) %}                        <a href="/formations/checkout/{{ formation['id'] }}" class="btn btn-warning btn-lg fw-bold px-4">
+                    {% elif (floatval((coalesce(formation['price'], 0))) > 0) %}                        <a href="/formations/checkout/{{ formation['id'] }}" class="btn v2-btn v2-btn-primary btn-lg fw-bold px-4">
                             <i class="bi bi-cart-check"></i> S'inscrire — {{ number_format(formation['price'], 2) }} €
                         </a>
-                    {% else %}                        <form action="/formations/enroll/{{ formation['id'] }}" method="POST" class="d-inline">
-                            <button type="submit" class="btn btn-warning btn-lg fw-bold px-4">
+                    {% else %}                        <form action="/formations/{{ h(formation['slug']) }}/inscription" method="POST" class="d-inline">{{ CsrfMiddleware_field() }}
+                            <button type="submit" class="btn v2-btn v2-btn-primary btn-lg fw-bold px-4">
                                 <i class="bi bi-play-circle"></i> Commencer gratuitement
                             </button>
                         </form>
@@ -70,7 +70,7 @@
     <div class="container">
         <h2 class="text-center fw-bold mb-5">Ce que vous allez apprendre</h2>
         <div class="row g-4">
-            {% set objectives = [] %}{% if (not empty(formation['objectives'])) %}{% set objectives = json_decode(formation['objectives'], true) %}{% endif %}{% if empty(objectives) %}{% set title = str_replace('Formation ', '', formation['title']) %}{% set objectives = [cat('Maîtriser les fondamentaux de ', strtolower(title)), 'Comprendre les meilleures pratiques et techniques avancées', 'Mettre en place des stratégies efficaces et mesurables', 'Éviter les erreurs courantes et optimiser vos résultats', 'Utiliser les outils professionnels recommandés', 'Appliquer vos connaissances sur des cas concrets'] %}{% endif %}            {% for obj in php_values(objectives) %}                <div class="col-md-6">
+            {% set objectives = [] %}{% if (not empty(formation['objectives'])) %}{% set objectives = json_decode(formation['objectives'], true) %}{% endif %}{% if empty(objectives) %}{% set ftitle = str_replace('Formation ', '', formation['title']) %}{% set objectives = [cat('Maîtriser les fondamentaux de ', strtolower(ftitle)), 'Comprendre les meilleures pratiques et techniques avancées', 'Mettre en place des stratégies efficaces et mesurables', 'Éviter les erreurs courantes et optimiser vos résultats', 'Utiliser les outils professionnels recommandés', 'Appliquer vos connaissances sur des cas concrets'] %}{% endif %}            {% for obj in php_values(objectives) %}                <div class="col-md-6">
                     <div class="d-flex align-items-start">
                         <i class="bi bi-check-circle-fill text-success fs-4 me-3 flex-shrink-0"></i>
                         <p class="mb-0">{{ h(obj) }}</p>
@@ -142,10 +142,10 @@
 </section>
 {% endif %}
 <!-- CTA Final -->
-<section class="py-5 text-white text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+<section class="py-5 text-white text-center" style="background: radial-gradient(ellipse at 80% 20%, rgba(var(--accent-rgb), 0.25) 0%, transparent 60%), #0a0a0a;">
     <div class="container">
         <h2 class="display-5 fw-bold mb-3">Prêt à vous lancer ?</h2>
-        <p class="lead mb-4">Rejoignez {{ coalesce(formation['enrolled_count'], 0) }} apprenants et développez vos compétences dès aujourd'hui.</p>
+        <p class="lead mb-4">Apprenez à votre rythme, avec des cas concrets pour votre entreprise.</p>
         
         {% if not formation['available'] %}            <div class="mb-3">
                 <span class="display-4 fw-bold">{{ number_format(formation['price'], 2) }} €</span>
@@ -157,11 +157,11 @@
         {% elif (floatval((coalesce(formation['price'], 0))) > 0) %}            <div class="mb-3">
                 <span class="display-4 fw-bold">{{ number_format(formation['price'], 2) }} €</span>
             </div>
-            <a href="/formations/checkout/{{ formation['id'] }}" class="btn btn-warning btn-lg fw-bold px-5 py-3">
+            <a href="/formations/checkout/{{ formation['id'] }}" class="btn v2-btn v2-btn-primary btn-lg fw-bold px-5 py-3">
                 <i class="bi bi-cart-check"></i> S'inscrire maintenant
             </a>
-        {% else %}            <form action="/formations/enroll/{{ formation['id'] }}" method="POST" class="d-inline">
-                <button type="submit" class="btn btn-warning btn-lg fw-bold px-5 py-3">
+        {% else %}            <form action="/formations/{{ h(formation['slug']) }}/inscription" method="POST" class="d-inline">{{ CsrfMiddleware_field() }}
+                <button type="submit" class="btn v2-btn v2-btn-primary btn-lg fw-bold px-5 py-3">
                     <i class="bi bi-play-circle"></i> Commencer gratuitement
                 </button>
             </form>

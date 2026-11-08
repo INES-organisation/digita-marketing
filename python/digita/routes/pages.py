@@ -6,6 +6,7 @@ from starlette.responses import JSONResponse
 from .. import grille, ines_feed, php, services_catalog
 from .. import solutions as solutions_catalog
 from .. import accueil
+from .. import boutique as boutique_data
 from ..realisations import REALISATIONS
 from ..render import base_context, render_page, render_view
 from .common import moved, redirect
@@ -71,9 +72,42 @@ def services(request):
         "poles": services_catalog.POLES, "categories": services_catalog.categories(),
     })
 
-support = _simple("support/index-content", "Aide et support client | DIGITA", "/assets/css/support.css",
-                  "Aide DIGITA : contacter le support (chat, WhatsApp, e-mail, téléphone), accéder à votre espace client "
-                  "et réponses aux questions fréquentes sur votre site, vos automatisations et vos formations.")
+SUPPORT_FAQ = [
+    {"question": "Dans quel délai recevrai-je une réponse ?",
+     "answer": "Sous 24 heures ouvrées par e-mail, WhatsApp ou téléphone. L'assistant du site répond tout de suite, "
+               "jour et nuit, et me transmet ce qu'il ne sait pas traiter."},
+    {"question": "Mon site ou mon agent IA ne fonctionne plus, que faire ?",
+     "answer": "Écrivez « urgent » par WhatsApp ou e-mail avec l'adresse concernée et, si possible, une capture "
+               "d'écran : c'est traité en priorité. Pour un site sous maintenance ou un agent IA sous abonnement, la "
+               "correction est comprise."},
+    {"question": "Comment accéder à mon espace client ?",
+     "answer": "Connectez-vous depuis le menu avec l'adresse e-mail donnée lors de la commande. Vous y retrouvez vos "
+               "projets, vos commandes, vos factures et vos formations. Mot de passe oublié : utilisez le lien de "
+               "réinitialisation de la page de connexion."},
+    {"question": "Où trouver mes factures ?",
+     "answer": "Dans « Mes commandes » pour les achats en ligne. Pour les prestations sur devis, la facture vous est "
+               "envoyée par e-mail ; un duplicata est envoyé sur simple demande."},
+    {"question": "Puis-je faire modifier mon site après sa livraison ?",
+     "answer": "Oui. Les petites corrections sont comprises pendant la période de garantie indiquée au devis, puis "
+               "dans la maintenance mensuelle si vous l'avez choisie. Une évolution plus importante fait l'objet d'un "
+               "devis, aux prix de la page Tarifs."},
+    {"question": "Proposez-vous des formations ?",
+     "answer": "Oui : des formations en ligne à suivre à votre rythme, et des formations ou du coaching sur mesure, "
+               "en visio ou dans votre entreprise (390 € la journée, 120 € l'heure)."},
+    {"question": "Comment résilier un abonnement ?",
+     "answer": "Par simple e-mail à contact@digita.buzz, à tout moment après la durée minimale éventuelle indiquée au "
+               "devis, avec effet à la fin du mois en cours. Vous récupérez vos contenus et vos accès."},
+]
+
+
+def support(request):
+    return render_view(request, "support/index-content", {
+        "title": "Aide et support client | DIGITA",
+        "metaDescription": "Aide DIGITA : chat, WhatsApp, e-mail ou téléphone, réponse sous 24 h ouvrées. Accès à votre "
+                           "espace client, à vos factures et réponses aux questions fréquentes.",
+        "extraCss": ["/assets/css/support.css"],
+        "faqSchema": SUPPORT_FAQ,
+    })
 
 
 TARIFS_FAQ = [
@@ -120,9 +154,18 @@ def tarifs(request):
 
 def ines_catalogue(request):
     return JSONResponse(ines_feed.entries())
-boutique = _simple("boutique/index-content", "Boutique : Packs et Services Digitaux | DIGITA", "/assets/css/boutique.css",
-                   "Packs et services digitaux DIGITA prêts à commander : sites, visibilité, automatisation et "
-                   "formations pour faire grandir votre entreprise.")
+def boutique(request):
+    return render_view(request, "boutique/index-content", {
+        "title": "Boutique : prompts et automatisations IA | DIGITA",
+        "metaDescription": "Bientôt sur DIGITA : packs de prompts par métier, automatisations IA installées pour vous et "
+                           "matériel pour les pros. Inscrivez-vous pour être prévenu de l'ouverture.",
+        "metaRobots": "index, follow" if boutique_data.OPEN else "noindex, follow",
+        "extraCss": ["/assets/css/boutique.css"],
+        "shop": boutique_data,
+        "waitlistFlash": request.session.pop("waitlist_flash", None),
+    })
+
+
 def solutions(request):
     return render_view(request, "solutions/index-content", {
         "title": "Agent IA 24/7 Messenger, Téléphone, Lead Ads | DIGITA",

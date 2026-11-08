@@ -10,10 +10,15 @@ def _select(icon=True):
 
 
 ORDER = " ORDER BY f.created_at DESC NULLS LAST, f.id DESC"
+# Seules les formations réellement disponibles (au moins une leçon avec du contenu ou une vidéo) sont
+# listées sur le site : le catalogue généré automatiquement (« Bientôt disponible ») reste en base, invisible.
+AVAILABLE = (" AND EXISTS (SELECT 1 FROM formation_modules am JOIN formation_lessons al ON al.module_id = am.id"
+             " WHERE am.formation_id = f.id AND (TRIM(COALESCE(al.content, '')) <> '' OR TRIM(COALESCE(al.video_url, '')) <> ''))")
+PUBLISHED = " WHERE f.status = 'published'" + AVAILABLE
 
 
 def get_all_published(limit=None, offset=0):
-    sql = _select() + " WHERE f.status = 'published'" + ORDER
+    sql = _select() + PUBLISHED + ORDER
     if limit:
         sql += f" LIMIT {int(limit)} OFFSET {int(offset)}"
     return db.fetch_all(sql)
@@ -65,7 +70,7 @@ def available_ids():
 
 
 def get_by_category(category_slug, limit=None):
-    sql = _select() + " WHERE c.slug = ? AND f.status = 'published'" + ORDER
+    sql = _select() + PUBLISHED + " AND c.slug = ?" + ORDER
     if limit:
         sql += f" LIMIT {int(limit)}"
     return db.fetch_all(sql, [category_slug])
@@ -76,24 +81,24 @@ def search(query, limit=20):
     return db.fetch_all(
         _select(icon=False)
         + f" WHERE ({like_ci('f.title')} OR {like_ci('f.description')} OR {like_ci('f.service_name')})"
-          " AND f.status = 'published'" + ORDER + " LIMIT ?",
+          " AND f.status = 'published'" + AVAILABLE + ORDER + " LIMIT ?",
         [q, q, q, limit],
     )
 
 
 def get_popular(limit=6):
     return db.fetch_all(
-        _select(icon=False) + " WHERE f.status = 'published'"
+        _select(icon=False) + PUBLISHED +
         " ORDER BY f.enrolled_count DESC NULLS LAST, f.rating DESC NULLS LAST, f.id DESC LIMIT ?", [limit])
 
 
 def get_recent(limit=6):
-    return db.fetch_all(_select(icon=False) + " WHERE f.status = 'published'" + ORDER + " LIMIT ?", [limit])
+    return db.fetch_all(_select(icon=False) + PUBLISHED + ORDER + " LIMIT ?", [limit])
 
 
 def get_related(formation_id, category_id, limit=3):
     return db.fetch_all(
-        _select(icon=False) + f" WHERE f.id != ? AND f.category_id = ? AND f.status = 'published' ORDER BY {rand_order('f')} LIMIT ?",
+        _select(icon=False) + PUBLISHED + f" AND f.id != ? AND f.category_id = ? ORDER BY {rand_order('f')} LIMIT ?",
         [formation_id, category_id, limit])
 
 
@@ -122,14 +127,14 @@ def count(category_slug=None):
     if category_slug:
         return db.fetch(
             """SELECT COUNT(*) as total FROM formations f LEFT JOIN service_categories c ON f.category_id = c.id
-               WHERE c.slug = ? AND f.status = 'published'""", [category_slug])["total"]
-    return db.fetch("SELECT COUNT(*) as total FROM formations WHERE status = 'published'")["total"]
+               """ + PUBLISHED + " AND c.slug = ?", [category_slug])["total"]
+    return db.fetch("SELECT COUNT(*) as total FROM formations f" + PUBLISHED)["total"]
 
 
 def get_categories():
     rows = db.fetch_all(
         """SELECT c.*, COUNT(f.id) as formation_count FROM service_categories c
-           LEFT JOIN formations f ON c.id = f.category_id AND f.status = 'published'
+           LEFT JOIN formations f ON c.id = f.category_id AND f.status = 'published'""" + AVAILABLE + """
            GROUP BY c.id HAVING COUNT(f.id) > 0 ORDER BY c.id""")
     return sort_by_name(rows)
 

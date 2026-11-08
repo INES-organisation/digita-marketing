@@ -1,20 +1,8 @@
-/* ==================== SUPPORT STYLES ==================== */
-
-/* Hero Section - Bleu (conservé) */
-.support-hero {
-    margin-top: 0 !important;
-    padding-top: 120px !important;
-}
-
-/* Support Icon Circle - Remplace style inline */
-.support-icon-circle {
-    width: 70px;
-    height: 70px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .support-hero {
-        padding-top: 100px !important;
-    }
+/* ==================== SUPPORT ====================
+   Cartes et sections : home-v2.css et pages-v2.css. */
+.support-channel {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
 }

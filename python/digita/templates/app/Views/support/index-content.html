@@ -1,247 +1,95 @@
-<!-- Hero Section Premium (même en-tête que /blog) -->
-<section class="page-hero hero-blog py-6 bg-premium-glow position-relative overflow-hidden">
-    <div class="container position-relative z-2">
-        <div class="row align-items-center">
-            <div class="col-lg-8" data-aos="fade-right">
-                <span class="badge rounded-pill bg-premium-gold-gradient px-3 py-2 mb-3" style="background: var(--gold-gradient); color: var(--dark); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Nous pouvons vous aider</span>
-                <h1 class="display-3 fw-bold mb-3 text-white" style="font-family: var(--font-heading);">💬 Centre d'<span class="text-gradient-gold">Aide</span> & Support</h1>
-                <p class="lead mb-0 text-white-50" style="font-size: 1.15rem; max-width: 600px;">Questions fréquentes, assistance technique et contact direct : trouvez rapidement une réponse ou parlez à un humain.</p>
+{% set hero_kicker = 'Aide et support' %}{% set hero_title = 'Une question ? Je vous réponds' %}
+{% set hero_lead = "Client ou futur client, choisissez le moyen le plus simple pour vous. Vous parlez directement à la personne qui s'occupe de votre projet." %}
+{% include 'includes/partials/page-hero.html' %}
+
+<!-- Canaux -->
+<section class="v2-section" aria-labelledby="canaux-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Me contacter</p>
+            <h2 id="canaux-title">Quatre façons de joindre DIGITA</h2>
+            <p>Réponse sous 24 h ouvrées. Pour un site en panne ou un agent IA qui ne répond plus, précisez « urgent » : c'est traité en priorité.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-3" data-aos="fade-up">
+                <button type="button" class="v2-card v2-need support-channel" onclick="toggleChatbot()">
+                    <span class="v2-icon"><i class="bi bi-chat-dots" aria-hidden="true"></i></span>
+                    <h3>Chat</h3>
+                    <p>L'assistant du site répond tout de suite, 24 h/24, et me transmet votre demande si besoin.</p>
+                    <span class="v2-link">Ouvrir le chat <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </button>
             </div>
-            <div class="col-lg-4 text-center d-none d-lg-block" data-aos="zoom-in">
-                <div class="position-absolute" style="top: 20%; right: 10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(var(--gold-rgb), 0.1) 0%, transparent 70%);"></div>
-                <i class="bi bi-life-preserver text-gradient-gold" style="font-size: 12rem; filter: drop-shadow(0 0 20px rgba(var(--gold-rgb), 0.2));"></i>
+            <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="80">
+                <a href="https://wa.me/262693487817?text={{ 'Bonjour, j\'ai une question pour DIGITA.' | urlencode }}" class="v2-card v2-need" target="_blank" rel="noopener">
+                    <span class="v2-icon"><i class="bi bi-whatsapp" aria-hidden="true"></i></span>
+                    <h3>WhatsApp</h3>
+                    <p>Le plus rapide pour une question courte, une capture d'écran ou un document.</p>
+                    <span class="v2-link">06 93 48 78 17 <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
+            </div>
+            <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="160">
+                <a href="mailto:contact@digita.buzz" class="v2-card v2-need">
+                    <span class="v2-icon"><i class="bi bi-envelope" aria-hidden="true"></i></span>
+                    <h3>E-mail</h3>
+                    <p>Pour une demande détaillée, avec vos fichiers en pièce jointe.</p>
+                    <span class="v2-link">contact@digita.buzz <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
+            </div>
+            <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="240">
+                <a href="tel:+262693487817" class="v2-card v2-need">
+                    <span class="v2-icon"><i class="bi bi-telephone" aria-hidden="true"></i></span>
+                    <h3>Téléphone</h3>
+                    <p>Si je ne décroche pas, laissez un message : je vous rappelle.</p>
+                    <span class="v2-link">06 93 48 78 17 <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Support Options -->
-<section class="py-5 bg-white">
-  <div class="container">
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h2 class="mb-4">Comment Pouvons-Nous Vous Aider ?</h2>
-        <p class="lead text-muted">Notre équipe support est à votre disposition pour vous accompagner. Choisissez le canal qui vous convient le mieux.</p>
-      </div>
-    </div>
-
-    <div class="row g-4 mb-5">
-      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
-        <div class="card h-100 border-0 shadow-sm hover-lift text-center p-4">
-          <div class="support-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3">
-            <i class="bi bi-headset fs-1 text-primary"></i>
-          </div>
-          <h5 class="mb-3">Support Technique</h5>
-          <p class="text-muted small mb-3">Assistance rapide pour tous vos problèmes techniques</p>
-          <a href="mailto:contact@digita.buzz" class="btn btn-outline-primary btn-sm">Contacter le support</a>
+<!-- Espace client -->
+<section class="v2-section v2-section-alt" aria-labelledby="espace-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Déjà client ?</p>
+            <h2 id="espace-title">Tout est dans votre espace</h2>
         </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
-        <div class="card h-100 border-0 shadow-sm hover-lift text-center p-4">
-          <div class="support-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3">
-            <i class="bi bi-book fs-1 text-primary"></i>
-          </div>
-          <h5 class="mb-3">Documentation</h5>
-          <p class="text-muted small mb-3">Guides et tutoriels détaillés pour nos services</p>
-          <a href="#documentation" class="btn btn-outline-primary btn-sm">Voir la doc</a>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
-        <div class="card h-100 border-0 shadow-sm hover-lift text-center p-4">
-          <div class="support-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3">
-            <i class="bi bi-chat-dots fs-1 text-primary"></i>
-          </div>
-          <h5 class="mb-3">Chat en Direct</h5>
-          <p class="text-muted small mb-3">Discutez avec notre équipe en temps réel</p>
-          <button class="btn btn-outline-primary btn-sm" onclick="alert('Chat disponible prochainement')">Démarrer le chat</button>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
-        <div class="card h-100 border-0 shadow-sm hover-lift text-center p-4">
-          <div class="support-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3">
-            <i class="bi bi-telephone fs-1 text-primary"></i>
-          </div>
-          <h5 class="mb-3">Assistance Téléphonique</h5>
-          <p class="text-muted small mb-3">Appelez-nous pour une aide immédiate</p>
-          <a href="tel:+262693487817" class="btn btn-outline-primary btn-sm">06 93 48 78 17</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Horaires -->
-    <div class="row justify-content-center">
-      <div class="col-lg-8" data-aos="fade-up" data-aos-delay="500">
-        <div class="card border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="row align-items-center">
-              <div class="col-md-6 mb-3 mb-md-0">
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-clock text-primary fs-2 me-3"></i>
-                  <div>
-                    <h6 class="mb-1">Horaires d'ouverture</h6>
-                    <p class="text-muted small mb-0">Lundi - Vendredi : 9h - 18h<br>Samedi : 9h - 13h</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-lightning text-primary fs-2 me-3"></i>
-                  <div>
-                    <h6 class="mb-1">Temps de réponse</h6>
-                    <p class="text-muted small mb-0">Moins de 2h en moyenne<br>Support prioritaire disponible</p>
-                  </div>
-                </div>
-              </div>
+        <div class="row g-4">
+            {% for e in [
+                ['bi-briefcase', 'Mes projets', "Suivi de vos projets, messages et fichiers échangés.", '/espace-client'],
+                ['bi-receipt', 'Mes commandes et factures', "Vos achats en ligne, leurs factures et vos téléchargements.", '/mes-commandes'],
+                ['bi-mortarboard', 'Mes formations', "Reprenez vos formations là où vous les avez laissées.", '/mes-formations'],
+            ] %}
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}">
+                <a href="{{ e[3] }}" class="v2-card v2-need">
+                    <span class="v2-icon"><i class="bi {{ e[0] }}" aria-hidden="true"></i></span>
+                    <h3>{{ e[1] }}</h3>
+                    <p>{{ e[2] }}</p>
+                    <span class="v2-link">Ouvrir <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
             </div>
-          </div>
+            {% endfor %}
         </div>
-      </div>
+        <p class="v2-small text-center mt-4">Mot de passe oublié ? <a href="/mot-de-passe-oublie">Réinitialisez-le ici</a>.</p>
     </div>
-  </div>
 </section>
 
-<!-- FAQ Support -->
-<section class="py-5 bg-light" id="faq">
-  <div class="container">
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h2 class="mb-4">Questions Fréquentes - Support</h2>
-        <p class="text-muted">Trouvez rapidement des réponses à vos questions</p>
-      </div>
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="accordion" id="supportFaqAccordion">
-          <div class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up" data-aos-delay="100">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#support-faq1">
-                Comment puis-je accéder à mon espace client ?
-              </button>
-            </h2>
-            <div id="support-faq1" class="accordion-collapse collapse show" data-bs-parent="#supportFaqAccordion">
-              <div class="accordion-body">
-                Vous recevrez vos identifiants par email après la signature du contrat. Connectez-vous sur notre portail client pour suivre l'avancement de votre projet, accéder aux fichiers et communiquer avec l'équipe.
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up" data-aos-delay="200">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#support-faq2">
-                Que faire en cas de problème technique urgent ?
-              </button>
-            </h2>
-            <div id="support-faq2" class="accordion-collapse collapse" data-bs-parent="#supportFaqAccordion">
-              <div class="accordion-body">
-                Pour les urgences, contactez-nous immédiatement par téléphone au 06 93 48 78 17. Notre équipe technique intervient rapidement pour résoudre tout problème critique.
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up" data-aos-delay="300">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#support-faq3">
-                Comment demander une modification ou une mise à jour ?
-              </button>
-            </h2>
-            <div id="support-faq3" class="accordion-collapse collapse" data-bs-parent="#supportFaqAccordion">
-              <div class="accordion-body">
-                Connectez-vous à votre espace client et créez un ticket de support en décrivant précisément votre demande. Vous pouvez aussi nous envoyer un email à contact@digita.buzz.
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item border-0 shadow-sm mb-3" data-aos="fade-up" data-aos-delay="400">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#support-faq4">
-                Proposez-vous des formations ?
-              </button>
-            </h2>
-            <div id="support-faq4" class="accordion-collapse collapse" data-bs-parent="#supportFaqAccordion">
-              <div class="accordion-body">
-                Oui, nous proposons des formations personnalisées pour vous aider à gérer votre site web, vos réseaux sociaux ou vos outils marketing. Contactez-nous pour plus d'informations.
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item border-0 shadow-sm" data-aos="fade-up" data-aos-delay="500">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#support-faq5">
-                Quels sont les délais de réponse du support ?
-              </button>
-            </h2>
-            <div id="support-faq5" class="accordion-collapse collapse" data-bs-parent="#supportFaqAccordion">
-              <div class="accordion-body">
-                Nous nous engageons à répondre à toutes les demandes sous 2h en moyenne pendant nos heures d'ouverture. Les clients avec un contrat de maintenance bénéficient d'un support prioritaire.
-              </div>
-            </div>
-          </div>
+<!-- FAQ -->
+<section class="v2-section" id="faq" aria-labelledby="faq-title">
+    <div class="container-fluid v2-container v2-narrow">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Questions fréquentes</p>
+            <h2 id="faq-title">Les réponses aux questions courantes</h2>
         </div>
-      </div>
+        <div class="v2-faq">
+            {% for q in faqSchema %}
+            <details class="v2-faq-item"{% if loop.first %} open{% endif %}>
+                <summary>{{ q.question }}<i class="bi bi-plus-lg" aria-hidden="true"></i></summary>
+                <p>{{ q.answer }}</p>
+            </details>
+            {% endfor %}
+        </div>
     </div>
-  </div>
 </section>
 
-<!-- Documentation Section -->
-<section class="py-5 bg-white" id="documentation">
-  <div class="container">
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h2 class="mb-4">Documentation & Ressources</h2>
-        <p class="text-muted">Accédez à nos guides et tutoriels pour tirer le meilleur parti de nos services</p>
-      </div>
-    </div>
-
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <i class="bi bi-file-earmark-text text-primary fs-1 mb-3"></i>
-            <h5 class="card-title">Guide de démarrage</h5>
-            <p class="card-text text-muted">Premiers pas avec votre nouveau site web ou service digital</p>
-            <a href="#" class="btn btn-link p-0">Lire le guide <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <i class="bi bi-play-circle text-primary fs-1 mb-3"></i>
-            <h5 class="card-title">Tutoriels vidéo</h5>
-            <p class="card-text text-muted">Apprenez en vidéo comment utiliser et gérer vos outils</p>
-            <a href="#" class="btn btn-link p-0">Voir les vidéos <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <i class="bi bi-question-circle text-primary fs-1 mb-3"></i>
-            <h5 class="card-title">Base de connaissances</h5>
-            <p class="card-text text-muted">Articles détaillés sur tous nos services et fonctionnalités</p>
-            <a href="#" class="btn btn-link p-0">Parcourir <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="py-5 bg-primary text-white">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h3 class="mb-4">Vous ne trouvez pas de réponse ?</h3>
-        <p class="lead mb-4">Notre équipe support est là pour vous aider. Contactez-nous directement.</p>
-        <a href="/contact" class="btn btn-light btn-lg px-5">Contacter le support</a>
-      </div>
-    </div>
-  </div>
-</section>
+{% include 'includes/partials/page-cta.html' %}

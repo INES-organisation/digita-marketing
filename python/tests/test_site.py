@@ -355,7 +355,18 @@ def test_old_shop_and_solution_addresses_are_moved_permanently():
         r = c.get(old, follow_redirects=False)
         assert (r.status_code, r.headers["location"]) == (301, new), old
     html = c.get("/boutique").text
-    assert not re.findall(r'(?:href|action)="/boutique/', html)
+    assert not re.findall(r'(?:href|action)="/boutique/(?!prevenir")', html)  # seule la liste d'attente y poste
+
+
+def test_boutique_waitlist_announces_opening_without_fake_products():
+    from digita import boutique
+
+    html = _client().get("/boutique").text
+    assert not boutique.OPEN and 'content="noindex, follow"' in html and 'action="/boutique/prevenir"' in html
+    for gone in ("197.00", "349.00", "Populaire", "🛒"):
+        assert gone not in html
+    for w in boutique.WORKFLOWS:
+        assert w["title"] in html and w["price"] in html
 
 
 def test_home_seo_is_clean_and_preview_redirects():

@@ -1,150 +1,111 @@
-<!-- Hero Section Boutique -->
-<section class="boutique-hero">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-3">🛒 Boutique Digita</h1>
-                <p class="lead mb-4">
-                    Découvrez notre sélection de produits et services digitaux prêts à l'emploi.
-                    Templates, formations, outils et bien plus encore !
-                </p>
-                
-                <!-- Barre de recherche -->
-                <form action="/formations/search" method="GET" class="search-form">
-                    <div class="input-group input-group-lg">
-                        <input type="text" name="q" class="form-control" placeholder="Rechercher une formation..." required>
-                        <button class="btn btn-light" type="submit">
-                            <i class="bi bi-search"></i> Rechercher
-                        </button>
+{# Produits et prix : digita/boutique.py. Tant que boutique.OPEN est faux, la page annonce l'ouverture et tient une liste d'attente. #}
+{% set hero_kicker = 'Ouverture prochaine' %}{% set hero_title = 'La boutique DIGITA ouvre bientôt' %}
+{% set hero_lead = "Des prompts prêts à l'emploi et des automatisations IA pour gagner du temps dès demain, et une sélection de matériel pour les pros. Inscrivez-vous pour être prévenu de l'ouverture." %}
+{% include 'includes/partials/page-hero.html' %}
+
+<!-- Liste d'attente -->
+<section class="v2-section" id="prevenir" aria-labelledby="prevenir-title">
+    <div class="container-fluid v2-container v2-narrow">
+        <div class="v2-final-card" data-aos="fade-up">
+            <p class="v2-kicker">Liste d'attente</p>
+            <h2 id="prevenir-title">Soyez prévenu à l'ouverture</h2>
+            <p>Un seul e-mail, le jour de l'ouverture. Pas de newsletter imposée.</p>
+            {% if waitlistFlash %}<div class="alert {{ 'alert-success' if waitlistFlash['ok'] else 'alert-danger' }} mb-4" role="status">{{ h(waitlistFlash['message']) }}</div>{% endif %}
+            <form action="/boutique/prevenir" method="POST" class="boutique-waitlist">
+                {{ CsrfMiddleware_field() }}
+                <div style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+                    <label for="bq-site-web">Ne pas remplir</label><input type="text" id="bq-site-web" name="site_web" tabindex="-1" autocomplete="off">
+                </div>
+                <div class="row g-3 text-start">
+                    <div class="col-md-6">
+                        <label for="bq-email" class="form-label">E-mail</label>
+                        <input type="email" id="bq-email" name="email" class="form-control" required maxlength="100" autocomplete="email">
                     </div>
-                </form>
-            </div>
-            <div class="col-lg-4 text-center d-none d-lg-block">
-                <i class="bi bi-shop hero-icon"></i>
-            </div>
+                    <div class="col-md-6">
+                        <label for="bq-interest" class="form-label">Ce qui vous intéresse</label>
+                        <select id="bq-interest" name="interest" class="form-select">
+                            <option value="prompts">Packs de prompts</option>
+                            <option value="workflows">Automatisations IA</option>
+                            <option value="materiel">Matériel informatique</option>
+                            <option value="tout">Un peu de tout</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="bq-consent" name="consent" value="1" required>
+                            <label class="form-check-label" for="bq-consent">J'accepte d'être prévenu par e-mail de l'ouverture de la boutique. Voir la <a href="/politique-confidentialite">politique de confidentialité</a>.</label>
+                        </div>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button type="submit" class="v2-btn v2-btn-primary"><i class="bi bi-bell" aria-hidden="true"></i> Me prévenir</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </section>
 
-<!-- Catégories -->
-<section class="py-4 bg-light border-bottom">
-    <div class="container">
-        <div class="categories-scroll d-flex gap-2 overflow-auto pb-2">
-            <a href="/boutique" class="btn btn-outline-primary">
-                <i class="bi bi-grid-3x3"></i> Tous
-            </a>
-            <a href="/solutions#packs" class="btn btn-outline-primary">
-                <i class="bi bi-file-earmark-code"></i> Templates
-            </a>
-            <a href="/formations" class="btn btn-outline-primary">
-                <i class="bi bi-mortarboard"></i> Formations
-            </a>
-            <a href="/outils" class="btn btn-outline-primary">
-                <i class="bi bi-tools"></i> Outils
-            </a>
-            <a href="/services" class="btn btn-outline-primary">
-                <i class="bi bi-briefcase"></i> Services
-            </a>
+<!-- Packs de prompts -->
+<section class="v2-section v2-section-alt" id="prompts" aria-labelledby="prompts-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Produits téléchargeables</p>
+            <h2 id="prompts-title">Packs de prompts par métier</h2>
+            <p>Des consignes testées, à copier dans ChatGPT, Claude ou Gemini : vous gagnez du temps sur les écrits de tous les jours. Téléchargement immédiat après paiement.</p>
         </div>
-    </div>
-</section>
-
-<!-- Produits Populaires -->
-<section class="py-5">
-    <div class="container">
-        <h3 class="mb-4"><i class="bi bi-fire text-danger"></i> Produits Populaires</h3>
         <div class="row g-4">
-            <!-- Produit 1 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 shadow-sm hover-lift">
-                    <div class="card-img-placeholder bg-primary d-flex align-items-center justify-content-center">
-                        <i class="bi bi-file-earmark-code large-icon text-white"></i>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <span class="badge bg-primary">Template</span>
-                            <span class="badge bg-danger">
-                                <i class="bi bi-fire"></i> Populaire
-                            </span>
-                        </div>
-                        <h5 class="card-title">Template Site E-commerce</h5>
-                        <p class="card-text text-muted small">Template complet pour créer votre boutique en ligne avec toutes les fonctionnalités essentielles.</p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div class="h5 mb-0 text-primary">197.00 €</div>
-                            <a href="/solutions#packs" class="btn btn-sm btn-outline-primary">
-                                Voir <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
+            {% for p in shop.PROMPT_PACKS %}
+            <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}">
+                <div class="v2-card pg-price">
+                    <span class="v2-icon"><i class="bi bi-chat-square-text" aria-hidden="true"></i></span>
+                    <h3>{{ p.title }}</h3>
+                    <div class="pg-amount">{{ p.price }}</div>
+                    <ul>{% for i in p['items'] %}<li>{{ i }}</li>{% endfor %}</ul>
                 </div>
             </div>
-
-            <!-- Produit 2 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 shadow-sm hover-lift">
-                    <div class="card-img-placeholder bg-success d-flex align-items-center justify-content-center">
-                        <i class="bi bi-mortarboard large-icon text-white"></i>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <span class="badge bg-success">Formation</span>
-                            <span class="badge bg-danger">
-                                <i class="bi bi-fire"></i> Populaire
-                            </span>
-                        </div>
-                        <h5 class="card-title">Pack Formation Marketing Digital</h5>
-                        <p class="card-text text-muted small">Formation complète incluant SEO, réseaux sociaux, publicité en ligne et analytics.</p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div class="h5 mb-0 text-success">349.00 €</div>
-                            <a href="/formations" class="btn btn-sm btn-outline-success">
-                                Voir <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produit 3 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 shadow-sm hover-lift">
-                    <div class="card-img-placeholder bg-warning d-flex align-items-center justify-content-center">
-                        <i class="bi bi-tools large-icon text-white"></i>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <span class="badge bg-warning">Outil</span>
-                            <span class="badge bg-danger">
-                                <i class="bi bi-fire"></i> Populaire
-                            </span>
-                        </div>
-                        <h5 class="card-title">Suite Outils Marketing</h5>
-                        <p class="card-text text-muted small">Pack complet d'outils pour gérer vos campagnes marketing : planification, analytics, automation.</p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div class="h5 mb-0 text-warning">149.00 €</div>
-                            <a href="/outils" class="btn btn-sm btn-outline-warning">
-                                Voir <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
+        <p class="v2-small text-center mt-4">{{ shop.PROMPT_BUNDLE.title }} : {{ shop.PROMPT_BUNDLE.price }}. Prix nets, TVA non applicable (art. 293 B du CGI).</p>
     </div>
 </section>
 
-<!-- Tous les produits -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h3 class="mb-4">Tous les produits</h3>
+<!-- Workflows IA -->
+<section class="v2-section" id="workflows" aria-labelledby="workflows-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Automatisations IA</p>
+            <h2 id="workflows-title">Des workflows prêts à tourner, installés pour vous</h2>
+            <p>Chaque automatisation est installée et adaptée à votre activité par DIGITA, puis tourne sur INES. Maintenance en option : {{ shop.WORKFLOW_MAINTENANCE }}.</p>
+        </div>
         <div class="row g-4">
-            <div class="col-12">
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle"></i> Catalogue en cours de construction. Revenez bientôt pour découvrir tous nos produits !
+            {% for w in shop.WORKFLOWS %}
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ (loop.index0 % 3) * 80 }}">
+                <div class="v2-card pg-price">
+                    <span class="v2-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
+                    <h3>{{ w.title }}</h3>
+                    <div class="pg-amount"><small>installé</small> {{ w.price }}</div>
+                    <p>{{ w.summary }}</p>
                 </div>
+            </div>
+            {% endfor %}
+        </div>
+        <p class="v2-small text-center mt-4">L'abonnement aux services utilisés (intelligence artificielle, messagerie, CRM) reste à votre charge lorsqu'il est nécessaire ; il est indiqué sur chaque fiche avant achat.</p>
+    </div>
+</section>
+
+<!-- Matériel -->
+<section class="v2-section v2-section-alt" id="materiel" aria-labelledby="materiel-title">
+    <div class="container-fluid v2-container v2-narrow">
+        <div class="v2-card v2-promise" data-aos="fade-up">
+            <span class="v2-icon"><i class="bi bi-laptop" aria-hidden="true"></i></span>
+            <div>
+                <h3 id="materiel-title">Ordinateurs et matériel pour les pros</h3>
+                <p>Une sélection d'ordinateurs, d'écrans et d'accessoires adaptés au travail de tous les jours, vendue et livrée à La Réunion par notre boutique partenaire MultiProShop, avec le même compte.</p>
+                <a href="{{ shop.MPS_URL }}" class="v2-link" target="_blank" rel="noopener">Voir MultiProShop <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA -->
-{% set ctaTitle = "Besoin d'un Produit Sur-Mesure ?" %}{% set ctaText = 'Nous créons des solutions personnalisées adaptées à vos besoins spécifiques.' %}{% set ctaLink = '/contact' %}{% set ctaButton = 'Nous contacter' %}{% set projectRoot = dirname(dirname(dirname(const('__DIR__')))) %}{% if once('includes/partials/cta-section.html') %}{% include 'includes/partials/cta-section.html' %}{% endif %}
+{% set cta_title = 'Besoin d\'une automatisation sur mesure ?' %}{% set cta_text = "Si votre besoin ne rentre dans aucun modèle, on en parle pendant le diagnostic gratuit : 30 minutes pour repérer ce qui peut tourner tout seul." %}
+{% include 'includes/partials/page-cta.html' %}

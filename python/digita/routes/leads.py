@@ -177,6 +177,37 @@ def _save_contact(d, spam=None):
     return True
 
 
+# ---------------------------------------------------------------- liste d'attente de la boutique
+WAITLIST_INTERESTS = {"prompts": "Packs de prompts", "workflows": "Automatisations IA", "materiel": "Matériel", "tout": "Tout"}
+
+
+async def boutique_waitlist(request):
+    """« Me prévenir » de /boutique (ouverture prochaine) : enregistré dans les messages de contact et
+    copié dans INES avec l'étiquette « liste-attente-boutique », pour l'e-mail d'ouverture."""
+    form = await request.form()
+    security.check_csrf(request, form)
+    security.check_rate(request, "contact")
+    mail = php.trim(form.get("email", "")).lower()
+    interest = WAITLIST_INTERESTS.get(form.get("interest", ""), "Tout")
+    if not security.valid_email(mail) or len(mail) > 100 or not form.get("consent"):
+        request.session["waitlist_flash"] = {"ok": False, "message": "Merci d'indiquer une adresse e-mail valide et de cocher la case."}
+        return redirect("/boutique#prevenir")
+    if not php.trim(form.get("site_web", "")):  # piège à robots : rien n'est enregistré, même réponse
+        await run_in_threadpool(_save_waitlist, mail, interest)
+    request.session["waitlist_flash"] = {"ok": True, "message": "C'est noté : vous serez prévenu par e-mail dès l'ouverture de la boutique."}
+    return redirect("/boutique#prevenir")
+
+
+def _save_waitlist(mail, interest):
+    try:
+        db.execute("INSERT INTO contact_messages (name, email, phone, subject, message, status) VALUES (?, ?, ?, ?, ?, ?)",
+                   [mail[:100], mail, "", "Liste d'attente boutique", f"Intérêt : {interest}", "new"])
+    except Exception as e:  # noqa: BLE001
+        log.error("Liste d'attente boutique non enregistrée : %s", e)
+    ines.push_lead(mail, mail, "boutique", f"Liste d'attente de la boutique. Intérêt : {interest}",
+                   tags=("liste-attente-boutique", interest))
+
+
 # ---------------------------------------------------------------- newsletter
 async def subscribe_newsletter(request):
     """Inscription depuis le pied de page (le formulaire pointait vers une route inexistante)."""

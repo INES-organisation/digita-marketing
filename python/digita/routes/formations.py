@@ -38,6 +38,8 @@ def show(request, slug):
         if new := redirects.target("formation", slug):
             return moved("/formations/" + new)
         return not_found(request, slug=slug, formation=f)
+    if not f["available"]:  # formation sans contenu (catalogue généré) : retirée du site
+        return moved("/formations")
     related = Formation.get_related(f["id"], f["category_id"], 3)
     session = request.session
     user_id = session.get("user_id")
@@ -121,8 +123,13 @@ def landing(request, slug):
         if new := redirects.target("formation", slug):
             return moved(f"/formations/{new}/landing")
         return not_found(request, slug=slug, formation=f)
+    if not f["available"]:
+        return moved("/formations")
+    base = base_context(request)["base_url"]
     return render_view(request, "payment/landing-content", {
         "title": f["title"] + " — Formation | DIGITA",
+        "metaRobots": "noindex, follow",  # double de la fiche /formations/<slug>, qui seule est indexée
+        "canonical": base + "/formations/" + f["slug"],
         "metaDescription": _description(f),
         "extraCss": ["/assets/css/formations.css"],
         "formation": f,
