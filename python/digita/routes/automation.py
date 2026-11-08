@@ -76,14 +76,20 @@ def _since(items, field, days=7):
     return [i for i in items if i.get(field) and php.strtotime(php.strval(i[field])) >= limit.timestamp()]
 
 
+def next_newsletter():
+    """Contenu de la prochaine lettre (lundi 10 h) : nouveautés des 7 derniers jours, comme à l'envoi."""
+    articles = _since(Article.get_all_published(10), "published_at")[:5]
+    formations = _since(Formation.get_all_published(10), "created_at")[:3]
+    return articles, formations
+
+
 def send_newsletter():
     """Lundi 10 h : seulement ce qui est paru depuis une semaine — sans nouveauté, pas d'envoi
     (l'ancienne version renvoyait chaque semaine les cinq mêmes articles)."""
     subscribers = db.fetch_all("SELECT email FROM newsletters WHERE status = 'active' ORDER BY id")
     if not subscribers:
         return {"sent": 0, "failed": 0}
-    articles = _since(Article.get_all_published(10), "published_at")[:5]
-    formations = _since(Formation.get_all_published(10), "created_at")[:3]
+    articles, formations = next_newsletter()
     if not articles and not formations:
         return {"sent": 0, "failed": 0, "skipped": "aucun contenu nouveau cette semaine"}
     subject = "La lettre DIGITA du " + php.date("d/m/Y")

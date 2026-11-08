@@ -110,7 +110,7 @@
                                         <small>{{ date('d/m/Y H:i', strtotime(contact['created_at'])) }}</small>
                                     </td>
                                     <td>
-                                        <strong>{{ h(contact['name']) }}</strong>
+                                        <a href="/admin/contacts/{{ contact['id'] }}" class="fw-bold text-decoration-none">{{ h(contact['name']) }}</a>
                                     </td>
                                     <td>
                                         <a href="mailto:{{ h(contact['email']) }}">
@@ -118,16 +118,17 @@
                                     </td>
                                     <td>
                                         {{ h(coalesce(contact['phone'], '-')) }}                                    </td>
-                                    <td>{{ h(contact['subject']) }}</td>
+                                    <td><a href="/admin/contacts/{{ contact['id'] }}" class="text-decoration-none text-reset">{{ h(contact['subject']) }}</a></td>
                                     <td>
-                                        <small>{{ h(substr(contact['message'], 0, 50)) }}...</small>
+                                        <a href="/admin/contacts/{{ contact['id'] }}" class="text-decoration-none text-muted"><small>{{ h(mb_strimwidth(coalesce(contact['message'], ''), 0, 90, '…')) }}</small></a>
                                     </td>
                                     <td>
                                         <span class="badge bg-{{ ('danger' if (contact['status'] == 'new') else (('warning' if (contact['status'] == 'read') else 'success'))) }}">
-                                            {{ ucfirst(contact['status']) }}                                        </span>
+                                            {{ {'new': 'Nouveau', 'read': 'Lu', 'replied': 'Répondu'}.get(contact['status'], contact['status']) }}                                        </span>
                                     </td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
+                                            <a href="/admin/contacts/{{ contact['id'] }}" class="btn btn-primary" title="Ouvrir le message"><i class="bi bi-envelope-open"></i></a>
                                             {% if (contact['status'] == 'new') %}                                                <a href="/admin/contacts/read?id={{ contact['id'] }}" 
                                                    class="btn btn-outline-warning" title="Marquer comme lu">
                                                     <i class="bi bi-eye"></i>

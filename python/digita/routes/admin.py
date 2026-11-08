@@ -172,14 +172,40 @@ def _contact_status(status):
     return route
 
 
+@admin_only
+def contact_show(request, contact_id):
+    """Fiche d'un message reçu : texte complet, coordonnées, réponse. L'ouvrir le marque comme lu."""
+    contact = Admin.find_contact(contact_id)
+    if not contact:
+        return redirect("/admin/contacts")
+    if contact["status"] == "new":
+        Admin.set_contact_status(contact_id, "read")
+        contact["status"] = "read"
+    newer, older = Admin.contact_neighbours(contact_id)
+    phone = "".join(c for c in php.strval(contact.get("phone")) if c.isdigit())
+    if phone.startswith("0") and len(phone) == 10:  # numéro de La Réunion : 0692…/0693… → 262692…
+        phone = "262" + phone[1:]
+    return _view(request, "admin/contact-show", {
+        "pageTitle": "Messages de contact", "contact": contact, "newerId": newer, "olderId": older,
+        "whatsapp": phone, "stats": {"contacts": Admin.contact_stats()}, "currentUser": _current_user(request),
+    })
+
+
 contact_read = _contact_status("read")
 contact_replied = _contact_status("replied")
 
 
 @admin_only
 def newsletters(request):
+    from .automation import next_newsletter
+    try:
+        articles, formations = next_newsletter()
+    except Exception as e:  # noqa: BLE001
+        log.error("Prochaine newsletter illisible : %s", e)
+        articles, formations = [], []
     return _view(request, "admin/newsletters", {
         "pageTitle": "Abonnés newsletter",
+        "nextArticles": articles, "nextFormations": formations,
         "newsletters": Admin.newsletters(),
         "stats": Admin.newsletter_stats(),
         "currentUser": _current_user(request),
@@ -742,9 +768,22 @@ def boutique_file(request, name):
     path = SHOP_FILES / name
     if name not in known or not path.is_file():
         return redirect("/admin/boutique")
-    if request.query_params.get("download"):
-        return FileResponse(path, filename=name, media_type="text/markdown; charset=utf-8")
+    if request.query_params.get("download") or path.suffix == ".pdf":
+        inline = "inline" if path.suffix == ".pdf" and not request.query_params.get("download") else "attachment"
+        return FileResponse(path, filename=name, media_type=shop.MEDIA_TYPES.get(path.suffix, "application/octet-stream"),
+                            content_disposition_type=inline)
     return _view(request, "admin/boutique-file", {
         "pageTitle": "Boutique", "fileName": name, "content": path.read_text(encoding="utf-8"),
         "currentUser": _current_user(request),
     })
+
+
+@admin_only
+def newsletter_preview(request):
+    """La lettre telle que les abonnés la recevront lundi (ou, sans nouveauté, un exemple avec les derniers articles)."""
+    from .automation import newsletter_html, next_newsletter
+    articles, formations = next_newsletter()
+    if not articles and not formations:
+        articles = Article.get_all_published(3)
+    html = newsletter_html(articles, formations, config.APP_URL.rstrip("/") + "/newsletter/unsubscribe")
+    return Response(html, media_type="text/html")

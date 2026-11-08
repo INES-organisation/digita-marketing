@@ -3,8 +3,9 @@
 Source unique des produits et de leurs prix (digita.buzz fait foi, comme services_catalog.py).
 Prix nets, TVA non applicable (art. 293 B du CGI), fixés le 08/11/2026 :
 
-- Packs de master prompts : fichiers téléchargeables (python/digita/boutique_files/), au prix d'un
-  produit numérique d'entrée de gamme. Livrés par lien personnel après paiement.
+- Packs de master prompts : PDF mis en page + version texte (Markdown) pour copier-coller, dans
+  python/digita/boutique_files/ (PDF générés par python/tools/build_boutique_pdfs.py). Livrés par lien
+  personnel après paiement.
 - Workflows IA : les 10 « Workflows Entreprise » de la bibliothèque INES (ent-001 à ent-010). Ils ne
   tournent que dans INES : on vend leur installation et leur paramétrage par DIGITA. Prix calés sur la
   grille « Automatisation » de /tarifs (490 / 790 / 1 200 €) selon la complexité du workflow (nombre de
@@ -84,12 +85,21 @@ def euros(amount):
     return f"{amount:,}".replace(",", " ") + " €"
 
 
+def _pack_files(markdown_name):
+    """Un pack se livre en PDF mis en page et en version texte (pour copier-coller les prompts)."""
+    return [markdown_name.replace(".md", ".pdf"), markdown_name]
+
+
+MEDIA_TYPES = {".pdf": "application/pdf", ".md": "text/markdown; charset=utf-8"}
+
+
 def products():
     """Tous les produits vendables, par identifiant : packs (téléchargement) et workflows (installation)."""
     items = {}
     for p in PROMPT_PACKS:
-        items[p["slug"]] = {**p, "kind": "download", "files": [p["file"]]}
-    items[PROMPT_BUNDLE["slug"]] = {**PROMPT_BUNDLE, "kind": "download", "items": [p["title"] for p in PROMPT_PACKS]}
+        items[p["slug"]] = {**p, "kind": "download", "files": _pack_files(p["file"])}
+    items[PROMPT_BUNDLE["slug"]] = {**PROMPT_BUNDLE, "kind": "download", "items": [p["title"] for p in PROMPT_PACKS],
+                                    "files": [f for p in PROMPT_PACKS for f in _pack_files(p["file"])]}
     for w in WORKFLOWS:
         items[w["slug"]] = {**w, "kind": "service", "files": []}
     return items

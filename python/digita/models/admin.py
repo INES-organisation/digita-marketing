@@ -44,6 +44,18 @@ def new_contacts():
     return db.fetch_all("SELECT * FROM contact_messages WHERE status = ? ORDER BY id", ["new"])
 
 
+def find_contact(contact_id):
+    return db.fetch("SELECT * FROM contact_messages WHERE id = ?", [key(contact_id)])
+
+
+def contact_neighbours(contact_id):
+    """Messages précédent (plus récent) et suivant (plus ancien) pour naviguer depuis la fiche."""
+    k = key(contact_id)
+    newer = db.fetch("SELECT id FROM contact_messages WHERE id > ? ORDER BY id LIMIT 1", [k])
+    older = db.fetch("SELECT id FROM contact_messages WHERE id < ? ORDER BY id DESC LIMIT 1", [k])
+    return (newer or {}).get("id"), (older or {}).get("id")
+
+
 def set_contact_status(contact_id, status):
     db.execute("UPDATE contact_messages SET status = ? WHERE id = ?", [status, key(contact_id)])
 

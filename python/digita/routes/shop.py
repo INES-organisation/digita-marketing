@@ -104,7 +104,7 @@ def download(request, token):
         return render_view(request, "boutique/link-expired-content", {
             "title": "Lien de téléchargement expiré | DIGITA", "metaRobots": "noindex, nofollow", "extraCss": CSS,
         }, status=410)
-    return FileResponse(path, filename=row["file_name"], media_type="text/markdown; charset=utf-8",
+    return FileResponse(path, filename=row["file_name"], media_type=boutique.MEDIA_TYPES.get(path.suffix, "application/octet-stream"),
                         headers={"Cache-Control": "no-store", "X-Robots-Tag": "noindex"})
 
 

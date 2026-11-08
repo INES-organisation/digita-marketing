@@ -87,3 +87,30 @@ def test_admin_shop_page_lists_products_and_prompt_files(monkeypatch):
     dl = c.get("/admin/boutique/fichier/pack-immobilier.md?download=1")
     assert dl.status_code == 200 and "attachment" in dl.headers["content-disposition"]
     assert c.get("/admin/boutique/fichier/..%2F..%2Fconfig.py", follow_redirects=False).status_code == 302
+
+
+def test_admin_can_open_a_message_and_preview_the_newsletter(monkeypatch):
+    from starlette.testclient import TestClient
+    from digita import sessions
+    from digita.main import app
+    from digita.routes import automation
+
+    store = {"e" * 64: {"user_id": 1, "user_role": "admin"}}
+    monkeypatch.setattr(sessions, "_load", lambda k: store.get(k))
+    monkeypatch.setattr(sessions, "_save", lambda k, data, touch: store.__setitem__(k, data))
+    msg = {"id": 5, "name": "Marie Hoarau", "email": "marie@ex.re", "phone": "0692 12 34 56", "subject": "Contact site - Site web",
+           "message": "Bonjour,\\nje voudrais un site pour mon salon.\\nMerci", "status": "new", "created_at": "2026-11-08 09:00:00"}
+    marked = []
+    monkeypatch.setattr(admin.Admin, "find_contact", lambda cid: dict(msg))
+    monkeypatch.setattr(admin.Admin, "set_contact_status", lambda cid, st: marked.append(st))
+    monkeypatch.setattr(admin.Admin, "contact_neighbours", lambda cid: (None, 4))
+    monkeypatch.setattr(admin.Admin, "contact_stats", lambda: {"new": 0})
+    monkeypatch.setattr(admin.Admin, "find_user", lambda uid: {"email": "admin@digita.buzz"})
+    c = TestClient(app, base_url="https://digita.buzz")
+    c.cookies.set(sessions.COOKIE, "e" * 64)
+    page = c.get("/admin/contacts/5").text
+    assert "je voudrais un site pour mon salon." in page and marked == ["read"]  # ouvert : marqué comme lu
+    assert "wa.me/262692123456" in page and "mailto:marie@ex.re?subject=" in page and "/admin/contacts/4" in page
+    monkeypatch.setattr(automation, "next_newsletter", lambda: ([{"title": "Article test", "excerpt": "Résumé", "slug": "a"}], []))
+    preview = c.get("/admin/newsletters/apercu").text
+    assert "La lettre DIGITA" in preview and "Article test" in preview

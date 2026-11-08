@@ -283,3 +283,42 @@ async def reset(request):
     await run_in_threadpool(_apply_reset, record, password)
     request.session["login_success"] = "Mot de passe modifié. Vous pouvez vous connecter."
     return redirect("/connexion")
+
+
+# ---------------------------------------------------------------- changement de mot de passe (connecté)
+def show_change_password(request):
+    if "user_id" not in request.session:
+        request.session["redirect_after_login"] = "/mon-compte/mot-de-passe"
+        return redirect("/connexion")
+    user = db.fetch("SELECT * FROM users WHERE id = ?", [request.session["user_id"]])
+    return render_view(request, "auth/change-password", {
+        "title": "Changer mon mot de passe | DIGITA", "metaRobots": "noindex, nofollow",
+        "extraCss": ["/assets/css/auth.css"], "account": {k: (user or {}).get(k) for k in ("email", "ines_sub")},
+        "error": request.session.pop("password_error", None), "success": request.session.pop("password_success", None),
+        "backUrl": "/admin/dashboard" if request.session.get("user_role") == "admin" else "/espace-client",
+    })
+
+
+async def change_password(request):
+    form = await request.form()
+    security.check_csrf(request, form)
+    if "user_id" not in request.session:
+        return redirect("/connexion")
+    security.check_rate(request, "login")
+    current, password, password2 = form.get("current", ""), form.get("password", ""), form.get("password2", "")
+    user = await run_in_threadpool(db.fetch, "SELECT * FROM users WHERE id = ?", [request.session["user_id"]])
+    error = None
+    if not user or not await run_in_threadpool(_verify, current, user.get("password") or ""):
+        error = "Le mot de passe actuel est incorrect."
+    elif password != password2:
+        error = "Les deux nouveaux mots de passe ne correspondent pas."
+    elif php.strlen(password) < 8:
+        error = "Le nouveau mot de passe doit contenir au moins 8 caractères."
+    elif password == current:
+        error = "Le nouveau mot de passe doit être différent de l'actuel."
+    if error:
+        request.session["password_error"] = error
+    else:
+        await run_in_threadpool(db.execute, "UPDATE users SET password = ? WHERE id = ?", [_hash(password), user["id"]])
+        request.session["password_success"] = "Votre mot de passe a été modifié."
+    return redirect("/mon-compte/mot-de-passe")
