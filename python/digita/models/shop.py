@@ -77,3 +77,21 @@ def use_link(token):
                       WHERE token = ? AND expires_at > NOW() AND downloads < max_downloads
                       RETURNING *""", [token])
     return row
+
+
+# ---------------------------------------------------------------- administration
+def sales_by_product():
+    """Ventes payées par produit : {slug: {"count": n, "revenue": total}}."""
+    rows = db.fetch_all("""SELECT oi.product_slug, COUNT(*) AS count, COALESCE(SUM(oi.price), 0) AS revenue
+                           FROM order_items oi JOIN orders o ON o.id = oi.order_id
+                           WHERE oi.product_type = 'pack' AND oi.product_slug IS NOT NULL AND o.status = 'paid'
+                           GROUP BY oi.product_slug""")
+    return {r["product_slug"]: {"count": int(r["count"]), "revenue": float(r["revenue"])} for r in rows}
+
+
+def recent_orders(limit=30):
+    return db.fetch_all("""SELECT o.id, o.created_at, o.status, o.amount, o.customer_email, o.consent_at,
+                                  oi.product_slug, oi.product_name
+                           FROM orders o JOIN order_items oi ON oi.order_id = o.id
+                           WHERE oi.product_type = 'pack' AND oi.product_slug IS NOT NULL
+                           ORDER BY o.id DESC LIMIT ?""", [limit])

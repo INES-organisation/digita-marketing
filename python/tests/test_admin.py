@@ -60,3 +60,30 @@ def test_redirect_chains_are_shortened(monkeypatch):
     redirects.record("article", "b", "c")
     assert [c[0] for c in calls] == ["DELETE", "UPDATE", "INSERT"]
     assert calls[1][1] == ["c", "article", "b"]  # x → b devient x → c
+
+
+def test_admin_shop_page_lists_products_and_prompt_files(monkeypatch):
+    from starlette.testclient import TestClient
+    from digita import boutique, sessions
+    from digita.main import app
+    from digita.models import shop
+
+    store = {"b" * 64: {"user_id": 1, "user_role": "admin"}, "c" * 64: {"user_id": 2, "user_role": "client"}}
+    monkeypatch.setattr(sessions, "_load", lambda k: store.get(k))
+    monkeypatch.setattr(sessions, "_save", lambda k, data, touch: store.__setitem__(k, data))
+    monkeypatch.setattr(admin.Admin, "find_user", lambda uid: {"id": uid, "username": "anthony"})
+    monkeypatch.setattr(shop, "sales_by_product", lambda: {"devis-ia": {"count": 2, "revenue": 1780.0}})
+    monkeypatch.setattr(shop, "recent_orders", lambda: [])
+    c = TestClient(app, base_url="https://digita.buzz")
+    c.cookies.set(sessions.COOKIE, "c" * 64)
+    assert c.get("/admin/boutique", follow_redirects=False).status_code == 302  # client : refusé
+    c.cookies.set(sessions.COOKIE, "b" * 64)
+    html = c.get("/admin/boutique").text
+    for p in boutique.products().values():
+        assert p["title"] in html
+    assert "1 780,00 €" in html and "manquant" not in html
+    page = c.get("/admin/boutique/fichier/pack-immobilier.md").text
+    assert "Master prompt de contexte" in page
+    dl = c.get("/admin/boutique/fichier/pack-immobilier.md?download=1")
+    assert dl.status_code == 200 and "attachment" in dl.headers["content-disposition"]
+    assert c.get("/admin/boutique/fichier/..%2F..%2Fconfig.py", follow_redirects=False).status_code == 302

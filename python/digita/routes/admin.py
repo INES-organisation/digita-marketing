@@ -7,10 +7,11 @@ la vue de contenu (Controller::viewWithLayout).
 """
 import mimetypes
 import os
+import logging
 import time as _time
 
 from starlette.concurrency import run_in_threadpool
-from starlette.responses import Response
+from starlette.responses import FileResponse, Response
 
 from .. import config, php, redirects
 from ..forms import php_post
@@ -58,6 +59,10 @@ def admin_only(fn):
     wrapper.__wrapped_admin__ = True
     wrapper.__name__ = fn.__name__
     return wrapper
+
+
+log = logging.getLogger("digita.admin")
+SHOP_FILES = config.ROOT / "python" / "digita" / "boutique_files"
 
 
 def _view(request, view, data):
@@ -710,3 +715,36 @@ def project_price(request, project_id):
     _flash(request, "success", "Prix mis à jour : " + php.number_format(price, 2) + " €")
     return redirect("/admin/projects/" + project_id)
 
+
+
+# ---------------------------------------------------------------- boutique
+@admin_only
+def boutique(request):
+    from .. import boutique as shop
+    from ..models import shop as Shop
+    try:
+        sales, orders = Shop.sales_by_product(), Shop.recent_orders()
+    except Exception as e:  # noqa: BLE001 — la page reste consultable sans les ventes
+        log.error("Ventes de la boutique illisibles : %s", e)
+        sales, orders = {}, []
+    files = {name: (SHOP_FILES / name).is_file() for p in shop.products().values() for name in p.get("files", [])}
+    return _view(request, "admin/boutique", {
+        "pageTitle": "Boutique", "shop": shop, "products": list(shop.products().values()),
+        "sales": sales, "orders": orders, "files": files, "currentUser": _current_user(request),
+    })
+
+
+@admin_only
+def boutique_file(request, name):
+    """Lecture (ou téléchargement avec ?download=1) d'un fichier de la boutique, par l'administrateur."""
+    from .. import boutique as shop
+    known = {f for p in shop.products().values() for f in p.get("files", [])}
+    path = SHOP_FILES / name
+    if name not in known or not path.is_file():
+        return redirect("/admin/boutique")
+    if request.query_params.get("download"):
+        return FileResponse(path, filename=name, media_type="text/markdown; charset=utf-8")
+    return _view(request, "admin/boutique-file", {
+        "pageTitle": "Boutique", "fileName": name, "content": path.read_text(encoding="utf-8"),
+        "currentUser": _current_user(request),
+    })
