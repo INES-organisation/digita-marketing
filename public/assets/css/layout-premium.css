@@ -344,9 +344,9 @@ body::before {
     height: 44px;
 }
 
-/* Menu centré sur la largeur du header (et non entre le logo et les boutons, de largeurs
-   différentes) dès qu'il y a la place de ne rien chevaucher */
-@media (min-width: 1200px) {
+/* Menu centré sur la largeur du header, donc sur le contenu des pages (et non entre le logo et
+   les boutons, de largeurs différentes) dès que le menu horizontal est affiché */
+@media (min-width: 992px) {
     .navbar-site > .container-fluid {
         position: relative;
     }
@@ -395,6 +395,21 @@ body::before {
     letter-spacing: 0;
     color: var(--shell-text);
     white-space: nowrap;
+}
+
+/* Écrans de 992 à 1299 px : menu et logo resserrés pour rester centrés sans rien chevaucher */
+@media (min-width: 992px) and (max-width: 1299.98px) {
+    .navbar-site .navbar-brand img {
+        height: 36px;
+    }
+
+    .navbar-site .navbar-nav {
+        gap: 0.1rem;
+    }
+
+    .navbar-site .nav-link {
+        padding: 0.35rem 0.55rem !important;
+    }
 }
 
 .navbar-site .navbar-toggler {
