@@ -1,5 +1,13 @@
 <!-- Article du blog -->
+{% macro toc_list() %}<ul class="list-unstyled mb-0 article-toc-list">
+    {% for tocItem in php_values(tableOfContents) %}<li class="{{ ('article-toc-sub' if (tocItem['level'] == 3) else '') }}"><a href="#{{ h(tocItem['slug']) }}" data-toc-link>{{ h(tocItem['text']) }}</a></li>
+    {% endfor %}</ul>{% endmacro %}
 <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+{% if (not empty(tableOfContents)) %}<details class="toc-flottant d-lg-none" data-toc-mobile>
+    <summary><i class="bi bi-list-nested" aria-hidden="true"></i><span class="toc-flottant-label">Sommaire</span><span class="toc-flottant-current" data-toc-current></span></summary>
+    <nav aria-label="Sommaire de l'article">{{ toc_list() }}</nav>
+</details>
+{% endif %}
 <article class="blog-article-page bg-premium-grid" style="padding-top: 100px !important; min-height: 100vh;">
     <div class="container py-5">
         <header class="row mb-5">
@@ -36,15 +44,9 @@
                                 {% endif %}                            </ol>
                         </nav>
 
-                        {% if (not empty(tableOfContents)) %}                            <nav class="article-toc glass-card p-4 mb-5" aria-labelledby="sommaire-titre">
+                        {% if (not empty(tableOfContents)) %}                            <nav class="article-toc glass-card p-4 mb-5 d-lg-none" aria-labelledby="sommaire-titre" data-toc-inline>
                                 <p class="fw-bold mb-3 text-blue" id="sommaire-titre"><i class="bi bi-list-nested me-2"></i>Sommaire</p>
-                                <ul class="list-unstyled mb-0">
-                                    {% for tocItem in php_values(tableOfContents) %}                                        <li class="{{ ('ms-4' if (tocItem['level'] == 3) else '') }} mb-2">
-                                            <a href="#{{ h(tocItem['slug']) }}" class="text-white-50 text-decoration-none small hover-gold transition-all d-flex align-items-center">
-                                                <i class="bi bi-chevron-right me-2" style="font-size: 0.7rem; color: var(--gold);"></i>
-                                                {{ h(tocItem['text']) }}                                            </a>
-                                        </li>
-                                    {% endfor %}                                </ul>
+                                {{ toc_list() }}
                             </nav>
                         {% endif %}
                         <!-- Corps de l'article -->
@@ -83,14 +85,7 @@
                         </div>
                     </div>
 
-                    <div class="glass-card p-4 mb-4 border-gold article-sidebar-cta">
-                        <p class="text-gold small fw-bold text-uppercase mb-2" style="letter-spacing: 2px;">Diagnostic gratuit</p>
-                        <p class="text-white fw-bold h5 mb-3">30 minutes pour faire le point sur votre présence en ligne</p>
-                        <p class="text-white-50 small mb-4">Avec le fondateur, sans engagement. Vous repartez avec les 3 actions prioritaires pour votre entreprise.</p>
-                        <a href="/diagnostic" class="btn-premium btn-premium-gold w-100 py-3">Réserver mon créneau</a>
-                    </div>
-
-                    {% if (not empty(popularArticles)) %}                    <div class="glass-card p-4 mb-4 border-glass">
+                    {% if (not empty(popularArticles)) %}                    <div class="glass-card p-4 mb-4 border-glass d-lg-none">
                         <p class="text-gold mb-3 text-uppercase small fw-bold" style="letter-spacing: 2px;"><i class="bi bi-bookmark me-2"></i>À lire aussi</p>
                         <div class="list-group list-group-flush bg-transparent">
                             {% for popular in php_values(popularArticles) %}{% if popular['slug'] != article['slug'] %}                                <a href="/blog/{{ h(popular['slug']) }}" class="list-group-item bg-transparent border-glass text-white px-0 py-3 hover-gold-text transition-all d-flex justify-content-between align-items-center gap-3">
@@ -99,7 +94,21 @@
                                 </a>
                             {% endif %}{% endfor %}                        </div>
                     </div>
-                    {% endif %}                </div>
+                    {% endif %}
+                    {# Bloc collant : le sommaire reste visible pendant toute la lecture (grand écran) #}
+                    <div class="article-sidebar-sticky">
+                        {% if (not empty(tableOfContents)) %}                        <nav class="article-toc article-toc-side glass-card p-4 mb-4 d-none d-lg-flex" aria-labelledby="sommaire-titre-side">
+                            <p class="fw-bold mb-3 text-blue" id="sommaire-titre-side"><i class="bi bi-list-nested me-2"></i>Sommaire</p>
+                            {{ toc_list() }}
+                        </nav>
+                        {% endif %}                        <div class="glass-card p-4 mb-4 border-gold article-sidebar-cta">
+                            <p class="text-gold small fw-bold text-uppercase mb-2" style="letter-spacing: 2px;">Diagnostic gratuit</p>
+                            <p class="text-white fw-bold h6 mb-2">30 minutes pour faire le point sur votre présence en ligne</p>
+                            <p class="text-white-50 small mb-3">Avec le fondateur, sans engagement.</p>
+                            <a href="/diagnostic" class="btn-premium btn-premium-gold w-100 py-2">Réserver mon créneau</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -139,5 +148,50 @@
     }
     window.addEventListener('scroll', update, { passive: true });
     update();
+})();
+(function () {
+    // Sommaire toujours visible : section en cours surlignée, sommaire flottant sur mobile.
+    var links = Array.prototype.slice.call(document.querySelectorAll('[data-toc-link]'));
+    if (!links.length) return;
+    var ids = [];
+    links.forEach(function (a) { var id = decodeURIComponent(a.getAttribute('href').slice(1)); if (ids.indexOf(id) < 0) ids.push(id); });
+    var heads = ids.map(function (id) { return document.getElementById(id); }).filter(Boolean);
+    var floating = document.querySelector('[data-toc-mobile]');
+    var current = document.querySelector('[data-toc-current]');
+    var inline = document.querySelector('[data-toc-inline]');
+    var body = document.querySelector('.article-content');
+    var activeId = null;
+    function setActive(id) {
+        if (id === activeId) return;
+        activeId = id;
+        links.forEach(function (a) {
+            var on = decodeURIComponent(a.getAttribute('href').slice(1)) === id;
+            a.classList.toggle('is-active', on);
+            if (on && a.closest('.article-toc-side')) {
+                var box = a.closest('.article-toc-list');
+                if (box && (a.offsetTop < box.scrollTop || a.offsetTop > box.scrollTop + box.clientHeight - 40)) box.scrollTop = a.offsetTop - box.clientHeight / 3;
+            }
+        });
+        if (current) {
+            var h = id && document.getElementById(id);
+            current.textContent = h ? h.textContent.trim() : '';
+        }
+    }
+    function onScroll() {
+        var line = 140, id = null;
+        for (var i = 0; i < heads.length; i++) { if (heads[i].getBoundingClientRect().top - line <= 0) id = heads[i].id; else break; }
+        setActive(id);
+        if (floating) {
+            var start = inline ? inline.getBoundingClientRect().bottom < 0 : window.scrollY > 400;
+            var end = body ? body.getBoundingClientRect().bottom < window.innerHeight * 0.5 : false;
+            var show = start && !end;
+            floating.classList.toggle('is-visible', show);
+            if (!show) floating.removeAttribute('open');
+        }
+    }
+    links.forEach(function (a) { a.addEventListener('click', function () { if (floating) floating.removeAttribute('open'); }); });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
 })();
 </script>
