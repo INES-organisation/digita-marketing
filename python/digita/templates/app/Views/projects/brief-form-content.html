@@ -1,7 +1,6 @@
 <!-- Atelier Stratégique DIGITA - Brief Interactif v2.0 -->
 <section class="brief-page bg-premium-dark-blue" style="padding-top: 150px; padding-bottom: 100px; min-height: 100vh; position: relative;">
     <div class="bg-premium-grid"></div>
-    <div class="bg-premium-glow" style="top: 20%; left: 10%;"></div>
 
     <div class="container relative-z">
         <div class="row g-5">
@@ -10,7 +9,7 @@
                 <div class="glass-card p-4 p-md-5">
                     <div class="mb-5">
                         <span class="badge bg-gold-gradient text-dark mb-2 px-3 py-2 uppercase tracking-wide">Workshop Stratégique</span>
-                        <h1 class="display-5 fw-bold text-white">Donnez vie à votre ambition</h1>
+                        <h1 class="display-5 fw-bold text-white">Décrivez votre projet</h1>
                         <p class="text-white-50">Décrivez vos enjeux et obtenez une trajectoire budgétaire instantanée.</p>
                     </div>
 
@@ -80,10 +79,10 @@
                                     <select name="business_type" id="business_type" class="form-select form-control-premium">
                                         <option value="">Sélectionner un domaine...</option>
                                         <option value="business">Services B2B / Conseil</option>
-                                        <option value="luxe">Luxe / Premium</option>
+                                        <option value="luxe">Haut de gamme</option>
                                         <option value="commerce">Social Commerce / E-shop</option>
-                                        <option value="immo">Real Estate / Immobilier</option>
-                                        <option value="tech">Saas / Tech</option>
+                                        <option value="immo">Immobilier</option>
+                                        <option value="tech">Logiciel / numérique</option>
                                         <option value="autre">Autre secteur stratégique</option>
                                     </select>
                                 </div>
@@ -136,7 +135,7 @@
                                 <div class="col-md-4">
                                     <label for="content_tone" class="form-label text-white-50 fw-bold">TON DE VOIX</label>
                                     <select name="content_tone" id="content_tone" class="form-select form-control-premium">
-                                        <option value="luxe">Exclusif / Luxe</option>
+                                        <option value="luxe">Haut de gamme</option>
                                         <option value="professionnel">Expert / Autoritaire</option>
                                         <option value="dynamique">Engagé / Disruptif</option>
                                     </select>
@@ -147,7 +146,7 @@
                                 <div class="card-body p-4">
                                     <label class="form-label text-white-50 fw-bold mb-3 small tracking-widest">MODULES D'EXPÉRIENCE</label>
                                     <div class="row g-3">
-                                        {% set features = {'contact_form': 'Lead Gen Advanced', 'blog': 'Thought Leadership (Blog)', 'booking': 'Online Conciergerie', 'newsletter': 'Engagement Automatisé', 'multilingual': 'Portée Internationale', 'analytics': 'Tracking Data Insight'} %}{% for fKey, fLabel in php_items(features) %}                                            <div class="col-md-4 col-6">
+                                        {% set features = {'contact_form': 'Formulaire de contact', 'blog': 'Blog', 'booking': 'Prise de rendez-vous en ligne', 'newsletter': 'Newsletter', 'multilingual': 'Site multilingue', 'analytics': 'Statistiques de visite'} %}{% for fKey, fLabel in php_items(features) %}                                            <div class="col-md-4 col-6">
                                                 <div class="premium-checkbox">
                                                     <input type="checkbox" name="features[]" value="{{ fKey }}" id="feat_{{ fKey }}" class="form-check-input">
                                                     <label for="feat_{{ fKey }}">{{ fLabel }}</label>
@@ -161,7 +160,7 @@
                                 <div class="premium-urgent-toggle">
                                     <input type="checkbox" name="urgent" id="urgent" value="1">
                                     <label for="urgent">
-                                        <i class="bi bi-lightning-charge-fill me-2 text-warning"></i> DÉPLOIEMENT ACCÉLÉRÉ (Priority Desk)
+                                        <i class="bi bi-lightning-charge-fill me-2 text-gold"></i> Option express : délai divisé par deux (+30 %)
                                     </label>
                                 </div>
                             </div>
@@ -171,11 +170,11 @@
                                 <div class="card-body p-0 d-flex overflow-hidden">
                                     <div class="p-4 bg-gold-gradient text-dark d-flex flex-column justify-content-center align-items-center" style="min-width: 180px;">
                                         <small class="fw-bold tracking-widest text-uppercase" style="font-size: 10px;">Estimation</small>
-                                        <div class="h2 fw-black mb-0" id="quotePrice">0.00 €</div>
+                                        <div class="h2 fw-black mb-0" id="quotePrice">—</div>
                                     </div>
                                     <div class="p-4 flex-grow-1 text-white">
                                         <h5 class="mb-1 text-gold">Note de Conseils</h5>
-                                        <p class="mb-0 small text-white-50">Cette estimation inclut l'accompagnement stratégique et le design haute-fidélité. Un expert révisera ce brief dans les 24h.</p>
+                                        <p class="mb-0 small text-white-50">Estimation indicative, calculée sur les prix de la page Tarifs. Je relis votre brief et vous envoie un devis détaillé sous 24 h ouvrées.</p>
                                     </div>
                                 </div>
                             </div>
@@ -206,13 +205,13 @@
                                     <i class="bi bi-shield-check text-gold"></i>
                                     <div class="expert-pulse"></div>
                                 </div>
-                                <h4 class="h6 text-white mb-0 uppercase tracking-widest">DIGITA Intelligence</h4>
+                                <h4 class="h6 text-white mb-0 uppercase tracking-widest">Conseils</h4>
                             </div>
                             <div id="agent-type-badge" class="badge text-gold p-0 small fw-light">ASSISTANT STRATÉGIQUE</div>
                         </div>
                         <div class="p-4">
                             <div id="expert-tip" class="expert-message-box">
-                                <p class="text-white-50 mb-0 italic">Initialisation de la console de conseil...</p>
+                                <p class="text-white-50 mb-0 italic">Des conseils s'affichent ici au fil de votre saisie.</p>
                             </div>
                             
                             <hr class="border-glass my-4">
@@ -228,7 +227,7 @@
                         <div class="p-4 bg-gold bg-opacity-5">
                             <div class="d-flex gap-2">
                                 <i class="bi bi-info-circle text-gold mt-1"></i>
-                                <p class="small text-white-50 mb-0">Ce parcours accélère de 48h la mise en œuvre de votre projet.</p>
+                                <p class="small text-white-50 mb-0">Un brief complet permet de démarrer votre projet plus vite.</p>
                             </div>
                         </div>
                     </div>
@@ -423,7 +422,7 @@
     }
     .premium-urgent-toggle label {
         cursor: pointer;
-        color: #ffc107;
+        color: var(--accent);
         font-weight: 600;
         font-size: 0.9rem;
         margin-bottom: 0;

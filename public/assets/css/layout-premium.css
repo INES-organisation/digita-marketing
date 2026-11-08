@@ -1022,3 +1022,10 @@ select.form-select:disabled {
     color: var(--accent);
     font-weight: 700;
 }
+
+/* Bouton « Diagnostic gratuit » du header (grands écrans ; ailleurs, il est dans le menu agence) */
+.navbar-site .navbar-cta {
+    padding: 0.6rem 1.15rem;
+    font-size: 0.88rem;
+    box-shadow: none;
+}

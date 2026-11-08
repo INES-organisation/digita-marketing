@@ -94,10 +94,14 @@ def booking_slots(request):
 
 
 # ---------------------------------------------------------------- formulaire de contact
-SERVICES = {
+SERVICES = {  # choix « Votre besoin » de /contact (les 5 premiers : anciennes valeurs, gardées pour les liens existants)
     "strategie": "Conseil & Stratégie", "ia": "Intelligence Artificielle", "automation": "Automatisation",
     "prestige": "Identité de marque", "ecosysteme": "Écosystème Web",
+    "agent-ia": "Agent IA 24/7", "site": "Site web ou landing page", "visibilite": "Référencement et publicité",
+    "reseaux": "Réseaux sociaux et contenus", "identite": "Identité visuelle", "formation": "Formation",
+    "autre": "Autre demande",
 }
+CONTACT_CHOICES = ["agent-ia", "site", "visibilite", "reseaux", "automation", "identite", "formation", "autre"]
 
 
 # Démarchage reçu le 02/11/2026 (« ranking is not good on Google… SEO Packages… Can I send? ») : il a
@@ -140,7 +144,7 @@ async def submit_contact(request):
     # Même réponse au visiteur : un robot ou un démarcheur ne doit pas savoir qu'il a été repéré.
     ok = await run_in_threadpool(_save_contact, data, spam_reason(form, data, request.session))
     request.session["contact_flash"] = {"ok": ok, "message": (
-        "Merci, votre message a bien été envoyé. Nous vous répondons sous 48 h." if ok
+        "Merci, votre message a bien été envoyé. Je vous réponds sous 24 h ouvrées." if ok
         else "Une erreur technique est survenue. Merci de réessayer ou d'utiliser le chat.")}
     return redirect("/contact#formulaire")
 

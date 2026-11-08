@@ -6,6 +6,7 @@
       <img src="/assets/images/logo-480.webp" alt="DIGITA, retour à l'accueil" width="190" height="44">
     </a>
     <div class="navbar-actions d-flex align-items-center gap-2 order-lg-last">
+      <a href="/diagnostic#consultant" class="v2-btn v2-btn-primary navbar-cta d-none d-xxl-inline-flex"><i class="bi bi-calendar-check" aria-hidden="true"></i> Diagnostic gratuit</a>
       <button type="button" class="theme-toggle" data-theme-toggle aria-label="Changer de thème" title="Thème clair / sombre">
         <i class="bi bi-sun-fill theme-icon-light"></i><i class="bi bi-moon-stars-fill theme-icon-dark"></i>
       </button>
@@ -23,11 +24,11 @@
     <div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
       <ul class="navbar-nav mb-2 mb-lg-0">
         {% for link in [
-            ['/a-propos', 'À propos', 'Apprendre à nous connaître'],
-            ['/services', 'Services', 'Découvrir nos services'],
-            ['/contact', 'Contact', 'Prendre contact'],
-            ['/solutions', 'Solutions', 'Nos offres clés en main'],
-            ['/tarifs', 'Tarifs', 'Trouver une offre'],
+            ['/a-propos', 'À propos', 'Qui est derrière DIGITA'],
+            ['/services', 'Services', 'Sites, visibilité, IA'],
+            ['/solutions', 'Solutions', 'Agents IA 24/7'],
+            ['/tarifs', 'Tarifs', 'Prix affichés'],
+            ['/contact', 'Contact', 'Écrire ou appeler'],
         ] %}
         {% set active = (navPath == link[0]) or navPath.startswith(link[0] ~ '/') %}
         <li class="nav-item">

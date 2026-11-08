@@ -5,7 +5,7 @@
     <img src="/assets/images/digita-192.webp" alt="" width="44" height="44">
     <div>
       <span class="sidebar-agence-brand">DIGITA</span>
-      <span class="sidebar-agence-tagline">Marketing Digital</span>
+      <span class="sidebar-agence-tagline">Agence IA &amp; digitale</span>
     </div>
     <button type="button" class="sidebar-agence-close" aria-label="Fermer le menu" data-agence-close><i class="bi bi-x-lg"></i></button>
   </div>
@@ -20,7 +20,7 @@
         </div>
       </div>
       {% if userRole == 'admin' %}<a href="/admin/dashboard" class="btn-agence btn-agence-primary"><i class="bi bi-speedometer2"></i> Administration</a>{% endif %}
-      <a href="/espace-client" class="btn-agence btn-agence-primary"><i class="bi bi-briefcase"></i> Espace membre</a>
+      <a href="/espace-client" class="btn-agence btn-agence-primary"><i class="bi bi-briefcase"></i> Mon espace</a>
       <a href="/mes-formations" class="btn-agence btn-agence-outline"><i class="bi bi-collection-play"></i> Mes formations</a>
       <a href="/admin/logout" class="btn-agence btn-agence-outline"><i class="bi bi-box-arrow-right"></i> Déconnexion</a>
     {% else %}
@@ -30,16 +30,17 @@
   </div>
 
   <nav class="sidebar-agence-nav">
-    <a href="/blog">Blog<span>Actualités & conseils</span></a>
-    <a href="/outils">Outils<span>Ressources & outils gratuits</span></a>
-    <a href="/support">Support<span>Nous pouvons vous aider</span></a>
+    <a href="/blog">Blog<span>Guides et conseils</span></a>
+    <a href="/outils">Outils<span>Audit SEO, ROI, méta-descriptions</span></a>
+    <a href="/support">Aide<span>Chat, WhatsApp, espace client</span></a>
     <hr>
-    <a href="/formations">Formations<span>Apprendre & se former</span></a>
-    <a href="/boutique">Boutique<span>Produits & services</span></a>
+    <a href="/formations">Formations<span>Apprendre à son rythme</span></a>
+    <a href="/boutique">Boutique<span>Prompts et workflows IA, bientôt</span></a>
   </nav>
 
   <div class="sidebar-agence-foot">
-    <a href="/projets/brief" class="cta-sidebar">Lancer un projet</a>
+    <a href="/diagnostic#consultant" class="cta-sidebar">Diagnostic gratuit</a>
+    <a href="https://wa.me/262693487817" class="btn-agence btn-agence-outline mt-2" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> WhatsApp</a>
   </div>
 </aside>
 <div id="sidebar-overlay" class="sidebar-agence-overlay" data-agence-close></div>

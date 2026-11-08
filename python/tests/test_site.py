@@ -163,11 +163,13 @@ def test_navigation_order_matches_footer():
     nav = html[html.index('id="mainNavbar"'):html.index('id="sidebar-agence"')]
     agence = html[html.index('id="sidebar-agence"'):html.index('id="sidebar-overlay"')]
     footer = html[html.index('class="footer-premium"'):]
-    assert order(nav, ["À propos<", "Services<", "Contact<", "Solutions<", "Tarifs<"])
+    assert order(nav, ["À propos<", "Services<", "Solutions<", "Tarifs<", "Contact<"])
     assert "Espace membre" not in nav and "nav-sep" not in nav
-    assert order(agence, [">Blog<", ">Outils<", ">Support<", "<hr>", ">Formations<", ">Boutique<", ">Lancer un projet<"])
-    assert order(footer, [">À propos<", ">Services<", ">Contact<", ">Solutions<", ">Tarifs<", "footer-sep", ">Diagnostic gratuit<", ">Espace membre<",
-                          ">Blog<", ">Outils<", ">Support<", ">Formations<", ">Boutique<", "footer-sep", ">Lancer un projet<"])
+    assert order(agence, [">Blog<", ">Outils<", ">Aide<", "<hr>", ">Formations<", ">Boutique<", ">Diagnostic gratuit<"])
+    assert order(footer, [">À propos<", ">Services<", ">Solutions<", ">Tarifs<", ">Contact<", "footer-sep", ">Diagnostic gratuit<", ">Mon espace<",
+                          ">Blog<", ">Outils<", ">Aide<", ">Formations<", ">Boutique<"])
+    # « Lancer un projet » menait au brief, qui exige un compte : remplacé par le diagnostic gratuit
+    assert "/projets/brief" not in nav + agence + footer
 
 
 def test_services_page_lists_every_category_in_order():
@@ -249,7 +251,7 @@ def test_agent_landing_is_noindex_and_uses_real_offers():
     # Agent nommé INES, prix nets (art. 293 B), WhatsApp par offre, chatbot présent, marque DIGITA.buzz.
     assert "INES, notre agent IA" in html and 'id="chatbot-container"' in html and "/assets/js/chatbot.js" in html
     assert " HT" not in html and "293 B" in html
-    assert html.count("https://wa.me/262693487817") == 1 + len(solutions.OFFERS)
+    assert html.count("https://wa.me/262693487817") == 2 + len(solutions.OFFERS)  # + action rapide du chatbot
     assert 'DIGITA<span>.buzz</span>' in html
     assert solutions.LANCEMENT["price"] in html
     # L'ancienne adresse d'aperçu mène à la page.

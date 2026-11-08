@@ -1,197 +1,121 @@
-<!-- Hero Section Contact Premium -->
-<section class="contact-hero py-6 bg-premium-glow position-relative overflow-hidden">
-    <div class="container position-relative z-2">
-        <div class="row align-items-center">
-            <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-                <span class="badge rounded-pill bg-premium-gold-gradient px-3 py-2 mb-3" style="background: var(--gold-gradient); color: var(--dark); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Consultation Stratégique</span>
-                <h1 class="display-3 fw-bold mb-4 text-white" style="font-family: var(--font-heading);">Engagez la <span class="text-gradient-gold">Transformation</span></h1>
-                <p class="lead mb-0 text-white-50" style="font-size: 1.2rem;">Nos experts sont prêts à auditer votre écosystème et à concevoir votre architecture de demain.</p>
+{% set hero_kicker = 'Contact' %}{% set hero_title = 'Parlons de votre projet' %}
+{% set hero_lead = "Un message, un appel ou un rendez-vous de 30 minutes : vous échangez directement avec Anthony, qui réalisera votre projet. Réponse sous 24 h ouvrées." %}
+{% include 'includes/partials/page-hero.html' %}
+
+<!-- Canaux -->
+<section class="v2-section" aria-labelledby="canaux-title">
+    <div class="container-fluid v2-container">
+        <h2 id="canaux-title" class="visually-hidden">Moyens de contact</h2>
+        <div class="row g-4">
+            {% for c in [
+                ['bi-calendar-check', 'Diagnostic gratuit', "30 minutes en visio ou par téléphone, le mardi ou le jeudi. Choisissez votre créneau en ligne.", '/diagnostic#consultant', 'Réserver un créneau', false],
+                ['bi-whatsapp', 'WhatsApp', "Le plus rapide pour une question ou pour envoyer une photo, un document.", 'https://wa.me/262693487817?text=' ~ ('Bonjour, je voudrais parler de mon projet avec DIGITA.' | urlencode), '06 93 48 78 17', true],
+                ['bi-telephone', 'Téléphone', "Si je ne décroche pas, laissez un message : je vous rappelle.", 'tel:+262693487817', '06 93 48 78 17', false],
+                ['bi-envelope', 'E-mail', "Pour une demande détaillée, avec vos documents en pièce jointe.", 'mailto:contact@digita.buzz', 'contact@digita.buzz', false],
+            ] %}
+            <div class="col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}">
+                <a href="{{ c[3] }}" class="v2-card v2-need"{% if c[5] %} target="_blank" rel="noopener"{% endif %}>
+                    <span class="v2-icon"><i class="bi {{ c[0] }}" aria-hidden="true"></i></span>
+                    <h3>{{ c[1] }}</h3>
+                    <p>{{ c[2] }}</p>
+                    <span class="v2-link">{{ c[4] }} <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Formulaire -->
+<section class="v2-section v2-section-alt" id="formulaire" aria-labelledby="form-title">
+    <div class="container-fluid v2-container">
+        <div class="row g-5">
+            <div class="col-lg-4" data-aos="fade-up">
+                <div class="v2-head v2-head-left">
+                    <p class="v2-kicker">Écrire un message</p>
+                    <h2 id="form-title">Décrivez votre besoin</h2>
+                    <p>Quelques lignes suffisent : votre activité, ce que vous voulez améliorer, et vos délais si vous en avez.</p>
+                </div>
+                <ul class="pg-list">
+                    <li>Réponse sous 24 h ouvrées</li>
+                    <li>Devis gratuit et détaillé, aux <a href="/tarifs">prix publics</a></li>
+                    <li>Vos informations ne servent qu'à vous répondre</li>
+                </ul>
+                <div class="contact-address v2-card v2-promise mt-4">
+                    <span class="v2-icon"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
+                    <div>
+                        <h3>DIGITA</h3>
+                        <p>8 bis impasse des Jonquilles<br>97430 Le Tampon, La Réunion<br>Interventions dans toute l'île, en visio ou sur place.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8" data-aos="fade-up" data-aos-delay="80">
+                <form action="/contact" method="POST" class="contact-form v2-card">
+                    {{ CsrfMiddleware_field() }}
+                    {# Piège à robots : invisible et ignoré des lecteurs d'écran, seul un robot le remplit. #}
+                    <div style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+                        <label for="contact-site-web">Ne pas remplir</label>
+                        <input type="text" id="contact-site-web" name="site_web" tabindex="-1" autocomplete="off">
+                    </div>
+                    {% if contactFlash %}<div class="alert {{ 'alert-success' if contactFlash['ok'] else 'alert-danger' }} mb-4" role="status">{{ h(contactFlash['message']) }}</div>{% endif %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="contact-nom">Nom et prénom *</label>
+                            <input type="text" class="form-control" id="contact-nom" name="nom" required autocomplete="name">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="contact-entreprise">Entreprise</label>
+                            <input type="text" class="form-control" id="contact-entreprise" name="entreprise" autocomplete="organization">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="contact-email">E-mail *</label>
+                            <input type="email" class="form-control" id="contact-email" name="email" required autocomplete="email">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="contact-telephone">Téléphone (facultatif)</label>
+                            <input type="tel" class="form-control" id="contact-telephone" name="telephone" autocomplete="tel">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="contact-service">Votre besoin *</label>
+                            <select class="form-select" id="contact-service" name="service" required>
+                                <option value="">Choisir…</option>
+                                {% for key, label in contactChoices %}<option value="{{ key }}">{{ label }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="contact-message">Votre message *</label>
+                            <textarea class="form-control" id="contact-message" name="message" rows="5" required placeholder="Mon activité, ce que je voudrais améliorer, mes délais…"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rgpd" required>
+                                <label class="form-check-label" for="rgpd">J'accepte que mes informations soient utilisées pour répondre à ma demande, comme décrit dans la <a href="/politique-confidentialite">politique de confidentialité</a>.</label>
+                            </div>
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="submit" class="v2-btn v2-btn-primary"><i class="bi bi-send" aria-hidden="true"></i> Envoyer mon message</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Contact Info & Form Premium -->
-<section class="py-6 bg-premium-grid animated">
-    <div class="container">
-        <div class="row justify-content-center mb-6">
-            <div class="col-lg-10 text-center" data-aos="fade-up">
-                <h2 class="display-5 fw-bold text-white mb-4">Architecture de Collaboration</h2>
-                <p class="lead text-white-50">Vous avez une vision, nous avons l'expertise technologique pour la concrétiser. Choisissez votre canal de communication privilégié.</p>
-            </div>
+<!-- FAQ -->
+<section class="v2-section" id="faq" aria-labelledby="faq-title">
+    <div class="container-fluid v2-container v2-narrow">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Questions fréquentes</p>
+            <h2 id="faq-title">Avant de nous écrire</h2>
         </div>
-
-        <div class="row g-4 mb-6">
-            <!-- Contact Cards Glass -->
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="glass-card h-100 text-center p-5 border-glass hover-blue-border transition-all">
-                    <div class="contact-icon-circle bg-premium-dark-blue border-blue rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
-                        <i class="bi bi-envelope-at fs-2 text-blue shadow-blue-glow"></i>
-                    </div>
-                    <h4 class="text-white fw-bold mb-3">Expertise Mail</h4>
-                    <p class="text-white-50 mb-2">contact@digita.buzz</p>
-                    <div class="mt-4">
-                        <a href="mailto:contact@digita.buzz" class="btn-premium btn-premium-blue py-2 px-4 small">Nouveau Brief</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="glass-card h-100 text-center p-5 border-gold shadow-gold-glow transition-all">
-                    <div class="contact-icon-circle bg-premium-dark-blue border-gold rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
-                        <i class="bi bi-telephone-outbound fs-2 text-gold shadow-gold-glow"></i>
-                    </div>
-                    <h4 class="text-white fw-bold mb-3">Ligne Directe</h4>
-                    <p class="text-white-50 mb-2">06 93 48 78 17</p>
-                    <div class="mt-4">
-                        <a href="tel:+262693487817" class="btn-premium btn-premium-gold py-2 px-4 small">Appel Stratégique</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="glass-card h-100 text-center p-5 border-glass hover-blue-border transition-all">
-                    <div class="contact-icon-circle bg-premium-dark-blue border-glass rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
-                        <i class="bi bi-geo-fill fs-2 text-white-50"></i>
-                    </div>
-                    <h4 class="text-white fw-bold mb-3">Hub Réunion</h4>
-                    <p class="text-white-50 mb-2">Interventions Globales</p>
-                    <div class="mt-4">
-                        <a href="#" class="btn-premium py-2 px-4 glass-card border-glass text-white small">Localiser le Hub</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contact Form Glass -->
-        <div class="row justify-content-center">
-            <div class="col-lg-10" data-aos="fade-up" data-aos-delay="400">
-                <div class="glass-card p-0 border-glass overflow-hidden shadow-lg">
-                    <div class="row g-0">
-                        <div class="col-lg-4 bg-premium-dark-blue p-5 border-end border-glass d-flex flex-column justify-content-center">
-                            <h3 class="text-white fw-bold mb-4">Prêt pour le Diagnostic ?</h3>
-                            <p class="text-white-50 small mb-4">Notre orchestrateur d'agents analysera votre demande pour vous proposer le meilleur expert conseil dès le premier échange.</p>
-                            <ul class="list-unstyled text-white-50 small">
-                                <li class="mb-3"><i class="bi bi-check-circle text-gold me-2"></i> Audit initial offert</li>
-                                <li class="mb-3"><i class="bi bi-check-circle text-gold me-2"></i> Réponse sous 48h</li>
-                                <li class="mb-3"><i class="bi bi-check-circle text-gold me-2"></i> Confidentialité totale</li>
-                            </ul>
-                        </div>
-                        <div class="col-lg-8 p-5">
-                            <form action="/contact" method="POST" class="premium-form" id="formulaire">
-                                {{ CsrfMiddleware_field() }}
-                                {# Piège à robots : invisible et ignoré des lecteurs d'écran, seul un robot le remplit. #}
-                                <div style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
-                                    <label for="contact-site-web">Ne pas remplir</label>
-                                    <input type="text" id="contact-site-web" name="site_web" tabindex="-1" autocomplete="off">
-                                </div>
-                                {% if contactFlash %}<div class="alert {{ 'alert-success' if contactFlash['ok'] else 'alert-danger' }} mb-4" role="status">{{ h(contactFlash['message']) }}</div>{% endif %}
-                                <div class="row g-4">
-                                    <div class="col-md-6">
-                                        <label class="form-label text-white-50 small" for="contact-nom">Nom complet</label>
-                                        <input type="text" class="form-control glass-card border-glass text-white p-3" id="contact-nom" name="nom" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label text-white-50 small" for="contact-entreprise">Organisation</label>
-                                        <input type="text" class="form-control glass-card border-glass text-white p-3" id="contact-entreprise" name="entreprise">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label text-white-50 small" for="contact-email">E-mail professionnel</label>
-                                        <input type="email" class="form-control glass-card border-glass text-white p-3" id="contact-email" name="email" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label text-white-50 small" for="contact-telephone">Téléphone (facultatif)</label>
-                                        <input type="tel" class="form-control glass-card border-glass text-white p-3" id="contact-telephone" name="telephone">
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label text-white-50 small" for="contact-service">Expertise Recherchée</label>
-                                        <select class="form-select glass-card border-glass text-white p-3" id="contact-service" name="service" required style="background-color: transparent;">
-                                            <option value="" class="bg-dark">Sélectionnez un domaine</option>
-                                            <option value="strategie" class="bg-dark">Conseil & Stratégie</option>
-                                            <option value="ia" class="bg-dark">Intelligence Artificielle</option>
-                                            <option value="automation" class="bg-dark">Automatisation Cœur</option>
-                                            <option value="prestige" class="bg-dark">Identité de Prestige</option>
-                                            <option value="ecosysteme" class="bg-dark">Ecosystème Web</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label text-white-50 small" for="contact-message">Brief de votre projet</label>
-                                        <textarea class="form-control glass-card border-glass text-white p-3" id="contact-message" name="message" rows="4" required placeholder="Décrivez vos enjeux stratégiques..."></textarea>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="rgpd" required>
-                                            <label class="form-check-label text-white-50 small" for="rgpd">
-                                                J'autorise l'analyse de ces données pour l'établissement de ma recommandation stratégique.
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 text-end">
-                                        <button type="submit" class="btn-premium btn-premium-gold px-5 py-3">Lancer l'Analyse</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- FAQ Section Premium -->
-<section class="py-6 bg-premium-dark-blue border-top border-glass">
-    <div class="container">
-        <div class="row justify-content-center mb-6">
-            <div class="col-lg-8 text-center" data-aos="fade-up">
-                <h5 class="text-gold mb-3 fw-bold" style="letter-spacing: 2px;">FAQ PRESTIGE</h5>
-                <h2 class="display-5 fw-bold text-white mb-4">Questions Fréquentes</h2>
-            </div>
-        </div>
-
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="accordion accordion-premium" id="faqAccordion">
-                    <div class="accordion-item bg-transparent border-glass mb-3" data-aos="fade-up">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button glass-card border-0 text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                Quelle est votre méthodologie de conseil ?
-                            </button>
-                        </h2>
-                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-white-50">
-                                Nous combinons l'audit technique (Dette, Processus) avec une analyse stratégique de votre marché pour concevoir des systèmes qui ne se contentent pas de fonctionner, mais qui performent et évoluent de manière autonome.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item bg-transparent border-glass mb-3" data-aos="fade-up">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button glass-card border-0 text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                Comment gérez-vous l'intégration de l'IA ?
-                            </button>
-                        </h2>
-                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-white-50">
-                                L'IA n'est pas un gadget pour nous. Nous développons des orchestrateurs d'agents spécialisés (LLM, RAG) capables d'automatiser des flux complexes : de la qualification de leads à la production de contenu stratégique.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item bg-transparent border-glass mb-3" data-aos="fade-up">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button glass-card border-0 text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                                Comment mesurez-vous les résultats ?
-                            </button>
-                        </h2>
-                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-white-50">
-                                Dès le diagnostic, nous fixons avec vous des objectifs chiffrés : demandes de devis, rendez-vous pris, temps gagné sur les tâches répétitives. Ils sont suivis à chaque étape, pour que vous voyiez concrètement ce que chaque action vous rapporte.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="v2-faq">
+            {% for q in faqSchema %}
+            <details class="v2-faq-item"{% if loop.first %} open{% endif %}>
+                <summary>{{ q.question }}<i class="bi bi-plus-lg" aria-hidden="true"></i></summary>
+                <p>{{ q.answer }}</p>
+            </details>
+            {% endfor %}
         </div>
     </div>
 </section>

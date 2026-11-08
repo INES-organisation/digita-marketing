@@ -1,20 +1,32 @@
-/* ==================== CONTACT STYLES ==================== */
-
-/* Hero Section - Bleu (conservé) */
-.contact-hero {
-    margin-top: 0 !important;
-    padding-top: 120px !important;
+/* ==================== CONTACT ====================
+   Cartes et sections : home-v2.css et pages-v2.css. Ici, le formulaire. */
+.contact-form {
+    position: relative;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
 }
 
-/* Contact Icon Circle - Remplace style inline */
-.contact-icon-circle {
-    width: 70px;
-    height: 70px;
+.contact-form .form-label,
+.contact-form .form-check-label {
+    color: var(--content-text);
+    font-size: 0.9rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .contact-hero {
-        padding-top: 100px !important;
-    }
+.contact-form .form-control,
+.contact-form .form-select {
+    padding: 0.8rem 1rem;
+    border-radius: 14px;
+    border: 1px solid var(--content-border);
+    background-color: var(--page-bg);
+    color: var(--content-heading);
+}
+
+.contact-form .form-control:focus,
+.contact-form .form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.contact-form .form-check-label a,
+.pg-list a {
+    color: var(--accent);
 }

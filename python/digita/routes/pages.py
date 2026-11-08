@@ -9,6 +9,7 @@ from .. import accueil
 from .. import boutique as boutique_data
 from ..realisations import REALISATIONS
 from ..render import base_context, render_page, render_view
+from . import leads
 from .common import moved, redirect
 
 
@@ -215,6 +216,18 @@ def diagnostic(request):
     })
 
 
+CONTACT_FAQ = [
+    {"question": "Sous quel délai me répondez-vous ?",
+     "answer": "Sous 24 heures ouvrées, par e-mail ou par téléphone selon votre préférence. Sur WhatsApp, c'est "
+               "souvent plus rapide."},
+    {"question": "Le premier échange est-il payant ?",
+     "answer": "Non. Le diagnostic de 30 minutes est gratuit et sans engagement : vous repartez avec 2 ou 3 actions "
+               "prioritaires, et un devis détaillé si vous le souhaitez."},
+    {"question": "Travaillez-vous en dehors du Tampon ?",
+     "answer": "Oui, avec des entreprises de toute La Réunion, en visio, par téléphone ou sur place selon le projet."},
+]
+
+
 def contact(request):
     request.session["contact_form_at"] = php.time()  # anti-robot : délai de remplissage (leads.spam_reason)
     return render_view(request, "contact/index-content", {
@@ -223,6 +236,8 @@ def contact(request):
                            "ou d'IA ? Réponse rapide et diagnostic gratuit de 30 min.",
         "extraCss": ["/assets/css/contact.css"],
         "contactFlash": request.session.pop("contact_flash", None),
+        "contactChoices": [(k, leads.SERVICES[k]) for k in leads.CONTACT_CHOICES],
+        "faqSchema": CONTACT_FAQ,
     })
 
 
