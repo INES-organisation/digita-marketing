@@ -1,0 +1,14 @@
+{# Bandeau de tête commun aux pages internes. Variables : hero_kicker, hero_title, hero_lead, hero_cta (bool) #}
+<section class="pg-hero">
+    <div class="container-fluid">
+        {% if hero_kicker is defined and hero_kicker %}<p class="v2-badge"><span class="v2-dot"></span>{{ hero_kicker }}</p>{% endif %}
+        <h1>{{ hero_title }}</h1>
+        {% if hero_lead is defined and hero_lead %}<p class="pg-lead">{{ hero_lead }}</p>{% endif %}
+        {% if hero_cta is defined and hero_cta %}
+        <div class="v2-actions">
+            <a href="/diagnostic#consultant" class="v2-btn v2-btn-primary"><i class="bi bi-calendar-check" aria-hidden="true"></i> Diagnostic gratuit</a>
+            <a href="https://wa.me/262693487817?text={{ 'Bonjour, je voudrais parler de mon projet avec DIGITA.' | urlencode }}" class="v2-btn v2-btn-whatsapp" target="_blank" rel="noopener"><i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp</a>
+        </div>
+        {% endif %}
+    </div>
+</section>

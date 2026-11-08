@@ -1,0 +1,15 @@
+{# Appel final commun : diagnostic gratuit (rendez-vous de 30 min) et WhatsApp. Variables facultatives : cta_title, cta_text #}
+<section class="v2-section v2-final" aria-labelledby="final-title">
+    <div class="container-fluid v2-container v2-narrow">
+        <div class="v2-final-card" data-aos="zoom-in">
+            <p class="v2-kicker">Première étape</p>
+            <h2 id="final-title">{{ cta_title if cta_title is defined and cta_title else 'Parlons de votre projet' }}</h2>
+            <p>{{ cta_text if cta_text is defined and cta_text else "30 minutes en visio ou par téléphone pour faire le point sur votre activité. Vous repartez avec des priorités claires, sans aucun engagement." }}</p>
+            <div class="v2-actions justify-content-center">
+                <a href="/diagnostic#consultant" class="v2-btn v2-btn-primary"><i class="bi bi-calendar-check" aria-hidden="true"></i> Réserver mon diagnostic gratuit</a>
+                <a href="https://wa.me/262693487817?text={{ 'Bonjour, je voudrais parler de mon projet avec DIGITA.' | urlencode }}" class="v2-btn v2-btn-whatsapp" target="_blank" rel="noopener"><i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp</a>
+            </div>
+            <p class="v2-small">Gratuit · Sans engagement · Rappel sous 24 h ouvrées</p>
+        </div>
+    </div>
+</section>

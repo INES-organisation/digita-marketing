@@ -1,165 +1,159 @@
-<!-- Hero Section -->
-<section class="about-hero py-5 bg-primary text-white">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-        <h1 class="display-4 fw-bold mb-4">À Propos de Digita Marketing</h1>
-        <p class="lead mb-0">Apprendre à nous connaître</p>
-      </div>
+{% set hero_kicker = 'Qui est derrière DIGITA' %}{% set hero_title = 'Une agence à taille humaine, un seul interlocuteur' %}
+{% set hero_lead = "DIGITA aide les TPE et PME de La Réunion à gagner des clients et du temps : sites qui convertissent, automatisations et agents IA, expliqués simplement et à prix affichés." %}{% set hero_cta = true %}
+{% include 'includes/partials/page-hero.html' %}
+
+<!-- Fondateur -->
+<section class="v2-section" aria-labelledby="fondateur-title">
+    <div class="container-fluid v2-container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-5" data-aos="fade-up">
+                <figure class="about-portrait">
+                    <img src="/assets/images/v2/fondateur-anthony-legros.webp" alt="Anthony Legros, fondateur de DIGITA" width="480" height="480" loading="lazy">
+                </figure>
+            </div>
+            <div class="col-lg-7" data-aos="fade-up">
+                <div class="v2-head v2-head-left">
+                    <p class="v2-kicker">Le fondateur</p>
+                    <h2 id="fondateur-title">Anthony Legros, entrepreneur avant d'être prestataire</h2>
+                </div>
+                <div class="pg-prose about-prose">
+                    <p>Je dirige Tony Alpha 8.0, mon entreprise individuelle basée au Tampon. J'aide les particuliers et les entreprises à se lancer et à se développer : je crée du contenu, des sites, des applications, des boutiques en ligne et des automatisations, pour mes propres activités comme pour mes clients.</p>
+                    <p>DIGITA est née d'un constat simple : les outils qui font gagner du temps aux grandes entreprises (agents IA, relances automatiques, pages qui convertissent) sont devenus accessibles, mais les petites entreprises n'ont ni le temps ni l'interlocuteur pour les mettre en place. Je les construis d'abord pour mes propres activités, puis je les adapte à votre métier.</p>
+                    <p>DIGITA est jeune : plutôt que des chiffres gonflés, je vous propose de juger sur pièce, avec des démonstrations que vous pouvez tester dès maintenant et des tarifs publics.</p>
+                </div>
+                <div class="v2-demos mt-4">
+                    <p class="v2-demos-title">À tester tout de suite</p>
+                    <a href="https://lp48.digita.buzz" class="v2-demo" target="_blank" rel="noopener">
+                        <i class="bi bi-lightning-charge" aria-hidden="true"></i>
+                        <span><strong>LP48</strong> : une page de vente livrée en 48 h</span>
+                        <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://agent24-7.digita.buzz" class="v2-demo" target="_blank" rel="noopener">
+                        <i class="bi bi-robot" aria-hidden="true"></i>
+                        <span><strong>INES</strong> : discutez avec notre agent IA 24/7</span>
+                        <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </section>
 
-<!-- Notre Histoire -->
-<section class="py-5 bg-white">
-  <div class="container">
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-10" data-aos="fade-up">
-        <h2 class="text-center mb-4">Notre Histoire</h2>
-        <p class="lead text-center mb-4">Digita Marketing est née d'une passion commune pour le digital et d'une volonté d'accompagner les entreprises dans leur transformation numérique.</p>
-        <p class="text-muted text-center">Fondée en 2019, notre agence s'est rapidement imposée comme un acteur incontournable du marketing digital à La Réunion et au-delà. Nous avons accompagné plus de 200 entreprises dans leur développement digital, des startups innovantes aux PME établies.</p>
-      </div>
+<!-- Ce que fait DIGITA -->
+<section class="v2-section v2-section-alt" aria-labelledby="metier-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Ce que je fais pour vous</p>
+            <h2 id="metier-title">Trois leviers, un objectif : plus de clients, moins de tâches</h2>
+        </div>
+        <div class="row g-4">
+            {% for c in [
+                ['bi-window-sidebar', 'Être trouvé et choisi', "Sites vitrines, pages de vente et référencement local pour que vos clients vous trouvent et vous contactent.", '/services#sites-web', 'Voir les sites et le SEO'],
+                ['bi-diagram-3', 'Automatiser le répétitif', "Relances de devis, prises de rendez-vous, rappels, suivi des prospects : ce qui vous prend des heures tourne tout seul.", '/services#ia-automation', "Voir l'automatisation"],
+                ['bi-robot', 'Un agent IA qui répond 24/7', "INES répond à vos clients, qualifie les demandes et prend les rendez-vous, même quand vous êtes sur un chantier.", '/solutions', 'Voir les solutions'],
+            ] %}
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}">
+                <a href="{{ c[3] }}" class="v2-card v2-need">
+                    <span class="v2-icon"><i class="bi {{ c[0] }}" aria-hidden="true"></i></span>
+                    <h3>{{ c[1] }}</h3>
+                    <p>{{ c[2] }}</p>
+                    <span class="v2-link">{{ c[4] }} <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
-        <div class="text-center p-4 bg-light rounded">
-          <div class="display-4 fw-bold text-primary mb-2">5+</div>
-          <h5>Années d'expérience</h5>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
-        <div class="text-center p-4 bg-light rounded">
-          <div class="display-4 fw-bold text-primary mb-2">200+</div>
-          <h5>Projets réalisés</h5>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
-        <div class="text-center p-4 bg-light rounded">
-          <div class="display-4 fw-bold text-primary mb-2">15</div>
-          <h5>Experts passionnés</h5>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
-        <div class="text-center p-4 bg-light rounded">
-          <div class="display-4 fw-bold text-primary mb-2">95%</div>
-          <h5>Clients satisfaits</h5>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
 
-<!-- Nos Valeurs -->
-<section class="py-5 bg-light">
-  <div class="container">
-    <h2 class="text-center mb-5" data-aos="fade-up">Nos Valeurs</h2>
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="about-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-              <i class="bi bi-lightbulb fs-2 text-primary"></i>
-            </div>
-            <h5 class="card-title">Innovation</h5>
-            <p class="card-text text-muted">Nous restons à la pointe des technologies et des tendances pour offrir des solutions toujours plus performantes.</p>
-          </div>
+<!-- Méthode -->
+<section class="v2-section" aria-labelledby="methode-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Ma méthode</p>
+            <h2 id="methode-title">Simple, transparente, sans engagement long</h2>
         </div>
-      </div>
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="about-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-              <i class="bi bi-heart fs-2 text-primary"></i>
-            </div>
-            <h5 class="card-title">Passion</h5>
-            <p class="card-text text-muted">Chaque projet est une nouvelle aventure que nous abordons avec enthousiasme et dévouement.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="about-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-              <i class="bi bi-shield-check fs-2 text-primary"></i>
-            </div>
-            <h5 class="card-title">Transparence</h5>
-            <p class="card-text text-muted">Communication claire, tarifs transparents et reporting régulier pour une collaboration sereine.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="about-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-              <i class="bi bi-people fs-2 text-primary"></i>
-            </div>
-            <h5 class="card-title">Proximité</h5>
-            <p class="card-text text-muted">Une relation de confiance basée sur l'écoute, la disponibilité et l'accompagnement personnalisé.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="about-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-              <i class="bi bi-trophy fs-2 text-primary"></i>
-            </div>
-            <h5 class="card-title">Excellence</h5>
-            <p class="card-text text-muted">Nous visons l'excellence dans chaque détail pour garantir des résultats qui dépassent vos attentes.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="600">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="about-icon-circle bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-              <i class="bi bi-graph-up-arrow fs-2 text-primary"></i>
-            </div>
-            <h5 class="card-title">Résultats</h5>
-            <p class="card-text text-muted">Notre succès se mesure à votre réussite. Nous nous engageons pour des résultats concrets et mesurables.</p>
-          </div>
-        </div>
-      </div>
+        <ol class="v2-steps">
+            {% for step in [
+                ['bi-chat-dots', 'Diagnostic gratuit', "30 minutes pour comprendre votre activité et repérer ce qui vous fait perdre du temps ou des clients.", '#d4af37'],
+                ['bi-file-earmark-text', 'Devis clair', "Une proposition chiffrée, avec les prix publics de la grille et des délais écrits.", '#3b82f6'],
+                ['bi-tools', 'Mise en place', "Je construis, vous validez à chaque étape. Pas de jargon, pas de surprise.", '#10b981'],
+                ['bi-graph-up-arrow', 'Suivi', "On mesure les résultats et on ajuste. Vous restez propriétaire de tout.", '#a855f7'],
+            ] %}
+            <li class="v2-step" style="--c: {{ step[3] }}" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 80 }}">
+                <span class="v2-step-num">0{{ loop.index }}</span>
+                <span class="v2-icon"><i class="bi {{ step[0] }}" aria-hidden="true"></i></span>
+                <h3>{{ step[1] }}</h3>
+                <p>{{ step[2] }}</p>
+            </li>
+            {% endfor %}
+        </ol>
     </div>
-  </div>
 </section>
 
-<!-- Notre Mission -->
-<section class="py-5 bg-white">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6" data-aos="fade-right">
-        <h2 class="mb-4">Notre Mission</h2>
-        <p class="lead mb-4">Démocratiser l'accès au digital pour toutes les entreprises</p>
-        <p class="text-muted mb-4">Nous croyons fermement que chaque entreprise, quelle que soit sa taille, mérite une présence digitale exceptionnelle. Notre mission est de rendre les technologies digitales accessibles et performantes pour tous.</p>
-        <ul class="list-unstyled">
-          <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Accompagner les entrepreneurs dans leur transformation digitale</li>
-          <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Créer des solutions sur-mesure adaptées à chaque budget</li>
-          <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Former et transmettre nos compétences à nos clients</li>
-          <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Innover constamment pour rester à la pointe</li>
-        </ul>
-      </div>
-      <div class="col-lg-6" data-aos="fade-left">
-        <div class="bg-primary bg-opacity-10 rounded p-5 text-center">
-          <i class="bi bi-bullseye display-1 text-primary mb-4"></i>
-          <h4 class="mb-3">Notre Vision</h4>
-          <p class="text-muted">Devenir le partenaire digital de référence dans l'Océan Indien en offrant des solutions innovantes qui transforment durablement les entreprises.</p>
+<!-- Engagements -->
+<section class="v2-section v2-section-alt" aria-labelledby="engagements-title">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Mes engagements</p>
+            <h2 id="engagements-title">Ce que vous pouvez attendre de DIGITA</h2>
         </div>
-      </div>
+        <div class="row g-3">
+            {% for e in [
+                ['bi-person-check', 'Un seul interlocuteur', "Vous parlez directement à la personne qui réalise votre projet."],
+                ['bi-tag', 'Des prix affichés', "Tarifs publics, devis gratuit et détaillé, TVA non applicable (art. 293 B du CGI)."],
+                ['bi-key', 'Vous êtes propriétaire', "Nom de domaine, contenus et accès : tout est à vous."],
+                ['bi-unlock', "Pas de prise d'otage", "Engagements courts et écrits, vous récupérez tout si vous partez."],
+                ['bi-geo-alt', 'Basé à La Réunion', "Au Tampon, au service des entreprises de toute l'île, en visio ou sur place."],
+                ['bi-cpu', "L'IA utile, pas gadget", "Des outils modernes appliqués à votre métier, expliqués simplement."],
+            ] %}
+            <div class="col-sm-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ (loop.index0 % 3) * 80 }}">
+                <div class="v2-card v2-promise">
+                    <span class="v2-icon"><i class="bi {{ e[0] }}" aria-hidden="true"></i></span>
+                    <div>
+                        <h3>{{ e[1] }}</h3>
+                        <p>{{ e[2] }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-  </div>
 </section>
 
-<!-- CTA -->
-<section class="py-5 bg-primary text-white">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center" data-aos="fade-up">
-        <h3 class="mb-4">Prêt à démarrer votre projet avec nous ?</h3>
-        <p class="lead mb-4">Discutons ensemble de vos objectifs et trouvons la solution idéale pour votre entreprise.</p>
-        <a href="/contact" class="btn btn-light btn-lg px-5">Contactez-nous</a>
-      </div>
+<!-- Fiche entreprise -->
+<section class="v2-section" aria-labelledby="fiche-title">
+    <div class="container-fluid v2-container v2-narrow">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">En bref</p>
+            <h2 id="fiche-title">L'entreprise</h2>
+        </div>
+        <div class="row g-3">
+            {% for f in [
+                ['bi-building', 'Statut', "Anthony Legros, entrepreneur individuel (TONY ALPHA 8.0), nom commercial Digita Marketing. SIREN 844 384 198. TVA non applicable, art. 293 B du CGI."],
+                ['bi-geo-alt', 'Adresse', "8 bis impasse des Jonquilles, 97430 Le Tampon, La Réunion."],
+                ['bi-telephone', 'Contact', "06 93 48 78 17 (appel ou WhatsApp) · contact@digita.buzz"],
+                ['bi-clock', 'Disponibilité', "Diagnostics en visio ou par téléphone le mardi et le jeudi, de 9 h à 18 h (heure de La Réunion). Messages : réponse sous 24 h ouvrées."],
+            ] %}
+            <div class="col-sm-6">
+                <div class="v2-card v2-promise">
+                    <span class="v2-icon"><i class="bi {{ f[0] }}" aria-hidden="true"></i></span>
+                    <div>
+                        <h3>{{ f[1] }}</h3>
+                        <p>{{ f[2] }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-  </div>
 </section>
+
+{% set cta_title = 'Faisons connaissance' %}{% set cta_text = "30 minutes en visio ou par téléphone, gratuitement : vous me parlez de votre activité, je vous dis franchement ce qui vaut la peine d'être fait." %}
+{% include 'includes/partials/page-cta.html' %}
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "AboutPage", "url": "https://digita.buzz/a-propos", "name": "À propos de DIGITA",
+ "mainEntity": {"@type": "Person", "name": "Anthony Legros", "jobTitle": "Fondateur de DIGITA", "image": "https://digita.buzz/assets/images/v2/fondateur-anthony-legros.webp",
+   "worksFor": {"@type": "ProfessionalService", "name": "DIGITA", "url": "https://digita.buzz", "telephone": "+262693487817",
+     "address": {"@type": "PostalAddress", "streetAddress": "8 bis impasse des Jonquilles", "postalCode": "97430", "addressLocality": "Le Tampon", "addressRegion": "La Réunion", "addressCountry": "FR"}}}}
+</script>

@@ -52,7 +52,10 @@
     
     <!-- Coque du site : navigation, pied de page, chatbot -->
     <link rel="stylesheet" href="/assets/css/layout-premium.css?v={{ asset_v }}">
-    {% if not isHomePage %}<link rel="stylesheet" href="/assets/css/sidebar-onglet.css?v={{ asset_v }}">{% endif %}
+    {% if not isHomePage %}<link rel="stylesheet" href="/assets/css/sidebar-onglet.css?v={{ asset_v }}">
+    <!-- Composants de l'accueil (cartes, boutons, FAQ) réutilisés par les pages, et leurs gabarits communs -->
+    <link rel="stylesheet" href="/assets/css/home-v2.css?v={{ asset_v }}">
+    <link rel="stylesheet" href="/assets/css/pages-v2.css?v={{ asset_v }}">{% endif %}
     
     <!-- CSS Spécifique aux pages (optionnel) - EN DERNIER pour priorité -->
     {% if (isset(extraCss)) %}        {% for css in php_values(extraCss) %}            <link rel="stylesheet" href="{{ css }}?v={{ asset_v }}">

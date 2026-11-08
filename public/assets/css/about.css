@@ -1,20 +1,19 @@
-/* ==================== ABOUT STYLES ==================== */
-
-/* Hero Section - Bleu (conservé) */
-.about-hero {
-    margin-top: 0 !important;
-    padding-top: 120px !important;
+/* ==================== À PROPOS ====================
+   La page reprend les composants de l'accueil (home-v2.css) et des pages (pages-v2.css). */
+.about-portrait {
+    margin: 0;
 }
 
-/* About Icon Circle - Remplace style inline */
-.about-icon-circle {
-    width: 60px;
-    height: 60px;
+.about-portrait img {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 28px;
+    border: 1px solid rgba(var(--accent-rgb), 0.35);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .about-hero {
-        padding-top: 100px !important;
-    }
+.about-prose {
+    max-width: none;
 }

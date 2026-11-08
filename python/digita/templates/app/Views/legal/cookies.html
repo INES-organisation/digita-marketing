@@ -1,164 +1,55 @@
-<!-- Hero Section -->
-<section class="legal-hero py-5 bg-primary text-white">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-                <h1 class="display-4 fw-bold mb-3">Politique des Cookies</h1>
-                <p class="lead mb-0">Gestion des cookies et technologies similaires</p>
+{% set hero_kicker = 'Informations légales' %}{% set hero_title = 'Politique des cookies' %}
+{% set hero_lead = "Ce que digita.buzz enregistre dans votre navigateur, pourquoi, et combien de temps. En bref : aucun cookie publicitaire ni de mesure d'audience." %}
+{% include 'includes/partials/page-hero.html' %}
+
+<section class="v2-section">
+    <div class="container-fluid v2-container">
+        <div class="pg-prose">
+            <p class="pg-date">Dernière mise à jour : 8 novembre 2026</p>
+
+            <div class="pg-note">
+                <p><strong>digita.buzz n'utilise ni cookie publicitaire, ni outil de mesure d'audience (pas de Google Analytics), ni pixel de réseau social.</strong> Les seuls éléments enregistrés sont indispensables au fonctionnement du site ou servent à mémoriser un choix que vous avez fait. C'est pourquoi aucune bannière de consentement ne vous est demandée (article 82 de la loi Informatique et Libertés, lignes directrices de la CNIL).</p>
             </div>
-        </div>
-    </div>
-</section>
 
-<!-- Content Section -->
-<section class="legal-content bg-white">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <p class="update-date">Dernière mise à jour : 28 octobre 2025</p>
+            <h2>1. Qu'est-ce qu'un cookie ?</h2>
+            <p>Un cookie est un petit fichier déposé sur votre appareil par le site que vous visitez. Le « stockage local » du navigateur (localStorage) joue un rôle comparable : il conserve une information sur votre appareil, sans l'envoyer automatiquement au site.</p>
 
-                <div class="highlight-box">
-                    <p class="mb-0">Ce site utilise des cookies pour améliorer votre expérience de navigation et analyser l'utilisation du site. Cette politique explique ce que sont les cookies, comment nous les utilisons et comment vous pouvez les gérer.</p>
-                </div>
+            <h2>2. Ce que digita.buzz enregistre</h2>
+            <table>
+                <thead>
+                    <tr><th>Nom</th><th>Type</th><th>À quoi il sert</th><th>Durée</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>DIGITASESSID</td><td>Cookie strictement nécessaire (HttpOnly, sécurisé)</td><td>Identifiant de session : protection des formulaires contre les envois frauduleux, connexion à votre espace, commande en cours. Il ne contient qu'un identifiant aléatoire ; les données associées restent sur notre serveur et sont effacées après 24 h d'inactivité.</td><td>Jusqu'à la fermeture du navigateur</td></tr>
+                    <tr><td>digita-theme</td><td>Stockage local (préférence)</td><td>Mémorise le thème clair ou sombre que vous avez choisi.</td><td>Jusqu'à ce que vous l'effaciez</td></tr>
+                    <tr><td>digitaChatSession</td><td>Stockage local (fonctionnel)</td><td>Permet de retrouver votre conversation avec l'assistant du site d'une page à l'autre. Créé uniquement si vous utilisez le chat.</td><td>Jusqu'à ce que vous l'effaciez</td></tr>
+                </tbody>
+            </table>
 
-                <h2>1. Qu'est-ce qu'un cookie ?</h2>
-                <p>Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, smartphone, tablette) lors de la visite d'un site web.</p>
-                <p>Les cookies permettent de :</p>
-                <ul>
-                    <li>Mémoriser vos préférences</li>
-                    <li>Faciliter votre navigation</li>
-                    <li>Analyser l'utilisation du site</li>
-                    <li>Personnaliser le contenu</li>
-                </ul>
+            <h2>3. Services tiers chargés par le site</h2>
+            <p>Pour afficher correctement les pages, votre navigateur télécharge des polices et des bibliothèques auprès de services tiers. Ces services ne déposent pas de cookie depuis digita.buzz, mais reçoivent, comme tout serveur web, votre adresse IP et des informations techniques sur votre navigateur :</p>
+            <ul>
+                <li><strong>Google Fonts</strong> (polices de caractères), Google Ireland Ltd : <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">politique de confidentialité</a> ;</li>
+                <li><strong>jsDelivr</strong> et <strong>unpkg</strong> (bibliothèques Bootstrap, icônes, animations), réseaux de diffusion de fichiers publics.</li>
+            </ul>
+            <p>Lors d'un paiement en ligne, vous êtes redirigé vers la page de paiement sécurisée de <strong>Stripe</strong>, qui dépose ses propres cookies, nécessaires à la sécurité du paiement et à la lutte contre la fraude : <a href="https://stripe.com/fr/cookie-settings" target="_blank" rel="noopener">politique cookies de Stripe</a>.</p>
+            <p>Les liens vers WhatsApp, LinkedIn ou Facebook sont de simples liens : rien n'est chargé depuis ces réseaux tant que vous ne cliquez pas.</p>
 
-                <h2>2. Types de cookies utilisés</h2>
+            <h2>4. Gérer ou supprimer ces éléments</h2>
+            <p>Vous pouvez à tout moment supprimer les cookies et le stockage local depuis les réglages de votre navigateur :</p>
+            <ul>
+                <li><strong>Chrome :</strong> Paramètres › Confidentialité et sécurité › Cookies et autres données des sites ;</li>
+                <li><strong>Firefox :</strong> Paramètres › Vie privée et sécurité › Cookies et données de sites ;</li>
+                <li><strong>Safari :</strong> Réglages › Confidentialité › Gérer les données de sites web ;</li>
+                <li><strong>Edge :</strong> Paramètres › Cookies et autorisations de site.</li>
+            </ul>
+            <p>Si vous bloquez le cookie de session, les formulaires, la connexion et le paiement ne fonctionneront plus ; le reste du site reste consultable.</p>
 
-                <h3>2.1 Cookies strictement nécessaires</h3>
-                <p>Ces cookies sont indispensables au fonctionnement du site. Ils ne peuvent pas être désactivés.</p>
-                <ul>
-                    <li><strong>Cookies de session :</strong> maintiennent votre session active</li>
-                    <li><strong>Cookies de sécurité :</strong> protègent contre les attaques</li>
-                    <li><strong>Cookies de préférences :</strong> mémorisent vos choix (langue, etc.)</li>
-                </ul>
-                <p><strong>Durée de conservation :</strong> Session ou 12 mois maximum</p>
+            <h2>5. Évolutions</h2>
+            <p>Si nous ajoutions un jour un outil de mesure d'audience ou un service soumis à consentement, une bannière vous permettrait de l'accepter ou de le refuser avant tout dépôt, et cette page serait mise à jour.</p>
 
-                <h3>2.2 Cookies de performance et d'analyse</h3>
-                <p>Ces cookies nous permettent de mesurer l'audience et d'améliorer le site.</p>
-                <ul>
-                    <li><strong>Google Analytics :</strong> analyse du trafic et du comportement des visiteurs</li>
-                    <li><strong>Statistiques de pages :</strong> pages les plus visitées, temps passé, etc.</li>
-                </ul>
-                <p><strong>Durée de conservation :</strong> 13 mois maximum</p>
-                <p><strong>Votre consentement est requis</strong> pour ces cookies.</p>
-
-                <h3>2.3 Cookies de fonctionnalité</h3>
-                <p>Ces cookies améliorent votre expérience utilisateur.</p>
-                <ul>
-                    <li><strong>Préférences d'affichage :</strong> thème, taille de police, etc.</li>
-                    <li><strong>Mémorisation de formulaires :</strong> données saisies précédemment</li>
-                    <li><strong>Vidéos intégrées :</strong> YouTube, Vimeo, etc.</li>
-                </ul>
-                <p><strong>Durée de conservation :</strong> 12 mois maximum</p>
-                <p><strong>Votre consentement est requis</strong> pour ces cookies.</p>
-
-                <h3>2.4 Cookies publicitaires et de ciblage</h3>
-                <p>Actuellement, nous n'utilisons pas de cookies publicitaires sur ce site.</p>
-                <p>Si nous décidons d'en utiliser à l'avenir, nous vous en informerons et recueillerons votre consentement préalable.</p>
-
-                <h2>3. Cookies tiers</h2>
-                <p>Certains cookies sont déposés par des services tiers que nous utilisons :</p>
-
-                <h3>3.1 Google Analytics</h3>
-                <ul>
-                    <li><strong>Finalité :</strong> Analyse d'audience</li>
-                    <li><strong>Données collectées :</strong> Pages visitées, durée, provenance, etc.</li>
-                    <li><strong>Durée :</strong> 13 mois</li>
-                    <li><strong>Plus d'infos :</strong> <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="text-primary">Politique de confidentialité Google</a></li>
-                </ul>
-
-                <h3>3.2 Réseaux sociaux</h3>
-                <p>Si vous interagissez avec des boutons de partage (Facebook, Twitter, LinkedIn, etc.), ces plateformes peuvent déposer leurs propres cookies.</p>
-                <p>Nous vous invitons à consulter leurs politiques de confidentialité respectives.</p>
-
-                <h2>4. Durée de conservation</h2>
-                <p>Les cookies sont conservés pour les durées suivantes :</p>
-                <ul>
-                    <li><strong>Cookies de session :</strong> Jusqu'à la fermeture du navigateur</li>
-                    <li><strong>Cookies persistants :</strong> 12 à 13 mois maximum</li>
-                </ul>
-                <p>Conformément aux recommandations de la CNIL, la durée de conservation ne peut excéder 13 mois.</p>
-
-                <h2>5. Gestion des cookies</h2>
-
-                <h3>5.1 Paramétrage lors de votre visite</h3>
-                <p>Lors de votre première visite, une bannière vous permet de :</p>
-                <ul>
-                    <li>Accepter tous les cookies</li>
-                    <li>Refuser les cookies non essentiels</li>
-                    <li>Personnaliser vos choix</li>
-                </ul>
-                <p>Vous pouvez modifier vos préférences à tout moment en cliquant sur le lien "Gérer les cookies" en bas de page.</p>
-
-                <h3>5.2 Paramétrage de votre navigateur</h3>
-                <p>Vous pouvez configurer votre navigateur pour :</p>
-                <ul>
-                    <li>Accepter tous les cookies</li>
-                    <li>Refuser tous les cookies</li>
-                    <li>Être averti avant l'enregistrement d'un cookie</li>
-                    <li>Supprimer les cookies existants</li>
-                </ul>
-
-                <h4>Instructions par navigateur :</h4>
-                <ul>
-                    <li><strong>Chrome :</strong> Menu > Paramètres > Confidentialité et sécurité > Cookies</li>
-                    <li><strong>Firefox :</strong> Menu > Options > Vie privée et sécurité > Cookies</li>
-                    <li><strong>Safari :</strong> Préférences > Confidentialité > Cookies</li>
-                    <li><strong>Edge :</strong> Menu > Paramètres > Cookies et autorisations</li>
-                </ul>
-
-                <h3>5.3 Outils de désactivation</h3>
-                <p>Vous pouvez également utiliser des outils tiers :</p>
-                <ul>
-                    <li><strong>Google Analytics :</strong> <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener" class="text-primary">Module de désactivation</a></li>
-                    <li><strong>Your Online Choices :</strong> <a href="http://www.youronlinechoices.com/fr/" target="_blank" rel="noopener" class="text-primary">Gestion des cookies publicitaires</a></li>
-                </ul>
-
-                <h2>6. Conséquences du refus des cookies</h2>
-                <p>Si vous refusez les cookies non essentiels :</p>
-                <ul>
-                    <li>Le site restera pleinement fonctionnel</li>
-                    <li>Certaines fonctionnalités avancées peuvent être limitées</li>
-                    <li>Vos préférences ne seront pas mémorisées</li>
-                    <li>Nous ne pourrons pas améliorer le site en fonction de votre utilisation</li>
-                </ul>
-
-                <h2>7. Cookies et données personnelles</h2>
-                <p>Certains cookies peuvent collecter des données personnelles (adresse IP, identifiant unique, etc.).</p>
-                <p>Ces données sont traitées conformément à notre <a href="/politique-confidentialite" class="text-primary">Politique de confidentialité</a> et au RGPD.</p>
-                <p>Vous disposez des droits suivants :</p>
-                <ul>
-                    <li>Droit d'accès</li>
-                    <li>Droit de rectification</li>
-                    <li>Droit à l'effacement</li>
-                    <li>Droit d'opposition</li>
-                    <li>Droit à la portabilité</li>
-                </ul>
-
-                <h2>8. Mise à jour de la politique</h2>
-                <p>Cette politique peut être modifiée à tout moment pour refléter les changements dans nos pratiques ou dans la législation.</p>
-                <p>Nous vous encourageons à la consulter régulièrement.</p>
-
-                <h2>9. Contact</h2>
-                <p>Pour toute question concernant notre utilisation des cookies :</p>
-                <ul>
-                    <li><strong>Email :</strong> <a href="mailto:contact@digita.buzz" class="text-primary">contact@digita.buzz</a></li>
-                    <li><strong>Courrier :</strong> Digita Marketing (TONY ALPHA 8.0), 8 bis impasse des Jonquilles, 97430 Le Tampon, La Réunion, France</li>
-                </ul>
-
-                <div class="highlight-box">
-                    <p class="mb-0"><strong>Bon à savoir :</strong> La CNIL (Commission Nationale de l'Informatique et des Libertés) est l'autorité de contrôle en matière de cookies. Pour plus d'informations : <a href="https://www.cnil.fr" target="_blank" rel="noopener" class="text-primary">www.cnil.fr</a></p>
-                </div>
-            </div>
+            <h2>6. Contact</h2>
+            <p>Pour toute question : <a href="mailto:contact@digita.buzz">contact@digita.buzz</a> ou par courrier à Digita Marketing (TONY ALPHA 8.0), 8 bis impasse des Jonquilles, 97430 Le Tampon, La Réunion. Vos droits sur vos données sont détaillés dans la <a href="/politique-confidentialite">politique de confidentialité</a>. Autorité de contrôle : la <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.</p>
         </div>
     </div>
 </section>

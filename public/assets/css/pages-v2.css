@@ -1,0 +1,214 @@
+/* ==================== PAGES INTERNES : gabarits communs ====================
+   Mêmes composants que l'accueil (home-v2.css : v2-card, v2-btn, v2-faq…), plus le bandeau de tête
+   des pages, les blocs de texte (pages légales) et les cartes de prix. Une seule couleur : l'accent. */
+
+.pg-hero {
+    position: relative;
+    overflow: hidden;
+    padding: calc(var(--navbar-height) + clamp(2.5rem, 6vw, 4.5rem)) 0 clamp(2.5rem, 6vw, 4rem);
+    background:
+        radial-gradient(ellipse at 80% 20%, rgba(var(--accent-rgb), 0.12) 0%, transparent 55%),
+        var(--page-bg);
+    border-bottom: 1px solid var(--content-border);
+    text-align: center;
+}
+
+.pg-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(var(--accent-rgb), 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--accent-rgb), 0.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.pg-hero > .container-fluid {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+}
+
+.pg-hero h1 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.1rem, 4.4vw, 3.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--content-heading);
+    margin: 0 0 1rem;
+}
+
+.pg-hero .pg-lead {
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--content-text);
+}
+
+.pg-hero .v2-actions {
+    justify-content: center;
+    margin: 2rem 0 0;
+}
+
+.pg-hero .v2-badge {
+    margin-bottom: 1.25rem;
+}
+
+/* Cartes de prix (tarifs, boutique) */
+.pg-price {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.pg-price .pg-amount {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.9rem;
+    line-height: 1.1;
+    color: var(--content-heading);
+}
+
+.pg-price .pg-amount small {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--content-muted);
+}
+
+.pg-price ul,
+.pg-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.pg-price li,
+.pg-list li {
+    position: relative;
+    padding-left: 1.6rem;
+    font-size: 0.93rem;
+    line-height: 1.55;
+    color: var(--content-text);
+}
+
+.pg-price li::before,
+.pg-list li::before {
+    content: "\F26E";
+    font-family: "bootstrap-icons";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent);
+}
+
+.pg-price .v2-btn {
+    margin-top: auto;
+}
+
+.pg-price.is-featured {
+    border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+.pg-tag {
+    align-self: flex-start;
+    padding: 0.25rem 0.7rem;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid rgba(var(--accent-rgb), 0.25);
+}
+
+/* Texte long (pages légales, à propos) */
+.pg-prose {
+    max-width: 860px;
+    margin: 0 auto;
+    color: var(--content-text);
+    line-height: 1.8;
+}
+
+.pg-prose h2 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.45rem;
+    color: var(--content-heading);
+    margin: 2.5rem 0 1rem;
+}
+
+.pg-prose h3 {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--content-heading);
+    margin: 1.75rem 0 0.75rem;
+}
+
+.pg-prose ul {
+    padding-left: 1.4rem;
+}
+
+.pg-prose li {
+    margin-bottom: 0.5rem;
+}
+
+.pg-prose strong {
+    color: var(--content-heading);
+}
+
+.pg-prose a {
+    color: var(--accent);
+}
+
+.pg-prose table {
+    width: 100%;
+    margin: 1rem 0 1.5rem;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.pg-prose th,
+.pg-prose td {
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--content-border);
+    vertical-align: top;
+    text-align: left;
+}
+
+.pg-prose th {
+    color: var(--content-heading);
+    background: var(--content-surface-alt);
+}
+
+.pg-note {
+    padding: 1.1rem 1.35rem;
+    margin: 1.5rem 0;
+    border-radius: 14px;
+    background: var(--content-surface);
+    border: 1px solid var(--content-border);
+    border-left: 3px solid var(--accent);
+}
+
+.pg-note p:last-child {
+    margin-bottom: 0;
+}
+
+.pg-date {
+    font-size: 0.9rem;
+    color: var(--content-muted);
+}
+
+@media (max-width: 575.98px) {
+    .pg-prose table {
+        display: block;
+        overflow-x: auto;
+    }
+}

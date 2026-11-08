@@ -60,8 +60,8 @@ def _simple(view, title, css, description=None):
 
 
 about = _simple("about/index-content", "À propos : Agence IA et Digitale à La Réunion | DIGITA", "/assets/css/about.css",
-                "DIGITA, agence IA et digitale à La Réunion : conseil stratégique, création de sites et automatisation "
-                "pour les dirigeants de TPE/PME. Notre méthode.")
+                "DIGITA, agence IA et digitale au Tampon (La Réunion) : sites, automatisation et agents IA "
+                "pour les TPE/PME, par Anthony Legros. Méthode, engagements et coordonnées.")
 def services(request):
     return render_view(request, "services/index-content", {
         "title": "Sites Web, Automatisation & IA à La Réunion | DIGITA",

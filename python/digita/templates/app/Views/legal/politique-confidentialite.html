@@ -1,140 +1,77 @@
-<!-- Hero Section -->
-<section class="legal-hero py-5 bg-primary text-white">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-                <h1 class="display-4 fw-bold mb-3">Politique de Confidentialité</h1>
-                <p class="lead mb-0">Protection de vos données personnelles</p>
+{% set hero_kicker = 'Informations légales' %}{% set hero_title = 'Politique de confidentialité' %}
+{% set hero_lead = "Quelles données digita.buzz collecte, pourquoi, avec qui elles sont partagées, combien de temps elles sont gardées et comment exercer vos droits." %}
+{% include 'includes/partials/page-hero.html' %}
+
+<section class="v2-section">
+    <div class="container-fluid v2-container">
+        <div class="pg-prose">
+            <p class="pg-date">Dernière mise à jour : 8 novembre 2026</p>
+
+            <div class="pg-note">
+                <p>DIGITA ne vend ni ne loue vos données. Elles servent uniquement à répondre à vos demandes, à réaliser les prestations commandées et à respecter nos obligations légales, conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et Libertés.</p>
             </div>
-        </div>
-    </div>
-</section>
 
-<!-- Content Section -->
-<section class="legal-content bg-white">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <p class="update-date">Dernière mise à jour : 28 octobre 2025</p>
+            <h2>1. Responsable du traitement</h2>
+            <ul>
+                <li><strong>Anthony Legros, entrepreneur individuel (TONY ALPHA 8.0, nom commercial Digita Marketing)</strong>, SIREN 844 384 198</li>
+                <li>8 bis impasse des Jonquilles, 97430 Le Tampon, La Réunion, France</li>
+                <li>E-mail : <a href="mailto:contact@digita.buzz">contact@digita.buzz</a> · Téléphone : 06 93 48 78 17</li>
+            </ul>
 
-                <div class="highlight-box">
-                    <p class="mb-0"><strong>Digita Marketing</strong> s'engage à protéger la confidentialité de vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés.</p>
-                </div>
+            <h2>2. Données collectées, finalités et bases légales</h2>
+            <table>
+                <thead>
+                    <tr><th>Où</th><th>Données</th><th>Pourquoi</th><th>Base légale</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Formulaire de contact</td><td>Nom, organisation, e-mail, téléphone (facultatif), domaine recherché, message</td><td>Répondre à votre demande, vous proposer un devis</td><td>Mesures précontractuelles à votre demande</td></tr>
+                    <tr><td>Diagnostic gratuit et prise de rendez-vous</td><td>Nom, e-mail, téléphone, entreprise, secteur, priorité, site, créneau choisi</td><td>Organiser et préparer l'appel de 30 min, vous envoyer la confirmation et le lien d'annulation</td><td>Mesures précontractuelles à votre demande</td></tr>
+                    <tr><td>Audit SEO et outils gratuits</td><td>Adresse du site analysé, e-mail s'il est demandé</td><td>Produire le rapport demandé</td><td>Votre demande</td></tr>
+                    <tr><td>Assistant de chat</td><td>Vos messages, la page consultée, votre adresse IP, et les coordonnées que vous choisissez de donner</td><td>Vous répondre, et si vous le souhaitez transmettre votre demande pour être recontacté</td><td>Intérêt légitime (répondre aux visiteurs) ; votre demande pour le rappel</td></tr>
+                    <tr><td>Newsletter</td><td>Adresse e-mail</td><td>Vous envoyer nos conseils et actualités ; désinscription en un clic dans chaque envoi</td><td>Consentement</td></tr>
+                    <tr><td>Compte client, commandes et formations</td><td>Identité, e-mail, mot de passe chiffré, commandes, factures, progression dans les formations, preuve de renonciation au droit de rétractation pour les contenus numériques</td><td>Gérer votre compte, exécuter la commande, livrer les contenus, facturer</td><td>Exécution du contrat ; obligations comptables</td></tr>
+                    <tr><td>Navigation</td><td>Adresse IP et journaux techniques du serveur</td><td>Sécurité du site, lutte contre le spam et les abus</td><td>Intérêt légitime</td></tr>
+                </tbody>
+            </table>
+            <p>Les cookies et le stockage local sont décrits dans la <a href="/cookies">politique des cookies</a> : aucun outil de mesure d'audience ni cookie publicitaire n'est utilisé.</p>
 
-                <h2>1. Responsable du traitement</h2>
-                <p>Le responsable du traitement des données est :</p>
-                <ul>
-                    <li><strong>Anthony Legros, entrepreneur individuel (TONY ALPHA 8.0, Digita Marketing)</strong>, SIREN 844 384 198</li>
-                    <li>8 bis impasse des Jonquilles, 97430 Le Tampon, La Réunion, France</li>
-                    <li>E-mail : contact@digita.buzz</li>
-                    <li>Téléphone : 06 93 48 78 17</li>
-                </ul>
+            <h2>3. Intelligence artificielle</h2>
+            <p>L'assistant de chat et certains outils (générateur de méta-descriptions, calendrier éditorial, analyse de votre site) utilisent un modèle d'intelligence artificielle (Claude, de la société Anthropic) via la plateforme INES. Seul le texte nécessaire à la réponse est transmis ; il n'est pas utilisé pour entraîner le modèle. Aucune décision produisant un effet juridique à votre égard n'est prise automatiquement : les demandes qualifiées par l'assistant sont toujours traitées par une personne.</p>
 
-                <h2>2. Données collectées</h2>
-                <p>Nous collectons les données personnelles suivantes :</p>
-                
-                <h3>2.1 Données d'identification</h3>
-                <ul>
-                    <li>Nom et prénom</li>
-                    <li>Adresse email</li>
-                    <li>Numéro de téléphone</li>
-                    <li>Nom de l'entreprise</li>
-                </ul>
+            <h2>4. Destinataires et sous-traitants</h2>
+            <p>Vos données sont traitées par Anthony Legros, seul responsable de DIGITA, et par les prestataires techniques suivants, qui n'agissent que sur instruction :</p>
+            <ul>
+                <li><strong>OVH SAS</strong> (Roubaix, France) : hébergement du site et de la base de données ;</li>
+                <li><strong>INES</strong> (plateforme de gestion utilisée par DIGITA, hébergée en France) : gestion de la relation client (vos demandes y sont copiées sous forme de fiche contact), agenda des rendez-vous, envoi des e-mails transactionnels, passerelle vers l'intelligence artificielle et vers le paiement ;</li>
+                <li><strong>Anthropic</strong> (États-Unis) : modèle d'intelligence artificielle de l'assistant et des outils ;</li>
+                <li><strong>Stripe</strong> (Irlande et États-Unis) : paiement en ligne des formations et produits numériques. DIGITA n'a jamais accès à vos données bancaires ;</li>
+                <li><strong>Google Fonts, jsDelivr, unpkg</strong> : diffusion des polices et bibliothèques du site (adresse IP uniquement).</li>
+            </ul>
+            <p>Les autorités compétentes peuvent y accéder en cas d'obligation légale.</p>
 
-                <h3>2.2 Données de navigation</h3>
-                <ul>
-                    <li>Adresse IP</li>
-                    <li>Type de navigateur</li>
-                    <li>Pages visitées</li>
-                    <li>Durée de visite</li>
-                    <li>Cookies (voir notre <a href="/cookies" class="text-primary">Politique des cookies</a>)</li>
-                </ul>
+            <h2>5. Transferts hors de l'Union européenne</h2>
+            <p>Anthropic et Stripe peuvent traiter des données aux États-Unis. Ces transferts sont encadrés par le cadre de protection des données UE-États-Unis (Data Privacy Framework) et/ou par les clauses contractuelles types de la Commission européenne.</p>
 
-                <h2>3. Finalités du traitement</h2>
-                <p>Vos données personnelles sont collectées pour les finalités suivantes :</p>
-                <ul>
-                    <li>Traitement de vos demandes de contact et de devis</li>
-                    <li>Gestion de la relation client</li>
-                    <li>Envoi de newsletters (avec votre consentement)</li>
-                    <li>Amélioration de nos services</li>
-                    <li>Statistiques et analyses</li>
-                    <li>Respect de nos obligations légales</li>
-                </ul>
+            <h2>6. Durées de conservation</h2>
+            <ul>
+                <li><strong>Prospects</strong> (contact, diagnostic, chat, rendez-vous) : 3 ans après le dernier échange ;</li>
+                <li><strong>Clients</strong> : pendant la relation contractuelle, puis 5 ans (prescription) ; <strong>factures et pièces comptables</strong> : 10 ans ;</li>
+                <li><strong>Newsletter</strong> : jusqu'à votre désinscription ;</li>
+                <li><strong>Compte</strong> : jusqu'à sa suppression, ou 3 ans sans connexion ;</li>
+                <li><strong>Session de navigation</strong> : effacée après 24 h d'inactivité ; journaux techniques : 12 mois au plus.</li>
+            </ul>
 
-                <h2>4. Base légale du traitement</h2>
-                <p>Le traitement de vos données repose sur :</p>
-                <ul>
-                    <li><strong>Votre consentement</strong> : pour l'envoi de newsletters</li>
-                    <li><strong>L'exécution d'un contrat</strong> : pour la fourniture de nos services</li>
-                    <li><strong>Notre intérêt légitime</strong> : pour l'amélioration de nos services</li>
-                    <li><strong>Une obligation légale</strong> : pour la conservation de certaines données</li>
-                </ul>
+            <h2>7. Vos droits</h2>
+            <p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, de portabilité et d'opposition, du droit de retirer votre consentement à tout moment, et du droit de définir des directives sur le sort de vos données après votre décès. Écrivez à <a href="mailto:contact@digita.buzz">contact@digita.buzz</a> ou à l'adresse postale ci-dessus ; une réponse vous est apportée sous un mois. Vous pouvez aussi vous opposer à tout moment au démarchage, et vous inscrire gratuitement sur la liste <a href="https://www.bloctel.gouv.fr" target="_blank" rel="noopener">Bloctel</a>.</p>
 
-                <h2>5. Durée de conservation</h2>
-                <p>Vos données sont conservées pendant les durées suivantes :</p>
-                <ul>
-                    <li><strong>Données de contact :</strong> 3 ans après le dernier contact</li>
-                    <li><strong>Données clients :</strong> 10 ans (obligations comptables)</li>
-                    <li><strong>Cookies :</strong> 13 mois maximum</li>
-                    <li><strong>Données de navigation :</strong> 25 mois</li>
-                </ul>
+            <h2>8. Sécurité</h2>
+            <p>Connexion chiffrée (HTTPS), mots de passe chiffrés, accès d'administration restreints, protection des formulaires contre les envois automatisés, sauvegardes régulières.</p>
 
-                <h2>6. Destinataires des données</h2>
-                <p>Vos données peuvent être transmises à :</p>
-                <ul>
-                    <li>Notre équipe interne</li>
-                    <li>Nos prestataires techniques (hébergement, emailing, etc.)</li>
-                    <li>Les autorités compétentes en cas d'obligation légale</li>
-                </ul>
-                <p><strong>Nous ne vendons ni ne louons vos données personnelles à des tiers.</strong></p>
+            <h2>9. Réclamation</h2>
+            <p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez saisir la CNIL, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
 
-                <h2>7. Vos droits</h2>
-                <p>Conformément au RGPD, vous disposez des droits suivants :</p>
-                <ul>
-                    <li><strong>Droit d'accès :</strong> obtenir une copie de vos données</li>
-                    <li><strong>Droit de rectification :</strong> corriger vos données inexactes</li>
-                    <li><strong>Droit à l'effacement :</strong> supprimer vos données</li>
-                    <li><strong>Droit à la limitation :</strong> limiter le traitement de vos données</li>
-                    <li><strong>Droit à la portabilité :</strong> récupérer vos données dans un format structuré</li>
-                    <li><strong>Droit d'opposition :</strong> vous opposer au traitement de vos données</li>
-                    <li><strong>Droit de retirer votre consentement :</strong> à tout moment</li>
-                </ul>
-
-                <h3>Comment exercer vos droits ?</h3>
-                <p>Pour exercer vos droits, contactez-nous :</p>
-                <ul>
-                    <li>Par email : <a href="mailto:contact@digita.buzz" class="text-primary">contact@digita.buzz</a></li>
-                    <li>Par courrier : Digita Marketing (TONY ALPHA 8.0), 8 bis impasse des Jonquilles, 97430 Le Tampon, La Réunion, France</li>
-                </ul>
-                <p>Nous vous répondrons dans un délai maximum d'un mois.</p>
-
-                <h2>8. Sécurité des données</h2>
-                <p>Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données contre :</p>
-                <ul>
-                    <li>La perte accidentelle</li>
-                    <li>L'utilisation non autorisée</li>
-                    <li>L'accès non autorisé</li>
-                    <li>La divulgation</li>
-                    <li>La modification</li>
-                </ul>
-
-                <h2>9. Transfert de données hors UE</h2>
-                <p>Vos données sont hébergées au sein de l'Union Européenne, chez OVH SAS (Roubaix, France). En cas de transfert hors UE, nous nous assurons que des garanties appropriées sont mises en place.</p>
-
-                <h2>10. Réclamation</h2>
-                <p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez introduire une réclamation auprès de la CNIL :</p>
-                <ul>
-                    <li><strong>CNIL</strong> - 3 Place de Fontenoy, 75007 Paris</li>
-                    <li>Site web : <a href="https://www.cnil.fr" target="_blank" rel="noopener" class="text-primary">www.cnil.fr</a></li>
-                </ul>
-
-                <h2>11. Modifications</h2>
-                <p>Nous nous réservons le droit de modifier cette politique de confidentialité à tout moment. La version en vigueur est celle publiée sur cette page.</p>
-
-                <div class="highlight-box">
-                    <p class="mb-0"><strong>Contact :</strong> Pour toute question concernant cette politique, contactez-nous à <a href="mailto:contact@digita.buzz" class="text-primary">contact@digita.buzz</a></p>
-                </div>
-            </div>
+            <h2>10. Modifications</h2>
+            <p>Cette politique peut évoluer, notamment si de nouveaux services sont ajoutés au site. La version en vigueur est celle publiée sur cette page, avec sa date de mise à jour.</p>
         </div>
     </div>
 </section>
