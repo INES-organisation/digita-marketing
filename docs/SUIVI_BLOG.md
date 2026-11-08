@@ -6,7 +6,7 @@ comment ajouter un lot.
 
 ## En ligne
 
-25 articles publiés sur https://digita.buzz/blog, en 5 lots, tous fusionnés dans `main` et déployés :
+30 articles publiés sur https://digita.buzz/blog, en 6 lots, tous fusionnés dans `main` et déployés :
 
 | Lot | PR | Articles (slug) |
 |---|---|---|
@@ -15,7 +15,7 @@ comment ajouter un lot.
 | 3 | #16 | `lexique-ia-tpe`, `saison-cyclonique-entreprise`, `chatgpt-tpe-usages`, `relances-automatiques-devis-factures`, `chatbot-whatsapp-entreprise` |
 | 4 | #17 | `rgpd-tpe-essentiel`, `prise-rendez-vous-en-ligne`, `site-internet-artisan`, `boutique-en-ligne-reunion`, `temps-perdu-taches-repetitives` |
 | 5 | #18 | `nom-de-domaine-entreprise`, `newsletter-tpe`, `idees-publications-reseaux-sociaux`, `landing-page-definition`, `page-facebook-piratee` |
-| 6 (brouillon, en attente de validation) | à venir | `bilan-digital-fin-annee`, `lexique-marketing-digital`, `audit-seo-lire-rapport`, `creer-logo-entreprise`, `facture-electronique-tpe` |
+| 6 | #20 | `bilan-digital-fin-annee`, `lexique-marketing-digital`, `audit-seo-lire-rapport`, `creer-logo-entreprise`, `facture-electronique-tpe` |
 
 Les anciens articles (472 de l'ère PHP) n'ont pas été modifiés.
 
