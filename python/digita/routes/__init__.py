@@ -2,7 +2,7 @@
 
 Chaque entrée : (méthode, chemin PHP avec :param, fonction).
 """
-from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment, projects, admin, automation
+from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment, projects, admin, automation, shop
 
 R = []
 
@@ -63,6 +63,11 @@ get("/rendez-vous/annuler", leads.cancel_booking_form)
 post("/rendez-vous/annuler", leads.cancel_booking)
 post("/contact", leads.submit_contact)
 post("/boutique/prevenir", leads.boutique_waitlist)
+# Boutique : commande et paiement (Stripe via INES), téléchargements personnels (digita/boutique.py)
+get("/boutique/commander/:slug", shop.checkout)
+post("/boutique/commander/:slug", shop.process)
+get("/telecharger/:token", shop.download)
+post("/mes-commandes/:id/nouveaux-liens", shop.renew)
 post("/newsletter/subscribe", leads.subscribe_newsletter)
 get("/projets/brief", projects.brief_form)
 post("/projets/brief", projects.submit_brief)
@@ -110,7 +115,7 @@ get("/boutique/categorie/services", pages.moved_to("/services"))
 get("/boutique/categorie/:cat", pages.moved_to("/solutions"))
 get("/boutique/pack-formation-marketing", pages.moved_to("/formations"))
 get("/boutique/suite-outils-marketing", pages.moved_to("/outils"))
-get("/boutique/:slug", pages.moved_to("/solutions"))
+get("/boutique/:slug", shop.product_page)  # fiche produit, ou 301 vers /solutions pour les anciennes fiches PHP
 get("/a-propos", pages.about)
 get("/services", pages.services)
 get("/catalogue", pages.moved_to("/services"))  # catalogue en dur supprimé le 08/11/2026 : /services fait foi

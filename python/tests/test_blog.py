@@ -85,3 +85,27 @@ def test_build_sql_inserts_drafts_on_one_line(tmp_path):
     assert "'published'" not in sql and sql.count("'draft'") == len(ARTICLES)
     # apply_sql.py coupe aux « ; » de fin de ligne : seules les fins d'instruction en ont
     assert len(re.findall(r";\s*$", sql, re.M)) == len(ARTICLES)
+
+
+def test_category_and_search_pages_use_site_style(monkeypatch):
+    from digita import db
+    from digita.routes import blog as blog_routes
+
+    art = {"slug": "page-facebook-piratee", "title": "Page Facebook piratée", "excerpt": "Que faire tout de suite.",
+           "category_name": "Réseaux sociaux", "category_slug": "reseaux", "published_at": "2026-11-02 10:00:00", "views": 3}
+    cats = [{"slug": "reseaux", "name": "Réseaux sociaux", "article_count": 1}]
+    monkeypatch.setattr(blog_routes.Article, "get_by_category", lambda slug, n: [art])
+    monkeypatch.setattr(blog_routes.Article, "count", lambda slug=None: 1)
+    monkeypatch.setattr(blog_routes.Article, "get_categories", lambda: cats)
+    monkeypatch.setattr(blog_routes.Article, "search", lambda q, n: [art] if q == "facebook" else [])
+    monkeypatch.setattr(blog_routes.Article, "get_popular", lambda n: [art])
+    monkeypatch.setattr(db, "fetch", lambda sql, params=None: {"slug": "reseaux", "name": "Réseaux sociaux", "description": ""}
+                        if "service_categories" in sql else None)
+    c = TestClient(app, base_url="https://digita.buzz")
+    page = c.get("/blog/categorie/reseaux").text
+    assert 'class="pg-hero"' in page and "Page Facebook piratée" in page and "02/11/2026" in page
+    assert "bg-light" not in page.split('id="contenu"')[1].split("footer-premium")[0] and "1 article pour" in page
+    found = c.get("/blog/search?q=facebook").text
+    assert "Résultats pour « facebook »" in found and "1 article trouvé" in found
+    empty = c.get("/blog/search?q=zzz").text
+    assert "Aucun article ne correspond" in empty and "Les articles les plus lus" in empty

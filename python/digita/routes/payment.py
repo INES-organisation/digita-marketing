@@ -8,6 +8,7 @@ from .. import php
 from ..models import formation as Formation
 from ..models import invoice as Invoice
 from ..models import order as Order
+from ..models import shop as Shop
 from ..render import base_context, render_view
 from ..services import stripe
 from .common import not_found, redirect
@@ -110,12 +111,16 @@ def success(request):
         return redirect("/connexion")
     session_id = request.query_params.get("session_id")
     order = formation = None
+    products, links = [], []
     if php.t(session_id):
         order = stripe.complete(session_id)
         if order:
             formation = _formation_of(order)
+            products = Shop.order_products(order["id"])
+            links = Shop.links(order["id"]) if products else []
     return render_view(request, "payment/success-content", {
         "title": "Paiement réussi | DIGITA", "extraCss": CSS, "order": order, "formation": formation,
+        "shopProducts": products, "shopLinks": links,
     })
 
 
@@ -179,6 +184,8 @@ def order_detail(request, order_id):
     return render_view(request, "payment/order-detail-content", {
         "title": "Commande #" + order_id + " | DIGITA", "extraCss": CSS,
         "order": order, "invoice": Invoice.get_by_order_id(order_id),
+        "shopProducts": Shop.order_products(order_id),
+        "shopLinks": Shop.links(order_id) if order["status"] == "paid" else [],
     })
 
 

@@ -1,0 +1,57 @@
+{# Fiche d'un produit de la boutique (digita/boutique.py) #}
+{% set hero_kicker = ('Pack de master prompts' if product.kind == 'download' else 'Workflow IA installé · ' ~ product.group) %}{% set hero_title = product.title %}
+{% set hero_lead = product.summary %}
+{% include 'includes/partials/page-hero.html' %}
+
+<section class="v2-section">
+    <div class="container-fluid v2-container">
+        <div class="row g-5">
+            <div class="col-lg-7" data-aos="fade-up">
+                {% if product.kind == 'download' %}
+                <div class="v2-head v2-head-left"><p class="v2-kicker">Ce que contient le pack</p><h2>Prêt à copier dans votre IA</h2></div>
+                <ul class="pg-list mb-4">{% for i in product['items'] %}<li>{{ i }}</li>{% endfor %}</ul>
+                <div class="pg-prose">
+                    <p>Chaque master prompt est structuré comme ceux de la plateforme INES : rôle, contexte, mission, contraintes, ton et format de sortie. Vous remplacez quelques variables (nom de l'entreprise, métier, ville, ton) et vous obtenez un texte prêt à envoyer, dans ChatGPT, Claude, Gemini ou Mistral.</p>
+                    <p>Les prompts interdisent à l'IA d'inventer des prix, des chiffres ou des mentions légales : elle laisse des repères « [À COMPLÉTER] » là où une information vous revient.</p>
+                    <p><strong>Livraison :</strong> fichier texte (Markdown) téléchargeable aussitôt après le paiement, depuis l'e-mail de confirmation et « Mes commandes ». Licence personnelle pour votre entreprise.</p>
+                </div>
+                {% else %}
+                <div class="v2-head v2-head-left"><p class="v2-kicker">Comment ça se passe</p><h2>Installé et paramétré pour vous</h2></div>
+                <ol class="v2-steps product-steps">
+                    {% for st in [
+                        ['bi-calendar-check', 'Rendez-vous de lancement', "30 minutes pour adapter le workflow à votre activité et réunir les accès nécessaires."],
+                        ['bi-gear', 'Installation dans INES', "Je configure le workflow, ses messages et ses règles, puis je le teste avec vous."],
+                        ['bi-play-circle', 'Mise en route', "Le workflow tourne tout seul ; vous recevez une courte notice d'utilisation."],
+                    ] %}
+                    <li class="v2-step" style="--c: var(--accent)">
+                        <span class="v2-step-num">0{{ loop.index }}</span>
+                        <span class="v2-icon"><i class="bi {{ st[0] }}" aria-hidden="true"></i></span>
+                        <h3>{{ st[1] }}</h3>
+                        <p>{{ st[2] }}</p>
+                    </li>
+                    {% endfor %}
+                </ol>
+                <div class="pg-prose mt-4">
+                    <p><strong>Hébergement et maintenance :</strong> {{ shop.WORKFLOW_MAINTENANCE }}, en option, pour que le workflow tourne sur INES et reste à jour.</p>
+                    <p><strong>À prévoir de votre côté :</strong> les abonnements aux outils que le workflow utilise, si vous n'en avez pas déjà (messagerie, CRM, service d'intelligence artificielle). Je vous les indique au rendez-vous de lancement, avant toute installation.</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-5" data-aos="fade-up" data-aos-delay="80">
+                <div class="v2-card pg-price product-buy">
+                    <span class="pg-tag">{{ 'Téléchargement immédiat' if product.kind == 'download' else 'Installation comprise' }}</span>
+                    <div class="pg-amount">{{ shop.euros(product.price) }}</div>
+                    <p>Prix net, TVA non applicable (art. 293 B du CGI). Paiement sécurisé par carte avec Stripe.</p>
+                    {% if open %}
+                    <a href="/boutique/commander/{{ product.slug }}" class="v2-btn v2-btn-primary"><i class="bi bi-bag-check" aria-hidden="true"></i> Acheter</a>
+                    {% else %}
+                    <a href="/boutique#prevenir" class="v2-btn v2-btn-primary"><i class="bi bi-bell" aria-hidden="true"></i> Être prévenu de l'ouverture</a>
+                    {% endif %}
+                    <a href="https://wa.me/262693487817?text={{ ('Bonjour, une question sur « ' ~ product.title ~ ' » de la boutique DIGITA.') | urlencode }}" class="v2-btn v2-btn-whatsapp" target="_blank" rel="noopener"><i class="bi bi-whatsapp" aria-hidden="true"></i> Une question ?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% include 'includes/partials/page-cta.html' %}

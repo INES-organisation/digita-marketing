@@ -12,6 +12,7 @@ import httpx
 from .. import php
 from ..models import invoice as Invoice
 from ..models import order as Order
+from ..models import shop as Shop
 from . import email, ines
 
 log = logging.getLogger("digita.stripe")
@@ -43,9 +44,9 @@ def _call(method, path, json=None):
     return body
 
 
-def create_formation_checkout(formation, order_id, amount, success_url, cancel_url, user_id, user_email):
-    description = php.mb_strimwidth(php.strip_tags(formation.get("description") or ""), 0, 200, "...")
-    product = {"name": formation["title"], "images": [formation["image"]] if php.t(formation.get("image")) else []}
+def create_checkout(name, description, image, order_id, amount, success_url, cancel_url, user_email, metadata):
+    """Session Stripe Checkout (paiement unique) créée par INES pour une commande Digita."""
+    product = {"name": name, "images": [image] if php.t(image) else []}
     if description:
         product["description"] = description  # Stripe refuse une description vide
     session = _call("POST", "/checkout-sessions", {"site": "digita", "params": {
@@ -59,10 +60,16 @@ def create_formation_checkout(formation, order_id, amount, success_url, cancel_u
         "cancel_url": cancel_url,
         "client_reference_id": str(order_id),
         "customer_email": user_email,
-        "metadata": {"order_id": order_id, "formation_id": formation["id"], "user_id": user_id},
+        "metadata": {"order_id": order_id, **metadata},
     }})
     Order.set_stripe_session(order_id, session["id"])
     return session
+
+
+def create_formation_checkout(formation, order_id, amount, success_url, cancel_url, user_id, user_email):
+    description = php.mb_strimwidth(php.strip_tags(formation.get("description") or ""), 0, 200, "...")
+    return create_checkout(formation["title"], description, formation.get("image"), order_id, amount, success_url,
+                           cancel_url, user_email, {"formation_id": formation["id"], "user_id": user_id})
 
 
 def verify_session(session_id):
@@ -85,9 +92,25 @@ def complete(session_id):
     if order["status"] != "paid":
         Order.fulfill_order(order["id"], session_id, result["payment_intent"])
         Invoice.create_from_order(Order.find(order["id"]))
-        if php.t(order.get("customer_email")):
+        products = Shop.order_products(order["id"])
+        if products:  # boutique : liens de téléchargement, e-mail de livraison, fiche client dans INES
+            _deliver_shop_order(order, products)
+        elif php.t(order.get("customer_email")):
             try:
                 email.send_order_confirmation(order["customer_email"], order["id"])
             except Exception as e:  # noqa: BLE001
                 log.error("Erreur envoi email confirmation: %s", e)
     return Order.find(order["id"])
+
+
+def _deliver_shop_order(order, products):
+    links = Shop.issue_downloads(order["id"], order.get("user_id"))
+    mail = order.get("customer_email")
+    if php.t(mail):
+        try:
+            email.send_shop_delivery(mail, order["id"], products, links)
+        except Exception as e:  # noqa: BLE001 — les liens restent dans « Mes commandes »
+            log.error("E-mail de livraison boutique non envoyé (commande %s) : %s", order["id"], e)
+    titles = ", ".join(p["title"] for p in products)
+    ines.push_lead(mail, mail, "boutique", f"Achat boutique : {titles} — commande #{order['id']} ({order['amount']} €)",
+                   tags=("client", *(f"boutique:{p['slug']}" for p in products)))

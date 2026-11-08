@@ -1,0 +1,10 @@
+{# Carte d'article (catégorie, recherche). Variable : article #}
+<div class="col-md-6 col-lg-4" data-aos="fade-up">
+    <a href="/blog/{{ article['slug'] }}" class="v2-card v2-need blog-card">
+        {% if t(article['category_name']) %}<span class="pg-tag">{{ h(article['category_name']) }}</span>{% endif %}
+        <h2 class="h3">{{ h(article['title']) }}</h2>
+        <p>{{ h(mb_strimwidth(strip_tags(coalesce(article['excerpt'], '')), 0, 160, '…')) }}</p>
+        <span class="blog-card-meta">{% if article['published_at'] %}<i class="bi bi-calendar3" aria-hidden="true"></i> {{ date('d/m/Y', strtotime(article['published_at'])) }}{% endif %}</span>
+        <span class="v2-link">Lire l'article <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+    </a>
+</div>

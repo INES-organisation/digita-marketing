@@ -16,7 +16,14 @@
                         {% if t(order) %}                            <p class="text-muted mb-1">Commande <strong>#{{ order['id'] }}</strong></p>
                             <p class="text-muted mb-4">Montant : <strong>{{ number_format(order['amount'], 2) }} €</strong></p>
                         {% endif %}
-                        {% if t(formation) %}                            <div class="alert alert-success">
+                        {% if shopProducts %}
+                            {% if shopLinks %}<div class="alert alert-success text-start">
+                                <p class="mb-2"><i class="bi bi-download"></i> <strong>Vos fichiers sont prêts</strong> (liens personnels, valables 30 jours, 5 téléchargements) :</p>
+                                {% for l in shopLinks %}<a href="/telecharger/{{ l['token'] }}" class="btn btn-primary btn-sm d-block mb-2"><i class="bi bi-file-earmark-arrow-down"></i> {{ l['file_name'] }}</a>{% endfor %}
+                            </div>{% endif %}
+                            {% for sp in shopProducts if sp['kind'] == 'service' %}<div class="alert alert-info text-start"><i class="bi bi-calendar-check"></i> Installation de <strong>{{ sp['title'] }}</strong> commandée : je vous contacte sous 24 h ouvrées pour le rendez-vous de lancement. <a href="/diagnostic#consultant">Réserver un créneau maintenant</a>.</div>{% endfor %}
+                            <div class="d-grid gap-2"><a href="/mes-commandes/{{ order['id'] }}" class="btn btn-outline-secondary"><i class="bi bi-receipt"></i> Ma commande et ma facture</a></div>
+                        {% elif t(formation) %}                            <div class="alert alert-success">
                                 <i class="bi bi-mortarboard"></i>
                                 Vous avez maintenant accès à la formation <strong>{{ h(formation['title']) }}</strong>
                             </div>

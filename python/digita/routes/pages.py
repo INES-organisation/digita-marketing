@@ -157,9 +157,9 @@ def ines_catalogue(request):
     return JSONResponse(ines_feed.entries())
 def boutique(request):
     return render_view(request, "boutique/index-content", {
-        "title": "Boutique : prompts et automatisations IA | DIGITA",
-        "metaDescription": "Bientôt sur DIGITA : packs de prompts par métier, automatisations IA installées pour vous et "
-                           "matériel pour les pros. Inscrivez-vous pour être prévenu de l'ouverture.",
+        "title": "Boutique : master prompts et workflows IA | DIGITA",
+        "metaDescription": "Packs de master prompts par métier (29 €) et 10 workflows IA installés pour vous : devis, "
+                           "relances, support client, rapports. Paiement sécurisé, téléchargement immédiat.",
         "metaRobots": "index, follow" if boutique_data.OPEN else "noindex, follow",
         "extraCss": ["/assets/css/boutique.css"],
         "shop": boutique_data,

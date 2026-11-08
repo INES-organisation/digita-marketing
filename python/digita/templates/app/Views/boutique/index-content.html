@@ -1,8 +1,14 @@
-{# Produits et prix : digita/boutique.py. Tant que boutique.OPEN est faux, la page annonce l'ouverture et tient une liste d'attente. #}
+{# Produits et prix : digita/boutique.py. boutique.OPEN faux : « ouverture prochaine » et liste d'attente. #}
+{% if shop.OPEN %}
+{% set hero_kicker = 'Boutique' %}{% set hero_title = 'Gagnez du temps dès aujourd\'hui' %}
+{% set hero_lead = "Des master prompts prêts à l'emploi pour vos écrits de tous les jours, et des automatisations IA installées pour vous. Paiement sécurisé, téléchargement immédiat." %}
+{% else %}
 {% set hero_kicker = 'Ouverture prochaine' %}{% set hero_title = 'La boutique DIGITA ouvre bientôt' %}
 {% set hero_lead = "Des prompts prêts à l'emploi et des automatisations IA pour gagner du temps dès demain, et une sélection de matériel pour les pros. Inscrivez-vous pour être prévenu de l'ouverture." %}
+{% endif %}
 {% include 'includes/partials/page-hero.html' %}
 
+{% if not shop.OPEN %}
 <!-- Liste d'attente -->
 <section class="v2-section" id="prevenir" aria-labelledby="prevenir-title">
     <div class="container-fluid v2-container v2-narrow">
@@ -44,14 +50,15 @@
         </div>
     </div>
 </section>
+{% endif %}
 
-<!-- Packs de prompts -->
-<section class="v2-section v2-section-alt" id="prompts" aria-labelledby="prompts-title">
+<!-- Packs de master prompts -->
+<section class="v2-section{{ ' v2-section-alt' if not shop.OPEN else '' }}" id="prompts" aria-labelledby="prompts-title">
     <div class="container-fluid v2-container">
         <div class="v2-head" data-aos="fade-up">
-            <p class="v2-kicker">Produits téléchargeables</p>
-            <h2 id="prompts-title">Packs de prompts par métier</h2>
-            <p>Des consignes testées, à copier dans ChatGPT, Claude ou Gemini : vous gagnez du temps sur les écrits de tous les jours. Téléchargement immédiat après paiement.</p>
+            <p class="v2-kicker">Téléchargement immédiat</p>
+            <h2 id="prompts-title">Packs de master prompts par métier</h2>
+            <p>10 consignes complètes par métier, construites comme les master prompts d'INES, à copier dans ChatGPT, Claude, Gemini ou Mistral : devis, relances, avis, publications, service client.</p>
         </div>
         <div class="row g-4">
             {% for p in shop.PROMPT_PACKS %}
@@ -59,42 +66,60 @@
                 <div class="v2-card pg-price">
                     <span class="v2-icon"><i class="bi bi-chat-square-text" aria-hidden="true"></i></span>
                     <h3>{{ p.title }}</h3>
-                    <div class="pg-amount">{{ p.price }}</div>
-                    <ul>{% for i in p['items'] %}<li>{{ i }}</li>{% endfor %}</ul>
+                    <div class="pg-amount">{{ shop.euros(p.price) }}</div>
+                    <ul>{% for i in p['items'][:3] %}<li>{{ i }}</li>{% endfor %}</ul>
+                    <div class="shop-card-actions">
+                        <a href="/boutique/{{ p.slug }}" class="v2-btn v2-btn-ghost">Détail</a>
+                        {% if shop.OPEN %}<a href="/boutique/commander/{{ p.slug }}" class="v2-btn v2-btn-primary">Acheter</a>{% endif %}
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        <p class="v2-small text-center mt-4">{{ shop.PROMPT_BUNDLE.title }} : {{ shop.PROMPT_BUNDLE.price }}. Prix nets, TVA non applicable (art. 293 B du CGI).</p>
+        <div class="v2-card v2-promise mt-4" data-aos="fade-up">
+            <span class="v2-icon"><i class="bi bi-collection" aria-hidden="true"></i></span>
+            <div class="flex-grow-1">
+                <h3>{{ shop.PROMPT_BUNDLE.title }} : {{ shop.euros(shop.PROMPT_BUNDLE.price) }}</h3>
+                <p>{{ shop.PROMPT_BUNDLE.summary }}</p>
+            </div>
+            {% if shop.OPEN %}<a href="/boutique/commander/{{ shop.PROMPT_BUNDLE.slug }}" class="v2-btn v2-btn-primary align-self-center">Acheter</a>{% endif %}
+        </div>
     </div>
 </section>
 
 <!-- Workflows IA -->
-<section class="v2-section" id="workflows" aria-labelledby="workflows-title">
+<section class="v2-section{{ ' v2-section-alt' if shop.OPEN else '' }}" id="workflows" aria-labelledby="workflows-title">
     <div class="container-fluid v2-container">
         <div class="v2-head" data-aos="fade-up">
             <p class="v2-kicker">Automatisations IA</p>
-            <h2 id="workflows-title">Des workflows prêts à tourner, installés pour vous</h2>
-            <p>Chaque automatisation est installée et adaptée à votre activité par DIGITA, puis tourne sur INES. Maintenance en option : {{ shop.WORKFLOW_MAINTENANCE }}.</p>
+            <h2 id="workflows-title">10 workflows prêts à tourner, installés pour vous</h2>
+            <p>Les modèles « Workflows Entreprise » d'INES, installés et adaptés à votre activité par DIGITA. Hébergement et maintenance en option : {{ shop.WORKFLOW_MAINTENANCE }}.</p>
         </div>
-        <div class="row g-4">
-            {% for w in shop.WORKFLOWS %}
+        {% for group in shop.WORKFLOW_GROUPS %}
+        <h3 class="shop-group">{{ group }}</h3>
+        <div class="row g-4 mb-4">
+            {% for w in shop.WORKFLOWS if w.group == group %}
             <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ (loop.index0 % 3) * 80 }}">
                 <div class="v2-card pg-price">
                     <span class="v2-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
                     <h3>{{ w.title }}</h3>
-                    <div class="pg-amount"><small>installé</small> {{ w.price }}</div>
+                    <div class="pg-amount"><small>installé</small> {{ shop.euros(w.price) }}</div>
                     <p>{{ w.summary }}</p>
+                    <div class="shop-card-actions">
+                        <a href="/boutique/{{ w.slug }}" class="v2-btn v2-btn-ghost">Détail</a>
+                        {% if shop.OPEN %}<a href="/boutique/commander/{{ w.slug }}" class="v2-btn v2-btn-primary">Commander</a>{% endif %}
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        <p class="v2-small text-center mt-4">L'abonnement aux services utilisés (intelligence artificielle, messagerie, CRM) reste à votre charge lorsqu'il est nécessaire ; il est indiqué sur chaque fiche avant achat.</p>
+        {% endfor %}
+        <p class="v2-small text-center">L'abonnement aux outils utilisés par un workflow (messagerie, CRM, service d'intelligence artificielle) reste à votre charge lorsqu'il est nécessaire ; il vous est indiqué au rendez-vous de lancement, avant toute installation.</p>
     </div>
 </section>
 
 <!-- Matériel -->
-<section class="v2-section v2-section-alt" id="materiel" aria-labelledby="materiel-title">
+<section class="v2-section" id="materiel" aria-labelledby="materiel-title">
     <div class="container-fluid v2-container v2-narrow">
         <div class="v2-card v2-promise" data-aos="fade-up">
             <span class="v2-icon"><i class="bi bi-laptop" aria-hidden="true"></i></span>

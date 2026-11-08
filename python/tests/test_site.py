@@ -356,19 +356,72 @@ def test_old_shop_and_solution_addresses_are_moved_permanently():
                      ("/favicon.ico", "/assets/images/digita.png")]:
         r = c.get(old, follow_redirects=False)
         assert (r.status_code, r.headers["location"]) == (301, new), old
-    html = c.get("/boutique").text
-    assert not re.findall(r'(?:href|action)="/boutique/(?!prevenir")', html)  # seule la liste d'attente y poste
-
-
-def test_boutique_waitlist_announces_opening_without_fake_products():
     from digita import boutique
 
-    html = _client().get("/boutique").text
-    assert not boutique.OPEN and 'content="noindex, follow"' in html and 'action="/boutique/prevenir"' in html
+    html = c.get("/boutique").text
+    # Liens de la boutique : seulement vers les vrais produits (fiche ou commande) et la liste d'attente
+    for target in re.findall(r'(?:href|action)="/boutique/([^"#?]+)', html):
+        slug = target.removeprefix("commander/")
+        assert target == "prevenir" or boutique.product(slug), target
+
+
+def test_boutique_sells_real_products_without_fake_ones():
+    from digita import boutique
+
+    c = _client()
+    html = c.get("/boutique").text
+    assert boutique.OPEN and len(boutique.WORKFLOWS) == 10 and len(boutique.PROMPT_PACKS) == 4
     for gone in ("197.00", "349.00", "Populaire", "🛒"):
         assert gone not in html
-    for w in boutique.WORKFLOWS:
-        assert w["title"] in html and w["price"] in html
+    for item in [*boutique.WORKFLOWS, *boutique.PROMPT_PACKS]:
+        assert item["title"] in html and boutique.euros(item["price"]) in html
+        assert f'href="/boutique/commander/{item["slug"]}"' in html
+    for group in boutique.WORKFLOW_GROUPS:
+        assert group in html
+    page = c.get("/boutique/devis-ia")
+    assert page.status_code == 200 and "Acheter" in page.text and "Installé et paramétré pour vous" in page.text
+    for pack in boutique.PROMPT_PACKS:  # chaque pack vendu a bien son fichier
+        assert (__import__("pathlib").Path(__file__).parent.parent / "digita" / "boutique_files" / pack["file"]).is_file(), pack["file"]
+
+
+def test_boutique_checkout_requires_login_and_both_consents(monkeypatch):
+    from digita.routes import shop
+
+    c = _client()
+    r = c.get("/boutique/commander/pack-immobilier", follow_redirects=False)
+    assert (r.status_code, r.headers["location"]) == (302, "/connexion")
+    monkeypatch.setattr(shop.stripe, "is_configured", lambda: True)
+    created = []
+    monkeypatch.setattr(shop.Shop, "create_order", lambda *a: created.append(a) or "12")
+    monkeypatch.setattr(shop.stripe, "create_checkout", lambda *a: {"url": "https://checkout.stripe.test/cs"})
+    from digita import sessions as sess
+
+    sid = "a" * 64
+    store = {sid: {"user_id": 3, "user_email": "a@b.fr"}}
+    monkeypatch.setattr(sess, "_load", lambda k: store.get(k))
+    monkeypatch.setattr(sess, "_save", lambda k, data, touch: store.__setitem__(k, data))
+    c.cookies.set(sess.COOKIE, sid)
+    page = c.get("/boutique/commander/pack-immobilier")
+    assert page.status_code == 200 and "perdre ainsi mon droit de rétractation" in page.text
+    token = _token(page.text)
+    r = c.post("/boutique/commander/pack-immobilier", data={"_csrf_token": token, "cgv": "1"}, follow_redirects=False)
+    assert r.headers["location"] == "/boutique/commander/pack-immobilier" and not created
+    r = c.post("/boutique/commander/pack-immobilier", data={"_csrf_token": token, "cgv": "1", "consent": "1"},
+               follow_redirects=False)
+    assert r.headers["location"] == "https://checkout.stripe.test/cs"
+    assert created and "L221-28" in created[0][3]
+    page = c.get("/boutique/commander/devis-ia")  # service : exécution anticipée, pas de renonciation
+    assert "L221-25" in page.text and "perdre ainsi" not in page.text
+
+
+def test_expired_download_link_is_refused(monkeypatch):
+    from digita.routes import shop
+
+    monkeypatch.setattr(shop.Shop, "use_link", lambda token: None)
+    r = _client().get("/telecharger/inconnu")
+    assert r.status_code == 410 and "plus valable" in r.text
+    monkeypatch.setattr(shop.Shop, "use_link", lambda token: {"file_name": "../config.py"})
+    assert _client().get("/telecharger/x").status_code == 410  # pas de sortie du dossier des fichiers
 
 
 def test_home_seo_is_clean_and_preview_redirects():

@@ -154,6 +154,32 @@ def send_order_confirmation(to, order_id):
     return send(to, f"Confirmation de commande #{order_id}", order_confirmation_template(order_id), template="commande")
 
 
+def send_shop_delivery(to, order_id, products, links):
+    return send(to, f"Votre commande DIGITA #{order_id}", shop_delivery_template(order_id, products, links), template="boutique")
+
+
+def shop_delivery_template(order_id, products, links):
+    """Livraison d'une commande de la boutique : liens de téléchargement des packs, prise de rendez-vous
+    pour l'installation des workflows."""
+    base = _base()
+    content = p(f"Merci ! Votre commande <strong style=\"color:{INK};\">#{php.h(order_id)}</strong> est confirmée.")
+    if links:
+        content += p("Vos fichiers sont prêts. Chaque lien est personnel, valable 30 jours et utilisable 5 fois :")
+        for link in links:
+            content += button(f"Télécharger {link['file_name']}", f"{base}/telecharger/{link['token']}")
+        content += p("Un lien expiré ? Vous en obtenez un nouveau à tout moment depuis « Mes commandes ».")
+    services = [x for x in products if x.get("kind") == "service"]
+    if services:
+        names = ", ".join(php.h(x["title"]) for x in services)
+        content += p(f"Installation commandée : <strong style=\"color:{INK};\">{names}</strong>. Je vous contacte sous 24 h "
+                     "ouvrées pour fixer un rendez-vous de lancement (30 min) et recueillir les accès nécessaires. "
+                     "Vous pouvez aussi réserver directement un créneau :")
+        content += button("Réserver le rendez-vous de lancement", f"{base}/diagnostic#consultant")
+    content += (p(f"Votre facture et votre commande sont disponibles dans <a href=\"{base}/mes-commandes/{php.h(order_id)}\">Mes commandes</a>.")
+                + signature())
+    return layout("Commande confirmée", content, "Votre commande DIGITA est confirmée.")
+
+
 def order_confirmation_template(order_id):
     base = _base()
     content = (p(f"Votre commande <strong style=\"color:{INK};\">#{php.h(order_id)}</strong> est confirmée.")

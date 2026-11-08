@@ -71,6 +71,17 @@
                     </div>
                 </div>
 
+                <!-- Boutique : téléchargements et installation -->
+                {% if shopLinks %}<div class="card shadow-sm mb-4"><div class="card-body">
+                    <h6 class="mb-3"><i class="bi bi-download"></i> Mes téléchargements</h6>
+                    {% for l in shopLinks %}<div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>{{ l['file_name'] }} <small class="text-muted">({{ l['downloads'] }}/{{ l['max_downloads'] }} téléchargements)</small></span>
+                        {% if l['valid'] %}<a href="/telecharger/{{ l['token'] }}" class="btn btn-primary btn-sm">Télécharger</a>{% else %}<span class="text-muted small">Lien expiré</span>{% endif %}
+                    </div>{% endfor %}
+                    {% if shopLinks | rejectattr('valid') | list %}<form action="/mes-commandes/{{ order['id'] }}/nouveaux-liens" method="POST" class="mt-3">{{ CsrfMiddleware_field() }}<button type="submit" class="btn btn-outline-primary btn-sm">Obtenir de nouveaux liens</button></form>{% endif %}
+                </div></div>{% endif %}
+                {% for sp in shopProducts if sp['kind'] == 'service' %}<div class="alert alert-info"><i class="bi bi-calendar-check"></i> Installation de <strong>{{ sp['title'] }}</strong> : si nous n'avons pas encore fixé le rendez-vous de lancement, <a href="/diagnostic#consultant">réservez un créneau</a> ou écrivez-moi sur <a href="https://wa.me/262693487817">WhatsApp</a>.</div>{% endfor %}
+
                 <!-- Facture -->
                 {% if t(invoice) %}                    <div class="card shadow-sm mb-4">
                         <div class="card-body d-flex justify-content-between align-items-center">

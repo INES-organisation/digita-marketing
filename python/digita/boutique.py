@@ -1,47 +1,99 @@
-"""Boutique DIGITA (page /boutique) : produits numériques vendus sur digita.buzz, matériel sur MultiProShop.
+"""Boutique DIGITA (/boutique) : produits vendus et payés sur digita.buzz, matériel sur MultiProShop.
 
-Source unique des produits et de leurs prix (digita.buzz fait foi, comme pour services_catalog.py).
-Prix nets, TVA non applicable (art. 293 B du CGI), proposés le 08/11/2026 :
+Source unique des produits et de leurs prix (digita.buzz fait foi, comme services_catalog.py).
+Prix nets, TVA non applicable (art. 293 B du CGI), fixés le 08/11/2026 :
 
-- Packs de prompts : fichiers téléchargeables, prix d'un produit numérique d'entrée de gamme (19-39 €).
-- Workflows IA : modèles de la bibliothèque INES (« Templates INES », ent-001 à ent-010), qui ne tournent
-  que dans INES : ils se vendent donc installés et paramétrés par DIGITA (prix d'une installation de
-  freelance n8n/Make, bas de fourchette pour les TPE de La Réunion), maintenance mensuelle en option.
-  La version fichier à installer soi-même (export n8n) viendra une fois les workflows reconstruits.
-- Matériel (ordinateurs, électronique) : vendu et livré par MultiProShop, la boutique ne fait que le présenter.
+- Packs de master prompts : fichiers téléchargeables (python/digita/boutique_files/), au prix d'un
+  produit numérique d'entrée de gamme. Livrés par lien personnel après paiement.
+- Workflows IA : les 10 « Workflows Entreprise » de la bibliothèque INES (ent-001 à ent-010). Ils ne
+  tournent que dans INES : on vend leur installation et leur paramétrage par DIGITA. Prix calés sur la
+  grille « Automatisation » de /tarifs (490 / 790 / 1 200 €) selon la complexité du workflow (nombre de
+  nœuds, niveau INES Moyen / Avancé / Expert), bien en dessous des prix « ETI » indiqués dans INES.
+- Matériel (ordinateurs, électronique) : vendu et livré par MultiProShop, la boutique le présente.
 
-OPEN reste à False tant que la vente en ligne n'est pas branchée (fichiers, table des commandes de
-produits) : la page affiche alors « ouverture prochaine » et une liste d'attente.
+OPEN : vente en ligne ouverte (table shop_downloads et colonnes de la migration
+database/migrations/2026_11_08_boutique.sql appliquées en production).
 """
 
-OPEN = False
+OPEN = True
 MPS_URL = "https://multiproshop.com"
+WORKFLOW_MAINTENANCE = "49 €/mois"
+DOWNLOAD_DAYS = 30        # validité d'un lien de téléchargement
+DOWNLOAD_MAX = 5          # téléchargements par lien (un nouveau lien s'obtient depuis « Mes commandes »)
 
 PROMPT_PACKS = [
-    {"id": "pack-artisans-btp", "title": "Pack Artisans & BTP", "price": "29 €",
-     "items": ["Devis et relances de devis", "Réponses aux avis Google", "Publications de chantier pour les réseaux"]},
-    {"id": "pack-sante-bien-etre", "title": "Pack Santé & bien-être", "price": "29 €",
-     "items": ["Rappels et confirmations de rendez-vous", "Réponses aux avis", "Conseils et publications de saison"]},
-    {"id": "pack-immobilier", "title": "Pack Immobilier", "price": "29 €",
-     "items": ["Annonces de biens", "Relances d'acquéreurs et de vendeurs", "Comptes rendus de visite"]},
-    {"id": "pack-commerce", "title": "Pack Commerce & e-commerce", "price": "29 €",
-     "items": ["Fiches produits", "E-mails de promotion et de relance", "Réponses au service client"]},
+    {"slug": "pack-artisans-btp", "title": "Pack Artisans & BTP", "price": 29, "file": "pack-artisans-btp.md",
+     "summary": "10 master prompts pour les écrits de tous les jours d'un artisan ou d'une entreprise du bâtiment.",
+     "items": ["Devis clairs et relances à J+3, J+10, J+21", "Réponses aux avis Google", "Publications de chantier avant/après",
+               "Demandes urgentes, retards, réclamations", "Fiches services pour le référencement local"]},
+    {"slug": "pack-sante-bien-etre", "title": "Pack Santé & bien-être", "price": 29, "file": "pack-sante-bien-etre.md",
+     "summary": "10 master prompts pour instituts, praticiens du bien-être et coachs, sans allégation thérapeutique.",
+     "items": ["Confirmations, rappels et annulations de rendez-vous", "Réponses aux avis", "Publications de saison et conseils",
+               "Carte de soins et fiche Google Business", "Fidélisation et relance des clients inactifs"]},
+    {"slug": "pack-immobilier", "title": "Pack Immobilier", "price": 29, "file": "pack-immobilier.md",
+     "summary": "10 master prompts pour agences et mandataires, mentions obligatoires laissées à compléter.",
+     "items": ["Annonces de biens", "Relances acquéreurs et vendeurs", "Comptes rendus de visite",
+               "Publications réseaux d'un nouveau bien", "Script d'appel de prospection"]},
+    {"slug": "pack-commerce", "title": "Pack Commerce & e-commerce", "price": 29, "file": "pack-commerce.md",
+     "summary": "10 master prompts pour boutiques physiques et en ligne.",
+     "items": ["Fiches produits optimisées pour Google", "Promotions, newsletters, paniers abandonnés",
+               "Service client : retours, retards, produits défectueux", "Réponses aux avis", "FAQ produit"]},
 ]
-PROMPT_BUNDLE = {"id": "pack-complet", "title": "Les 4 packs de prompts", "price": "79 €"}
+PROMPT_BUNDLE = {"slug": "pack-complet", "title": "Les 4 packs de master prompts", "price": 79,
+                 "files": [p["file"] for p in PROMPT_PACKS],
+                 "summary": "Les 40 master prompts des quatre métiers, pour 79 € au lieu de 116 €."}
 
-# Modèle INES d'origine entre parenthèses (frontend/src/app/workflows/templates-ines/WorkflowAutomationData.ts).
+WORKFLOW_GROUPS = ["Commercial IA", "Opérations IA", "Support et veille"]
+
+# « ines » : identifiant du modèle dans INES (frontend/src/app/workflows/templates-ines/WorkflowAutomationData.ts).
 WORKFLOWS = [
-    {"id": "qualification-prospects", "ines": "ent-001", "title": "Qualification et routage des prospects", "price": "390 €",
-     "summary": "Chaque demande reçue par formulaire est lue par l'IA, notée et envoyée à la bonne personne avec une réponse prête."},
-    {"id": "relance-devis", "ines": "ent-003", "title": "Relance automatique des devis (21 jours)", "price": "490 €",
-     "summary": "Une séquence de relances personnalisées par e-mail tant que le prospect n'a pas répondu ; vous êtes prévenu à chaque réponse."},
-    {"id": "clients-dormants", "ines": "ent-004", "title": "Réactivation des clients dormants", "price": "590 €",
-     "summary": "Chaque semaine, les clients sans nouvelles depuis longtemps reçoivent un message adapté à leur historique."},
-    {"id": "devis-ia", "ines": "ent-009", "title": "Génération de devis par l'IA", "price": "690 €",
-     "summary": "À partir d'une demande, l'IA prépare un devis au format PDF que vous validez avant envoi, puis relance."},
-    {"id": "rapports-alertes", "ines": "ent-005", "title": "Rapports et alertes automatiques", "price": "790 €",
-     "summary": "Un point hebdomadaire de votre activité par e-mail, et une alerte dès qu'un indicateur décroche."},
-    {"id": "support-niveau-1", "ines": "ent-008", "title": "Support client IA de niveau 1", "price": "890 €",
-     "summary": "Les questions simples de vos clients reçoivent une réponse immédiate ; les autres vous sont transmises, déjà résumées."},
+    {"slug": "qualification-prospects", "ines": "ent-001", "group": "Commercial IA", "price": 490,
+     "title": "Qualification et routage des prospects",
+     "summary": "Chaque demande entrante est lue par l'IA (budget, lieu, type de besoin), notée et envoyée aussitôt à la bonne personne, avec une réponse prête."},
+    {"slug": "suivi-21-jours", "ines": "ent-003", "group": "Commercial IA", "price": 590,
+     "title": "Séquence de suivi sur 21 jours",
+     "summary": "Cinq e-mails personnalisés par l'IA (J0, J3, J7, J14, J21) pour chaque prospect, et une tâche d'appel quand il le faut."},
+    {"slug": "reactivation-clients", "ines": "ent-004", "group": "Commercial IA", "price": 690,
+     "title": "Réactivation des clients dormants",
+     "summary": "Chaque lundi, les contacts inactifs depuis plus de 90 jours reçoivent une campagne de 3 messages sur 12 jours, rédigée selon leur historique."},
+    {"slug": "devis-ia", "ines": "ent-009", "group": "Commercial IA", "price": 890,
+     "title": "Génération de devis par l'IA",
+     "summary": "À partir d'une demande, l'IA prépare un devis complet en PDF (lignes, remise, arguments), que vous validez avant l'envoi et la relance."},
+    {"slug": "lead-scoring", "ines": "ent-007", "group": "Commercial IA", "price": 1290,
+     "title": "Notation des prospects en temps réel",
+     "summary": "Chaque action d'un prospect recalcule sa note d'intérêt de 0 à 100 ; vous êtes alerté dès qu'un contact devient chaud."},
+    {"slug": "traitement-documents", "ines": "ent-002", "group": "Opérations IA", "price": 990,
+     "title": "Traitement des documents par l'IA",
+     "summary": "Factures, devis et contrats lus automatiquement : extraction des données, contrôle, détection des anomalies et classement."},
+    {"slug": "rapports-alertes", "ines": "ent-005", "group": "Opérations IA", "price": 790,
+     "title": "Rapports et alertes automatiques",
+     "summary": "Chaque matin de semaine, un point clair de vos ventes, tâches et contacts, et une alerte dès qu'un indicateur décroche."},
+    {"slug": "onboarding-client", "ines": "ent-006", "group": "Opérations IA", "price": 1190,
+     "title": "Accueil automatisé des nouveaux clients",
+     "summary": "Dès la signature : accès envoyés, messages d'accompagnement sur 30 jours (J0 à J30) et mesure de la satisfaction."},
+    {"slug": "support-niveau-1", "ines": "ent-008", "group": "Support et veille", "price": 990,
+     "title": "Support client IA de niveau 1",
+     "summary": "Chaque demande est classée : réponse immédiate si elle est simple, transmise avec un résumé complet si elle est délicate."},
+    {"slug": "veille-concurrentielle", "ines": "ent-010", "group": "Support et veille", "price": 690,
+     "title": "Veille concurrentielle automatique",
+     "summary": "Chaque lundi, une synthèse de ce que font vos concurrents (sites, actualités, réseaux), avec les points d'alerte."},
 ]
-WORKFLOW_MAINTENANCE = "49 €/mois"
+
+
+def euros(amount):
+    return f"{amount:,}".replace(",", " ") + " €"
+
+
+def products():
+    """Tous les produits vendables, par identifiant : packs (téléchargement) et workflows (installation)."""
+    items = {}
+    for p in PROMPT_PACKS:
+        items[p["slug"]] = {**p, "kind": "download", "files": [p["file"]]}
+    items[PROMPT_BUNDLE["slug"]] = {**PROMPT_BUNDLE, "kind": "download", "items": [p["title"] for p in PROMPT_PACKS]}
+    for w in WORKFLOWS:
+        items[w["slug"]] = {**w, "kind": "service", "files": []}
+    return items
+
+
+def product(slug):
+    return products().get(slug)

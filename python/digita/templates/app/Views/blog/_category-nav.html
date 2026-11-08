@@ -1,0 +1,5 @@
+{# Catégories du blog en pastilles. Variables : categories, current (slug ou vide) #}
+<nav class="formations-cats blog-cats mb-4" aria-label="Catégories du blog">
+    <a href="/blog"{% if not current %} class="is-active"{% endif %}>Tous</a>
+    {% for cat_ in php_values(categories) %}<a href="/blog/categorie/{{ cat_['slug'] }}"{% if cat_['slug'] == current %} class="is-active" aria-current="page"{% endif %}>{{ h(cat_['name']) }} <span>{{ cat_['article_count'] }}</span></a>{% endfor %}
+</nav>
