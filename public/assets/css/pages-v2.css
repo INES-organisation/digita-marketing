@@ -224,3 +224,8 @@
 .v2-small a {
     color: var(--accent);
 }
+
+/* Pages internes en thème sombre : sections alternées neutres (le dégradé bleuté reste propre à l'accueil) */
+[data-theme="dark"] body.layout-pages .v2-section-alt {
+    background: var(--content-surface-alt);
+}

@@ -30,3 +30,7 @@
 .pg-list a {
     color: var(--accent);
 }
+
+.contact-address {
+    height: auto;
+}
