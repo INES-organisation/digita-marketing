@@ -18,7 +18,7 @@ Les corrections marquées ✅ sont faites dans la PR « Coque unique, formulaire
 | 6 | **Connexion / inscription sans mise en forme** (formulaire collé en haut, sous la barre). | ✅ intégrées au thème |
 | 7 | **Page 404 brute** (texte « Page non trouvée » sans design) pour toute URL inconnue ; `/portfolio` et `/equipe` affichaient « Une erreur est survenue ». | ✅ vraie page 404 (noindex) ; portfolio/équipe renvoient vers « À propos » |
 | 8 | **Erreur JavaScript sur l'accueil** (`Cannot read properties of null (reading 'classList')`) venant de `main.js`, plus un code de débogage qui dessinait « DEBUG CANVAS OK ». | ✅ script retiré |
-| 9 | **Image manquante sur /blog** (`placeholder-blog.jpg`, 404 ×5) : aucun des 472 articles n'a d'image. | ✅ visuel de remplacement ; ⚠️ images d'articles à produire |
+| 9 | **Image manquante sur /blog** (`placeholder-blog.jpg`, 404 ×5) : aucun des 472 articles n'a d'image. | ✅ visuel de remplacement ; ✅ les 25 nouveaux articles ont leur image (08/11/2026, voir [Suivi du blog](../SUIVI_BLOG.md)) ; ⚠️ images des anciens articles à produire |
 | 10 | **Partages réseaux sociaux des formations** vers `http://digita-marketing.local/...`. | ✅ URL du site |
 | 11 | Débordement horizontal sur mobile (/a-propos, articles, /projets/brief). | ✅ corrigé |
 | 12 | **Mentions légales fictives** : SIRET 123 456 789 00012, « 123 Rue du Marketing, Paris », hébergeur « [Nom de l'hébergeur] », directeur « [Nom du directeur] ». Obligation légale (LCEN). | ✅ remplacées par les vraies informations (EI TONY ALPHA 8.0, SIREN 844 384 198, hébergeur OVH) |
@@ -34,7 +34,7 @@ Les corrections marquées ✅ sont faites dans la PR « Coque unique, formulaire
 | Paramètre `?v=time()` sur chaque CSS : aucun cache navigateur possible. | ✅ version fixée au démarrage |
 | Sitemap OK (903 URL, calculé à la demande), robots.txt OK (commentaire d'ancien domaine corrigé). | ✅ |
 | **Contenu dupliqué** : 382 formations au même prix (297 €), même durée, descriptions générées sur le même modèle (« Formation complète pour maîtriser X de A à Z »), 2 inscrits au total. Risque de contenu jugé pauvre par Google. | ⚠️ réécrire les fiches prioritaires, regrouper ou désindexer le reste |
-| 472 articles sans image : pas de miniature dans Google Discover ni sur les réseaux. | ⚠️ générer des visuels (l'IA INES peut aider) |
+| 472 articles sans image : pas de miniature dans Google Discover ni sur les réseaux. | ⚠️ générer des visuels (l'IA INES peut aider) ; les 25 nouveaux articles en ont un |
 | Pas de `BreadcrumbList` / `FAQPage` sur les pages fixes ; FAQ de /contact sans schéma. | à ajouter |
 | Image Open Graph = logo carré 350 Ko. | créer une image 1200×630 dédiée |
 | Pas de Google Search Console ni d'outil de mesure déclaré dans le code. | à brancher |

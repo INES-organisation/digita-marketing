@@ -9,6 +9,7 @@
 ## Stratégie et contenu
 
 - [Refonte et page de vente Agent IA](SUIVI_REFONTE_ACCUEIL.md) : analyse de synaps.re, décisions, page de vente `/agent24-7` (future `agent24-7.digita.buzz`), Pack de lancement, points ouverts.
+- [Suivi du blog](SUIVI_BLOG.md) : 25 nouveaux articles en ligne, règles de rédaction (cas fictifs, sources officielles, tarifs de la grille), page article et sommaire toujours visible, procédure pour ajouter un lot.
 - [Stratégie Digita](DIGITA_STRATEGY.md)
 - [Stratégie de référence](STRATEGIE_REFERENCE_DIGITA.md)
 - [Manifeste](MANIFESTE_DIGITA.md)

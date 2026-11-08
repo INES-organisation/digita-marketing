@@ -81,6 +81,7 @@ Google sanctionne la surmultiplication de pages clonées ou générées à la vo
 - **Enrichissement des Articles de Blog :**
   - Résoudre l'absence d'images d'illustration sur les articles existants.
   - Associer à chaque article une image originale optimisée (1200×630 px avec balise `alt` descriptive).
+  - ✅ Fait pour les 25 nouveaux articles (08/11/2026) ; reste à faire pour les anciens. Voir [Suivi du blog](SUIVI_BLOG.md).
 
 ---
 
@@ -121,6 +122,7 @@ L'évaluation de la qualité repose sur l'autorité, la crédibilité et la tran
 
 - **Règle 1 : QUI (Transparence de l'Auteur)**
   - Signer chaque article et guide par une personne réelle disposant d'une légitimité établie.
+  - ✅ Les nouveaux articles sont signés par Anthony Legros (photo, bio, lien vers `/a-propos`, auteur dans `BlogPosting`).
   - Créer un encart auteur avec bio, domaines d'expertise, liens vers profils vérifiables (LinkedIn, publications).
   - *Interdiction stricte Google :* Ne jamais inventer de fausses identités ou portraits d'experts par IA (considéré comme tromperie et sanctionné comme contenu de faible qualité).
 - **Règle 2 : COMMENT (Transparence de la Méthode)**
