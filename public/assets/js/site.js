@@ -47,23 +47,55 @@
     });
 
     // ---------- Accueil : section visible surlignée dans le menu ----------
-    var sectionLinks = document.querySelectorAll('[data-section-link]');
-    if (sectionLinks.length && 'IntersectionObserver' in window) {
-        var byId = {};
-        sectionLinks.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (!entry.isIntersecting) return;
-                sectionLinks.forEach(function (a) { a.classList.remove('active'); a.removeAttribute('aria-current'); });
-                var link = byId[entry.target.id];
-                if (link) { link.classList.add('active'); link.setAttribute('aria-current', 'true'); }
+    var sectionLinks = Array.prototype.slice.call(document.querySelectorAll('[data-section-link]'));
+    if (sectionLinks.length) {
+        // La section active est la dernière dont le haut a dépassé le premier tiers de l'écran
+        // (fiable quelle que soit la hauteur de l'écran, même pour une section courte).
+        // En bas de page, la dernière section est active ; dans le héros, aucune.
+        var spy = sectionLinks.map(function (a) {
+            return { link: a, section: document.getElementById(a.getAttribute('href').slice(1)) };
+        }).filter(function (x) { return x.section; });
+        var setActive = function (link) {
+            sectionLinks.forEach(function (a) {
+                var on = a === link;
+                a.classList.toggle('active', on);
+                if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
             });
-        }, { rootMargin: '-45% 0px -50% 0px' });
-        // Le héros n'a pas d'entrée : quand il est visible, aucun lien n'est surligné
-        Object.keys(byId).concat(['hero-premium']).forEach(function (id) {
-            var section = document.getElementById(id);
-            if (section) observer.observe(section);
-        });
+        };
+        var updateSpy = function () {
+            var line = Math.min(window.innerHeight * 0.33, 320);
+            var current = null;
+            spy.forEach(function (x) { if (x.section.getBoundingClientRect().top <= line) current = x.link; });
+            var atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+            if (atBottom && spy.length) current = spy[spy.length - 1].link;
+            setActive(current);
+        };
+        var spyTicking = false;
+        window.addEventListener('scroll', function () {
+            if (spyTicking) return;
+            spyTicking = true;
+            window.requestAnimationFrame(function () { updateSpy(); spyTicking = false; });
+        }, { passive: true });
+        window.addEventListener('resize', updateSpy);
+        // Au clic, le lien choisi est surligné tout de suite
+        spy.forEach(function (x) { x.link.addEventListener('click', function () { setActive(x.link); }); });
+        updateSpy();
+    }
+
+    // ---------- Arrivée sur une ancre depuis une autre page ----------
+    // Le navigateur saute à l'ancre avant la fin du chargement (polices, images) : le contenu
+    // se décale ensuite et la cible finit sous la barre fixe. On la recale une fois tout chargé.
+    // (Le catalogue a son propre calage, plus fin : on le laisse faire.)
+    if (location.hash.length > 1 && !document.querySelector('[data-catalogue-nav]')) {
+        var realignHash = function () {
+            var target;
+            try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { return; }
+            if (!target || target.closest('.modal')) return;
+            if (target.hasAttribute('data-aos')) target.classList.add('aos-animate');
+            target.scrollIntoView({ block: 'start', behavior: 'instant' });
+        };
+        window.addEventListener('load', function () { realignHash(); setTimeout(realignHash, 350); });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(realignHash);
     }
 
     // ---------- Thème clair / sombre ----------

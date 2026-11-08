@@ -344,6 +344,21 @@ body::before {
     height: 44px;
 }
 
+/* Menu centré sur la largeur du header (et non entre le logo et les boutons, de largeurs
+   différentes) dès qu'il y a la place de ne rien chevaucher */
+@media (min-width: 1200px) {
+    .navbar-site > .container-fluid {
+        position: relative;
+    }
+
+    .navbar-site #mainNavbar {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
 .navbar-site .navbar-nav {
     gap: 0.5rem;
 }
@@ -909,3 +924,48 @@ body.agence-open {
     color: var(--on-gold);
 }
 .chat-booking-error { color: #b91c1c; font-size: 12px; margin: 0; }
+
+/* ---------- Ancres : la cible arrive sous la barre fixe, sur toutes les pages ----------
+   Priorité nulle (:where) : les pages qui ont leur propre décalage (Services, Catalogue) le gardent. */
+:where(body.layout-pages main [id]) {
+    scroll-margin-top: calc(var(--navbar-height) + 1rem);
+}
+
+@media (max-width: 991.98px) {
+    :where(body.layout-home main [id]) {
+        scroll-margin-top: calc(var(--topbar-height) + 0.5rem);
+    }
+}
+
+/* ---------- Listes déroulantes, calendriers et barres de défilement natives ----------
+   Elles suivent le thème du site (et non celui du système) : sombre par défaut, clair au choix. */
+:root,
+[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+[data-theme="light"] {
+    color-scheme: light;
+}
+
+select option,
+select optgroup {
+    background-color: var(--content-surface);
+    color: var(--content-heading);
+}
+
+/* Options marquées « bg-dark » par d'anciens gabarits : elles suivent aussi le thème */
+select option.bg-dark {
+    background-color: var(--content-surface) !important;
+    color: var(--content-heading) !important;
+}
+
+/* Sélecteurs « verre » (glass-card) : fond opaque à la couleur du thème, flèche lisible */
+select.form-select.glass-card {
+    background-color: var(--content-surface) !important;
+    color: var(--content-heading) !important;
+}
+
+select.form-select:disabled {
+    opacity: 0.6;
+}

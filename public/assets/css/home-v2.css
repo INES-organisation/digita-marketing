@@ -55,7 +55,11 @@
 
 .hero-buzz {
     display: inline-block;
-    margin: 0 0.15em;
+    /* Marge intérieure : la fin du « r » (police manuscrite) dépasse la boîte du mot ; animé, le mot
+       est dessiné sur son propre calque, coupé au bord de la boîte. Les marges négatives gardent
+       l'espacement visuel d'origine. */
+    padding: 0.1em 0.28em 0.1em 0.12em;
+    margin: -0.1em -0.13em -0.1em 0.03em;
     color: var(--accent);
     animation: heroBuzz 2.4s ease-in-out infinite;
 }
