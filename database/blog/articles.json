@@ -193,5 +193,70 @@
     "pole": "Chatbot",
     "icon": "chat-text",
     "visual_title": "WhatsApp qui répond pour vous"
+  },
+  {
+    "slug": "rgpd-tpe-essentiel",
+    "title": "RGPD pour une TPE : l'essentiel en 7 étapes",
+    "meta_title": "RGPD pour une TPE : l'essentiel en 7 étapes",
+    "meta_description": "Registre, formulaires, cookies, durées de conservation, sécurité : les 7 étapes pour mettre une petite entreprise en règle avec le RGPD, sans jargon.",
+    "excerpt": "Fichier clients, formulaire de contact, cookies : dès que vous avez des clients, le RGPD vous concerne. Les 7 étapes pour être en règle, sans y passer vos week-ends.",
+    "category": "creation-web",
+    "service_name": "Site internet et conformité",
+    "meta_keywords": "RGPD TPE, RGPD petite entreprise, registre des traitements, bandeau cookies, mentions RGPD formulaire",
+    "pole": "Conformité",
+    "icon": "shield-check",
+    "visual_title": "Le RGPD sans prise de tête"
+  },
+  {
+    "slug": "prise-rendez-vous-en-ligne",
+    "title": "Prise de rendez-vous en ligne : moins d'appels, moins de lapins",
+    "meta_title": "Prise de rendez-vous en ligne : le guide pour les TPE",
+    "meta_description": "Agenda en ligne, rappels par SMS, acompte, synchronisation : comment mettre en place la prise de rendez-vous en ligne et réduire les rendez-vous manqués.",
+    "excerpt": "Le téléphone sonne pendant que vous êtes avec un client, et le rendez-vous de 14 h ne vient pas. Ce qu'un agenda en ligne bien réglé change, et comment le choisir.",
+    "category": "intelligence-artificielle",
+    "service_name": "Automatisation",
+    "meta_keywords": "prise de rendez-vous en ligne, agenda en ligne TPE, rappel rendez-vous SMS, réservation en ligne Réunion",
+    "pole": "Automatisation",
+    "icon": "calendar-check",
+    "visual_title": "Des rendez-vous qui se prennent seuls"
+  },
+  {
+    "slug": "site-internet-artisan",
+    "title": "Site internet d'artisan : les 7 pages qui font venir des devis",
+    "meta_title": "Site d'artisan : les 7 pages qui apportent des devis",
+    "meta_description": "Accueil, services, réalisations, zone d'intervention, avis, devis : les 7 pages d'un site d'artisan qui transforme les visiteurs en demandes de devis.",
+    "excerpt": "Un beau site qui ne génère aucun appel ne sert à rien. Les pages qui comptent pour un artisan réunionnais, ce qu'il faut y mettre, et les erreurs qui font fuir.",
+    "category": "creation-web",
+    "service_name": "Sites web et landing",
+    "meta_keywords": "site internet artisan, site artisan Réunion, site vitrine BTP, demande de devis en ligne, page réalisations",
+    "pole": "Sites web",
+    "icon": "hammer",
+    "visual_title": "Le site d'artisan qui apporte des devis"
+  },
+  {
+    "slug": "boutique-en-ligne-reunion",
+    "title": "Lancer sa boutique en ligne à La Réunion : le guide pratique",
+    "meta_title": "Boutique en ligne à La Réunion : le guide pour bien démarrer",
+    "meta_description": "Plateforme, livraison, paiement, obligations légales, trafic : ce qu'il faut préparer pour lancer une boutique en ligne depuis La Réunion, étape par étape.",
+    "excerpt": "Une boutique en ligne ne vend pas toute seule. Catalogue, livraison depuis l'île, règles de la vente à distance et premiers visiteurs : le plan pour démarrer du bon pied.",
+    "category": "creation-web",
+    "service_name": "E-commerce",
+    "meta_keywords": "boutique en ligne Réunion, créer site e-commerce, vente en ligne obligations, droit de rétractation, e-commerce 974",
+    "pole": "E-commerce",
+    "icon": "bag-check",
+    "visual_title": "Votre boutique en ligne, prête à vendre"
+  },
+  {
+    "slug": "temps-perdu-taches-repetitives",
+    "title": "Combien vous coûtent vos tâches répétitives ? Le calcul en 15 minutes",
+    "meta_title": "Tâches répétitives : calculer le temps perdu en 15 minutes",
+    "meta_description": "Saisies, relances, copier-coller, prises de rendez-vous : la méthode pour chiffrer le temps perdu sur les tâches répétitives et savoir quoi automatiser d'abord.",
+    "excerpt": "Cinq minutes par-ci, dix minutes par-là : à la fin de l'année, ce sont des semaines entières. Une méthode simple pour chiffrer ce temps et choisir quoi automatiser en premier.",
+    "category": "intelligence-artificielle",
+    "service_name": "Automatisation",
+    "meta_keywords": "tâches répétitives, temps perdu entreprise, automatiser tâches TPE, rentabilité automatisation, gain de temps",
+    "pole": "Automatisation",
+    "icon": "stopwatch",
+    "visual_title": "Le vrai coût de vos tâches répétitives"
   }
 ]
