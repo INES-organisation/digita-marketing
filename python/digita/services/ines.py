@@ -150,13 +150,25 @@ def sale_payload(invoice):
               # micro-entreprise : « ventes » = marchandises ; formations en ligne, contenus numériques et
               # installations sont des prestations de services (plafond et taux URSSAF des prestations)
               "nature": "prestation"} for i in snap.get("items", [])]
+    total = round(float(invoice["amount_ttc"]), 2)
+    gross = round(sum(l["quantity"] * l["unit_price"] for l in lines), 2)
+    if lines and gross and gross != total:
+        # Code promo : INES exige que les lignes reconstituent le total encaissé ; la remise est
+        # répartie sur les lignes (le dernier centime d'arrondi va sur la dernière ligne).
+        for l in lines:
+            l["unit_price"] = round(l["unit_price"] * total / gross, 2)
+        diff = round(total - sum(l["quantity"] * l["unit_price"] for l in lines), 2)
+        lines[-1]["unit_price"] = round(lines[-1]["unit_price"] + diff / lines[-1]["quantity"], 2)
+    elif not lines:
+        lines = [{"label": "Vente en ligne", "quantity": 1, "unit_price": total, "nature": "prestation"}]
     return {"external_id": f"digita-invoice-{invoice['id']}", "kind": "sale",
-            "date": str(invoice.get("paid_at") or invoice.get("created_at")).replace(" ", "T"),
+            # heure du serveur (UTC) : INES exige une date avec fuseau
+            "date": str(invoice.get("paid_at") or invoice.get("created_at")).replace(" ", "T") + "+00:00",
             "invoice_number": invoice["invoice_number"],
             "customer": {"name": buyer.get("name") or invoice.get("billing_name") or invoice.get("billing_email"),
                          "email": buyer.get("email") or invoice.get("billing_email"),
                          "address": buyer.get("address"), "siren": buyer.get("siret")},
-            "lines": lines, "total": float(invoice["amount_ttc"]), "currency": "EUR",
+            "lines": lines, "total": total, "currency": "EUR",
             "payment_method": "carte bancaire (Stripe)", "refund_of": None}
 
 

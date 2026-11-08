@@ -29,5 +29,14 @@ def test_sale_payload_for_ines_receipts_ledger():
     inv = {"id": 3, "invoice_number": "DM-2026-0007", "paid_at": "2026-11-08 10:00:00", "amount_ttc": "29.00",
            "billing_email": "c@d.fr", "snapshot": json.dumps(snap)}
     p = ines.sale_payload(inv)
-    assert p["external_id"] == "digita-invoice-3" and p["kind"] == "sale" and p["date"] == "2026-11-08T10:00:00"
+    assert p["external_id"] == "digita-invoice-3" and p["kind"] == "sale" and p["date"] == "2026-11-08T10:00:00+00:00"
     assert p["total"] == 29.0 and p["lines"][0]["nature"] == "prestation" and p["customer"]["name"] == "Marie Hoarau"
+
+
+def test_sale_payload_spreads_a_promo_over_the_lines():
+    snap = {"buyer": {"name": "A", "email": "a@b.fr"},
+            "items": [{"product_name": "Formation", "product_type": "formation", "quantity": 1, "price": "97.00"}]}
+    inv = {"id": 4, "invoice_number": "DM-2026-0008", "paid_at": "2026-11-08 10:00:00", "amount_ttc": "77.60",
+           "billing_email": "a@b.fr", "snapshot": json.dumps(snap)}
+    p = ines.sale_payload(inv)
+    assert p["total"] == 77.6 and round(sum(l["quantity"] * l["unit_price"] for l in p["lines"]), 2) == 77.6
