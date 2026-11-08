@@ -1,27 +1,26 @@
+{% set hero_kicker = 'Erreur 404' %}{% set hero_title = 'Page introuvable' %}
+{% set hero_lead = "Cette page n'existe pas ou a été déplacée. Voici les pages les plus utiles pour continuer." %}
+{% include 'includes/partials/page-hero.html' %}
 
-<section class="py-5">
-    <div class="container text-center">
-        <div class="row justify-content-center">
-            <div class="col-lg-6">
-                <i class="bi bi-exclamation-triangle text-warning icon-xxl"></i>
-                <h1 class="display-4 mt-4">404</h1>
-                <h2 class="mb-4">Page non trouvée</h2>
-                <p class="lead text-muted mb-4">
-                    Désolé, la page que vous recherchez n'existe pas ou a été déplacée.
-                </p>
-                <div class="d-flex gap-3 justify-content-center">
-                    <a href="/" class="btn btn-primary">
-                        <i class="bi bi-house"></i> Retour à l'accueil
-                    </a>
-                    <a href="/blog" class="btn btn-outline-primary">
-                        <i class="bi bi-journal-text"></i> Voir le blog
-                    </a>
-                    <a href="/formations" class="btn btn-outline-primary">
-                        <i class="bi bi-mortarboard"></i> Voir les formations
-                    </a>
-                </div>
+<section class="v2-section">
+    <div class="container-fluid v2-container">
+        <div class="row g-4">
+            {% for l in [
+                ['bi-house', 'Accueil', "Ce que DIGITA fait pour les TPE et PME de La Réunion.", '/'],
+                ['bi-grid', 'Services', "Sites, visibilité, automatisation et IA, avec leurs prix.", '/services'],
+                ['bi-robot', 'Agents IA 24/7', "Un assistant qui répond à vos clients jour et nuit.", '/solutions'],
+                ['bi-calendar-check', 'Diagnostic gratuit', "30 minutes pour faire le point sur votre activité.", '/diagnostic#consultant'],
+            ] %}
+            <div class="col-sm-6 col-lg-3">
+                <a href="{{ l[3] }}" class="v2-card v2-need">
+                    <span class="v2-icon"><i class="bi {{ l[0] }}" aria-hidden="true"></i></span>
+                    <h2 class="h3">{{ l[1] }}</h2>
+                    <p>{{ l[2] }}</p>
+                    <span class="v2-link">Y aller <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
             </div>
+            {% endfor %}
         </div>
+        <p class="v2-small text-center mt-4">Vous cherchiez un article ? Le <a href="/blog">blog</a> a un moteur de recherche.</p>
     </div>
 </section>
-

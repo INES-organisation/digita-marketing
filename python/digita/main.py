@@ -10,7 +10,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from starlette.concurrency import run_in_threadpool
-from starlette.responses import FileResponse, PlainTextResponse, RedirectResponse, Response
+from starlette.responses import HTMLResponse, FileResponse, PlainTextResponse, RedirectResponse, Response
 
 from . import config
 from .routes import ROUTES
@@ -65,6 +65,21 @@ def healthz():
     return {"status": "ok"}
 
 
+# Page d'erreur autonome (sans gabarit ni base : l'erreur vient peut-être de là), aux couleurs du site.
+ERROR_500 = """<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Erreur momentanée | DIGITA</title><style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#050505;color:#d1d5db;font-family:system-ui,-apple-system,sans-serif;padding:16px}
+main{max-width:520px;text-align:center}h1{color:#fff;font-size:1.8rem;margin:1.2rem 0 .8rem}p{line-height:1.6}
+a{display:inline-block;margin:.4rem;padding:.8rem 1.4rem;border-radius:50px;text-decoration:none;font-weight:700}
+.p{background:linear-gradient(135deg,#d4af37,#f4d03f);color:#050505}.g{border:1px solid #25d366;color:#25d366}
+img{width:150px;height:auto}</style></head><body><main>
+<img src="/assets/images/logo-480.webp" alt="DIGITA" width="150" height="35">
+<h1>Un souci technique momentané</h1>
+<p>La page n'a pas pu s'afficher. Réessayez dans quelques instants ; si cela persiste, écrivez-nous, nous corrigeons au plus vite.</p>
+<p><a class="p" href="/">Retour à l'accueil</a><a class="g" href="https://wa.me/262693487817">WhatsApp</a></p>
+<p style="font-size:.85rem">06 93 48 78 17 · contact@digita.buzz</p></main></body></html>"""
+
+
 @app.api_route("/{full_path:path}", methods=["GET", "POST", "HEAD"])
 async def dispatch(request: Request, full_path: str):
     # Chemin brut (non décodé), comme parse_url($_SERVER['REQUEST_URI']) en PHP.
@@ -112,6 +127,5 @@ async def dispatch(request: Request, full_path: str):
         resp = stop.response
     except Exception:  # noqa: BLE001 — customExceptionHandler PHP : message générique
         log.exception("Erreur sur %s %s", request.method, uri)
-        return PlainTextResponse("Une erreur est survenue. Veuillez réessayer plus tard.",
-                                 status_code=500, media_type="text/html")
+        return HTMLResponse(ERROR_500, status_code=500)
     return resp if isinstance(resp, Response) else Response(resp)

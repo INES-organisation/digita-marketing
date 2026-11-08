@@ -11,17 +11,13 @@ Allow: /services
 Allow: /solutions
 Allow: /a-propos
 Allow: /contact
-Allow: /catalogue
-Allow: /boutique
 Allow: /tarifs
 
-# Bloquer l'accès admin et les pages de compte (non indexables)
+# Bloquer l'accès admin et les pages de compte (connexion et inscription restent lisibles : leur balise noindex les retire de Google)
 Disallow: /admin/
 Disallow: /api/
-Disallow: /connexion
 Disallow: /mot-de-passe-oublie
 Disallow: /reinitialiser-mot-de-passe
-Disallow: /inscription
 Disallow: /espace-client
 Disallow: /mes-formations
 Disallow: /mes-commandes

@@ -1,14 +1,14 @@
 {% set pageTitle = coalesce(pageTitle, 'Inscription - Digita Marketing') %}{% set extraCss = ['/assets/css/auth.css'] %}
 <div class="auth-container">
     <div class="auth-card">
-        <h2 class="auth-title">Créer un compte</h2>
+        <h1 class="auth-title">Créer un compte</h1>
         
         {% if ((isset(error)) and t(error)) %}            <div class="alert alert-danger">{{ h(error) }}</div>
         {% endif %}        
         <form method="post" action="/inscription" class="auth-form" autocomplete="on">
             {{ CsrfMiddleware_field() }}            
             <div class="form-group">
-                <label for="email" class="form-label">Adresse Email</label>
+                <label for="email" class="form-label">Adresse e-mail</label>
                 <input type="email" class="form-control" id="email" name="email" required autofocus>
             </div>
             
@@ -23,12 +23,13 @@
                 <input type="password" class="form-control" id="password2" name="password2" required minlength="8">
             </div>
             
+            <p class="small mb-3">En créant un compte, vous acceptez les <a href="/conditions-generales">conditions générales</a> ; vos données sont traitées selon la <a href="/politique-confidentialite">politique de confidentialité</a>.</p>
             <button type="submit" class="btn btn-primary btn-block">Créer mon compte</button>
         </form>
         {% if inesSso %}
         <div class="auth-sep"><span>ou</span></div>
         <a href="/auth/ines" class="btn btn-ines btn-block">Se connecter avec INES</a>
-        <p class="auth-ines-note">Un seul compte WAO pour INES, DIGITA, MultiProShop et Tony Alpha.</p>
+        <p class="auth-ines-note">Le même compte vous connecte à DIGITA, INES, MultiProShop et Tony Alpha 8.0.</p>
         {% endif %}
         
         <div class="auth-footer">

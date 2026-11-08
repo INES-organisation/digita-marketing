@@ -36,12 +36,13 @@
                         <div><span class="text-white-50 small">Mise en service</span><strong class="d-block text-white">{{ offer['setup'] }}</strong>{% if offer['setup_note'] %}<span class="text-white-50 small">{{ offer['setup_note'] }}</span>{% endif %}</div>
                         <div class="mt-2"><span class="text-white-50 small">Abonnement</span><strong class="d-block text-gold">{{ offer['monthly'] }}</strong><span class="text-white-50 small">{{ offer['monthly_note'] }}</span></div>
                     </div>
+                    {% if offer['id'] == 'standardiste' %}<p class="small mt-3 mb-0 text-gold"><i class="bi bi-gift me-1"></i>Essai de 14 jours : vous ne payez la mise en service que si INES vous a obtenu au moins un rendez-vous (<a href="/conditions-generales#essai-standardiste" class="text-gold">conditions</a>).</p>{% endif %}
                     <a href="/diagnostic?pack={{ offer['id'] }}#consultant" class="btn-premium btn-premium-gold w-100 py-2 mt-4 text-center">Parler de cette offre</a>
                 </article>
             </div>
             {% endfor %}
         </div>
-        <p class="text-white-50 small text-center mt-4 mb-0">Fourchettes selon le paramétrage (nombre de canaux, règles métier, volume). Prix définitif établi pendant le diagnostic gratuit.</p>
+        <p class="text-white-50 small text-center mt-4 mb-0">Fourchettes selon le paramétrage (nombre de canaux, règles métier, volume). Prix définitif établi pendant le diagnostic gratuit. Une question rapide ? <a href="https://wa.me/262693487817" class="text-gold" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> WhatsApp</a></p>
     </div>
 </section>
 

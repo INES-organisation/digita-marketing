@@ -99,17 +99,19 @@
     text-decoration: underline;
 }
 
-.alert {
+.auth-card .alert,
+.auth-container .alert {
     padding: 0.75rem 1rem;
     margin-bottom: 1.25rem;
     border-radius: 6px;
     font-size: 0.9375rem;
 }
 
-.alert-danger {
-    background-color: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #991b1b;
+.auth-card .alert-danger,
+.auth-container .alert-danger {
+    background-color: rgba(220, 38, 38, 0.12);
+    border: 1px solid rgba(220, 38, 38, 0.35);
+    color: var(--content-heading);
 }
 
 @media (max-width: 480px) {

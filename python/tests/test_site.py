@@ -36,7 +36,7 @@ def test_inner_pages_use_horizontal_menu_and_services_bar():
         assert 'class="sidebar-premium"' not in r.text, path
         assert 'href="/#hero-premium"' in r.text, path
     r = c.get("/page-qui-n-existe-pas")
-    assert r.status_code == 404 and "Page non trouvée" in r.text and "noindex" in r.text
+    assert r.status_code == 404 and "Page introuvable" in r.text and "noindex" in r.text and "/diagnostic#consultant" in r.text
     assert 'aria-current="page"' in c.get("/contact").text
 
 
@@ -389,3 +389,9 @@ def test_home_seo_is_clean_and_preview_redirects():
     assert "logo.png" not in html and "<canvas" not in html and "sidebar-onglet" not in html
     for anchor in ("#besoins", "#realisations", "#methode", "#engagements", "#faq"):
         assert f'href="{anchor}"' in html, anchor
+
+
+def test_server_error_page_matches_the_site():
+    from digita import main
+
+    assert "Un souci technique momentané" in main.ERROR_500 and "wa.me/262693487817" in main.ERROR_500
