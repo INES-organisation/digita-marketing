@@ -224,3 +224,17 @@ Le libellé est trompeur : remplacer par « Envoyer mon message ». La case « J
 4. Conversion : Diagnostic gratuit et WhatsApp dans la navbar, le footer et toutes les pages ; /contact et /projets/brief réécrits.
 5. Couleurs et style : palette d'accent unique, bleus retirés du thème sombre, héros homogènes, emojis retirés, pages Bootstrap passées au style premium.
 6. Finitions : pagination du blog, fil d'Ariane, outils (ROI, messages d'erreur), 404/500, H1 des pages de connexion, données structurées FAQPage, Person et WebApplication.
+
+## 5. Réalisé le 8 novembre 2026 (en ligne)
+
+- Lot 1 : /a-propos réécrite autour du fondateur. Cookies et confidentialité conformes à la réalité. CGV complétées : abonnements, contenus numériques avec renonciation à la rétractation, licence et garantie de conformité, formulaire de rétractation. Mentions légales : micro-entreprise.
+- Lot 2 : /tarifs générée depuis `solutions.py` et `grille.py`. Barre des services générée depuis `services_catalog.py`. /catalogue en 301 vers /services. Estimations du brief alignées sur la grille. Prix corrigés dans la source : SEO On-Page 590 €, identité dès 190 €, e-commerce dès 290 €/mois, Agent IA 24/7 ajouté.
+- Lot 3 : /boutique en « ouverture prochaine » (produits et prix dans `boutique.py`, liste d'attente vers INES). /formations limitée aux formations avec contenu ; aucune en production au 08/11, et les fiches vides redirigent vers /formations. /support réécrit.
+- Lot 4 : Diagnostic gratuit et WhatsApp dans le header (≥ 1400 px), le menu agence, le pied de page et le chatbot. /contact réécrite. Fenêtre de diagnostic de l'accueil sur toutes les pages (l'ancienne « Executive Offer » est supprimée). Brief sans jargon.
+- Lot 5 : plus de bleu en thème sombre. Outils en une seule couleur, ROI corrigé (bénéfice net, budget déduit), message « clé API OpenAI » retiré. Blog sans jargon, un seul fil d'Ariane, auteur vers /a-propos.
+- Lot 6 : pages 404 et 500 aux couleurs du site. h1 et lien CGU sur connexion et inscription. robots.txt. /services sans jargon. Essai de 14 jours et WhatsApp sur /solutions.
+
+Reste à faire :
+- nommer le médiateur de la consommation dans les CGV (art. 18) ;
+- brancher la vente en ligne des produits numériques (table de commandes de produits, fichiers privés, liens de téléchargement) avant de passer `boutique.OPEN` à True ;
+- pages catégorie et recherche du blog encore dans l'ancien style.
