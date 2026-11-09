@@ -94,7 +94,7 @@ def test_category_and_search_pages_use_site_style(monkeypatch):
     art = {"slug": "page-facebook-piratee", "title": "Page Facebook piratée", "excerpt": "Que faire tout de suite.",
            "category_name": "Réseaux sociaux", "category_slug": "reseaux", "published_at": "2026-11-02 10:00:00", "views": 3}
     cats = [{"slug": "reseaux", "name": "Réseaux sociaux", "article_count": 1}]
-    monkeypatch.setattr(blog_routes.Article, "get_by_category", lambda slug, n: [art])
+    monkeypatch.setattr(blog_routes.Article, "get_by_category", lambda slug, n, offset=0: [art])
     monkeypatch.setattr(blog_routes.Article, "count", lambda slug=None: 1)
     monkeypatch.setattr(blog_routes.Article, "get_categories", lambda: cats)
     monkeypatch.setattr(blog_routes.Article, "search", lambda q, n: [art] if q == "facebook" else [])
@@ -109,3 +109,57 @@ def test_category_and_search_pages_use_site_style(monkeypatch):
     assert "Résultats pour « facebook »" in found and "1 article trouvé" in found
     empty = c.get("/blog/search?q=zzz").text
     assert "Aucun article ne correspond" in empty and "Les articles les plus lus" in empty
+
+
+def test_every_article_has_a_known_content_type():
+    from digita import content_types
+    for a in ARTICLES:
+        assert content_types.get(a.get("content_type")), a["slug"]
+    migration = (ROOT / "database" / "migrations" / "2026_11_09_blog_content_type.sql").read_text(encoding="utf-8")
+    assert all(f"'{a['slug']}'" in migration for a in ARTICLES)
+
+
+def test_build_sql_sets_content_type(tmp_path):
+    sys.path.insert(0, str(ROOT / "python" / "tools"))
+    import build_blog_sql
+    out = tmp_path / "blog.sql"
+    build_blog_sql.main(out, ["facture-electronique-tpe"])
+    sql = out.read_text(encoding="utf-8")
+    assert ", content_type)" in sql and "'actualite')" in sql
+
+
+def test_blog_index_filters_by_type_and_paginates(monkeypatch):
+    from digita.routes import blog as blog_routes
+    art = {"slug": "facture-electronique-tpe", "title": "Facture électronique", "excerpt": "Ce qui change.",
+           "category_name": "IA", "category_slug": "ia", "published_at": "2026-11-08 10:00:00",
+           "content_type": "actualite", "image_url": "/assets/images/blog/facture-electronique-tpe.webp"}
+    calls = []
+    monkeypatch.setattr(blog_routes.Article, "get_all_published",
+                        lambda limit, offset, ctype=None: calls.append((limit, offset, ctype)) or [art])
+    monkeypatch.setattr(blog_routes.Article, "count", lambda slug=None, content_type=None: 30 if content_type else 412)
+    monkeypatch.setattr(blog_routes.Article, "get_categories", lambda: [])
+    monkeypatch.setattr(blog_routes.Article, "type_counts", lambda: {"actualite": 30, "guide": 11})
+    c = TestClient(app, base_url="https://digita.buzz")
+    page = c.get("/blog?type=actualite&page=2").text
+    assert calls[-1] == (12, 12, "actualite")
+    assert "<title>Actualités — Blog — page 2 | DIGITA</title>" in page
+    assert 'href="/blog?type=actualite&page=3"' in page and 'class="blog-type"' in page
+    assert 'href="/blog?type=guide"' in page and 'href="/blog?type=modele"' not in page  # pas de filtre vide
+    home = c.get("/blog").text
+    assert calls[-1] == (12, 0, None) and 'href="/blog?page=2">Suivant' in home
+    assert c.get("/blog?type=nimporte", follow_redirects=False).headers["location"] == "/blog"
+    assert c.get("/blog?page=99", follow_redirects=False).status_code in (301, 302, 303, 307)
+
+
+def test_article_shows_its_type(monkeypatch):
+    meta = ARTICLES[-1]
+    row = {"id": 2, "slug": meta["slug"], "title": meta["title"], "excerpt": meta["excerpt"], "content": "<h2>A</h2><p>b</p>",
+           "meta_title": meta["meta_title"], "meta_description": meta["meta_description"], "meta_keywords": "",
+           "featured_image": "", "image_url": "", "category_id": None, "category_name": None, "category_slug": None,
+           "views": 0, "published_at": "2026-11-09 08:00:00", "created_at": "2026-11-09", "updated_at": "2026-11-09",
+           "content_type": "actualite"}
+    monkeypatch.setattr(Article, "get_by_slug", lambda slug: dict(row) if slug == row["slug"] else None)
+    monkeypatch.setattr(Article, "get_related", lambda *a: [])
+    monkeypatch.setattr(Article, "get_popular", lambda *a: [])
+    page = TestClient(app, base_url="https://digita.buzz").get("/blog/" + row["slug"]).text
+    assert 'href="/blog?type=actualite" class="article-category article-type"' in page and "Actualité" in page

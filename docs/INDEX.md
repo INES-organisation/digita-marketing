@@ -12,7 +12,8 @@
 ## Stratégie et contenu
 
 - [Refonte et page de vente Agent IA](SUIVI_REFONTE_ACCUEIL.md) : analyse de synaps.re, décisions, page de vente `/agent24-7` (future `agent24-7.digita.buzz`), Pack de lancement, points ouverts.
-- [Suivi du blog](SUIVI_BLOG.md) : 25 nouveaux articles en ligne, règles de rédaction (cas fictifs, sources officielles, tarifs de la grille), page article et sommaire toujours visible, procédure pour ajouter un lot.
+- [Suivi du blog](SUIVI_BLOG.md) : 30 nouveaux articles en ligne, types de contenu (guide, pas à pas, actualité…) et filtres, règles de rédaction (cas fictifs, sources officielles, tarifs de la grille), page article et sommaire toujours visible, procédure pour ajouter un lot.
+- [Suivi des formations](SUIVI_FORMATIONS.md) : formation pilote « Être trouvé sur Google en 30 jours », production des vidéos (voix et rendu repris de la formation DGT Système d'INES), contraintes avant la mise en vente.
 - [Stratégie Digita](DIGITA_STRATEGY.md)
 - [Stratégie de référence](STRATEGIE_REFERENCE_DIGITA.md)
 - [Manifeste](MANIFESTE_DIGITA.md)

@@ -175,6 +175,22 @@
                     </div>
                 </div>
 
+                <!-- Type de contenu -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-bookmark-fill text-primary"></i> Type de contenu
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <select name="content_type" id="content_type" class="form-select">
+                            <option value="">— Non classé —</option>
+                            {% for slug_, type_ in contentTypes.items() %}<option value="{{ slug_ }}" {{ ('selected' if (article and article['content_type'] == slug_) else '') }}>{{ type_['label'] }}</option>
+                            {% endfor %}</select>
+                        <p class="form-text mb-0">Badge et filtre du blog : guide, pas à pas, comparatif, actualité, définition, modèle.</p>
+                    </div>
+                </div>
+
                 <!-- Service associé -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-0">

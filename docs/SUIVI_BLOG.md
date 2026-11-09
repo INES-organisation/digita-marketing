@@ -1,6 +1,6 @@
 # Suivi du blog : nouveaux articles
 
-État au 8 novembre 2026 (lot 6 rédigé le même jour). Le plan éditorial (mots-clés, calendrier, structure d'un article, design) se trouve
+État au 9 novembre 2026 (types de contenu ajoutés, à déployer). Le plan éditorial (mots-clés, calendrier, structure d'un article, design) se trouve
 dans le Claude Doc « Plan éditorial du blog DIGITA ». Ce fichier décrit ce qui a été fait dans le dépôt et
 comment ajouter un lot.
 
@@ -18,6 +18,31 @@ comment ajouter un lot.
 | 6 | #20 | `bilan-digital-fin-annee`, `lexique-marketing-digital`, `audit-seo-lire-rapport`, `creer-logo-entreprise`, `facture-electronique-tpe` |
 
 Les anciens articles (472 de l'ère PHP) n'ont pas été modifiés.
+
+## Types de contenu (9 novembre 2026)
+
+Chaque nouvel article a un type, défini dans `python/digita/content_types.py` et stocké dans la colonne
+`blog_articles.content_type` (migration `database/migrations/2026_11_09_blog_content_type.sql`). Les anciens
+articles restent sans type (`NULL`).
+
+| Type (slug) | Libellé | Pour quoi | Articles actuels |
+|---|---|---|---|
+| `guide` | Guide | Tout comprendre sur un sujet | 11 |
+| `pas-a-pas` | Pas à pas | Réussir une tâche précise | 10 |
+| `comparatif` | Comparatif | Choisir entre deux ou trois options | 2 |
+| `actualite` | Actualité | Ce qui change, et ce qu'il faut faire | 1 |
+| `definition` | Définition | Comprendre un mot ou une notion | 3 |
+| `modele` | Modèle | Checklist, modèle, calendrier prêts à l'emploi | 3 |
+
+- Le type s'affiche en badge doré sur les cartes et en tête d'article (lien vers le filtre).
+- `/blog` affiche des filtres par type (`/blog?type=guide`, seulement les types non vides, avec le nombre
+  d'articles), puis les catégories. Un type inconnu redirige vers `/blog`.
+- `/blog` liste d'abord les articles typés (les nouveaux), puis les anciens, 12 par page, avec pagination
+  (`?page=2`, combinable avec `?type=`). La pagination des catégories est corrigée (le décalage était ignoré).
+- Les cartes affichent la couverture quand elle est dans `/assets/images/blog/`.
+- Dans l'admin, le formulaire d'article a un champ « Type de contenu ».
+- Pour un nouveau lot : renseigner `"content_type"` dans `database/blog/articles.json`, `build_blog_sql.py`
+  l'insère. Un test vérifie que chaque article a un type connu.
 
 ## Règles de rédaction
 
@@ -84,7 +109,7 @@ Depuis `python/` :
    `intelligence-artificielle`, `crm`), sinon l'article n'a pas de catégorie. Si un article contient « % »,
    `tools/apply_sql.py` échoue (psycopg2 lit « % » comme un paramètre) : appliquer le fichier avec `psql -f`,
    comme sur le serveur.
-4. Tests : `python -m pytest -q` (121 tests au lot 6). `tests/test_blog.py` vérifie les longueurs des metas, la couverture, les
+4. Tests : `python -m pytest -q` (125 tests depuis les types de contenu). `tests/test_blog.py` vérifie les longueurs des metas, la couverture, les
    `h2`, « En bref », les sources, l'absence de lignes vides et la mention « fictif » des exemples.
 5. PR, validation d'Anthony, fusion.
 6. Mise en ligne sur le VPS (`ssh ines-vps`, depuis l'iMac) :
@@ -111,7 +136,9 @@ Claude Code, ou lancer le bloc à la main.
 
 - Calendrier : après le lot 6, tous les sujets du plan éditorial sont traités, sauf Kap Numérik et le
   financement des formations. Les prochains lots demandent de nouveaux sujets.
-- Nettoyage des 472 anciens articles (garder, fusionner, `noindex`, redirections 301) avec un export Search
-  Console.
+- Nettoyage des anciens articles : un premier tri des 382 articles publiés est prêt (126 à fusionner avec une
+  redirection 301 vers un nouvel article, 83 à réécrire en 16 nouveaux sujets, 173 à retirer en 410). Il
+  sera confirmé avec l'export Search Console (pages, 12 derniers mois) avant toute redirection. Le détail est
+  dans le Claude Doc « Plan de contenu : articles d'origine et formations ».
 - Google Search Console : sitemap et suivi des clics par article vers `/diagnostic`.
 - Photos réelles de La Réunion pour remplacer ou compléter les couvertures générées.
