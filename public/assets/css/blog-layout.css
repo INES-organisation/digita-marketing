@@ -673,9 +673,31 @@ article.blog-article-page .breadcrumb {
 
 /* Types de contenu (09/11/2026) : badge sur les cartes et dans l'article, filtres de /blog */
 .blog-card .blog-card-img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 12px; margin-bottom: 1rem; }
-.blog-card .blog-card-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; }
-.blog-card .blog-card-tags .pg-tag { margin: 0; }
-.blog-type { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.65rem; border-radius: 999px; background: rgba(var(--gold-rgb), 0.12); border: 1px solid rgba(var(--gold-rgb), 0.45); color: var(--gold); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; }
-[data-theme="light"] .blog-type { color: #8a6d12; }
-.blog-types a i { margin-right: 0.15rem; }
-.blog-article-page .article-type { margin-right: 0.5rem; background: rgba(var(--gold-rgb), 0.2); }
+.blog-card-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; }
+.blog-card-tags > * { margin: 0; }
+/* Couleurs (09/11/2026) : une couleur par type, les catégories en bleu comme « Voir les offres et tarifs »
+   de l'accueil (.v2-btn-blue). Mêmes classes sur les cartes, les filtres, l'article et « Poursuivre la lecture ». */
+.blog-type--guide { --type-rgb: 212, 175, 55; --type-ink: #8a6d12; }
+.blog-type--pas-a-pas { --type-rgb: 34, 197, 94; --type-ink: #15803d; }
+.blog-type--comparatif { --type-rgb: 168, 85, 247; --type-ink: #7e22ce; }
+.blog-type--actualite { --type-rgb: 249, 115, 22; --type-ink: #c2410c; }
+.blog-type--definition { --type-rgb: 20, 184, 166; --type-ink: #0f766e; }
+.blog-type--modele { --type-rgb: 236, 72, 153; --type-ink: #be185d; }
+.blog-type, .blog-cat { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; line-height: 1.4; }
+.blog-type { background: rgba(var(--type-rgb, 212, 175, 55), 0.14); border: 1px solid rgba(var(--type-rgb, 212, 175, 55), 0.55); color: rgb(var(--type-rgb, 212, 175, 55)); }
+[data-theme="light"] .blog-type { color: var(--type-ink, #8a6d12); background: rgba(var(--type-rgb, 212, 175, 55), 0.1); }
+.blog-cat { background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(0, 210, 255, 0.2)); border: 1px solid rgba(37, 99, 235, 0.5); color: #ffffff; }
+[data-theme="light"] .blog-cat { color: #1e3a8a; }
+.blog-types a i { margin-right: 0.15rem; color: rgb(var(--type-rgb)); }
+[data-theme="light"] .blog-types a i { color: var(--type-ink); }
+.blog-types a.blog-type-chip:hover, .blog-types a.blog-type-chip.is-active { border-color: rgba(var(--type-rgb), 0.7); background: rgba(var(--type-rgb), 0.14); color: rgb(var(--type-rgb)); }
+[data-theme="light"] .blog-types a.blog-type-chip:hover, [data-theme="light"] .blog-types a.blog-type-chip.is-active { color: var(--type-ink); }
+.blog-cats a:hover, .blog-cats a.is-active { border-color: rgba(37, 99, 235, 0.8); background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(0, 210, 255, 0.2)); color: #ffffff; }
+[data-theme="light"] .blog-cats a:hover, [data-theme="light"] .blog-cats a.is-active { color: #1e3a8a; }
+.blog-article-page .article-category.blog-type, .blog-article-page .article-category.blog-cat { padding: 0.4rem 1rem; font-size: 0.8rem; line-height: 1.4; vertical-align: middle; }
+.blog-article-page .article-category.blog-type { margin-right: 0.5rem; text-transform: none; letter-spacing: 0.02em; background: rgba(var(--type-rgb), 0.14); border-color: rgba(var(--type-rgb), 0.55); color: rgb(var(--type-rgb)); }
+.blog-article-page .article-category.blog-type:hover { background: rgba(var(--type-rgb), 0.24); }
+[data-theme="light"] .blog-article-page .article-category.blog-type { color: var(--type-ink); }
+.blog-article-page .article-category.blog-cat { letter-spacing: 0.08em; text-transform: uppercase; background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(0, 210, 255, 0.2)); border-color: rgba(37, 99, 235, 0.5); color: #ffffff; }
+[data-theme="light"] .blog-article-page .article-category.blog-cat { color: #1e3a8a; }
+.blog-article-page .article-category.blog-cat:hover { background: linear-gradient(135deg, rgba(37, 99, 235, 0.32), rgba(0, 210, 255, 0.32)); border-color: rgba(37, 99, 235, 0.8); }

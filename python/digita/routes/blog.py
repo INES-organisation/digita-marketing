@@ -100,6 +100,7 @@ def show(request, slug):
         "extraCss": ["/assets/css/blog-layout.css"],
         "article": article,
         "contentType": content_types.get(article.get("content_type")),
+        "contentTypes": content_types.TYPES,
         "readingTime": reading_time,
         "tableOfContents": toc["toc"],
         "faqSchema": faq,

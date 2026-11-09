@@ -61,7 +61,7 @@ def get_recent(limit=5):
 
 def get_related(article_id, category_id, limit=3):
     return db.fetch_all(
-        _select(icon=False) + f" WHERE a.id != ? AND a.category_id = ? AND a.status = 'published' ORDER BY {rand_order('a')} LIMIT ?",
+        _select(icon=False) + f" WHERE a.id != ? AND a.category_id = ? AND a.status = 'published' ORDER BY (a.content_type IS NULL), {rand_order('a')} LIMIT ?",
         [article_id, category_id, limit],
     )
 

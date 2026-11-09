@@ -17,7 +17,7 @@ comment ajouter un lot.
 | 5 | #18 | `nom-de-domaine-entreprise`, `newsletter-tpe`, `idees-publications-reseaux-sociaux`, `landing-page-definition`, `page-facebook-piratee` |
 | 6 | #20 | `bilan-digital-fin-annee`, `lexique-marketing-digital`, `audit-seo-lire-rapport`, `creer-logo-entreprise`, `facture-electronique-tpe` |
 
-Les anciens articles (472 de l'ère PHP) n'ont pas été modifiés.
+Les anciens articles (472 de l'ère PHP) ont été supprimés le 9 novembre 2026 (voir plus bas).
 
 ## Types de contenu (9 novembre 2026)
 
@@ -34,7 +34,13 @@ articles restent sans type (`NULL`).
 | `definition` | Définition | Comprendre un mot ou une notion | 3 |
 | `modele` | Modèle | Checklist, modèle, calendrier prêts à l'emploi | 3 |
 
-- Le type s'affiche en badge doré sur les cartes et en tête d'article (lien vers le filtre).
+- Le type s'affiche en badge sur les cartes, en tête d'article et dans « Poursuivre la lecture », avec une
+  couleur par type (classes `.blog-type--<slug>` dans `blog-layout.css`) : guide or, pas à pas vert,
+  comparatif violet, actualité orange, définition turquoise, modèle rose. Les filtres de `/blog` reprennent
+  la couleur du type.
+- Les catégories sont en bleu partout (`.blog-cat`, pastilles de catégorie actives), comme le bouton « Voir
+  les offres et tarifs » de l'accueil (`.v2-btn-blue`).
+- « Poursuivre la lecture » propose d'abord des articles typés.
 - `/blog` affiche des filtres par type (`/blog?type=guide`, seulement les types non vides, avec le nombre
   d'articles), puis les catégories. Un type inconnu redirige vers `/blog`.
 - `/blog` liste d'abord les articles typés (les nouveaux), puis les anciens, 12 par page, avec pagination
@@ -43,6 +49,18 @@ articles restent sans type (`NULL`).
 - Dans l'admin, le formulaire d'article a un champ « Type de contenu ».
 - Pour un nouveau lot : renseigner `"content_type"` dans `database/blog/articles.json`, `build_blog_sql.py`
   l'insère. Un test vérifie que chaque article a un type connu.
+
+## Suppression des anciens articles (9 novembre 2026)
+
+Décision d'Anthony le 9 novembre 2026 : le site n'a pas encore de visites, donc pas de référencement à
+préserver. Le blog ne garde que des articles utiles et clairs, sans article archivé ni redirection.
+
+- La migration `database/migrations/2026_11_09_blog_suppression_anciens_articles.sql` supprime les 472
+  anciens articles (sans type) et les redirections qui menaient vers eux. Les articles du plan éditorial sont
+  protégés par leur slug.
+- Une sauvegarde est faite sur le serveur juste avant : `/opt/digita/backups/blog_avant_suppression_2026-11-09.sql`.
+- Les anciennes adresses répondent 404.
+- Les 16 sujets utiles repérés dans les anciens articles sont réécrits comme nouveaux articles (lots 7 à 9).
 
 ## Règles de rédaction
 
@@ -136,9 +154,7 @@ Claude Code, ou lancer le bloc à la main.
 
 - Calendrier : après le lot 6, tous les sujets du plan éditorial sont traités, sauf Kap Numérik et le
   financement des formations. Les prochains lots demandent de nouveaux sujets.
-- Nettoyage des anciens articles : un premier tri des 382 articles publiés est prêt (126 à fusionner avec une
-  redirection 301 vers un nouvel article, 83 à réécrire en 16 nouveaux sujets, 173 à retirer en 410). Il
-  sera confirmé avec l'export Search Console (pages, 12 derniers mois) avant toute redirection. Le détail est
-  dans le Claude Doc « Plan de contenu : articles d'origine et formations ».
+- Rédiger les 16 nouveaux sujets (lots 7 à 9) : voir le Claude Doc « Plan de contenu : articles d'origine et
+  formations ».
 - Google Search Console : sitemap et suivi des clics par article vers `/diagnostic`.
 - Photos réelles de La Réunion pour remplacer ou compléter les couvertures générées.

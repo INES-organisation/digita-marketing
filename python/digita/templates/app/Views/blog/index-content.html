@@ -8,7 +8,7 @@
     <div class="container-fluid v2-container">
         <nav class="formations-cats blog-types mb-3" aria-label="Types d'articles">
             <a href="/blog"{% if not currentType %} class="is-active" aria-current="page"{% endif %}>Tous</a>
-            {% for slug_, t_ in contentTypes.items() %}{% if typeCounts.get(slug_) %}<a href="/blog?type={{ slug_ }}"{% if slug_ == currentType %} class="is-active" aria-current="page"{% endif %}><i class="bi {{ t_['icon'] }}" aria-hidden="true"></i> {{ t_['plural'] }} <span>{{ typeCounts[slug_] }}</span></a>{% endif %}{% endfor %}
+            {% for slug_, t_ in contentTypes.items() %}{% if typeCounts.get(slug_) %}<a href="/blog?type={{ slug_ }}" class="blog-type-chip blog-type--{{ slug_ }}{% if slug_ == currentType %} is-active" aria-current="page{% endif %}"><i class="bi {{ t_['icon'] }}" aria-hidden="true"></i> {{ t_['plural'] }} <span>{{ typeCounts[slug_] }}</span></a>{% endif %}{% endfor %}
         </nav>
         {% set current = '' %}{% include 'app/Views/blog/_category-nav.html' %}
         <form action="/blog/search" method="GET" class="formations-search mb-5" role="search">
