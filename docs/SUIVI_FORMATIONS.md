@@ -29,7 +29,7 @@ On reprend la chaîne de la formation DGT Système d'INES (`backend/scripts/dgt_
 INES, documentée dans `SUIVI_WORKSPACE_DGT_SYSTEME.md` §12.3) :
 
 1. un script par scène (texte lu, éléments à l'écran) ;
-2. la voix : OpenAI `gpt-4o-mini-tts`, voix « coral », consignes de formatrice en français. La synthèse se
+2. la voix : OpenAI `gpt-4o-mini-tts`, avec consignes de formatrice en français. La DGT utilise « coral » ; pour DIGITA, Anthony veut une autre voix (9 novembre 2026) : extraits à écouter avec marin, cedar et ash. La synthèse se
    lance dans le conteneur backend d'INES en production, pour que la clé API reste sur le serveur ;
 3. la composition HyperFrames en 1920 × 1080, calée sur la durée de chaque piste audio (ffprobe), rendue avec
    `npx hyperframes@0.8.136 render` (Node 22 ou plus) ;
@@ -40,11 +40,25 @@ Pour DIGITA, on change l'habillage (noir et or, logo DIGITA) et on ajoute des **
 Playwright enregistre des parcours sur des pages publiques (une recherche Google, une fiche d'établissement,
 un outil de test de vitesse), intégrés ensuite dans la composition.
 
-Limites :
+Écrans connectés :
 
-- pas de connexion aux comptes d'Anthony ou de clients : les écrans connectés (Google Business Profile,
-  Search Console) seront des enregistrements faits par Anthony ou des schémas ;
+- Claude ne saisit jamais les mots de passe d'Anthony ni de clients, et n'ouvre pas de session à leur place ;
+- INES et digita.buzz connectés : un compte de démonstration avec des données fictives ;
+- outils tiers (Google Business Profile, Search Console, Meta) : enregistrés dans la session d'Anthony,
+  ouverte par lui, avec l'extension Claude in Chrome ; sinon par Anthony à partir d'un script, ou remplacés
+  par des schémas ;
+- pas de cookies de session des utilisateurs gardés sur un serveur ;
 - pas de visage ni d'avatar généré, sauf décision contraire d'Anthony.
+
+## Prototype et proposition INES (9 novembre 2026)
+
+- Prototype sur l'iMac d'Anthony : une visite de digita.buzz de 48 s, scénario JSON, capture Playwright
+  1280 × 720 avec curseur visible, voix macOS provisoire, assemblage ffmpeg. Le code n'est pas commité.
+- Proposition « INES : enregistrement d'écrans pour les formations » (Claude Doc,
+  https://claude.ai/artifact/J21Nx6vnhGP3Hy1Gr23E4F) : capture sur le serveur des pages publiques et des
+  comptes de démonstration (réutilise `site_capture.py`, le worker `celery-worker-video`, HyperFrames et
+  MinIO, sans nouvelle dépendance), puis une extension Chrome pour les écrans connectés des outils tiers.
+  Cinq lots (A à E), en attente des décisions d'Anthony.
 
 ## À régler avant la mise en vente
 
