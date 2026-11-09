@@ -107,3 +107,5 @@ Google, et par où commencer.
   Business Profile (https://support.google.com/business/answer/7091), citée dans l'article
   fiche-google-reunion.
 - Sous-titres VTT générés depuis le texte de la voix.
+- La page d'aide de Google nomme le troisième critère « proéminence ». La voix dit « notoriété », comme
+  l'article du blog ; l'écran de la scène 4 affiche « Notoriété (« proéminence » chez Google) ».
