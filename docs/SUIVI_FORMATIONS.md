@@ -70,6 +70,8 @@ un outil de test de vitesse), intégrés ensuite dans la composition.
 
 ## Prochaines étapes
 
+Plan détaillé du pilote et script de la leçon 1 : `docs/formations/PILOTE_GOOGLE_30_JOURS.md` (9 novembre 2026, à valider).
+
 1. Plan détaillé du pilote (modules, leçons, durée) à valider par Anthony.
 2. Scripts des scènes, puis une première vidéo test (voix et rendu) avant de produire le reste.
 3. Import des leçons, page de vente, mise en ligne.
