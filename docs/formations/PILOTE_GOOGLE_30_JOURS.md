@@ -10,8 +10,9 @@ citées dans chaque article.
   semaine pendant 4 semaines. La formation ne promet ni une position ni un nombre de clients : Google ne le permet pas, et
   l'article « Fiche Google » le rappelle (la position dépend de la concurrence locale).
 - Public : dirigeant de TPE à La Réunion, sans connaissances techniques.
-- Format : 15 leçons vidéo de 4 à 7 minutes, soit environ 1 h 30, chacune suivie d'une action à faire
-  le jour même et d'une fiche à télécharger.
+- Format : 15 leçons vidéo, chacune suivie d'une action à faire le jour même et d'une fiche à
+  télécharger. Scripts écrits le 9 novembre 2026 : environ 25 minutes de narration au total, à
+  compléter par des démonstrations sur écran (voir `google-30-jours/README.md`).
 - Tout est filmé sur des pages publiques ou sur des schémas. Pas d'écran connecté dans le pilote.
 
 ## Positionnement validé (9 novembre 2026)
@@ -93,7 +94,7 @@ dernier est ajouté plus tard, ce sera une offre distincte, avec son prix dans l
 La leçon 14 montre un écran connecté (Search Console) : dans le pilote, elle sera faite avec des schémas,
 ou enregistrée par Anthony dans sa propre session.
 
-## Script de la leçon 1 : « Ce que voit votre client quand il vous cherche »
+## Script de la leçon 1, version test (remplacée par `google-30-jours/lecon-01.md`)
 
 Durée : environ 2 min 30 (337 mots lus). Une vidéo test courte suffit pour juger la voix et le rendu. Voix : marin. Habillage noir et or, logo DIGITA.
 
