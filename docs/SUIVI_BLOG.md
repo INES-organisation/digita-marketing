@@ -18,7 +18,8 @@ comment ajouter un lot.
 | 6 | #20 | `bilan-digital-fin-annee`, `lexique-marketing-digital`, `audit-seo-lire-rapport`, `creer-logo-entreprise`, `facture-electronique-tpe` |
 | 7 | #24 | `ecrire-pour-google-tpe`, `entretenir-securiser-site`, `accelerer-son-site`, `google-analytics-search-console`, `google-ads-tpe`, `plan-marketing-digital-une-page` |
 | 8 | #25 | `photos-telephone`, `videos-courtes-telephone`, `choisir-crm`, `fideliser-clients`, `linkedin-dirigeant` |
-| 9 | à venir | `createurs-contenu-reunion`, `marketplace-reunion`, `supports-imprimes-qr-codes`, `bad-buzz-local` |
+| 9 | #26 | `createurs-contenu-reunion`, `marketplace-reunion`, `supports-imprimes-qr-codes`, `bad-buzz-local` |
+| 10 | à venir | `accessibilite-site-internet` |
 
 Les anciens articles (472 de l'ère PHP) ont été supprimés le 9 novembre 2026 (voir plus bas).
 
@@ -164,10 +165,9 @@ Claude Code, ou lancer le bloc à la main.
 
 - Calendrier : après le lot 6, tous les sujets du plan éditorial sont traités, sauf Kap Numérik et le
   financement des formations. Les prochains lots demandent de nouveaux sujets.
-- Rédiger les 16 nouveaux sujets : 15 écrits (lots 7 à 9). Reste l'article sur l'accessibilité (directive
-  européenne, en vigueur depuis le 28 juin 2025) : les pages officielles (DGCCRF, EUR-Lex, Légifrance) refusent
-  la lecture depuis le serveur de travail. L'exemption des microentreprises de services est à vérifier sur le
-  texte avant d'écrire.
+- Rédiger les 16 nouveaux sujets : les 16 sont écrits. Le dernier, l'article sur l'accessibilité
+  (lot 10, `accessibilite-site-internet`), s'appuie sur la fiche DGCCRF du 13 novembre 2025 collée par Anthony
+  le 9 novembre 2026, les pages officielles refusant la lecture depuis le serveur de travail.
 - Idées d'articles sur des outils INES (9 novembre 2026), en attente du choix d'Anthony : devis depuis le
   téléphone, click & collect, réservations sans commission, planning et rapports d'intervention, QR codes, page
   de liens, carte de visite et signature e-mail, sondages, messagerie unique. Aucun n'a encore d'offre ni de prix

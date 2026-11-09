@@ -628,5 +628,19 @@
     "icon": "megaphone",
     "visual_title": "Garder la main face au bad buzz",
     "content_type": "pas-a-pas"
+  },
+  {
+    "slug": "accessibilite-site-internet",
+    "title": "Accessibilité des sites de vente en ligne : votre entreprise est-elle concernée ?",
+    "meta_title": "Accessibilité numérique : votre site est-il concerné ?",
+    "meta_description": "Directive accessibilité en vigueur depuis le 28 juin 2025 : qui doit rendre son site de vente accessible, l'exemption des TPE, les exigences et les sanctions.",
+    "excerpt": "Depuis le 28 juin 2025, la vente en ligne doit être accessible aux personnes en situation de handicap. Mais la plupart des TPE sont dispensées : voici comment savoir si vous l'êtes, et les premiers gestes utiles.",
+    "category": "creation-web",
+    "service_name": "Site internet et conformité",
+    "meta_keywords": "accessibilité numérique, directive accessibilité, European Accessibility Act, site e-commerce accessible, RGAA, DGCCRF",
+    "pole": "Conformité",
+    "icon": "universal-access",
+    "visual_title": "Un site de vente accessible à tous",
+    "content_type": "guide"
   }
 ]
