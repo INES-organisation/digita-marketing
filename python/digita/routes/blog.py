@@ -63,13 +63,6 @@ def show(request, slug):
     if not article:
         if new := redirects.target("article", slug):
             return moved("/blog/" + new)
-        if Article.is_retired(slug):
-            # Tri des articles d'origine (09/11/2026) : 410 dit à Google que la page est supprimée pour de bon.
-            return render_view(request, "errors/404", {
-                "title": "Article retiré | DIGITA", "metaRobots": "noindex, follow",
-                "errorKicker": "Article retiré", "errorTitle": "Cet article n'est plus en ligne",
-                "errorLead": "Nous avons retiré cet ancien article, devenu inutile. Les guides à jour sont sur le blog.",
-            }, status=410)
         return not_found(request, slug=slug, article=article)
     related = Article.get_related(article["id"], article["category_id"], 3)
     popular = Article.get_popular(5)

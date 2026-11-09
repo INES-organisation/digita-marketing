@@ -1,0 +1,71 @@
+-- Suppression des anciens articles du blog (09/11/2026, validée par Anthony : le site n'a pas encore de
+-- visites, aucun article archivé ni redirigé). Ne garde que les articles du plan éditorial, qui ont un type.
+-- Sauvegarde AVANT d'appliquer (sur le serveur) :
+--   docker exec ines-postgres pg_dump -U digita -d digita -t blog_articles -t slug_redirects > /opt/digita/backups/blog_avant_suppression_2026-11-09.sql
+-- Les commentaires et vues liés partent avec (ON DELETE CASCADE).
+BEGIN;
+DELETE FROM slug_redirects WHERE kind = 'article' AND new_slug NOT IN (
+'prix-site-internet-reunion',
+'instagram-ou-facebook-reunion',
+'budget-publicite-facebook-reunion',
+'automatiser-devis-artisan',
+'agent-ia-repondre-clients-24h',
+'fiche-google-reunion',
+'site-vitrine-ou-page-facebook',
+'gite-reunion-haute-saison',
+'repondre-clients-pendant-les-fetes',
+'avis-google-entreprise',
+'lexique-ia-tpe',
+'saison-cyclonique-entreprise',
+'chatgpt-tpe-usages',
+'relances-automatiques-devis-factures',
+'chatbot-whatsapp-entreprise',
+'rgpd-tpe-essentiel',
+'prise-rendez-vous-en-ligne',
+'site-internet-artisan',
+'boutique-en-ligne-reunion',
+'temps-perdu-taches-repetitives',
+'nom-de-domaine-entreprise',
+'newsletter-tpe',
+'idees-publications-reseaux-sociaux',
+'landing-page-definition',
+'page-facebook-piratee',
+'bilan-digital-fin-annee',
+'lexique-marketing-digital',
+'audit-seo-lire-rapport',
+'creer-logo-entreprise',
+'facture-electronique-tpe'
+);
+DELETE FROM blog_articles WHERE content_type IS NULL AND slug NOT IN (
+'prix-site-internet-reunion',
+'instagram-ou-facebook-reunion',
+'budget-publicite-facebook-reunion',
+'automatiser-devis-artisan',
+'agent-ia-repondre-clients-24h',
+'fiche-google-reunion',
+'site-vitrine-ou-page-facebook',
+'gite-reunion-haute-saison',
+'repondre-clients-pendant-les-fetes',
+'avis-google-entreprise',
+'lexique-ia-tpe',
+'saison-cyclonique-entreprise',
+'chatgpt-tpe-usages',
+'relances-automatiques-devis-factures',
+'chatbot-whatsapp-entreprise',
+'rgpd-tpe-essentiel',
+'prise-rendez-vous-en-ligne',
+'site-internet-artisan',
+'boutique-en-ligne-reunion',
+'temps-perdu-taches-repetitives',
+'nom-de-domaine-entreprise',
+'newsletter-tpe',
+'idees-publications-reseaux-sociaux',
+'landing-page-definition',
+'page-facebook-piratee',
+'bilan-digital-fin-annee',
+'lexique-marketing-digital',
+'audit-seo-lire-rapport',
+'creer-logo-entreprise',
+'facture-electronique-tpe'
+);
+COMMIT;

@@ -166,26 +166,9 @@ def test_article_shows_its_type(monkeypatch):
     assert "Actualité" in page
 
 
-def test_retired_article_answers_410_and_merged_one_redirects(monkeypatch):
-    from digita import redirects
-    monkeypatch.setattr(Article, "get_by_slug", lambda slug: None)
-    monkeypatch.setattr(redirects, "target", lambda kind, slug: "newsletter-tpe" if slug == "emailing-avance" else None)
-    monkeypatch.setattr(Article, "is_retired", lambda slug: slug == "nft-guide-complet")
-    client = TestClient(app, base_url="https://digita.buzz")
-    r = client.get("/blog/emailing-avance", follow_redirects=False)
-    assert r.status_code == 301 and r.headers["location"].endswith("/blog/newsletter-tpe")
-    r = client.get("/blog/nft-guide-complet")
-    assert r.status_code == 410 and "Article retiré" in r.text and "noindex" in r.text
-    assert client.get("/blog/n-existe-pas").status_code == 404
-
-
-def test_tri_sql_archives_only_old_articles_and_targets_new_ones():
-    import csv
-    from tools.build_tri_sql import ROOT, build
-    rows = list(csv.DictReader(open(ROOT / "database/blog/tri-articles-origine.csv", encoding="utf-8")))
-    new = {a["slug"] for a in ARTICLES}
-    assert not {r["slug"] for r in rows} & new, "un nouvel article ne doit jamais être trié"
-    assert all(r["cible"].removeprefix("/blog/") in new for r in rows if r["action"] == "fusion")
-    sql = build(rows)
-    assert "content_type IS NULL" in sql and "DELETE" not in sql.upper()
-    assert sql.count("'archived'") >= 1 and "reecrire" not in sql
+def test_deletion_sql_keeps_every_editorial_article():
+    root = Path(__file__).resolve().parents[2]
+    sql = (root / "database/migrations/2026_11_09_blog_suppression_anciens_articles.sql").read_text(encoding="utf-8")
+    assert "content_type IS NULL" in sql and "BEGIN;" in sql and "COMMIT;" in sql
+    for a in ARTICLES:
+        assert sql.count(f"'{a['slug']}'") == 2, a["slug"]

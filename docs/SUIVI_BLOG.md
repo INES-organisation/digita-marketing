@@ -17,7 +17,7 @@ comment ajouter un lot.
 | 5 | #18 | `nom-de-domaine-entreprise`, `newsletter-tpe`, `idees-publications-reseaux-sociaux`, `landing-page-definition`, `page-facebook-piratee` |
 | 6 | #20 | `bilan-digital-fin-annee`, `lexique-marketing-digital`, `audit-seo-lire-rapport`, `creer-logo-entreprise`, `facture-electronique-tpe` |
 
-Les anciens articles (472 de l'ère PHP) n'ont pas été modifiés.
+Les anciens articles (472 de l'ère PHP) ont été supprimés le 9 novembre 2026 (voir plus bas).
 
 ## Types de contenu (9 novembre 2026)
 
@@ -50,22 +50,17 @@ articles restent sans type (`NULL`).
 - Pour un nouveau lot : renseigner `"content_type"` dans `database/blog/articles.json`, `build_blog_sql.py`
   l'insère. Un test vérifie que chaque article a un type connu.
 
-## Tri des anciens articles (9 novembre 2026)
+## Suppression des anciens articles (9 novembre 2026)
 
-Validé par Anthony le 9 novembre 2026, sans attendre l'export Search Console. Le tri page par page est dans
-`database/blog/tri-articles-origine.csv` (slug, sujet, action, cible), et le SQL est généré par
-`python/tools/build_tri_sql.py` (`database/migrations/2026_11_09_blog_tri_articles_origine.sql`) :
+Décision d'Anthony le 9 novembre 2026 : le site n'a pas encore de visites, donc pas de référencement à
+préserver. Le blog ne garde que des articles utiles et clairs, sans article archivé ni redirection.
 
-| Action | Articles | Effet |
-|---|---|---|
-| `fusion` | 126 | Redirection 301 vers le nouvel article qui traite le sujet (`slug_redirects`), article archivé |
-| `retirer` | 173 | Article archivé, sa page répond 410 « Article retiré » (`noindex`) |
-| `reecrire` | 83 | Restent en ligne jusqu'à leur réécriture dans les 16 nouveaux sujets |
-
-- Rien n'est supprimé de la base : les articles passent en statut `archived`. Pour en remettre un en ligne :
-  `UPDATE blog_articles SET status = 'published' WHERE slug = '…'` (et retirer sa ligne de `slug_redirects`).
-- Seuls les anciens articles (`content_type` NULL) sont touchés. Le sitemap ne liste que les articles publiés.
-- Les anciennes adresses qui menaient à un article fusionné mènent directement à sa cible (pas de chaîne).
+- La migration `database/migrations/2026_11_09_blog_suppression_anciens_articles.sql` supprime les 472
+  anciens articles (sans type) et les redirections qui menaient vers eux. Les articles du plan éditorial sont
+  protégés par leur slug.
+- Une sauvegarde est faite sur le serveur juste avant : `/opt/digita/backups/blog_avant_suppression_2026-11-09.sql`.
+- Les anciennes adresses répondent 404.
+- Les 16 sujets utiles repérés dans les anciens articles sont réécrits comme nouveaux articles (lots 7 à 9).
 
 ## Règles de rédaction
 
@@ -159,7 +154,7 @@ Claude Code, ou lancer le bloc à la main.
 
 - Calendrier : après le lot 6, tous les sujets du plan éditorial sont traités, sauf Kap Numérik et le
   financement des formations. Les prochains lots demandent de nouveaux sujets.
-- Réécrire les 83 anciens articles gardés en ligne, regroupés en 16 nouveaux sujets (voir « Tri des anciens
-  articles »), puis rediriger chacun vers son remplaçant.
+- Rédiger les 16 nouveaux sujets (lots 7 à 9) : voir le Claude Doc « Plan de contenu : articles d'origine et
+  formations ».
 - Google Search Console : sitemap et suivi des clics par article vers `/diagnostic`.
 - Photos réelles de La Réunion pour remplacer ou compléter les couvertures générées.
