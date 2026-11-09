@@ -116,7 +116,8 @@ def test_every_article_has_a_known_content_type():
     for a in ARTICLES:
         assert content_types.get(a.get("content_type")), a["slug"]
     migration = (ROOT / "database" / "migrations" / "2026_11_09_blog_content_type.sql").read_text(encoding="utf-8")
-    assert all(f"'{a['slug']}'" in migration for a in ARTICLES)
+    # ponytail: migrations figées du 9 novembre, qui ne couvrent que les 30 premiers articles.
+    assert all(f"'{a['slug']}'" in migration for a in ARTICLES[:30])
 
 
 def test_build_sql_sets_content_type(tmp_path):
@@ -170,5 +171,5 @@ def test_deletion_sql_keeps_every_editorial_article():
     root = Path(__file__).resolve().parents[2]
     sql = (root / "database/migrations/2026_11_09_blog_suppression_anciens_articles.sql").read_text(encoding="utf-8")
     assert "content_type IS NULL" in sql and "BEGIN;" in sql and "COMMIT;" in sql
-    for a in ARTICLES:
+    for a in ARTICLES[:30]:
         assert sql.count(f"'{a['slug']}'") == 2, a["slug"]

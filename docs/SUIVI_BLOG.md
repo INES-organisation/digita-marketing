@@ -16,6 +16,7 @@ comment ajouter un lot.
 | 4 | #17 | `rgpd-tpe-essentiel`, `prise-rendez-vous-en-ligne`, `site-internet-artisan`, `boutique-en-ligne-reunion`, `temps-perdu-taches-repetitives` |
 | 5 | #18 | `nom-de-domaine-entreprise`, `newsletter-tpe`, `idees-publications-reseaux-sociaux`, `landing-page-definition`, `page-facebook-piratee` |
 | 6 | #20 | `bilan-digital-fin-annee`, `lexique-marketing-digital`, `audit-seo-lire-rapport`, `creer-logo-entreprise`, `facture-electronique-tpe` |
+| 7 | à venir | `ecrire-pour-google-tpe`, `entretenir-securiser-site`, `accelerer-son-site`, `google-analytics-search-console`, `google-ads-tpe`, `plan-marketing-digital-une-page` |
 
 Les anciens articles (472 de l'ère PHP) ont été supprimés le 9 novembre 2026 (voir plus bas).
 
@@ -60,6 +61,8 @@ préserver. Le blog ne garde que des articles utiles et clairs, sans article arc
   protégés par leur slug.
 - Une sauvegarde est faite sur le serveur juste avant : `/opt/digita/backups/blog_avant_suppression_2026-11-09.sql`.
 - Les anciennes adresses répondent 404.
+- Mise en ligne faite le 9 novembre 2026 (commit dae991f) : 164 redirections et 472 articles supprimés,
+  il reste 30 articles, tous publiés et typés. Sauvegarde de 1,6 Mo vérifiée avant la migration.
 - Les 16 sujets utiles repérés dans les anciens articles sont réécrits comme nouveaux articles (lots 7 à 9).
 
 ## Règles de rédaction
@@ -127,7 +130,7 @@ Depuis `python/` :
    `intelligence-artificielle`, `crm`), sinon l'article n'a pas de catégorie. Si un article contient « % »,
    `tools/apply_sql.py` échoue (psycopg2 lit « % » comme un paramètre) : appliquer le fichier avec `psql -f`,
    comme sur le serveur.
-4. Tests : `python -m pytest -q` (125 tests depuis les types de contenu). `tests/test_blog.py` vérifie les longueurs des metas, la couverture, les
+4. Tests : `python -m pytest -q` (132 tests au lot 7). `tests/test_blog.py` vérifie les longueurs des metas, la couverture, les
    `h2`, « En bref », les sources, l'absence de lignes vides et la mention « fictif » des exemples.
 5. PR, validation d'Anthony, fusion.
 6. Mise en ligne sur le VPS (`ssh ines-vps`, depuis l'iMac) :
@@ -152,9 +155,13 @@ Claude Code, ou lancer le bloc à la main.
 
 ## Reste à faire
 
+- Offres INES dans les articles (avis donné à Anthony le 9 novembre 2026) : seulement dans l'encadré « Ce que
+  fait DIGITA », seulement quand l'outil répond au sujet, jamais classé dans un comparatif, et seulement une
+  offre présente dans la grille avec son prix. Aujourd'hui aucune offre INES seule n'y figure : ne pas la citer.
+
 - Calendrier : après le lot 6, tous les sujets du plan éditorial sont traités, sauf Kap Numérik et le
   financement des formations. Les prochains lots demandent de nouveaux sujets.
-- Rédiger les 16 nouveaux sujets (lots 7 à 9) : voir le Claude Doc « Plan de contenu : articles d'origine et
+- Rédiger les 16 nouveaux sujets (lot 7 écrit, lots 8 et 9 à faire) : voir le Claude Doc « Plan de contenu : articles d'origine et
   formations ».
 - Google Search Console : sitemap et suivi des clics par article vers `/diagnostic`.
 - Photos réelles de La Réunion pour remplacer ou compléter les couvertures générées.
