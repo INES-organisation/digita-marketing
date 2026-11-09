@@ -14,11 +14,16 @@ def _select(icon=True):
     return SELECT.format(icon=", c.icon as category_icon" if icon else "")
 
 
-def get_all_published(limit=None, offset=0):
-    sql = _select() + " WHERE a.status = 'published' ORDER BY a.published_at DESC NULLS LAST, a.id DESC"
+def get_all_published(limit=None, offset=0, content_type=None):
+    sql, params = _select() + " WHERE a.status = 'published'", []
+    if content_type:
+        sql += " AND a.content_type = ?"
+        params.append(content_type)
+    # Les articles classés (nouveaux) passent avant les articles d'origine, non classés.
+    sql += " ORDER BY (a.content_type IS NULL), a.published_at DESC NULLS LAST, a.id DESC"
     if limit:
         sql += f" LIMIT {int(limit)} OFFSET {int(offset)}"
-    return db.fetch_all(sql)
+    return db.fetch_all(sql, params)
 
 
 def get_by_slug(slug):
@@ -28,10 +33,11 @@ def get_by_slug(slug):
     return article
 
 
-def get_by_category(category_slug, limit=None):
-    sql = _select() + " WHERE c.slug = ? AND a.status = 'published' ORDER BY a.published_at DESC NULLS LAST, a.id DESC"
+def get_by_category(category_slug, limit=None, offset=0):
+    sql = (_select() + " WHERE c.slug = ? AND a.status = 'published'"
+           " ORDER BY (a.content_type IS NULL), a.published_at DESC NULLS LAST, a.id DESC")
     if limit:
-        sql += f" LIMIT {int(limit)}"
+        sql += f" LIMIT {int(limit)} OFFSET {int(offset)}"
     return db.fetch_all(sql, [category_slug])
 
 
@@ -66,13 +72,23 @@ def increment_views(article_id):
     db.execute("UPDATE blog_articles SET views = views + 1 WHERE id = ?", [article_id])
 
 
-def count(category_slug=None):
+def count(category_slug=None, content_type=None):
+    if content_type:
+        return db.fetch("SELECT COUNT(*) as total FROM blog_articles WHERE status = 'published' AND content_type = ?",
+                        [content_type])["total"]
     if category_slug:
         return db.fetch(
             """SELECT COUNT(*) as total FROM blog_articles a
                LEFT JOIN service_categories c ON a.category_id = c.id
                WHERE c.slug = ? AND a.status = 'published'""", [category_slug])["total"]
     return db.fetch("SELECT COUNT(*) as total FROM blog_articles WHERE status = 'published'")["total"]
+
+
+def type_counts():
+    """{type: nombre d'articles publiés} pour les filtres de /blog."""
+    rows = db.fetch_all("SELECT content_type, COUNT(*) as total FROM blog_articles "
+                        "WHERE status = 'published' AND content_type IS NOT NULL GROUP BY content_type")
+    return {r["content_type"]: r["total"] for r in rows}
 
 
 def get_categories():
@@ -168,13 +184,13 @@ def get_by_id(article_id):
 def create(data):
     row = db.fetch(
         """INSERT INTO blog_articles (title, slug, content, excerpt, category_id, service_name, meta_title,
-                                      meta_description, meta_keywords, featured_image, status, published_at, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()) RETURNING id""",
+                                      meta_description, meta_keywords, featured_image, status, published_at, content_type, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()) RETURNING id""",
         [data["title"], data["slug"], data["content"], data.get("excerpt", ""),
          key(data["category_id"]) if php.t(data["category_id"]) else None, data.get("service_name", ""),
          data.get("meta_title", data["title"]), data.get("meta_description", ""), data.get("meta_keywords", ""),
          data.get("featured_image", ""), data.get("status", "draft"),
-         php.date("Y-m-d H:i:s") if data["status"] == "published" else None])
+         php.date("Y-m-d H:i:s") if data["status"] == "published" else None, data.get("content_type") or None])
     return str(row["id"])
 
 
@@ -186,12 +202,12 @@ def update(article_id, data):
     db.execute(
         """UPDATE blog_articles SET title = ?, slug = ?, content = ?, excerpt = ?, category_id = ?, service_name = ?,
                   meta_title = ?, meta_description = ?, meta_keywords = ?, featured_image = ?,
-                  status = ?, published_at = ?, updated_at = NOW() WHERE id = ?""",
+                  status = ?, published_at = ?, content_type = ?, updated_at = NOW() WHERE id = ?""",
         [data["title"], data["slug"], data["content"], data.get("excerpt", ""),
          key(data["category_id"]) if php.t(data["category_id"]) else None, data.get("service_name", ""),
          data.get("meta_title", data["title"]), data.get("meta_description", ""), data.get("meta_keywords", ""),
          php.coalesce(data.get("featured_image"), article.get("featured_image"), ""),
-         data.get("status", "draft"), published_at, key(article_id)])
+         data.get("status", "draft"), published_at, data.get("content_type") or None, key(article_id)])
     return True
 
 

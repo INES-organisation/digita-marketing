@@ -15,7 +15,7 @@ import time as _time
 from starlette.concurrency import run_in_threadpool
 from starlette.responses import FileResponse, Response
 
-from .. import config, php, redirects
+from .. import config, content_types, php, redirects
 from ..forms import php_post
 from ..models import admin as Admin
 from ..models import article as Article
@@ -269,6 +269,7 @@ def articles(request):
 def article_new(request):
     return _view(request, "admin/articles/form", {
         "pageTitle": "Nouvel article", "categories": Article.get_all_categories(), "article": None,
+        "contentTypes": content_types.TYPES,
         "currentUser": _current_user(request)})
 
 
@@ -284,6 +285,7 @@ def _article_form(post):
         "meta_keywords": php.trim(post.get("meta_keywords", "")),
         "featured_image": php.trim(post.get("featured_image_url", "")),
         "status": post.get("status", "draft"),
+        "content_type": post.get("content_type") if content_types.get(post.get("content_type")) else None,
     }
 
 
@@ -311,6 +313,7 @@ def article_edit(request, article_id):
         return redirect("/admin/articles")
     return _view(request, "admin/articles/form", {
         "pageTitle": "Modifier l'article", "categories": Article.get_all_categories(), "article": article,
+        "contentTypes": content_types.TYPES,
         "currentUser": _current_user(request)})
 
 

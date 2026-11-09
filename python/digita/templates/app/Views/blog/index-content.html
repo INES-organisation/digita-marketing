@@ -1,115 +1,39 @@
-<!-- Hero Section Blog Premium -->
-<section class="page-hero hero-blog py-6 bg-premium-glow position-relative overflow-hidden">
-    <div class="container position-relative z-2">
-        <div class="row align-items-center">
-            <div class="col-lg-8" data-aos="fade-right">
-                <span class="badge rounded-pill bg-premium-gold-gradient px-3 py-2 mb-3" style="background: var(--gold-gradient); color: var(--dark); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Le blog DIGITA</span>
-                <h1 class="display-3 fw-bold mb-3 text-white" style="font-family: var(--font-heading);">Guides et conseils <span class="text-gradient-gold">pour les TPE</span></h1>
-                <p class="lead mb-5 text-white-50" style="font-size: 1.15rem; max-width: 600px;">
-                    Intelligence artificielle, automatisation, référencement, réseaux sociaux : des articles concrets pour faire grandir votre entreprise à La Réunion.
-                </p>
-                
-                <!-- Barre de recherche Glass -->
-                <form action="/blog/search" method="GET" class="search-form" style="max-width: 500px;">
-                    <div class="input-group glass-card border-0 p-1" style="border-radius: 50px;">
-                        <input type="text" name="q" class="form-control bg-transparent border-0 text-white px-4" placeholder="Rechercher un article…" aria-label="Rechercher un article" required style="box-shadow: none;">
-                        <button class="btn btn-premium btn-premium-gold rounded-pill px-4" type="submit" style="margin: 2px;">
-                            <i class="bi bi-search me-2"></i> Rechercher
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="col-lg-4 text-center d-none d-lg-block" data-aos="zoom-in">
-                <div class="position-absolute" style="top: 20%; right: 10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(var(--gold-rgb), 0.1) 0%, transparent 70%);"></div>
-                <i class="bi bi-journal-richtext text-gradient-gold" style="font-size: 12rem; filter: drop-shadow(0 0 20px rgba(var(--gold-rgb), 0.2));"></i>
-            </div>
-        </div>
-    </div>
-</section>
+{% set type_ = (contentTypes[currentType] if currentType else none) %}
+{% set hero_kicker = ('Blog · ' ~ type_['plural'] if type_ else 'Le blog DIGITA') %}
+{% set hero_title = (type_['plural'] if type_ else 'Guides et conseils pour les TPE') %}
+{% set hero_lead = (type_['lead'] if type_ else "Intelligence artificielle, automatisation, référencement, réseaux sociaux : des articles concrets pour faire grandir votre entreprise à La Réunion.") %}
+{% include 'includes/partials/page-hero.html' %}
 
-<!-- Catégories Premium -->
-<section class="py-4 bg-premium-dark-blue border-bottom border-glass sticky-top" style="top: var(--navbar-height); z-index: 100;">
-    <div class="container">
-        <div class="d-flex align-items-center gap-3 flex-wrap justify-content-center">
-            <a href="/blog" class="btn-premium btn-premium-blue py-2 px-4 {{ ('active shadow-blue-glow' if (not (isset(currentCategory))) else '') }}">
-                <i class="bi bi-grid-fill me-2"></i> Tous
-            </a>
-            {% for cat_ in php_values(categories) %}                <a href="/blog/categorie/{{ h(cat_['slug']) }}" class="btn-premium py-2 px-4 glass-card border-glass text-white {{ ('active border-gold text-gold' if (((isset(currentCategory)) and (loose_eq(currentCategory, cat_['slug'])))) else '') }}">
-                    {% if (not empty(cat_['icon'])) %}                        <span class="me-2">{{ cat_['icon'] }}</span>
-                    {% endif %}                    {{ h(cat_['name']) }}                </a>
-            {% endfor %}        </div>
-    </div>
-</section>
-
-<!-- Articles Section -->
-<section class="main-content py-6 bg-premium-grid animated">
-    <div class="container">
-        <!-- Articles Populaires (Sélection Premium) -->
-        <div class="mb-5" data-aos="fade-up">
-            <h5 class="text-gold mb-3 fw-bold" style="letter-spacing: 2px;">LES PLUS LUS</h5>
-            <h2 class="display-5 fw-bold text-white mb-4">Articles populaires</h2>
-        </div>
-        
-        <div class="row g-4 mb-6">
-            {% for article in php_values(popularArticles) %}                <div class="col-md-6 col-lg-4" data-aos="fade-up">
-                    <div class="glass-card h-100 p-0 overflow-hidden border-glass hover-gold-border transition-all">
-                        <div class="article-image-wrapper position-relative overflow-hidden" style="height: 220px;">
-                            {% if (not empty(article['image_url'])) %}                                <img src="{{ h(article['image_url']) }}" class="w-100 h-100 object-fit-cover transition-all hover-zoom" alt="{{ h(article['title']) }}">
-                            {% else %}                                <div class="w-100 h-100 bg-premium-dark-blue d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-cpu text-gold opacity-50" style="font-size: 4rem;"></i>
-                                </div>
-                            {% endif %}                            <div class="position-absolute top-0 start-0 m-3 px-3 py-1 glass-card border-gold rounded-pill" style="font-size: 0.7rem; font-weight: 700; color: var(--gold);">
-                                {{ h(coalesce(article['category_name'], 'STRATÉGIE')) }}                            </div>
-                        </div>
-                        <div class="p-4">
-                            <div class="d-flex gap-3 text-white-50 small mb-3">
-                                {% if article['published_at'] %}<span><i class="bi bi-calendar3 me-1 text-gold"></i> {{ date('d/m/Y', strtotime(article['published_at'])) }}</span>{% endif %}
-                            </div>
-                            <h4 class="fw-bold mb-3 text-white mb-3" style="line-height: 1.4;">{{ h(article['title']) }}</h4>
-                            <p class="text-white-50 small mb-4">{{ h(substr(coalesce(article['excerpt'], ''), 0, 120)) }}...</p>
-                            <a href="/blog/{{ h(article['slug']) }}" class="btn-premium btn-premium-gold w-100 py-3">Lire l'article</a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}        </div>
-        
-        <hr class="border-glass my-6">
-
-        <!-- Flux Récent -->
-        <div class="mb-5" data-aos="fade-up">
-            <h5 class="text-gold mb-3 fw-bold" style="letter-spacing: 2px;">NOUVEAUTÉS</h5>
-            <h2 class="display-5 fw-bold text-white mb-4">Derniers articles</h2>
-        </div>
-        
+<section class="v2-section">
+    <div class="container-fluid v2-container">
+        <nav class="formations-cats blog-types mb-3" aria-label="Types d'articles">
+            <a href="/blog"{% if not currentType %} class="is-active" aria-current="page"{% endif %}>Tous</a>
+            {% for slug_, t_ in contentTypes.items() %}{% if typeCounts.get(slug_) %}<a href="/blog?type={{ slug_ }}"{% if slug_ == currentType %} class="is-active" aria-current="page"{% endif %}><i class="bi {{ t_['icon'] }}" aria-hidden="true"></i> {{ t_['plural'] }} <span>{{ typeCounts[slug_] }}</span></a>{% endif %}{% endfor %}
+        </nav>
+        {% set current = '' %}{% include 'app/Views/blog/_category-nav.html' %}
+        <form action="/blog/search" method="GET" class="formations-search mb-5" role="search">
+            <label for="blog-q" class="visually-hidden">Rechercher un article</label>
+            <input type="search" id="blog-q" name="q" placeholder="Rechercher un article…" required>
+            <button type="submit" class="v2-btn v2-btn-primary"><i class="bi bi-search" aria-hidden="true"></i> Rechercher</button>
+        </form>
         <div class="row g-4">
-            {% for article in php_values(recentArticles) %}                <div class="col-lg-6" data-aos="fade-up">
-                    <div class="glass-card p-4 border-glass hover-blue-border transition-all">
-                        <div class="row align-items-center">
-                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                <div class="rounded-3 overflow-hidden" style="height: 120px;">
-                                    <img src="{{ h(coalesce(article['image_url'], '/assets/images/contenu/placeholder-blog.svg')) }}" class="w-100 h-100 object-fit-cover" alt="{{ h(article['title']) }}" loading="lazy">
-                                </div>
-                            </div>
-                            <div class="col-sm-8">
-                                <span class="badge bg-premium-blue-gradient mb-2" style="font-size: 0.65rem; background: var(--blue-glow); color: white;">ACTUALITÉ</span>
-                                <h5 class="fw-bold text-white mb-2">{{ h(article['title']) }}</h5>
-                                <p class="text-white-50 small mb-3">{{ h(substr(coalesce(article['excerpt'], ''), 0, 80)) }}...</p>
-                                <a href="/blog/{{ h(article['slug']) }}" class="text-gold text-decoration-none small fw-bold">Lire l'article <i class="bi bi-arrow-right ms-1"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}        </div>
+            {% if empty(articles) %}
+            <p class="text-center v2-small">Aucun article pour l'instant. <a href="/blog">Voir tous les articles</a>.</p>
+            {% else %}
+            {% for article in php_values(articles) %}{% include 'app/Views/blog/_article-card.html' %}{% endfor %}
+            {% endif %}
+        </div>
+        {% if (totalPages > 1) %}
+        {% set base_ = ('/blog?type=' ~ currentType ~ '&page=' if currentType else '/blog?page=') %}
+        <nav class="mt-5" aria-label="Pages">
+            <ul class="pagination justify-content-center flex-wrap">
+                {% if (page > 1) %}<li class="page-item"><a class="page-link" href="{{ base_ }}{{ (page - 1) }}">Précédent</a></li>{% endif %}
+                {% for i in php_upto(max(1, (page - 2)), min(totalPages, (page + 2)), true) %}<li class="page-item {{ ('active' if (i == page) else '') }}"><a class="page-link" href="{{ base_ }}{{ i }}"{% if i == page %} aria-current="page"{% endif %}>{{ i }}</a></li>{% endfor %}
+                {% if (page < totalPages) %}<li class="page-item"><a class="page-link" href="{{ base_ }}{{ (page + 1) }}">Suivant</a></li>{% endif %}
+            </ul>
+        </nav>
+        {% endif %}
     </div>
 </section>
 
-<!-- Appel à l'action -->
-<section class="py-6 bg-premium-glow">
-    <div class="container px-4 text-center">
-        <div class="glass-card p-5 border-gold shadow-gold-glow" data-aos="zoom-in">
-            <h2 class="display-5 fw-bold text-white mb-4">Une question sur votre stratégie digitale ?</h2>
-            <p class="text-white-50 mb-5 fs-5">En 30 minutes, gratuitement, on fait le point sur votre activité et vous repartez avec 2 ou 3 actions prioritaires.</p>
-            <a href="/diagnostic#consultant" class="btn-premium btn-premium-gold px-5 py-4 fs-5">Réserver mon diagnostic gratuit</a>
-        </div>
-    </div>
-</section>
+{% include 'includes/partials/page-cta.html' %}

@@ -10,7 +10,8 @@
     "meta_keywords": "prix site internet Réunion, site vitrine 974, création site internet La Réunion, tarif site web",
     "pole": "Sites web",
     "icon": "window-desktop",
-    "visual_title": "Le vrai prix d'un site internet"
+    "visual_title": "Le vrai prix d'un site internet",
+    "content_type": "guide"
   },
   {
     "slug": "instagram-ou-facebook-reunion",
@@ -23,7 +24,8 @@
     "meta_keywords": "community manager Réunion, Facebook entreprise 974, Instagram commerce La Réunion, réseaux sociaux TPE",
     "pole": "Réseaux sociaux",
     "icon": "people",
-    "visual_title": "Instagram ou Facebook ?"
+    "visual_title": "Instagram ou Facebook ?",
+    "content_type": "comparatif"
   },
   {
     "slug": "budget-publicite-facebook-reunion",
@@ -36,7 +38,8 @@
     "meta_keywords": "publicité Facebook Réunion, budget pub Meta 974, Facebook Ads La Réunion, publicité Instagram",
     "pole": "Publicité",
     "icon": "megaphone",
-    "visual_title": "Quel budget pour une pub Facebook ?"
+    "visual_title": "Quel budget pour une pub Facebook ?",
+    "content_type": "guide"
   },
   {
     "slug": "automatiser-devis-artisan",
@@ -49,7 +52,8 @@
     "meta_keywords": "automatiser devis artisan, relance devis automatique, facture électronique 2027, automatisation TPE Réunion",
     "pole": "Automatisation",
     "icon": "diagram-3",
-    "visual_title": "Automatiser ses devis"
+    "visual_title": "Automatiser ses devis",
+    "content_type": "guide"
   },
   {
     "slug": "agent-ia-repondre-clients-24h",
@@ -62,7 +66,8 @@
     "meta_keywords": "agent IA entreprise, chatbot Messenger, réponse automatique clients, assistant IA TPE Réunion",
     "pole": "Agents IA",
     "icon": "robot",
-    "visual_title": "Un agent IA qui répond 24 h/24"
+    "visual_title": "Un agent IA qui répond 24 h/24",
+    "content_type": "guide"
   },
   {
     "slug": "fiche-google-reunion",
@@ -75,7 +80,8 @@
     "meta_keywords": "fiche Google Réunion, Google Business Profile, référencement local 974, apparaître sur Google Maps",
     "pole": "Référencement",
     "icon": "geo-alt",
-    "visual_title": "Apparaître sur Google Maps"
+    "visual_title": "Apparaître sur Google Maps",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "site-vitrine-ou-page-facebook",
@@ -88,7 +94,8 @@
     "meta_keywords": "site vitrine Réunion, page Facebook entreprise, créer un site internet 974, site ou Facebook",
     "pole": "Sites web",
     "icon": "window-desktop",
-    "visual_title": "Site vitrine ou page Facebook ?"
+    "visual_title": "Site vitrine ou page Facebook ?",
+    "content_type": "comparatif"
   },
   {
     "slug": "gite-reunion-haute-saison",
@@ -101,7 +108,8 @@
     "meta_keywords": "gîte Réunion, location saisonnière 974, réservation directe gîte, chambre d'hôtes La Réunion",
     "pole": "Tourisme",
     "icon": "house-heart",
-    "visual_title": "Remplir son gîte en haute saison"
+    "visual_title": "Remplir son gîte en haute saison",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "repondre-clients-pendant-les-fetes",
@@ -114,7 +122,8 @@
     "meta_keywords": "message d'absence WhatsApp Business, réponse automatique clients, fermeture fêtes entreprise, agent IA",
     "pole": "Automatisation",
     "icon": "chat-dots",
-    "visual_title": "Rester joignable pendant les fêtes"
+    "visual_title": "Rester joignable pendant les fêtes",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "avis-google-entreprise",
@@ -127,7 +136,8 @@
     "meta_keywords": "avis Google entreprise, obtenir des avis clients, répondre avis négatif, e-réputation Réunion",
     "pole": "Référencement",
     "icon": "star",
-    "visual_title": "Plus d'avis Google, mieux gérés"
+    "visual_title": "Plus d'avis Google, mieux gérés",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "lexique-ia-tpe",
@@ -140,7 +150,8 @@
     "meta_keywords": "lexique intelligence artificielle, définition IA générative, prompt définition, agent IA, IA pour TPE",
     "pole": "Intelligence artificielle",
     "icon": "book",
-    "visual_title": "20 mots de l'IA, enfin clairs"
+    "visual_title": "20 mots de l'IA, enfin clairs",
+    "content_type": "definition"
   },
   {
     "slug": "saison-cyclonique-entreprise",
@@ -153,7 +164,8 @@
     "meta_keywords": "saison cyclonique entreprise Réunion, alerte rouge cyclone entreprise, plan de continuité TPE, sauvegarde données",
     "pole": "Présence en ligne",
     "icon": "cloud-lightning-rain",
-    "visual_title": "Cyclone : votre entreprise reste joignable"
+    "visual_title": "Cyclone : votre entreprise reste joignable",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "chatgpt-tpe-usages",
@@ -166,7 +178,8 @@
     "meta_keywords": "ChatGPT TPE, ChatGPT entreprise usages, IA générative petite entreprise, prompt ChatGPT exemple, ChatGPT RGPD",
     "pole": "Intelligence artificielle",
     "icon": "stars",
-    "visual_title": "ChatGPT au service de votre TPE"
+    "visual_title": "ChatGPT au service de votre TPE",
+    "content_type": "guide"
   },
   {
     "slug": "relances-automatiques-devis-factures",
@@ -179,7 +192,8 @@
     "meta_keywords": "relance devis automatique, relance facture impayée, pénalités de retard 40 euros, automatisation TPE Réunion",
     "pole": "Automatisation",
     "icon": "arrow-repeat",
-    "visual_title": "Des relances qui partent toutes seules"
+    "visual_title": "Des relances qui partent toutes seules",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "chatbot-whatsapp-entreprise",
@@ -192,7 +206,8 @@
     "meta_keywords": "chatbot WhatsApp entreprise, WhatsApp Business API, WhatsApp Business Réunion, réponse automatique WhatsApp",
     "pole": "Chatbot",
     "icon": "chat-text",
-    "visual_title": "WhatsApp qui répond pour vous"
+    "visual_title": "WhatsApp qui répond pour vous",
+    "content_type": "guide"
   },
   {
     "slug": "rgpd-tpe-essentiel",
@@ -205,7 +220,8 @@
     "meta_keywords": "RGPD TPE, RGPD petite entreprise, registre des traitements, bandeau cookies, mentions RGPD formulaire",
     "pole": "Conformité",
     "icon": "shield-check",
-    "visual_title": "Le RGPD sans prise de tête"
+    "visual_title": "Le RGPD sans prise de tête",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "prise-rendez-vous-en-ligne",
@@ -218,7 +234,8 @@
     "meta_keywords": "prise de rendez-vous en ligne, agenda en ligne TPE, rappel rendez-vous SMS, réservation en ligne Réunion",
     "pole": "Automatisation",
     "icon": "calendar-check",
-    "visual_title": "Des rendez-vous qui se prennent seuls"
+    "visual_title": "Des rendez-vous qui se prennent seuls",
+    "content_type": "guide"
   },
   {
     "slug": "site-internet-artisan",
@@ -231,7 +248,8 @@
     "meta_keywords": "site internet artisan, site artisan Réunion, site vitrine BTP, demande de devis en ligne, page réalisations",
     "pole": "Sites web",
     "icon": "hammer",
-    "visual_title": "Le site d'artisan qui apporte des devis"
+    "visual_title": "Le site d'artisan qui apporte des devis",
+    "content_type": "guide"
   },
   {
     "slug": "boutique-en-ligne-reunion",
@@ -244,7 +262,8 @@
     "meta_keywords": "boutique en ligne Réunion, créer site e-commerce, vente en ligne obligations, droit de rétractation, e-commerce 974",
     "pole": "E-commerce",
     "icon": "bag-check",
-    "visual_title": "Votre boutique en ligne, prête à vendre"
+    "visual_title": "Votre boutique en ligne, prête à vendre",
+    "content_type": "guide"
   },
   {
     "slug": "temps-perdu-taches-repetitives",
@@ -257,7 +276,8 @@
     "meta_keywords": "tâches répétitives, temps perdu entreprise, automatiser tâches TPE, rentabilité automatisation, gain de temps",
     "pole": "Automatisation",
     "icon": "stopwatch",
-    "visual_title": "Le vrai coût de vos tâches répétitives"
+    "visual_title": "Le vrai coût de vos tâches répétitives",
+    "content_type": "modele"
   },
   {
     "slug": "nom-de-domaine-entreprise",
@@ -270,7 +290,8 @@
     "meta_keywords": "nom de domaine entreprise, nom de domaine .re, choisir nom de domaine, adresse mail professionnelle, Réunion",
     "pole": "Sites web",
     "icon": "globe2",
-    "visual_title": "Votre nom de domaine, bien à vous"
+    "visual_title": "Votre nom de domaine, bien à vous",
+    "content_type": "guide"
   },
   {
     "slug": "newsletter-tpe",
@@ -283,7 +304,8 @@
     "meta_keywords": "newsletter TPE, e-mail marketing petite entreprise, consentement newsletter RGPD, fidéliser clients e-mail",
     "pole": "E-mail marketing",
     "icon": "envelope-paper",
-    "visual_title": "La newsletter qui fait revenir vos clients"
+    "visual_title": "La newsletter qui fait revenir vos clients",
+    "content_type": "guide"
   },
   {
     "slug": "idees-publications-reseaux-sociaux",
@@ -296,7 +318,8 @@
     "meta_keywords": "idées publications Facebook, idées posts Instagram, quoi publier réseaux sociaux, calendrier éditorial TPE",
     "pole": "Réseaux sociaux",
     "icon": "lightbulb",
-    "visual_title": "30 idées pour ne plus sécher"
+    "visual_title": "30 idées pour ne plus sécher",
+    "content_type": "modele"
   },
   {
     "slug": "landing-page-definition",
@@ -309,7 +332,8 @@
     "meta_keywords": "landing page définition, page d'atterrissage, landing page publicité, créer landing page, landing page Réunion",
     "pole": "Sites web",
     "icon": "window-stack",
-    "visual_title": "Une page, un objectif"
+    "visual_title": "Une page, un objectif",
+    "content_type": "definition"
   },
   {
     "slug": "page-facebook-piratee",
@@ -322,7 +346,8 @@
     "meta_keywords": "page Facebook piratée, compte Facebook piraté entreprise, sécuriser page Facebook, double authentification, phishing Meta",
     "pole": "Sécurité",
     "icon": "shield-lock",
-    "visual_title": "Votre page Facebook, verrouillée"
+    "visual_title": "Votre page Facebook, verrouillée",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "bilan-digital-fin-annee",
@@ -335,7 +360,8 @@
     "meta_keywords": "bilan digital, checklist digitale TPE, audit présence en ligne, fiche Google horaires fêtes, Réunion",
     "pole": "Stratégie",
     "icon": "clipboard-check",
-    "visual_title": "Le bilan digital de fin d'année"
+    "visual_title": "Le bilan digital de fin d'année",
+    "content_type": "modele"
   },
   {
     "slug": "lexique-marketing-digital",
@@ -348,7 +374,8 @@
     "meta_keywords": "lexique marketing digital, définition SEO, CTR définition, CRM définition, taux de conversion",
     "pole": "Marketing digital",
     "icon": "book",
-    "visual_title": "Le digital, sans jargon"
+    "visual_title": "Le digital, sans jargon",
+    "content_type": "definition"
   },
   {
     "slug": "audit-seo-lire-rapport",
@@ -361,7 +388,8 @@
     "meta_keywords": "audit SEO gratuit, rapport SEO, balise title, meta description, référencement site Réunion",
     "pole": "Référencement",
     "icon": "search",
-    "visual_title": "Lire son audit SEO"
+    "visual_title": "Lire son audit SEO",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "creer-logo-entreprise",
@@ -374,7 +402,8 @@
     "meta_keywords": "créer un logo, logo entreprise Réunion, logo professionnel, déposer logo INPI, charte graphique",
     "pole": "Identité visuelle",
     "icon": "vector-pen",
-    "visual_title": "Un logo qui tient la route"
+    "visual_title": "Un logo qui tient la route",
+    "content_type": "pas-a-pas"
   },
   {
     "slug": "facture-electronique-tpe",
@@ -387,6 +416,7 @@
     "meta_keywords": "facture électronique TPE, facturation électronique 2026, plateforme agréée, e-reporting, micro-entreprise facture électronique",
     "pole": "Gestion",
     "icon": "receipt",
-    "visual_title": "La facture électronique, sans panique"
+    "visual_title": "La facture électronique, sans panique",
+    "content_type": "actualite"
   }
 ]

@@ -670,3 +670,12 @@ article.blog-article-page .breadcrumb {
 .formations-cats span {
     color: var(--content-muted);
 }
+
+/* Types de contenu (09/11/2026) : badge sur les cartes et dans l'article, filtres de /blog */
+.blog-card .blog-card-img { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 12px; margin-bottom: 1rem; }
+.blog-card .blog-card-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; }
+.blog-card .blog-card-tags .pg-tag { margin: 0; }
+.blog-type { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.65rem; border-radius: 999px; background: rgba(var(--gold-rgb), 0.12); border: 1px solid rgba(var(--gold-rgb), 0.45); color: var(--gold); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; }
+[data-theme="light"] .blog-type { color: #8a6d12; }
+.blog-types a i { margin-right: 0.15rem; }
+.blog-article-page .article-type { margin-right: 0.5rem; background: rgba(var(--gold-rgb), 0.2); }

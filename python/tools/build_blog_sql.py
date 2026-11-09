@@ -36,6 +36,8 @@ def statement(a):
         "meta_keywords": sql(a["meta_keywords"]), "featured_image": sql(image), "image_url": sql(image),
         "status": "'draft'", "created_at": "NOW()", "updated_at": "NOW()",
     }
+    if a.get("content_type"):  # colonne ajoutée par 2026_11_09_blog_content_type.sql
+        cols["content_type"] = sql(a["content_type"])
     return (f"INSERT INTO blog_articles ({', '.join(cols)})\nVALUES ({', '.join(cols.values())})\n"
             "ON CONFLICT (slug) DO NOTHING;\n")
 

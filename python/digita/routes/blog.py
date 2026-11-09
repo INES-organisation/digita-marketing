@@ -5,7 +5,7 @@ from ..models import article as Article
 from ..models import formation as Formation
 from ..render import render_view
 from .common import moved, not_found, page_param, redirect
-from .. import db, php, redirects
+from .. import content_types, db, php, redirects
 
 # Auteur affiché sous chaque article et dans les données structurées (BlogPosting).
 AUTHOR = {
@@ -27,20 +27,34 @@ def absolute(base, url):
 def index(request):
     page = page_param(request)
     per_page = 12
-    total = Article.count()
+    kind = request.query_params.get("type", "")
+    ctype = content_types.get(kind)
+    if kind and not ctype:
+        return redirect("/blog")
+    total = Article.count(content_type=kind if ctype else None)
+    total_pages = max(1, math.ceil(total / per_page))
+    if page > total_pages:
+        return redirect("/blog" + (f"?type={kind}" if ctype else ""))
+    title = ctype["plural"] + " — Blog" if ctype else "Blog Marketing Digital, IA & Automatisation"
+    if page > 1:
+        title += f" — page {page}"
+    title += " | DIGITA"
     return render_view(request, "blog/index-content", {
-        "title": "Blog Marketing Digital, IA & Automatisation | DIGITA",
-        "metaDescription": "Conseils pratiques en marketing digital, IA et automatisation pour TPE/PME : gagner du temps, "
-                           "trouver des clients et mieux suivre vos prospects.",
+        "title": title,
+        "metaDescription": (f"{ctype['plural']} du blog DIGITA pour les TPE de La Réunion : {ctype['lead'][0].lower()}{ctype['lead'][1:]}"
+                            if ctype else
+                            "Conseils pratiques en marketing digital, IA et automatisation pour TPE/PME : gagner du temps, "
+                            "trouver des clients et mieux suivre vos prospects."),
         "metaKeywords": "blog marketing digital, conseils SEO, automatisation, intelligence artificielle, stratégie digitale",
         "extraCss": ["/assets/css/blog-layout.css"],
         "totalArticles": total,
-        "articles": Article.get_all_published(per_page, (page - 1) * per_page),
-        "popularArticles": Article.get_popular(5),
-        "recentArticles": Article.get_recent(5),
+        "articles": Article.get_all_published(per_page, (page - 1) * per_page, kind if ctype else None),
         "categories": Article.get_categories(),
-        "currentPage": page,
-        "totalPages": float(math.ceil(total / per_page)),
+        "contentTypes": content_types.TYPES,
+        "typeCounts": Article.type_counts(),
+        "currentType": kind if ctype else "",
+        "page": page,
+        "totalPages": total_pages,
     })
 
 
@@ -85,6 +99,7 @@ def show(request, slug):
         "breadcrumbs": crumbs,
         "extraCss": ["/assets/css/blog-layout.css"],
         "article": article,
+        "contentType": content_types.get(article.get("content_type")),
         "readingTime": reading_time,
         "tableOfContents": toc["toc"],
         "faqSchema": faq,
@@ -101,7 +116,7 @@ def show(request, slug):
 def category(request, slug):
     page = page_param(request)
     per_page = 12
-    articles = Article.get_by_category(slug, per_page)
+    articles = Article.get_by_category(slug, per_page, (page - 1) * per_page)
     total = Article.count(slug)
     categories = Article.get_categories()
     cat = db.fetch("SELECT * FROM service_categories WHERE slug = ?", [slug])
@@ -117,6 +132,7 @@ def category(request, slug):
         "page": page,
         "totalPages": float(math.ceil(total / per_page)),
         "categories": categories,
+        "contentTypes": content_types.TYPES,
     })
 
 
@@ -148,4 +164,5 @@ def search(request):
         "articles": Article.search(query, 50),
         "categories": Article.get_categories(),
         "popularArticles": Article.get_popular(5),
+        "contentTypes": content_types.TYPES,
     })

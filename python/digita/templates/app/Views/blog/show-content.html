@@ -12,6 +12,7 @@
     <div class="container py-5">
         <header class="row mb-5">
             <div class="col-lg-10 mx-auto text-center">
+                {% if contentType %}<a href="/blog?type={{ article['content_type'] }}" class="article-category article-type"><i class="bi {{ contentType['icon'] }}" aria-hidden="true"></i> {{ contentType['label'] }}</a>{% endif %}
                 {% if (not empty(article['category_name'])) %}                    <a href="/blog/categorie/{{ h(article['category_slug']) }}" class="article-category">
                         {{ h(article['category_name']) }}                    </a>
                 {% endif %}                <h1 class="article-title fw-bold mb-4 text-white">{{ h(article['title']) }}</h1>
