@@ -17,7 +17,8 @@ comment ajouter un lot.
 | 5 | #18 | `nom-de-domaine-entreprise`, `newsletter-tpe`, `idees-publications-reseaux-sociaux`, `landing-page-definition`, `page-facebook-piratee` |
 | 6 | #20 | `bilan-digital-fin-annee`, `lexique-marketing-digital`, `audit-seo-lire-rapport`, `creer-logo-entreprise`, `facture-electronique-tpe` |
 | 7 | #24 | `ecrire-pour-google-tpe`, `entretenir-securiser-site`, `accelerer-son-site`, `google-analytics-search-console`, `google-ads-tpe`, `plan-marketing-digital-une-page` |
-| 8 | à venir | `photos-telephone`, `videos-courtes-telephone`, `choisir-crm`, `fideliser-clients`, `linkedin-dirigeant` |
+| 8 | #25 | `photos-telephone`, `videos-courtes-telephone`, `choisir-crm`, `fideliser-clients`, `linkedin-dirigeant` |
+| 9 | à venir | `createurs-contenu-reunion`, `marketplace-reunion`, `supports-imprimes-qr-codes`, `bad-buzz-local` |
 
 Les anciens articles (472 de l'ère PHP) ont été supprimés le 9 novembre 2026 (voir plus bas).
 
@@ -64,6 +65,7 @@ préserver. Le blog ne garde que des articles utiles et clairs, sans article arc
 - Les anciennes adresses répondent 404.
 - Mise en ligne faite le 9 novembre 2026 (commit dae991f) : 164 redirections et 472 articles supprimés,
   il reste 30 articles, tous publiés et typés. Sauvegarde de 1,6 Mo vérifiée avant la migration.
+- Lots 7 et 8 mis en ligne le 9 novembre 2026 (commit a82f079) : 41 articles publiés, tous typés.
 - Les 16 sujets utiles repérés dans les anciens articles sont réécrits comme nouveaux articles (lots 7 à 9).
 
 ## Règles de rédaction
@@ -131,7 +133,7 @@ Depuis `python/` :
    `intelligence-artificielle`, `crm`), sinon l'article n'a pas de catégorie. Si un article contient « % »,
    `tools/apply_sql.py` échoue (psycopg2 lit « % » comme un paramètre) : appliquer le fichier avec `psql -f`,
    comme sur le serveur.
-4. Tests : `python -m pytest -q` (137 tests au lot 8). `tests/test_blog.py` vérifie les longueurs des metas, la couverture, les
+4. Tests : `python -m pytest -q` (141 tests au lot 9). `tests/test_blog.py` vérifie les longueurs des metas, la couverture, les
    `h2`, « En bref », les sources, l'absence de lignes vides et la mention « fictif » des exemples.
 5. PR, validation d'Anthony, fusion.
 6. Mise en ligne sur le VPS (`ssh ines-vps`, depuis l'iMac) :
@@ -162,7 +164,14 @@ Claude Code, ou lancer le bloc à la main.
 
 - Calendrier : après le lot 6, tous les sujets du plan éditorial sont traités, sauf Kap Numérik et le
   financement des formations. Les prochains lots demandent de nouveaux sujets.
-- Rédiger les 16 nouveaux sujets (lots 7 et 8 écrits, lot 9 à faire) : voir le Claude Doc « Plan de contenu : articles d'origine et
+- Rédiger les 16 nouveaux sujets : 15 écrits (lots 7 à 9). Reste l'article sur l'accessibilité (directive
+  européenne, en vigueur depuis le 28 juin 2025) : les pages officielles (DGCCRF, EUR-Lex, Légifrance) refusent
+  la lecture depuis le serveur de travail. L'exemption des microentreprises de services est à vérifier sur le
+  texte avant d'écrire.
+- Idées d'articles sur des outils INES (9 novembre 2026), en attente du choix d'Anthony : devis depuis le
+  téléphone, click & collect, réservations sans commission, planning et rapports d'intervention, QR codes, page
+  de liens, carte de visite et signature e-mail, sondages, messagerie unique. Aucun n'a encore d'offre ni de prix
+  dans la grille : vérifier dans INES qu'il fonctionne, puis ne citer INES qu'une fois l'offre créée. : voir le Claude Doc « Plan de contenu : articles d'origine et
   formations ».
 - Google Search Console : sitemap et suivi des clics par article vers `/diagnostic`.
 - Photos réelles de La Réunion pour remplacer ou compléter les couvertures générées.

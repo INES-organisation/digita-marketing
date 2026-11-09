@@ -572,5 +572,61 @@
     "icon": "linkedin",
     "visual_title": "Votre profil LinkedIn qui inspire confiance",
     "content_type": "guide"
+  },
+  {
+    "slug": "createurs-contenu-reunion",
+    "title": "Travailler avec un créateur de contenu à La Réunion : choisir, cadrer, respecter la loi",
+    "meta_title": "Créateur de contenu à La Réunion : bien collaborer",
+    "meta_description": "Choisir un créateur de contenu local, préparer la collaboration et respecter la loi sur l'influence commerciale : mention obligatoire et contrat écrit.",
+    "excerpt": "Une vidéo d'un créateur local peut remplir une salle, ou ne rien rapporter. Les formes de collaboration, cinq étapes pour choisir le bon profil et ce qu'impose la loi du 9 juin 2023.",
+    "category": "reseaux-sociaux",
+    "service_name": "Réseaux sociaux",
+    "meta_keywords": "créateur de contenu Réunion, influenceur Réunion, collaboration commerciale, loi influence commerciale, UGC",
+    "pole": "Réseaux sociaux",
+    "icon": "person-video3",
+    "visual_title": "Un créateur local pour votre marque",
+    "content_type": "guide"
+  },
+  {
+    "slug": "marketplace-reunion",
+    "title": "Vendre en ligne à La Réunion : place de marché ou boutique en ligne ?",
+    "meta_title": "Place de marché ou boutique en ligne à La Réunion",
+    "meta_description": "Facebook, petites annonces, grandes plateformes ou boutique en ligne : comparez les canaux pour vendre depuis La Réunion et ce que déclarent les plateformes.",
+    "excerpt": "Vendre sur Facebook, sur une grande plateforme ou sur votre propre boutique ? Les quatre canaux comparés, cinq questions pour choisir et ce que les plateformes transmettent au fisc.",
+    "category": "creation-web",
+    "service_name": "E-commerce",
+    "meta_keywords": "place de marché Réunion, vendre en ligne Réunion, marketplace ou site e-commerce, vendre sur Facebook Marketplace, plateformes impôts",
+    "pole": "E-commerce",
+    "icon": "shop",
+    "visual_title": "Où vendre en ligne depuis l'île",
+    "content_type": "comparatif"
+  },
+  {
+    "slug": "supports-imprimes-qr-codes",
+    "title": "Supports imprimés et QR codes : relier le papier à vos clients en ligne",
+    "meta_title": "Supports imprimés et QR codes : le guide pratique",
+    "meta_description": "Carte de visite, flyer, vitrine, véhicule : choisir ses supports imprimés, utiliser les QR codes utiles (avis, menu, réservation) et les protéger des fraudes.",
+    "excerpt": "Un flyer ou une vitrine peuvent mener droit à vos avis Google ou à votre réservation. Quel support pour quel usage, six étapes pour un imprimé efficace et la sécurité des QR codes.",
+    "category": "creation-web",
+    "service_name": "Identité visuelle",
+    "meta_keywords": "QR code avis Google, flyer entreprise, carte de visite QR code, supports imprimés, QR code menu restaurant",
+    "pole": "Identité visuelle",
+    "icon": "qr-code",
+    "visual_title": "Du papier à vos clients en ligne",
+    "content_type": "guide"
+  },
+  {
+    "slug": "bad-buzz-local",
+    "title": "Bad buzz local : gérer un avis ou une publication qui s'emballe",
+    "meta_title": "Bad buzz local : la méthode en 7 étapes",
+    "meta_description": "Avis très négatif, publication virale dans un groupe local : répondre sans aggraver, signaler un faux avis et savoir quand parler de diffamation.",
+    "excerpt": "Sur une île où tout le monde se connaît, une mauvaise expérience peut faire le tour de la commune en une soirée. Sept étapes pour garder la main, et que faire selon le type de message.",
+    "category": "reseaux-sociaux",
+    "service_name": "Réseaux sociaux",
+    "meta_keywords": "bad buzz, avis négatif, répondre à un avis Google, signaler un faux avis, e-réputation entreprise",
+    "pole": "Réseaux sociaux",
+    "icon": "megaphone",
+    "visual_title": "Garder la main face au bad buzz",
+    "content_type": "pas-a-pas"
   }
 ]
