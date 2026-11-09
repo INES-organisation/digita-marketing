@@ -1,0 +1,74 @@
+<div class="en-bref">
+<p class="en-bref-titre">En bref</p>
+<ul>
+<li>Un site n'est pas « fini » le jour de sa mise en ligne. Sans mises à jour ni sauvegardes, il devient lent, vulnérable, puis tombe en panne.</li>
+<li>Quatre gestes protègent l'essentiel : mettre à jour, sauvegarder (et tester la restauration), sécuriser les accès, garder le HTTPS actif.</li>
+<li>Notez qui gère quoi (hébergement, nom de domaine, accès) : c'est ce qui manque le plus le jour d'un problème.</li>
+</ul>
+</div>
+<p>Un matin, un client vous appelle : votre site affiche une page de pharmacie en ligne, ou un message « site dangereux ». Dans la plupart des cas, la cause est banale : une extension pas mise à jour depuis des mois, un mot de passe trop simple, ou un ancien prestataire qui avait encore la main.</p>
+<p>Cybermalveillance.gouv.fr, le dispositif national d'assistance, le rappelle dans sa fiche sur la sécurité des sites : les mises à jour corrigent des failles connues, et une sauvegarde régulière permet de repartir après un incident. Voici l'entretien minimal, à faire vous-même ou à confier à votre prestataire.</p>
+<h2>Ce qui peut arriver à un site mal entretenu</h2>
+<table class="table-article">
+<thead><tr><th>Problème</th><th>Ce que voit le client</th><th>Cause fréquente</th></tr></thead>
+<tbody>
+<tr><td>Piratage (défiguration)</td><td>Pages modifiées, contenus étrangers, redirections</td><td>CMS ou extension pas à jour, mot de passe faible</td></tr>
+<tr><td>Alerte « site non sécurisé »</td><td>Avertissement du navigateur avant d'entrer</td><td>Certificat HTTPS expiré ou mal installé</td></tr>
+<tr><td>Site inaccessible</td><td>Page d'erreur ou page de l'hébergeur</td><td>Hébergement ou nom de domaine non renouvelé</td></tr>
+<tr><td>Formulaire muet</td><td>Rien, mais les demandes n'arrivent plus</td><td>Adresse de réception changée, e-mails classés en indésirables</td></tr>
+<tr><td>Site très lent</td><td>Pages qui mettent plusieurs secondes à s'afficher</td><td>Images trop lourdes, extensions inutiles, hébergement saturé</td></tr>
+</tbody>
+</table>
+<h2>Les 4 gestes d'entretien</h2>
+<ol class="etapes">
+<li><strong>Mettre à jour.</strong> Le CMS (WordPress, par exemple), le thème et les extensions reçoivent des correctifs de sécurité. Appliquez-les régulièrement, et supprimez les extensions que vous n'utilisez plus : une extension désactivée mais présente peut rester une porte d'entrée.</li>
+<li><strong>Sauvegarder, puis tester.</strong> Une sauvegarde automatique, au moins chaque semaine, des fichiers et de la base de données, conservée ailleurs que sur le serveur du site. Une fois par an, vérifiez qu'on sait réellement la restaurer : une sauvegarde jamais testée ne protège de rien.</li>
+<li><strong>Sécuriser les accès.</strong> Un mot de passe long et unique par compte, la double authentification quand elle existe, un compte par personne, et la suppression des accès des anciens salariés et prestataires.</li>
+<li><strong>Garder le HTTPS actif.</strong> Le petit cadenas dans la barre d'adresse indique que les échanges sont chiffrés. Le certificat se renouvelle en général automatiquement chez l'hébergeur ; vérifiez-le si le navigateur affiche une alerte.</li>
+</ol>
+<h2>Le calendrier d'entretien</h2>
+<table class="table-article">
+<thead><tr><th>Fréquence</th><th>À faire</th></tr></thead>
+<tbody>
+<tr><td>Chaque semaine</td><td>Vérifier que les sauvegardes automatiques ont tourné ; appliquer les mises à jour de sécurité</td></tr>
+<tr><td>Chaque mois</td><td>Envoyer une demande test par le formulaire ; vérifier que le site s'ouvre bien sur téléphone</td></tr>
+<tr><td>Chaque trimestre</td><td>Faire le tour des comptes ayant accès au site ; supprimer extensions et pages inutiles</td></tr>
+<tr><td>Chaque année</td><td>Tester une restauration ; vérifier les dates de renouvellement du nom de domaine et de l'hébergement</td></tr>
+</tbody>
+</table>
+<div class="encadre-exemple">
+<p class="encadre-titre">Exemple (cas fictif) : un cabinet de kinésithérapie à Saint-André</p>
+<p>Le site avait été créé il y a quatre ans par un ami, qui ne s'en occupe plus. Le cabinet découvre que l'extension de réservation n'a pas été mise à jour depuis deux ans. Il retrouve les accès, fait faire une sauvegarde, met à jour le CMS et les extensions, supprime trois extensions inutiles et crée un accès personnel pour la secrétaire, avec la double authentification. Il note dans un document qui gère l'hébergement et le nom de domaine.</p>
+</div>
+<h2>La fiche « qui gère quoi »</h2>
+<p>Le jour d'un problème, la première perte de temps est de retrouver les accès. Gardez une fiche à jour, rangée dans un gestionnaire de mots de passe ou un coffre sécurisé :</p>
+<ul class="checklist">
+<li><strong>Nom de domaine</strong> : chez quel registraire, au nom de qui, date de renouvellement. Voir notre article sur le <a href="/blog/nom-de-domaine-entreprise">nom de domaine</a>.</li>
+<li><strong>Hébergement</strong> : le fournisseur, l'offre, la date de renouvellement, le contact du support.</li>
+<li><strong>Administration du site</strong> : l'adresse de connexion et la liste des personnes qui ont un compte.</li>
+<li><strong>Messagerie</strong> : où sont gérées vos adresses e-mail professionnelles.</li>
+<li><strong>Prestataire</strong> : qui intervient, et ce qui est prévu au contrat (mises à jour, sauvegardes, délai d'intervention).</li>
+</ul>
+<h2>Si le site est piraté</h2>
+<p>Ne supprimez rien dans la précipitation. Prévenez votre hébergeur et votre prestataire, changez les mots de passe depuis un appareil sain, et restaurez une sauvegarde antérieure au piratage. Cybermalveillance.gouv.fr propose un parcours d'assistance en ligne et une liste de prestataires de proximité. Si des données de clients ont pu être consultées, la CNIL demande de notifier la violation dans les 72 heures.</p>
+<div class="encadre-digita">
+<p class="encadre-titre">Ce que fait DIGITA</p>
+<p>Dans le pack Visibilité locale 974, le site vitrine est livré avec l'hébergement inclus, pour 990 €. Pour un site existant, le diagnostic gratuit permet de faire le point sur ses accès, ses sauvegardes et ses mises à jour.</p>
+<p><a href="/solutions#local" class="encadre-lien">Le pack Visibilité locale 974</a> · <a href="/diagnostic" class="encadre-lien">Réserver un diagnostic gratuit</a></p>
+</div>
+<h2>Questions fréquentes</h2>
+<h3>Mon hébergeur fait-il déjà les sauvegardes ?</h3>
+<p>Souvent oui, mais pas toujours, et pas forcément assez longtemps. Vérifiez dans votre offre la fréquence, la durée de conservation et la façon de restaurer. Une copie gardée ailleurs reste prudente.</p>
+<h3>Le HTTPS est-il obligatoire ?</h3>
+<p>Les navigateurs signalent les sites sans HTTPS comme « non sécurisés », ce qui fait fuir les visiteurs. Dès qu'un site a un formulaire, le HTTPS protège les données envoyées. La plupart des hébergeurs le fournissent gratuitement.</p>
+<h3>Faut-il un contrat de maintenance ?</h3>
+<p>Si personne dans l'entreprise n'a le temps de faire les mises à jour et de vérifier les sauvegardes, oui. Demandez ce qui est inclus précisément et en combien de temps le prestataire intervient en cas de panne.</p>
+<div class="article-sources">
+<p class="encadre-titre">Sources</p>
+<ul>
+<li><a href="https://www.cybermalveillance.gouv.fr/medias/2021/04/210722_FichePratique_SitesInternet.pdf" target="_blank" rel="noopener">Cybermalveillance.gouv.fr : fiche pratique « Sécurité des sites internet »</a>.</li>
+<li><a href="https://www.cybermalveillance.gouv.fr/tous-nos-contenus/bonnes-pratiques/10-mesures-essentielles-assurer-securite-numerique" target="_blank" rel="noopener">Cybermalveillance.gouv.fr : les 10 mesures essentielles pour votre cybersécurité</a>.</li>
+<li><a href="https://www.cnil.fr/fr/notifier-une-violation-de-donnees-personnelles" target="_blank" rel="noopener">CNIL : notifier une violation de données personnelles</a>.</li>
+<li>Grille tarifaire DIGITA : <a href="/solutions#local">pack Visibilité locale 974</a>, consulté le 9 novembre 2026.</li>
+</ul>
+</div>

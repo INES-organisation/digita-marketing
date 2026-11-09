@@ -1,0 +1,70 @@
+<div class="en-bref">
+<p class="en-bref-titre">En bref</p>
+<ul>
+<li>Un site lent fait partir les visiteurs, surtout sur téléphone. Google mesure trois signaux de confort : l'affichage du contenu principal, la réactivité aux clics et la stabilité de la page.</li>
+<li>Mesurez d'abord avec PageSpeed Insights (gratuit), page par page, en regardant la version mobile.</li>
+<li>Dans la plupart des petits sites, les images trop lourdes sont la première cause de lenteur. Viennent ensuite les extensions et scripts inutiles.</li>
+</ul>
+</div>
+<p>Vous ouvrez votre site sur votre téléphone, en 4G, quelque part entre Cilaos et Saint-Louis. Trois secondes, quatre secondes, toujours une page blanche. Vos clients vivent la même chose, et beaucoup n'attendent pas : ils reviennent aux résultats de Google et cliquent sur le concurrent.</p>
+<p>Accélérer un site n'est pas réservé aux développeurs. Les gains les plus importants viennent souvent de gestes simples. Voici comment mesurer, puis corriger, dans l'ordre.</p>
+<h2>Les trois signaux de Google</h2>
+<p>Google regroupe la vitesse et le confort d'une page sous le nom de Core Web Vitals. Ce sont trois mesures, faites sur les visites réelles :</p>
+<table class="table-article">
+<thead><tr><th>Mesure</th><th>Ce qu'elle mesure</th><th>Bon</th><th>Mauvais</th></tr></thead>
+<tbody>
+<tr><td>LCP (Largest Contentful Paint)</td><td>Le temps d'affichage du plus gros élément visible : la grande image ou le titre</td><td>2,5 s ou moins</td><td>Plus de 4 s</td></tr>
+<tr><td>INP (Interaction to Next Paint)</td><td>Le délai de réaction quand on touche un bouton ou un menu</td><td>200 ms ou moins</td><td>Plus de 500 ms</td></tr>
+<tr><td>CLS (Cumulative Layout Shift)</td><td>Les décalages de la page pendant le chargement (le bouton qui bouge au moment de cliquer)</td><td>0,1 ou moins</td><td>Plus de 0,25</td></tr>
+</tbody>
+</table>
+<p>Ces seuils sont ceux publiés par Google sur web.dev. Ils s'appliquent aux trois quarts des visites : une page est « bonne » quand au moins 75 visites sur 100 restent sous le seuil.</p>
+<h2>Mesurer en 3 étapes</h2>
+<ol class="etapes">
+<li><strong>Ouvrez PageSpeed Insights</strong> (pagespeed.web.dev) et collez l'adresse de la page à tester : l'accueil, puis vos pages les plus importantes.</li>
+<li><strong>Regardez l'onglet « Mobile »</strong>. En haut, les données réelles des visiteurs, quand Google en a assez ; en dessous, un test en laboratoire avec une note sur 100 et la liste des problèmes.</li>
+<li><strong>Notez les trois premières recommandations</strong>, en particulier celles qui parlent d'images, de scripts et de polices. Ce sont souvent les plus rentables.</li>
+</ol>
+<p>Votre site est relié à la Search Console ? Le rapport « Core Web Vitals » liste les pages lentes à partir des visites réelles. Voir notre <a href="/blog/google-analytics-search-console">pas à pas Search Console</a>.</p>
+<h2>Corriger en 6 gestes</h2>
+<ol class="etapes">
+<li><strong>Alléger les images.</strong> Une photo prise au téléphone pèse souvent plusieurs mégaoctets. Redimensionnez-la à la taille d'affichage (rarement plus de 2 000 pixels de large) et enregistrez-la en WebP ou en JPEG compressé. C'est souvent le geste qui fait gagner le plus.</li>
+<li><strong>Fixer la taille des images et des blocs.</strong> Une image avec sa largeur et sa hauteur déclarées réserve sa place, et la page ne saute plus pendant le chargement (meilleur CLS).</li>
+<li><strong>Charger les images plus bas « à la demande ».</strong> Les images situées sous l'écran peuvent attendre que le visiteur fasse défiler. La plupart des CMS le proposent ; ne l'appliquez pas à la grande image du haut.</li>
+<li><strong>Supprimer les extensions et scripts inutiles.</strong> Chaque module de chat, de statistiques ou de réseau social ajoute du code à charger. Gardez ceux qui servent vraiment.</li>
+<li><strong>Activer le cache et la compression.</strong> La plupart des hébergeurs le proposent, ou une extension dédiée. Les pages déjà visitées s'affichent alors beaucoup plus vite.</li>
+<li><strong>Limiter les polices.</strong> Deux familles de polices, avec peu de graisses, suffisent. Chaque variante est un fichier de plus à télécharger.</li>
+</ol>
+<div class="encadre-exemple">
+<p class="encadre-titre">Exemple (cas fictif) : un traiteur à Sainte-Marie</p>
+<p>Sa page d'accueil affiche douze photos de plats, prises au téléphone et mises en ligne telles quelles. PageSpeed Insights indique un LCP très au-dessus de 4 secondes sur mobile. Il fait redimensionner et convertir les photos en WebP, déclare leur taille, charge à la demande celles du bas de page et retire un ancien module Instagram. Au test suivant, la grande image s'affiche nettement plus vite et la page ne saute plus.</p>
+</div>
+<h2>Quand faire appel à un professionnel</h2>
+<p>Si la note reste mauvaise après ces gestes, le problème vient souvent du thème, d'un constructeur de pages trop lourd ou de l'hébergement. Un audit technique permet de trouver la cause précise avant de dépenser dans un nouvel hébergement ou une refonte.</p>
+<ul class="checklist">
+<li>Le serveur met longtemps à répondre, même sur une page simple.</li>
+<li>Le thème charge des dizaines de fichiers, y compris ceux que vous n'utilisez pas.</li>
+<li>Le site plante ou ralentit fortement quand plusieurs personnes le consultent.</li>
+</ul>
+<div class="encadre-digita">
+<p class="encadre-titre">Ce que fait DIGITA</p>
+<p>L'audit technique et l'optimisation des pages coûtent 590 €. Le diagnostic gratuit permet de savoir si votre site a besoin d'un nettoyage ou d'une refonte.</p>
+<p><a href="/services#seo" class="encadre-lien">Voir l'offre SEO</a> · <a href="/diagnostic" class="encadre-lien">Réserver un diagnostic gratuit</a></p>
+</div>
+<h2>Questions fréquentes</h2>
+<h3>La vitesse joue-t-elle sur le classement Google ?</h3>
+<p>Elle fait partie de l'expérience de page que Google prend en compte, mais le contenu reste le premier critère. Un site rapide et vide ne passera pas devant une page lente qui répond mieux. La vitesse compte surtout pour ne pas perdre les visiteurs.</p>
+<h3>Ma note PageSpeed est de 60 sur 100, est-ce grave ?</h3>
+<p>Pas forcément. La note de laboratoire varie d'un test à l'autre. Regardez surtout les trois mesures LCP, INP et CLS des visites réelles, et corrigez ce qui est indiqué comme mauvais.</p>
+<h3>Faut-il changer d'hébergeur pour aller plus vite ?</h3>
+<p>Seulement si le serveur est vraiment en cause. Allégez d'abord les images et les extensions : c'est gratuit et souvent suffisant.</p>
+<div class="article-sources">
+<p class="encadre-titre">Sources</p>
+<ul>
+<li><a href="https://web.dev/articles/vitals?hl=fr" target="_blank" rel="noopener">web.dev (Google) : les Core Web Vitals</a>.</li>
+<li><a href="https://web.dev/articles/defining-core-web-vitals-thresholds?hl=fr" target="_blank" rel="noopener">web.dev (Google) : comment les seuils des Core Web Vitals ont été définis</a>.</li>
+<li><a href="https://support.google.com/webmasters/answer/9205520?hl=fr" target="_blank" rel="noopener">Aide Search Console : rapport Core Web Vitals</a>.</li>
+<li><a href="https://pagespeed.web.dev/" target="_blank" rel="noopener">PageSpeed Insights</a>.</li>
+<li>Grille tarifaire DIGITA : <a href="/tarifs">page Tarifs</a>, consultée le 9 novembre 2026.</li>
+</ul>
+</div>
