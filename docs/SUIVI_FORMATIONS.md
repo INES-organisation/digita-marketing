@@ -29,7 +29,7 @@ On reprend la chaîne de la formation DGT Système d'INES (`backend/scripts/dgt_
 INES, documentée dans `SUIVI_WORKSPACE_DGT_SYSTEME.md` §12.3) :
 
 1. un script par scène (texte lu, éléments à l'écran) ;
-2. la voix : OpenAI `gpt-4o-mini-tts`, avec consignes de formatrice en français. La DGT utilise « coral » ; pour DIGITA, Anthony veut une autre voix (9 novembre 2026) : extraits à écouter avec marin, cedar et ash. La synthèse se
+2. la voix : OpenAI `gpt-4o-mini-tts`, avec consignes de formatrice en français. La DGT utilise « coral » ; pour DIGITA, Anthony veut une autre voix (9 novembre 2026) : extraits à écouter avec marin, cedar et ash. Choix d'Anthony le 9 novembre 2026 : **marin**. La synthèse se
    lance dans le conteneur backend d'INES en production, pour que la clé API reste sur le serveur ;
 3. la composition HyperFrames en 1920 × 1080, calée sur la durée de chaque piste audio (ffprobe), rendue avec
    `npx hyperframes@0.8.136 render` (Node 22 ou plus) ;

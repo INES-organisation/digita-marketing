@@ -1,0 +1,73 @@
+<div class="en-bref">
+<p class="en-bref-titre">En bref</p>
+<ul>
+<li>La Search Console dit comment Google voit votre site : les recherches qui l'affichent, les clics, les pages indexées et les erreurs. Elle est gratuite et ne pose aucun cookie chez vos visiteurs.</li>
+<li>Google Analytics dit ce que font les visiteurs une fois sur le site : d'où ils viennent, quelles pages ils lisent, s'ils vous contactent.</li>
+<li>Google Analytics dépose des cookies : selon la CNIL, il faut recueillir le consentement des visiteurs avant de l'activer.</li>
+</ul>
+</div>
+<p>« Est-ce que mon site sert à quelque chose ? » Sans outil de mesure, impossible de répondre. Vous ne savez pas si des clients vous trouvent sur Google, avec quels mots, ni s'ils vont jusqu'au formulaire de contact.</p>
+<p>Deux outils gratuits de Google répondent à ces questions. Ils ne font pas la même chose, et se complètent. Voici comment les installer et quoi regarder, sans se noyer dans les chiffres.</p>
+<h2>Deux outils, deux rôles</h2>
+<table class="table-article">
+<thead><tr><th></th><th>Search Console</th><th>Google Analytics 4</th></tr></thead>
+<tbody>
+<tr><td>Question posée</td><td>Comment Google voit-il mon site ?</td><td>Que font les visiteurs sur mon site ?</td></tr>
+<tr><td>Ce qu'on y lit</td><td>Recherches, impressions, clics, position moyenne, pages indexées, erreurs</td><td>Visites, sources de trafic, pages vues, actions (formulaire, appel)</td></tr>
+<tr><td>Installation</td><td>Validation de la propriété du site, une seule fois</td><td>Une balise ajoutée sur toutes les pages</td></tr>
+<tr><td>Cookies chez le visiteur</td><td>Aucun</td><td>Oui : consentement à recueillir</td></tr>
+</tbody>
+</table>
+<h2>Installer la Search Console en 5 étapes</h2>
+<ol class="etapes">
+<li><strong>Connectez-vous</strong> sur search.google.com/search-console avec le compte Google de l'entreprise (pas un compte personnel que vous pourriez perdre).</li>
+<li><strong>Ajoutez une propriété.</strong> Choisissez « Domaine » si vous pouvez modifier la zone DNS de votre nom de domaine : elle couvre toutes les adresses du site. Sinon, choisissez « Préfixe d'URL » et saisissez l'adresse exacte, avec https.</li>
+<li><strong>Validez la propriété.</strong> Pour un domaine, copiez l'enregistrement TXT fourni par Google dans la zone DNS, chez votre registraire. Pour un préfixe d'URL, plusieurs méthodes existent : balise meta, fichier HTML, ou validation par Google Analytics si la balise est déjà installée.</li>
+<li><strong>Envoyez votre sitemap.</strong> Dans le menu « Sitemaps », indiquez l'adresse du plan du site, souvent votre-site.re/sitemap.xml. Google découvre ainsi toutes vos pages.</li>
+<li><strong>Ajoutez votre prestataire comme utilisateur</strong>, avec un accès limité si possible, plutôt que de partager votre mot de passe.</li>
+</ol>
+<h2>Ce qu'il faut regarder chaque mois</h2>
+<ul class="checklist">
+<li><strong>Rapport « Performances »</strong> : les recherches qui ont affiché votre site, avec les impressions, les clics et la position moyenne. Repérez les recherches qui ont beaucoup d'impressions et peu de clics : un titre de page plus clair peut changer la donne.</li>
+<li><strong>Pages qui ramènent des clics</strong> : ce sont celles à soigner en priorité (mise à jour, appel à l'action visible).</li>
+<li><strong>Rapport « Pages » (indexation)</strong> : les pages que Google n'indexe pas, et pourquoi. Une page importante absente de l'index mérite une vérification.</li>
+<li><strong>Rapport « Core Web Vitals »</strong> : les pages jugées lentes sur mobile. Voir <a href="/blog/accelerer-son-site">accélérer son site</a>.</li>
+</ul>
+<h2>Installer Google Analytics 4</h2>
+<ol class="etapes">
+<li><strong>Créez un compte et une propriété</strong> sur analytics.google.com, avec le fuseau horaire de La Réunion et l'euro comme devise.</li>
+<li><strong>Ajoutez un flux de données « Web »</strong> avec l'adresse de votre site. Google vous donne un identifiant de mesure qui commence par « G- ».</li>
+<li><strong>Installez la balise</strong> sur toutes les pages : par l'extension de votre CMS, par Google Tag Manager, ou par votre prestataire.</li>
+<li><strong>Branchez-la sur votre bandeau cookies.</strong> La balise ne doit déposer ses cookies qu'après l'accord du visiteur. Refuser doit être aussi simple qu'accepter.</li>
+<li><strong>Déclarez vos actions importantes</strong> comme événements clés : envoi du formulaire, clic sur le téléphone, réservation. Ce sont elles qui mesurent l'utilité du site.</li>
+</ol>
+<div class="encadre-exemple">
+<p class="encadre-titre">Exemple (cas fictif) : un moniteur de parapente à Saint-Leu</p>
+<p>Dans la Search Console, il découvre que sa page tarifs apparaît souvent pour « baptême parapente Saint-Leu prix », mais reçoit peu de clics. Il réécrit le titre de la page pour qu'il annonce le prix et la durée du vol. Dans Analytics, il déclare le clic sur le bouton « Réserver » comme événement clé, pour voir quelles pages mènent vraiment à une réservation.</p>
+</div>
+<h2>Cookies et consentement</h2>
+<p>La CNIL dispense de consentement certains outils de mesure d'audience, à des conditions strictes : usage limité à des statistiques pour le seul compte du site, données non croisées ni réutilisées par le fournisseur. Elle cite Google Analytics parmi les offres qui sortent de cette exemption, parce que le fournisseur indique réutiliser les données pour son propre compte. Il faut donc le déclencher seulement après l'accord du visiteur, ce qui réduit le nombre de visites mesurées.</p>
+<p>La Search Console, elle, ne dépose rien chez vos visiteurs : vous pouvez l'installer sans bandeau.</p>
+<div class="encadre-digita">
+<p class="encadre-titre">Ce que fait DIGITA</p>
+<p>L'audit technique et l'optimisation des pages coûtent 590 €. Le diagnostic gratuit permet de vérifier ce qui est déjà installé sur votre site.</p>
+<p><a href="/services#seo" class="encadre-lien">Voir l'offre SEO</a> · <a href="/diagnostic" class="encadre-lien">Réserver un diagnostic gratuit</a></p>
+</div>
+<h2>Questions fréquentes</h2>
+<h3>La Search Console améliore-t-elle mon classement ?</h3>
+<p>Non, l'installer ne change pas votre position. Elle vous montre ce qui se passe et ce qui bloque, pour que vous puissiez corriger.</p>
+<h3>Faut-il Google Analytics si j'ai la Search Console ?</h3>
+<p>Pour un petit site, la Search Console suffit souvent au début. Analytics devient utile quand vous voulez savoir quelles pages mènent à une demande de devis ou à une réservation.</p>
+<h3>Pourquoi Analytics affiche moins de visites que prévu ?</h3>
+<p>Parce que les visiteurs qui refusent les cookies ne sont pas mesurés, et que certains bloqueurs empêchent la balise de se charger. Comparez les tendances d'un mois sur l'autre plutôt que les chiffres bruts.</p>
+<div class="article-sources">
+<p class="encadre-titre">Sources</p>
+<ul>
+<li><a href="https://support.google.com/webmasters/answer/34592?hl=fr" target="_blank" rel="noopener">Aide Search Console : ajouter une propriété de site Web</a>.</li>
+<li><a href="https://support.google.com/webmasters/answer/10267942?hl=fr" target="_blank" rel="noopener">Aide Search Console : premiers pas avec la Search Console</a>.</li>
+<li><a href="https://support.google.com/analytics/answer/9304153?hl=fr" target="_blank" rel="noopener">Aide Google Analytics : configurer Analytics pour un site Web</a>.</li>
+<li><a href="https://www.cnil.fr/fr/mesurer-la-frequentation-de-vos-sites-web-et-de-vos-applications" target="_blank" rel="noopener">CNIL : mesurer la fréquentation de vos sites web et de vos applications</a>.</li>
+<li><a href="https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies-solutions-pour-les-outils-de-mesure-daudience" target="_blank" rel="noopener">CNIL : cookies, solutions pour les outils de mesure d'audience</a>.</li>
+<li>Grille tarifaire DIGITA : <a href="/tarifs">page Tarifs</a>, consultée le 9 novembre 2026.</li>
+</ul>
+</div>
