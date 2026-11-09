@@ -1,7 +1,7 @@
 # Formation pilote : « Être trouvé sur Google en 30 jours »
 
-Plan détaillé et script de la leçon 1, 9 novembre 2026. À valider par Anthony Legros avant de produire
-les autres leçons. Le contenu reprend uniquement des articles du blog déjà vérifiés, dont les sources sont
+Plan détaillé et script de la leçon 1, 9 novembre 2026, validés par Anthony Legros. Positionnement
+enrichi validé le même jour (section ci-dessous). Le contenu reprend uniquement des articles du blog déjà vérifiés, dont les sources sont
 citées dans chaque article.
 
 ## Principe
@@ -13,6 +13,62 @@ citées dans chaque article.
 - Format : 15 leçons vidéo de 4 à 7 minutes, soit environ 1 h 30, chacune suivie d'une action à faire
   le jour même et d'une fiche à télécharger.
 - Tout est filmé sur des pages publiques ou sur des schémas. Pas d'écran connecté dans le pilote.
+
+## Positionnement validé (9 novembre 2026)
+
+Décisions d'Anthony :
+
+- **Version enrichie, haut de gamme dès le départ**, avec une forte valeur perçue. Prix visé : **99 à
+  149 €** (le montant exact sera inscrit dans la grille par Anthony).
+- **Moins cher que le service** : faire le travail soi-même avec la formation coûte moins que l'offre
+  SEO Local de DIGITA (390 €, `grille.py`), mais demande du temps. La formation ne remplace pas le service,
+  elle s'adresse à ceux qui préfèrent le faire eux-mêmes, et mène au service ceux qui manquent de temps.
+- **Leçon 1 gratuite**, pour attirer les inscrits.
+- **Voix « marin »** pour le moment. La voix clonée d'Anthony viendra avec INES (voir
+  `INES/docs/user/Moniteurs/PF OCTAVE/Studio/IMPLEMENTATION_VOIX_CLONEE_ET_FORMATIONS_AUTONOMES.md`).
+
+Repères de prix relevés le 9 novembre 2026 sur les pages des éditeurs :
+
+- Elephorm, « Optimiser sa fiche Google My Business » : 59 €, 1 h 11 de vidéo en 18 vidéos ;
+- FormaSEO (Abondance), module Google Business Profile : 249 € HT pour un an d'accès.
+
+Ce qui doit justifier 99 à 149 € face à eux : le local (exemples réunionnais, cyclones, jours fériés
+locaux), un livrable concret à chaque leçon, et des outils prêts à l'emploi.
+
+## Ce que contient la version enrichie
+
+**Dans chaque leçon** :
+
+- une vidéo de 4 à 7 minutes, avec un exemple réunionnais (cas fictif annoncé comme tel) ;
+- une fiche action en PDF : le pas-à-pas de la leçon, à cocher ;
+- les sources officielles citées sous la vidéo.
+
+**Le kit fourni avec la formation** (modèles à adapter) :
+
+| Outil | Leçon |
+| --- | --- |
+| Grille d'état des lieux de sa présence sur Google | 1, 3 |
+| Liste des catégories et des services à décrire, par métier | 5, 6 |
+| Liste des photos à prendre (façade, équipe, réalisations) | 7 |
+| Kit avis : message SMS et e-mail de demande, QR code, affichette | 8 |
+| 10 modèles de réponses aux avis, positifs et négatifs | 9 |
+| Gabarit de page service pour son site | 12 |
+| Tableau de suivi mensuel (Search Console, appels, avis) | 14, 15 |
+| Calendrier de 30 minutes par semaine pour les mois suivants | 15 |
+
+**À la fin** : un quiz par semaine. Le nombre de questions reste à fixer.
+
+**Pas inclus** : aucune promesse de position sur Google, et pas d'accompagnement individuel. Si ce
+dernier est ajouté plus tard, ce sera une offre distincte, avec son prix dans la grille.
+
+## Production
+
+- Leçon 1 : la vidéo test du 9 novembre 2026 (2 min 17) sert de base. Elle doit être réécrite en
+  version enrichie (exemple réunionnais, capture Google plus grande, fiche action).
+- Les sous-titres sont alignés mot par mot sur l'audio réel. Le texte du script ne suffit pas : la
+  vidéo test était décalée.
+- Chaque piste de voix est vérifiée par retranscription. Lors du test, une phrase du script (« Elles
+  serviront de point de départ. ») manquait dans l'audio.
 
 ## Plan
 

@@ -21,7 +21,7 @@ Choisie le 9 novembre 2026 parce que :
   se connecter à un compte ;
 - elle mène naturellement au diagnostic gratuit et aux offres SEO et fiche Google de la grille.
 
-Prix et format de vente : à fixer par Anthony.
+Prix et format de vente (9 novembre 2026) : version enrichie haut de gamme, 99 à 149 €, leçon 1 gratuite, voix « marin » pour le moment. Détail dans `docs/formations/PILOTE_GOOGLE_30_JOURS.md`.
 
 ## Production des vidéos
 
