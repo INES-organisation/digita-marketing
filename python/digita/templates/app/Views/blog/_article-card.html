@@ -4,8 +4,8 @@
     <a href="/blog/{{ article['slug'] }}" class="v2-card v2-need blog-card">
         {% if t(article['image_url']) and '/assets/images/blog/' in article['image_url'] %}<img src="{{ h(article['image_url']) }}" alt="" class="blog-card-img" width="1200" height="630" loading="lazy">{% endif %}
         <span class="blog-card-tags">
-            {% if type_ %}<span class="blog-type"><i class="bi {{ type_['icon'] }}" aria-hidden="true"></i> {{ type_['label'] }}</span>{% endif %}
-            {% if t(article['category_name']) %}<span class="pg-tag">{{ h(article['category_name']) }}</span>{% endif %}
+            {% if type_ %}<span class="blog-type blog-type--{{ article['content_type'] }}"><i class="bi {{ type_['icon'] }}" aria-hidden="true"></i> {{ type_['label'] }}</span>{% endif %}
+            {% if t(article['category_name']) %}<span class="blog-cat">{{ h(article['category_name']) }}</span>{% endif %}
         </span>
         <h2 class="h3">{{ h(article['title']) }}</h2>
         <p>{{ h(mb_strimwidth(strip_tags(coalesce(article['excerpt'], '')), 0, 160, '…')) }}</p>

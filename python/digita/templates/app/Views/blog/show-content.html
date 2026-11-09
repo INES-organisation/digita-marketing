@@ -12,8 +12,8 @@
     <div class="container py-5">
         <header class="row mb-5">
             <div class="col-lg-10 mx-auto text-center">
-                {% if contentType %}<a href="/blog?type={{ article['content_type'] }}" class="article-category article-type"><i class="bi {{ contentType['icon'] }}" aria-hidden="true"></i> {{ contentType['label'] }}</a>{% endif %}
-                {% if (not empty(article['category_name'])) %}                    <a href="/blog/categorie/{{ h(article['category_slug']) }}" class="article-category">
+                {% if contentType %}<a href="/blog?type={{ article['content_type'] }}" class="article-category article-type blog-type blog-type--{{ article['content_type'] }}"><i class="bi {{ contentType['icon'] }}" aria-hidden="true"></i> {{ contentType['label'] }}</a>{% endif %}
+                {% if (not empty(article['category_name'])) %}                    <a href="/blog/categorie/{{ h(article['category_slug']) }}" class="article-category blog-cat">
                         {{ h(article['category_name']) }}                    </a>
                 {% endif %}                <h1 class="article-title fw-bold mb-4 text-white">{{ h(article['title']) }}</h1>
                 {% if ((not empty(article['excerpt'])) and (article['excerpt'][:1] != '#')) %}                    <p class="article-chapo mx-auto mb-4">{{ h(article['excerpt']) }}</p>
@@ -112,7 +112,7 @@
                 {% for related in php_values(relatedArticles) %}                    <div class="col-md-4">
                         <a href="/blog/{{ h(related['slug']) }}" class="text-decoration-none">
                             <div class="glass-card p-4 h-100 border-glass hover-gold-border transition-all">
-                                <span class="badge text-gold border border-gold mb-3 px-2 py-1" style="font-size: 0.65rem;">{{ h(coalesce(related['category_name'], 'Blog')) }}</span>
+                                <span class="blog-card-tags">{% set rt_ = contentTypes.get(related['content_type']) if related['content_type'] else none %}{% if rt_ %}<span class="blog-type blog-type--{{ related['content_type'] }}"><i class="bi {{ rt_['icon'] }}" aria-hidden="true"></i> {{ rt_['label'] }}</span>{% endif %}{% if t(related['category_name']) %}<span class="blog-cat">{{ h(related['category_name']) }}</span>{% endif %}</span>
                                 <p class="h5 text-white fw-bold mb-0" style="line-height: 1.4;">{{ h(related['title']) }}</p>
                             </div>
                         </a>

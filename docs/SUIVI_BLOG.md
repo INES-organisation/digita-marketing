@@ -34,7 +34,13 @@ articles restent sans type (`NULL`).
 | `definition` | Définition | Comprendre un mot ou une notion | 3 |
 | `modele` | Modèle | Checklist, modèle, calendrier prêts à l'emploi | 3 |
 
-- Le type s'affiche en badge doré sur les cartes et en tête d'article (lien vers le filtre).
+- Le type s'affiche en badge sur les cartes, en tête d'article et dans « Poursuivre la lecture », avec une
+  couleur par type (classes `.blog-type--<slug>` dans `blog-layout.css`) : guide or, pas à pas vert,
+  comparatif violet, actualité orange, définition turquoise, modèle rose. Les filtres de `/blog` reprennent
+  la couleur du type.
+- Les catégories sont en bleu partout (`.blog-cat`, pastilles de catégorie actives), comme le bouton « Voir
+  les offres et tarifs » de l'accueil (`.v2-btn-blue`).
+- « Poursuivre la lecture » propose d'abord des articles typés.
 - `/blog` affiche des filtres par type (`/blog?type=guide`, seulement les types non vides, avec le nombre
   d'articles), puis les catégories. Un type inconnu redirige vers `/blog`.
 - `/blog` liste d'abord les articles typés (les nouveaux), puis les anciens, 12 par page, avec pagination
@@ -43,6 +49,23 @@ articles restent sans type (`NULL`).
 - Dans l'admin, le formulaire d'article a un champ « Type de contenu ».
 - Pour un nouveau lot : renseigner `"content_type"` dans `database/blog/articles.json`, `build_blog_sql.py`
   l'insère. Un test vérifie que chaque article a un type connu.
+
+## Tri des anciens articles (9 novembre 2026)
+
+Validé par Anthony le 9 novembre 2026, sans attendre l'export Search Console. Le tri page par page est dans
+`database/blog/tri-articles-origine.csv` (slug, sujet, action, cible), et le SQL est généré par
+`python/tools/build_tri_sql.py` (`database/migrations/2026_11_09_blog_tri_articles_origine.sql`) :
+
+| Action | Articles | Effet |
+|---|---|---|
+| `fusion` | 126 | Redirection 301 vers le nouvel article qui traite le sujet (`slug_redirects`), article archivé |
+| `retirer` | 173 | Article archivé, sa page répond 410 « Article retiré » (`noindex`) |
+| `reecrire` | 83 | Restent en ligne jusqu'à leur réécriture dans les 16 nouveaux sujets |
+
+- Rien n'est supprimé de la base : les articles passent en statut `archived`. Pour en remettre un en ligne :
+  `UPDATE blog_articles SET status = 'published' WHERE slug = '…'` (et retirer sa ligne de `slug_redirects`).
+- Seuls les anciens articles (`content_type` NULL) sont touchés. Le sitemap ne liste que les articles publiés.
+- Les anciennes adresses qui menaient à un article fusionné mènent directement à sa cible (pas de chaîne).
 
 ## Règles de rédaction
 
@@ -136,9 +159,7 @@ Claude Code, ou lancer le bloc à la main.
 
 - Calendrier : après le lot 6, tous les sujets du plan éditorial sont traités, sauf Kap Numérik et le
   financement des formations. Les prochains lots demandent de nouveaux sujets.
-- Nettoyage des anciens articles : un premier tri des 382 articles publiés est prêt (126 à fusionner avec une
-  redirection 301 vers un nouvel article, 83 à réécrire en 16 nouveaux sujets, 173 à retirer en 410). Il
-  sera confirmé avec l'export Search Console (pages, 12 derniers mois) avant toute redirection. Le détail est
-  dans le Claude Doc « Plan de contenu : articles d'origine et formations ».
+- Réécrire les 83 anciens articles gardés en ligne, regroupés en 16 nouveaux sujets (voir « Tri des anciens
+  articles »), puis rediriger chacun vers son remplaçant.
 - Google Search Console : sitemap et suivi des clics par article vers `/diagnostic`.
 - Photos réelles de La Réunion pour remplacer ou compléter les couvertures générées.

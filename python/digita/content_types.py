@@ -1,4 +1,5 @@
-"""Types de contenu du blog (plan de contenu du 09/11/2026).
+"""Types de contenu du blog (plan de contenu du 09/11/2026). Couleur de chaque type : .blog-type--<slug>
+dans public/assets/css/blog-layout.css (les catégories sont en bleu, .blog-cat).
 
 Le type est stocké dans blog_articles.content_type (NULL pour les articles d'origine, non classés).
 Il s'affiche en badge sur les cartes et en tête d'article, et sert de filtre sur /blog (?type=guide).

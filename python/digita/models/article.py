@@ -33,6 +33,11 @@ def get_by_slug(slug):
     return article
 
 
+def is_retired(slug):
+    """Article retiré du blog (statut « archived ») : la page répond 410 au lieu de 404."""
+    return bool(db.fetch("SELECT 1 FROM blog_articles WHERE slug = ? AND status = 'archived'", [slug]))
+
+
 def get_by_category(category_slug, limit=None, offset=0):
     sql = (_select() + " WHERE c.slug = ? AND a.status = 'published'"
            " ORDER BY (a.content_type IS NULL), a.published_at DESC NULLS LAST, a.id DESC")
@@ -61,7 +66,7 @@ def get_recent(limit=5):
 
 def get_related(article_id, category_id, limit=3):
     return db.fetch_all(
-        _select(icon=False) + f" WHERE a.id != ? AND a.category_id = ? AND a.status = 'published' ORDER BY {rand_order('a')} LIMIT ?",
+        _select(icon=False) + f" WHERE a.id != ? AND a.category_id = ? AND a.status = 'published' ORDER BY (a.content_type IS NULL), {rand_order('a')} LIMIT ?",
         [article_id, category_id, limit],
     )
 

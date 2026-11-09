@@ -143,8 +143,8 @@ def test_blog_index_filters_by_type_and_paginates(monkeypatch):
     page = c.get("/blog?type=actualite&page=2").text
     assert calls[-1] == (12, 12, "actualite")
     assert "<title>Actualités — Blog — page 2 | DIGITA</title>" in page
-    assert 'href="/blog?type=actualite&page=3"' in page and 'class="blog-type"' in page
-    assert 'href="/blog?type=guide"' in page and 'href="/blog?type=modele"' not in page  # pas de filtre vide
+    assert 'href="/blog?type=actualite&page=3"' in page and 'class="blog-type blog-type--actualite"' in page and '<span class="blog-cat">IA</span>' in page
+    assert 'href="/blog?type=guide" class="blog-type-chip blog-type--guide"' in page and 'href="/blog?type=modele"' not in page  # pas de filtre vide
     home = c.get("/blog").text
     assert calls[-1] == (12, 0, None) and 'href="/blog?page=2">Suivant' in home
     assert c.get("/blog?type=nimporte", follow_redirects=False).headers["location"] == "/blog"
@@ -162,4 +162,30 @@ def test_article_shows_its_type(monkeypatch):
     monkeypatch.setattr(Article, "get_related", lambda *a: [])
     monkeypatch.setattr(Article, "get_popular", lambda *a: [])
     page = TestClient(app, base_url="https://digita.buzz").get("/blog/" + row["slug"]).text
-    assert 'href="/blog?type=actualite" class="article-category article-type"' in page and "Actualité" in page
+    assert 'href="/blog?type=actualite" class="article-category article-type blog-type blog-type--actualite"' in page
+    assert "Actualité" in page
+
+
+def test_retired_article_answers_410_and_merged_one_redirects(monkeypatch):
+    from digita import redirects
+    monkeypatch.setattr(Article, "get_by_slug", lambda slug: None)
+    monkeypatch.setattr(redirects, "target", lambda kind, slug: "newsletter-tpe" if slug == "emailing-avance" else None)
+    monkeypatch.setattr(Article, "is_retired", lambda slug: slug == "nft-guide-complet")
+    client = TestClient(app, base_url="https://digita.buzz")
+    r = client.get("/blog/emailing-avance", follow_redirects=False)
+    assert r.status_code == 301 and r.headers["location"].endswith("/blog/newsletter-tpe")
+    r = client.get("/blog/nft-guide-complet")
+    assert r.status_code == 410 and "Article retiré" in r.text and "noindex" in r.text
+    assert client.get("/blog/n-existe-pas").status_code == 404
+
+
+def test_tri_sql_archives_only_old_articles_and_targets_new_ones():
+    import csv
+    from tools.build_tri_sql import ROOT, build
+    rows = list(csv.DictReader(open(ROOT / "database/blog/tri-articles-origine.csv", encoding="utf-8")))
+    new = {a["slug"] for a in ARTICLES}
+    assert not {r["slug"] for r in rows} & new, "un nouvel article ne doit jamais être trié"
+    assert all(r["cible"].removeprefix("/blog/") in new for r in rows if r["action"] == "fusion")
+    sql = build(rows)
+    assert "content_type IS NULL" in sql and "DELETE" not in sql.upper()
+    assert sql.count("'archived'") >= 1 and "reecrire" not in sql

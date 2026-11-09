@@ -1,5 +1,6 @@
-{% set hero_kicker = 'Erreur 404' %}{% set hero_title = 'Page introuvable' %}
-{% set hero_lead = "Cette page n'existe pas ou a été déplacée. Voici les pages les plus utiles pour continuer." %}
+{# Sert aussi au 410 des articles retirés (errorKicker, errorTitle, errorLead) #}
+{% set hero_kicker = errorKicker if errorKicker is defined else 'Erreur 404' %}{% set hero_title = errorTitle if errorTitle is defined else 'Page introuvable' %}
+{% set hero_lead = errorLead if errorLead is defined else "Cette page n'existe pas ou a été déplacée. Voici les pages les plus utiles pour continuer." %}
 {% include 'includes/partials/page-hero.html' %}
 
 <section class="v2-section">
