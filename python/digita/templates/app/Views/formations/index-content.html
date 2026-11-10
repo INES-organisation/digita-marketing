@@ -6,6 +6,19 @@
 
 <section class="v2-section">
     <div class="container-fluid v2-container">
+        {% if dgt.visible %}
+        <div class="row g-4 mb-5">
+            <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                <a href="/formations/dgt-systeme" class="v2-card v2-need formation-card">
+                    <span class="pg-tag">Sur INES · Parcours avec attestation INES</span>
+                    <h3>{{ dgt.title }}</h3>
+                    <p>Choisir un sujet, construire l'offre, créer le produit, le vendre et le livrer avec INES.</p>
+                    <span class="formation-meta"><strong>{{ dgt_price }}</strong></span>
+                    <span class="v2-link">Voir la formation <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+                </a>
+            </div>
+        </div>
+        {% endif %}
         {% if empty(formations) %}
         <div class="v2-final-card" data-aos="fade-up">
             <p class="v2-kicker">Bientôt</p>

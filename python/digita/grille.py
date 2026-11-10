@@ -147,3 +147,17 @@ def price_label(level):
     if monthly:
         return f"{euros(monthly)}/mois"
     return euros(once)
+
+
+# Formations vendues sur INES (achat et suivi dans l'espace INES ; DIGITA ne montre qu'une fiche).
+# « visible » reste False tant que la page INES n'est pas corrigée (« parcours avec attestation INES »,
+# chiffres sourcés) : voir docs/SUIVI_FORMATIONS.md et, dans INES, PLAN_DGT_SYSTEME_ET_RESTE_A_FAIRE_INES.md.
+FORMATIONS_INES = [
+    {"id": "dgt-systeme",
+     "title": "DGT-Système : créer et vendre son produit digital avec INES",
+     "price": 197,
+     "price_note": "Paiement unique, sur INES",
+     "url": "https://ines.weballone.com/formation/dgt-systeme",
+     "visible": False},
+]
+DGT_SYSTEME = FORMATIONS_INES[0]

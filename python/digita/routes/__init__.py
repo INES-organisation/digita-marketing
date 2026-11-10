@@ -102,6 +102,7 @@ post("/outils/calendrier-editorial", tools.editorial_calendar_post)
 post("/api/analytics/pageview", analytics.pageview)
 post("/api/analytics/conversion", analytics.conversion)
 
+get("/formations/dgt-systeme", formations.dgt_systeme)
 get("/formations/:slug", formations.show)
 get("/boutique", pages.boutique)
 get("/solutions", pages.solutions)

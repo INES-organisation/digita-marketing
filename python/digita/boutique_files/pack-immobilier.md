@@ -10,6 +10,8 @@ Agences immobilières, mandataires, négociateurs indépendants : vous jonglez e
 
 **Avec quels outils ?** ChatGPT, Claude, Gemini, Mistral (Le Chat). Les versions gratuites suffisent pour la plupart des usages.
 
+**Dans INES.** Ces prompts fonctionnent aussi dans le chat d'INES (ines.weballone.com), la plateforme d'IA utilisée par DIGITA. L'usage est le même : une nouvelle conversation, le master prompt de contexte en premier, puis le prompt choisi. Dans INES, les fonctions d'IA consomment des crédits, y compris avec le compte gratuit (crédits offerts à l'inscription et pendant l'essai : détail sur la page des abonnements d'INES). Gardez une conversation par usage. Pour retrouver vos prompts sans ce fichier, enregistrez-les dans INES : page « Templates » (ines.weballone.com/codex/templates), bouton « Mes prompts », puis « Nouveau prompt » ; collez le prompt, donnez-lui un titre, puis cliquez sur « Enregistrer ». Ils restent privés, et vous pouvez les modifier, les copier ou les supprimer à tout moment.
+
 **En 4 étapes :**
 
 1. **Ouvrez une nouvelle conversation** et collez d'abord le « Master prompt de contexte » (section suivante), avec vos informations à la place des [VARIABLES]. Une seule fois par conversation.

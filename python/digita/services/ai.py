@@ -5,6 +5,7 @@ import json
 import math
 import os
 import re
+from html import unescape
 import socket
 import time
 import urllib.parse
@@ -195,7 +196,7 @@ def audit_seo(url):
     # 1. Title
     max_points += 10
     m = re.search(r"<title>(.*?)</title>", html, re.S | re.I)
-    title = m.group(1) if m else ""
+    title = unescape(m.group(1).strip()) if m else ""  # « &amp; » compté et affiché comme « & »
     if php.t(title):
         n = len(title)
         if 30 <= n <= 60:
@@ -212,7 +213,7 @@ def audit_seo(url):
     # 2. Meta description
     max_points += 10
     m = re.search(r"<meta\s+name=[\"']description[\"']\s+content=[\"'](.*?)[\"']", html, re.S | re.I)
-    meta_desc = m.group(1) if m else ""
+    meta_desc = unescape(m.group(1).strip()) if m else ""
     if php.t(meta_desc):
         n = len(meta_desc)
         if 120 <= n <= 160:
@@ -231,7 +232,7 @@ def audit_seo(url):
     h1 = re.findall(r"<h1[^>]*>(.*?)</h1>", html, re.S | re.I)
     if len(h1) == 1:
         points += 10
-        check("Balise H1", "good", php.strip_tags(h1[0]))
+        check("Balise H1", "good", unescape(php.strip_tags(h1[0]).strip()))
     elif len(h1) > 1:
         points += 5
         check("Balise H1", "warning", f"{len(h1)} balises H1 trouvées (1 seule recommandée)")

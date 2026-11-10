@@ -424,3 +424,38 @@ def test_server_error_page_matches_the_site():
     from digita import main
 
     assert "Un souci technique momentané" in main.ERROR_500 and "wa.me/262693487817" in main.ERROR_500
+
+
+def test_dgt_fiche_is_hidden_until_ines_page_is_fixed_then_links_to_ines(monkeypatch):
+    """Fiche DGT : masquée tant que « visible » est faux ; sinon prix de la grille et achat sur INES."""
+    from digita import grille
+    r = _client().get("/formations/dgt-systeme", follow_redirects=False)
+    assert r.status_code == 301 and r.headers["location"].endswith("/formations")
+
+    monkeypatch.setitem(grille.DGT_SYSTEME, "visible", True)
+    html = _client().get("/formations/dgt-systeme").text
+    assert grille.euros(grille.DGT_SYSTEME["price"]) in html
+    assert f'href="{grille.DGT_SYSTEME["url"]}"' in html
+    assert "Parcours avec attestation INES" in html and "certifiante" not in html.lower()
+    from digita.models import formation as Formation
+    for name, value in (("count", 0), ("available_ids", set()), ("get_all_published", []), ("get_popular", []),
+                        ("get_categories", [])):
+        monkeypatch.setattr(Formation, name, lambda *a, v=value: v)
+    html = _client().get("/formations").text
+    assert 'href="/formations/dgt-systeme"' in html and "Les premières formations arrivent" in html
+
+
+def test_seo_audit_unescapes_entities_and_home_description_fits(monkeypatch):
+    """L'audit affiche « & » (pas « &amp; ») et compte les vrais caractères ; la page d'accueil passe l'audit."""
+    from digita.services import ai
+    page = ('<html><head><title>Agence IA &amp; Automatisation à La Réunion | DIGITA</title>'
+            '<meta name="description" content="' + "x" * 130 + '"></head><body><h1>A &amp; B</h1></body></html>')
+    monkeypatch.setattr(ai, "_fetch", lambda url: (page, 200, 0.1))
+    checks = {c["name"]: c for c in ai.audit_seo("https://exemple.test")["checks"]}
+    assert checks["Balise Title"]["detail"] == "Agence IA & Automatisation à La Réunion | DIGITA (48 car.)"
+    assert checks["Balise H1"]["detail"] == "A & B"
+
+    import html as html_mod
+    home = _client().get("/").text
+    desc = html_mod.unescape(re.search(r'<meta\s+name="description"\s+content="(.*?)"', home, re.S).group(1))
+    assert 120 <= len(desc) <= 160

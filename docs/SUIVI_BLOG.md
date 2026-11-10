@@ -19,7 +19,7 @@ comment ajouter un lot.
 | 7 | #24 | `ecrire-pour-google-tpe`, `entretenir-securiser-site`, `accelerer-son-site`, `google-analytics-search-console`, `google-ads-tpe`, `plan-marketing-digital-une-page` |
 | 8 | #25 | `photos-telephone`, `videos-courtes-telephone`, `choisir-crm`, `fideliser-clients`, `linkedin-dirigeant` |
 | 9 | #26 | `createurs-contenu-reunion`, `marketplace-reunion`, `supports-imprimes-qr-codes`, `bad-buzz-local` |
-| 10 | à venir | `accessibilite-site-internet` |
+| 10 | #27 | `accessibilite-site-internet` |
 
 Les anciens articles (472 de l'ère PHP) ont été supprimés le 9 novembre 2026 (voir plus bas).
 

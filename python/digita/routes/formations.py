@@ -1,7 +1,7 @@
 """Formations (équivalent de FormationController.php, partie publique)."""
 import math
 
-from .. import db, php, redirects
+from .. import db, grille, php, redirects
 from ..models import formation as Formation
 from ..render import base_context, render_view
 from .blog import category_meta
@@ -14,6 +14,8 @@ def index(request):
     total = Formation.count()
     return render_view(request, "formations/index-content", {
         "availableIds": Formation.available_ids(),
+        "dgt": grille.DGT_SYSTEME,
+        "dgt_price": grille.euros(grille.DGT_SYSTEME["price"]),
         "title": "Formations Marketing Digital & IA en Ligne | DIGITA",
         "metaDescription": "Formations en ligne au marketing digital et à l'IA : SEO, réseaux sociaux, automatisation. "
                            "Apprenez à votre rythme, avec des cas concrets pour TPE/PME.",
@@ -150,4 +152,19 @@ def verify_certificate(request):
         "title": "Vérification de certificat | DIGITA",
         "certificate": cert,
         "searchNumber": number,
+    })
+
+
+def dgt_systeme(request):
+    """Fiche vitrine de la formation DGT-Système, vendue et suivie sur INES."""
+    f = grille.DGT_SYSTEME
+    if not f["visible"]:
+        return moved("/formations")
+    return render_view(request, "formations/dgt-systeme-content", {
+        "title": "Formation DGT-Système : vendre un produit digital | DIGITA",
+        "metaDescription": "Parcours en ligne pour créer, mettre en vente et livrer un produit digital avec INES : "
+                           "11 modules, 43 leçons vidéo, attestation INES. " + grille.euros(f["price"]) + ".",
+        "extraCss": ["/assets/css/formations.css"],
+        "f": f,
+        "price": grille.euros(f["price"]),
     })
