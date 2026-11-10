@@ -93,3 +93,15 @@ Stripe d'INES) se fait sur INES.
   complète dans le dépôt INES :
   `docs/user/Produit et parcours/Workspaces/PLAN_DGT_SYSTEME_ET_RESTE_A_FAIRE_INES.md`.
 - Test : `test_dgt_fiche_is_hidden_until_ines_page_is_fixed_then_links_to_ines` (`tests/test_site.py`).
+
+## Méthode de capture et de rendu validée (10 novembre 2026)
+
+- **Captures de pages réelles** : screencast CDP de Chromium, une image à chaque changement d'affichage,
+  avec son horodatage réel, puis assemblage en 30 i/s par ffmpeg (concat). Ne pas utiliser l'enregistreur
+  vidéo de Playwright, qui s'étire d'environ 9 % sous charge. Script sur l'iMac :
+  `~/Desktop/formation-google-lecon-1/sources/capture.js`.
+- **Rendu des leçons** : image par image à horloge fixe (`render.js`). Les sous-titres sont alignés mot par
+  mot (whisper sur le serveur, puis recalage sur les pauses avec `silencedetect`, script `align.py`). Sources
+  dans `~/Desktop/formation-google-lecon-1/sources/` (pas encore versionnées).
+- **Voix** : la synthèse peut omettre une phrase (deux fois sur trois pour la scène 5 de la leçon 1). Après
+  chaque génération, retranscrire, comparer au script, et régénérer la phrase manquante.
