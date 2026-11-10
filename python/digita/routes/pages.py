@@ -26,8 +26,7 @@ def _simple(view, title, css, description=None):
 
 
 about = _simple("about/index-content", "À propos : Agence IA et Digitale à La Réunion | DIGITA", "/assets/css/about.css",
-                "DIGITA, agence IA et digitale au Tampon (La Réunion) : sites, automatisation et agents IA "
-                "pour les TPE/PME, par Anthony Legros. Méthode, engagements et coordonnées.")
+                "DIGITA, agence IA et digitale au Tampon (La Réunion) : sites, automatisation et agents IA pour TPE/PME, par Anthony Legros. Méthode, engagements, coordonnées.")
 def services(request):
     return render_view(request, "services/index-content", {
         "title": "Sites Web, Automatisation & IA à La Réunion | DIGITA",
@@ -122,8 +121,7 @@ def ines_catalogue(request):
 def boutique(request):
     return render_view(request, "boutique/index-content", {
         "title": "Boutique : master prompts et workflows IA | DIGITA",
-        "metaDescription": "Packs de master prompts par métier (29 €) et 10 workflows IA installés pour vous : devis, "
-                           "relances, support client, rapports. Paiement sécurisé, téléchargement immédiat.",
+        "metaDescription": "Packs de master prompts par métier (29 €) et 10 workflows IA installés pour vous : devis, relances, support, rapports. Paiement sécurisé, téléchargement direct.",
         "metaRobots": "index, follow" if boutique_data.OPEN else "noindex, follow",
         "extraCss": ["/assets/css/boutique.css"],
         "shop": boutique_data,
