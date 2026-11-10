@@ -21,7 +21,7 @@ def index(request):
 def seo_audit(request):
     return render_view(request, "outils/seo-audit-content", {
         "title": "Audit SEO Gratuit de Votre Site | DIGITA",
-        "metaDescription": "Analysez gratuitement le SEO de votre site web. Score, recommandations et plan d'action personnalisé.",
+        "metaDescription": "Audit SEO gratuit de votre site : titre, description, HTTPS, affichage mobile, vitesse… 10 points vérifiés, un score et les corrections à faire.",
         "result": None, "url": "",
     })
 
@@ -29,7 +29,7 @@ def seo_audit(request):
 def meta_generator(request):
     return render_view(request, "outils/meta-generator-content", {
         "title": "Générateur de Meta Descriptions IA Gratuit | DIGITA",
-        "metaDescription": "Générez des meta descriptions SEO optimisées grâce à l'IA. Gratuit et instantané.",
+        "metaDescription": "Générateur gratuit de meta descriptions : saisissez le titre de votre page, l'IA propose une description prête à copier qui donne envie de cliquer.",
         "result": None, "pageTitle": "", "pageContent": "",
     })
 
@@ -37,7 +37,7 @@ def meta_generator(request):
 def roi_calculator(request):
     return render_view(request, "outils/roi-calculator-content", {
         "title": "Calculateur de ROI Marketing Gratuit | DIGITA",
-        "metaDescription": "Calculez le retour sur investissement de vos campagnes marketing. Outil gratuit et interactif.",
+        "metaDescription": "Calculateur de ROI gratuit : budget, coût par clic, taux de conversion, panier moyen et marge. Estimez ce que rapporte une campagne avant de la lancer.",
         "result": None, "params": [],
     })
 
@@ -45,7 +45,7 @@ def roi_calculator(request):
 def editorial_calendar(request):
     return render_view(request, "outils/editorial-calendar-content", {
         "title": "Calendrier Éditorial IA Gratuit | DIGITA",
-        "metaDescription": "Générez un calendrier éditorial personnalisé pour votre blog grâce à l'IA. Gratuit.",
+        "metaDescription": "Calendrier éditorial gratuit : indiquez votre secteur, la durée et le rythme voulus, l'IA propose des sujets d'articles pour votre blog, prêts à adapter.",
         "result": None, "niche": "", "duration": "1 mois", "frequency": "3 par semaine",
     })
 
@@ -53,13 +53,13 @@ def editorial_calendar(request):
 # ---------------------------------------------------------------- traitement (POST)
 TITLES = {
     "outils/seo-audit-content": ("Audit SEO Gratuit de Votre Site | DIGITA",
-                                 "Analysez gratuitement le SEO de votre site web. Score, recommandations et plan d'action personnalisé."),
+                                 "Audit SEO gratuit de votre site : titre, description, HTTPS, affichage mobile, vitesse… 10 points vérifiés, un score et les corrections à faire."),
     "outils/meta-generator-content": ("Générateur de Meta Descriptions IA Gratuit | DIGITA",
-                                      "Générez des meta descriptions SEO optimisées grâce à l'IA. Gratuit et instantané."),
+                                      "Générateur gratuit de meta descriptions : saisissez le titre de votre page, l'IA propose une description prête à copier qui donne envie de cliquer."),
     "outils/roi-calculator-content": ("Calculateur de ROI Marketing Gratuit | DIGITA",
-                                      "Calculez le retour sur investissement de vos campagnes marketing. Outil gratuit et interactif."),
+                                      "Calculateur de ROI gratuit : budget, coût par clic, taux de conversion, panier moyen et marge. Estimez ce que rapporte une campagne avant de la lancer."),
     "outils/editorial-calendar-content": ("Calendrier Éditorial IA Gratuit | DIGITA",
-                                          "Générez un calendrier éditorial personnalisé pour votre blog grâce à l'IA. Gratuit."),
+                                          "Calendrier éditorial gratuit : indiquez votre secteur, la durée et le rythme voulus, l'IA propose des sujets d'articles pour votre blog, prêts à adapter."),
 }
 
 

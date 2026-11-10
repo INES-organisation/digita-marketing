@@ -87,7 +87,7 @@ def show(request, slug):
     desc = (article.get("meta_description") or "") or php.mb_strimwidth(php.strip_tags(article["content"]), 0, 155, "...")
     title = (article.get("meta_title") or "") or article["title"]
     return render_view(request, "blog/show-content", {
-        "title": title + " | DIGITA",
+        "title": title if len(title) > 51 else title + " | DIGITA",  # 60 caractères au plus
         "metaDescription": desc,
         "metaKeywords": article.get("meta_keywords") or "",
         "ogType": "article",
@@ -151,7 +151,16 @@ def category_meta(kind, cat):
     desc = php.strip_tags(cat.get("description") or "").strip()
     if not desc:
         return _category_description(kind, cat)
-    return php.mb_strimwidth(f"{lead} — {cat['name']} : {desc[0].lower() + desc[1:]}", 0, 158, "...")
+    # ponytail: liste fixe de noms propres en tête de description ; à compléter si une catégorie en ajoute un.
+    keep = desc.split(" ", 1)[0].strip(",.;:") in {"Google", "Facebook", "Instagram", "IA", "CRM", "SEO", "WhatsApp"}
+    first = desc[0] if keep else desc[0].lower()
+    meta = f"{lead} — {cat['name']} : {first + desc[1:]}".rstrip(".")
+    # Google affiche 120 à 160 caractères : on complète une description de catégorie trop courte.
+    what = "Guides pratiques et sourcés" if kind == "Articles" else "Formations courtes et concrètes"
+    for tail in (f". {what}, pensés pour les TPE et PME de La Réunion.", f". {what} pour les TPE et PME.", "."):
+        if len(meta) >= 120 or len(meta + tail) <= 160:
+            break
+    return php.mb_strimwidth(meta + (tail if len(meta) < 120 else "."), 0, 158, "...")
 
 
 def search(request):

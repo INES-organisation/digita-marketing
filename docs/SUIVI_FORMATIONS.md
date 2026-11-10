@@ -93,3 +93,26 @@ Stripe d'INES) se fait sur INES.
   complète dans le dépôt INES :
   `docs/user/Produit et parcours/Workspaces/PLAN_DGT_SYSTEME_ET_RESTE_A_FAIRE_INES.md`.
 - Test : `test_dgt_fiche_is_hidden_until_ines_page_is_fixed_then_links_to_ines` (`tests/test_site.py`).
+
+## Méthode de capture et de rendu validée (10 novembre 2026)
+
+- **Captures de pages réelles** : screencast CDP de Chromium, une image à chaque changement d'affichage,
+  avec son horodatage réel, puis assemblage en 30 i/s par ffmpeg (concat). Ne pas utiliser l'enregistreur
+  vidéo de Playwright, qui s'étire d'environ 9 % sous charge. Script sur l'iMac :
+  `~/Desktop/formation-google-lecon-1/sources/capture.js`.
+- **Rendu des leçons** : image par image à horloge fixe (`render.js`). Les sous-titres sont alignés mot par
+  mot (whisper sur le serveur, puis recalage sur les pauses avec `silencedetect`, script `align.py`). Sources
+  dans `~/Desktop/formation-google-lecon-1/sources/` (pas encore versionnées).
+- **Voix** : la synthèse peut omettre une phrase (deux fois sur trois pour la scène 5 de la leçon 1). Après
+  chaque génération, retranscrire, comparer au script, et régénérer la phrase manquante.
+  Un seuil de couverture par phrase (75 %) ne suffit pas : la synthèse coupe parfois la **fin** d'une phrase
+  (L2 scène 3, L12 scène 4, le 10 novembre). Contrôle retenu : les derniers mots de chaque phrase doivent
+  être entendus. Les écarts restants viennent souvent de la retranscription (« la fiche » entendu
+  « l'affiche ») : on les vérifie à l'écoute, un par un.
+- **Bornes des sous-titres** : whisper prolonge souvent le dernier mot d'un groupe (jusqu'à 0,64 s de trop
+  sur L2). Les bornes sont recalées sur les pauses réelles de l'audio final (`silencedetect`), encadrées
+  par le premier et le dernier mot. Résultat sur L2 : 0,13 s d'écart maximal à l'apparition, 0,19 s à la
+  disparition.
+  Garde-fou ajouté : un sous-titre n'apparaît jamais plus de 0,15 s après le premier mot entendu (une
+  micro-pause après le premier mot avait retardé un sous-titre de 0,7 s sur L12), et en début de piste il
+  démarre avec la voix.

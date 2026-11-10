@@ -175,3 +175,15 @@ Claude Code, ou lancer le bloc à la main.
   formations ».
 - Google Search Console : sitemap et suivi des clics par article vers `/diagnostic`.
 - Photos réelles de La Réunion pour remplacer ou compléter les couvertures générées.
+
+## Lot 11 : titres et descriptions dans Google (10 novembre 2026)
+
+Relevé sur les 71 adresses du plan du site (digita.buzz/sitemap.xml) :
+- **Titres d'articles** : 19 dépassaient 60 caractères à cause du suffixe « | DIGITA » ajouté au
+  `meta_title`. Le suffixe n'est plus ajouté quand le titre fait plus de 51 caractères.
+- **Descriptions hors de 120 à 160 caractères** : `/a-propos` (164), `/boutique` (169), les quatre outils
+  (81 à 101), les six catégories du blog (54 à 101). Textes réécrits. Les catégories sont complétées
+  automatiquement (`category_meta`), qui garde aussi la majuscule de « IA » et « Google Ads ».
+- Test : `test_meta_descriptions_fit_google_snippet`.
+- La démo D1 de la formation (leçon 3) a été filmée sur `/boutique` avant cette correction : on garde la
+  prise, qui montre la ligne orange de 169 caractères.

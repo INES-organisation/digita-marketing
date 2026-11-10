@@ -459,3 +459,20 @@ def test_seo_audit_unescapes_entities_and_home_description_fits(monkeypatch):
     home = _client().get("/").text
     desc = html_mod.unescape(re.search(r'<meta\s+name="description"\s+content="(.*?)"', home, re.S).group(1))
     assert 120 <= len(desc) <= 160
+
+
+def test_meta_descriptions_fit_google_snippet():
+    """Pages fixes : meta description de 120 à 160 caractères (au-delà, Google la coupe)."""
+    import html as html_mod
+    from digita.routes.blog import category_meta
+    client = _client()
+    for path in ("/", "/a-propos", "/outils/audit-seo", "/outils/meta-generator", "/outils/roi-calculator",
+                 "/outils/calendrier-editorial", "/boutique"):
+        page = client.get(path).text
+        desc = html_mod.unescape(re.search(r'<meta\s+name="description"\s+content="(.*?)"', page, re.S).group(1))
+        assert 120 <= len(desc) <= 160, (path, len(desc))
+    for kind in ("Articles", "Formations"):
+        for name, desc in (("CRM", "Relation client et CRM"), ("Publicité en Ligne", "Google Ads et publicité display"),
+                           ("Réseaux Sociaux", "Community management et publicité sur les réseaux sociaux")):
+            meta = category_meta(kind, {"name": name, "description": desc})
+            assert 120 <= len(meta) <= 160 and "google Ads" not in meta, meta
