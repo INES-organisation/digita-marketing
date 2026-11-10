@@ -130,3 +130,10 @@ function formatReply(text) {
         .replace(/(^|[\s(])(\/[a-z0-9][a-z0-9\-\/#]*)/g, '$1<a href="$2">$2</a>')
         .replace(/\n/g, '<br>');
 }
+
+// « Écrire à INES maintenant » de la page de vente agent24-7.digita.buzz (Page Builder INES, sans
+// chatbot) : un lien vers …#discuter-avec-ines ouvre directement la conversation.
+if (location.hash === '#discuter-avec-ines') {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', toggleChatbot);
+    else toggleChatbot();
+}

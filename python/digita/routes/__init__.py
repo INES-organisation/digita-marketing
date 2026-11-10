@@ -2,6 +2,7 @@
 
 Chaque entrée : (méthode, chemin PHP avec :param, fonction).
 """
+from ..realisations import AGENT_URL
 from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment, projects, admin, automation, shop
 
 R = []
@@ -17,8 +18,9 @@ def post(path, fn):
 
 get("/", pages.home)
 get("/apercu-accueil", pages.redirect_to("/"))  # ancien aperçu de l'accueil, publié le 07/11/2026
-get("/agent24-7", pages.agent_landing)
-get("/accueil-v2", pages.redirect_to("/agent24-7"))  # future accueil, non indexée (docs/SUIVI_REFONTE_ACCUEIL.md)
+# Page de vente Agent IA 24/7 : dans le Page Builder INES depuis le 05/11/2026 (comme lp48), servie sur son sous-domaine.
+get("/agent24-7", pages.moved_to(AGENT_URL))
+get("/accueil-v2", pages.moved_to(AGENT_URL))
 get("/sitemap.xml", automation.sitemap)
 get("/newsletter/unsubscribe", automation.unsubscribe)
 # Tâches planifiées, appelées par INES (voir routes/automation.py)

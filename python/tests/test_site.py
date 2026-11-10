@@ -6,7 +6,7 @@ from starlette.testclient import TestClient
 
 from digita import db, sessions
 from digita.realisations import REALISATIONS
-from digita.main import app
+from digita.main import PUBLIC, app
 from digita.routes import leads
 from digita.services import email, ines
 
@@ -230,45 +230,17 @@ def test_diagnostic_page_offers_both_formats(monkeypatch):
     assert "Secteur : Artisan / BTP" in leads_sent[0][3]
 
 
-def test_agent_landing_is_noindex_and_uses_real_offers():
-    """Page de vente Agent IA 24/7 (docs/SUIVI_REFONTE_ACCUEIL.md) : hors index, offres et FAQ réelles, légère."""
-    from digita import solutions
-    from digita.routes.pages import AGENT_FAQ
+def test_agent_landing_moved_to_its_page_builder_subdomain():
+    """La page de vente Agent IA 24/7 vit dans le Page Builder INES (05/11/2026) : les anciennes adresses y mènent."""
+    from digita.realisations import AGENT_URL
 
-    r = _client().get("/agent24-7")
-    assert r.status_code == 200
-    html = r.text
-    assert '<meta name="robots" content="noindex, nofollow">' in html
-    assert html.count("<h1") == 1 and "Même à 23 h." in html
-    for offer in solutions.OFFERS:
-        assert offer["title"] in html and offer["monthly"] in html, offer["id"]
-    for dependency in ("bootstrap", "data-aos", "fonts.googleapis.com", "glass-card"):
-        assert dependency not in html, dependency
-    for figure in ("+250", "x2.5", "45%", "-70%", "+40%"):
-        assert figure not in html, figure
-    assert html.count("<details>") == len(AGENT_FAQ)
+    for old in ("/agent24-7", "/accueil-v2"):
+        r = _client().get(old, follow_redirects=False)
+        assert (r.status_code, r.headers["location"]) == (301, AGENT_URL), old
     assert "/agent24-7" not in _client().get("/sitemap.xml").text
-    # Agent nommé INES, prix nets (art. 293 B), WhatsApp par offre, chatbot présent, marque DIGITA.buzz.
-    assert "INES, notre agent IA" in html and 'id="chatbot-container"' in html and "/assets/js/chatbot.js" in html
-    assert " HT" not in html and "293 B" in html
-    assert html.count("https://wa.me/262693487817") == 2 + len(solutions.OFFERS)  # + action rapide du chatbot
-    assert 'DIGITA<span>.buzz</span>' in html
-    assert solutions.LANCEMENT["price"] in html
-    # L'ancienne adresse d'aperçu mène à la page.
-    old = _client().get("/accueil-v2", follow_redirects=False)
-    assert old.status_code == 302 and old.headers["location"] == "/agent24-7"
+    # Son bouton « Écrire à INES maintenant » ouvre le chat de digita.buzz (…#discuter-avec-ines).
+    assert "#discuter-avec-ines" in (PUBLIC / "assets/js/chatbot.js").read_text()
     assert 'id="essai-standardiste"' in _client().get("/conditions-generales").text
-
-
-def test_agent_subdomain_serves_landing_and_sends_other_links_to_main_site():
-    host = {"host": "agent24-7.digita.buzz"}
-    client = _client()
-    assert "Même à 23 h." in client.get("/", headers=host).text
-    assert client.get("/assets/css/agent247.css", headers=host).status_code == 200
-    link = client.get("/diagnostic?pack=standardiste", headers=host, follow_redirects=False)
-    assert link.status_code == 302 and link.headers["location"] == "https://digita.buzz/diagnostic?pack=standardiste"
-    # Le chatbot répond sur le sous-domaine (pas de redirection, un POST la perdrait).
-    assert client.get("/api/chatbot/slots", headers=host, follow_redirects=False).status_code != 302
 
 
 def test_agent_card_prices_are_synced_with_solutions():
