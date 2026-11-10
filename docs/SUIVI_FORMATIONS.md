@@ -116,3 +116,9 @@ Stripe d'INES) se fait sur INES.
   Garde-fou ajouté : un sous-titre n'apparaît jamais plus de 0,15 s après le premier mot entendu (une
   micro-pause après le premier mot avait retardé un sous-titre de 0,7 s sur L12), et en début de piste il
   démarre avec la voix.
+- **Règle finale du calage (10 novembre 2026)** : `silencedetect` prenait les respirations de la voix de
+  synthèse (−40 à −50 dB) pour de la parole. Le calage et le contrôle se font désormais sur l'énergie du son
+  (toutes les 20 ms, seuil relatif au niveau de la voix). Si whisper place le premier mot dans un silence,
+  le sous-titre démarre avec la parole qui suit ; sinon au début du segment de parole qui le contient, sans
+  empiéter sur le groupe précédent ; même principe pour la fin. Mesure sur 192 sous-titres : apparition
+  0,04 à 0,05 s avant la voix ; disparition entre 0,13 s avant (phrases enchaînées) et 0,15 s après.
