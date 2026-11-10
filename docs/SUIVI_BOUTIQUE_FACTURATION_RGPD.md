@@ -82,7 +82,7 @@ Application : envoyées par l'entrée standard dans le conteneur `digita-web` (m
   `/codex/templates`, prompts privés, bouton « Enregistrer » sur la bibliothèque). Les packs expliquent
   le chemin : « Templates » → « Mes prompts » → « Nouveau prompt » → « Enregistrer ». Libellés relevés
   dans le code de la PR (`MyPromptsPanel.tsx`).
-- **À ne mettre en ligne sur digita.buzz qu'une fois la PR INES #117 déployée**, sinon les acheteurs
-  chercheraient un bouton qui n'existe pas encore.
+- La PR INES #117 est en production depuis le 10 novembre 2026 (commit ffdd9601) : les packs mis à jour
+  peuvent être publiés sur digita.buzz avec la PR #28.
 - PDF : `tools/build_boutique_pdfs.py` (Playwright). Si le paquet Python Playwright manque, générer le
   HTML avec `build_html` et imprimer avec Playwright pour Node (même rendu A4, même pied de page).
