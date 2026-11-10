@@ -9,7 +9,7 @@ celle du script : les captures sont muettes, et la voix « marin » est calée d
 | N° | Leçon, scène | Démonstration | Qui tourne | Durée visée |
 | --- | --- | --- | --- | --- |
 | D1 | L3, scène 3 | Audit SEO gratuit de digita.buzz | Claude seul (page publique) | 60 s |
-| D2 | L13, scène 2 | PageSpeed Insights, onglet Mobile | Claude seul (page publique) | 60 s |
+| D2 | L13, scène 2 | PageSpeed Insights, onglet Mobile | Schéma (outil bloqué pour un robot) ; Anthony en option | 60 s |
 | D3 | L4, scène 3 | Revendiquer ou créer une fiche | Anthony (son compte Google) | 90 s |
 | D4 | L5, scènes 2 à 4 | Catégorie, zone desservie, horaires exceptionnels | Anthony | 2 min |
 | D5 | L6, scènes 3 et 4 | Services et description de la fiche | Anthony | 90 s |
@@ -65,7 +65,9 @@ Restent en schéma, sans capture :
 - **Essai du 10 novembre 2026** (captures image par image, Playwright, 1440 × 900) : score 95/100. L'essai
   a révélé deux défauts, corrigés dans la PR #28 : l'audit affichait « &amp; » au lieu de « & » (et
   comptait ces caractères en trop), et la meta description de l'accueil faisait 192 caractères. **Filmer
-  D1 après la mise en ligne de la PR #28**, pour que le rapport montré soit propre.
+  D1 après la mise en ligne de la PR #28**, pour que le rapport montré soit propre. Une répétition a
+  été faite sur l'iMac (capture image par image, 25 s, score 100). La version définitive utilisera une
+  page de DIGITA qui montre aussi des lignes orange ou rouges, comme le dit le script de la leçon 3.
 
 ### D2. PageSpeed Insights (Claude seul)
 
@@ -77,6 +79,10 @@ Restent en schéma, sans capture :
   Vitals (LCP, INP, CLS) → descendre jusqu'aux recommandations.
 - **Durée** : 60 s.
 - **À flouter** : rien.
+- **Essai du 10 novembre 2026** : depuis le serveur cloud comme depuis l'iMac, l'analyse reste sur
+  « Analyse en cours » pendant plus de 2 minutes, sans résultat. Conformément à la règle, on ne
+  contourne pas : **D2 reste en schéma** dans la leçon 13. Anthony peut la filmer lui-même dans son
+  navigateur s'il le souhaite (même fiche, mêmes réglages que D3 à D10).
 
 ### D3. Revendiquer ou créer une fiche (Anthony)
 
