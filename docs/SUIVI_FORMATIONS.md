@@ -109,3 +109,7 @@ Stripe d'INES) se fait sur INES.
   (L2 scène 3, L12 scène 4, le 10 novembre). Contrôle retenu : les derniers mots de chaque phrase doivent
   être entendus. Les écarts restants viennent souvent de la retranscription (« la fiche » entendu
   « l'affiche ») : on les vérifie à l'écoute, un par un.
+- **Bornes des sous-titres** : whisper prolonge souvent le dernier mot d'un groupe (jusqu'à 0,64 s de trop
+  sur L2). Les bornes sont recalées sur les pauses réelles de l'audio final (`silencedetect`), encadrées
+  par le premier et le dernier mot. Résultat sur L2 : 0,13 s d'écart maximal à l'apparition, 0,19 s à la
+  disparition.
