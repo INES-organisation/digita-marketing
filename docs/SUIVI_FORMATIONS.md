@@ -120,5 +120,35 @@ Stripe d'INES) se fait sur INES.
   synthèse (−40 à −50 dB) pour de la parole. Le calage et le contrôle se font désormais sur l'énergie du son
   (toutes les 20 ms, seuil relatif au niveau de la voix). Si whisper place le premier mot dans un silence,
   le sous-titre démarre avec la parole qui suit ; sinon au début du segment de parole qui le contient, sans
-  empiéter sur le groupe précédent ; même principe pour la fin. Mesure sur 192 sous-titres : apparition
-  0,04 à 0,05 s avant la voix ; disparition entre 0,13 s avant (phrases enchaînées) et 0,15 s après.
+  empiéter sur le groupe précédent ; même principe pour la fin. Seuil : 30 dB sous le 90e centile de
+  l'énergie de la voix.
+
+## Leçons produites (10 novembre 2026)
+
+Fichiers sur l'iMac : `~/Desktop/formation-google-lecons/lecon-NN.mp4`, chacun avec son `.vtt`. Rien n'est
+publié.
+
+| Leçon | Durée | Son | Sous-titres | Phrases vérifiées |
+| --- | --- | --- | --- | --- |
+| L2 · Les 3 critères de Google | 2 min 26 | −16,0 LUFS | 36 | 25 |
+| L3 · État des lieux en 15 min (avec la capture D1, page Boutique) | 2 min 08 | −15,9 LUFS | 32 | 25 |
+| L10 · Ce qui fait disparaître une fiche | 1 min 30 | −16,0 LUFS | 20 | 17 |
+| L12 · Une page par service | 1 min 38 | −16,1 LUFS | 21 | 14 |
+| L13 · Un site rapide sur téléphone (PageSpeed en schéma) | 1 min 37 | −15,7 LUFS | 23 | 17 |
+| L15 · Le plan des mois suivants | 1 min 40 | −16,5 LUFS | 26 | 19 |
+
+Contrôles :
+- Voix : 117 phrases retranscrites ; on régénère si une phrase est couverte à moins de 90 % ou si ses deux
+  derniers mots manquent (3 fins de phrase coupées sur 33 pistes, toutes régénérées).
+- Synchronisation sur la parole réelle de l'audio final (150 sous-titres mesurables sur 158) : apparition
+  0,03 à 0,07 s avant la voix, disparition au plus 0,17 s après.
+- Schémas seulement, aucune capture de google.com ni de vraies entreprises ; exemples marqués « Exemple (cas
+  fictif) ».
+
+Moteur réutilisable (non versionné pour l'instant) : `~/Desktop/formation-google-lecons/moteur/`
+(`lessons.py` scènes en JSON, `scene.html` schémas, `render.js` rendu image par image, `align.py`,
+`speech.py`, `verify.py`, `capture.js`). La voix est générée dans `ines-celery-worker-video` sur le serveur
+INES. L3 cale la capture D1 par `video:at:16.5` (le clic sur « Analyser » tombe sur « lancez le test »).
+
+Reste : leçons 4 à 9, 11 et 14, après les captures d'Anthony (D3 à D10). La leçon 1 a été produite le
+9 novembre avec l'ancienne méthode : à refaire avec ce moteur pour l'homogénéité.
