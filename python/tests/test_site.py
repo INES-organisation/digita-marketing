@@ -471,3 +471,19 @@ def test_dgt_fiche_is_hidden_until_ines_page_is_fixed_then_links_to_ines(monkeyp
         monkeypatch.setattr(Formation, name, lambda *a, v=value: v)
     html = _client().get("/formations").text
     assert 'href="/formations/dgt-systeme"' in html and "Les premières formations arrivent" in html
+
+
+def test_seo_audit_unescapes_entities_and_home_description_fits(monkeypatch):
+    """L'audit affiche « & » (pas « &amp; ») et compte les vrais caractères ; la page d'accueil passe l'audit."""
+    from digita.services import ai
+    page = ('<html><head><title>Agence IA &amp; Automatisation à La Réunion | DIGITA</title>'
+            '<meta name="description" content="' + "x" * 130 + '"></head><body><h1>A &amp; B</h1></body></html>')
+    monkeypatch.setattr(ai, "_fetch", lambda url: (page, 200, 0.1))
+    checks = {c["name"]: c for c in ai.audit_seo("https://exemple.test")["checks"]}
+    assert checks["Balise Title"]["detail"] == "Agence IA & Automatisation à La Réunion | DIGITA (48 car.)"
+    assert checks["Balise H1"]["detail"] == "A & B"
+
+    import html as html_mod
+    home = _client().get("/").text
+    desc = html_mod.unescape(re.search(r'<meta\s+name="description"\s+content="(.*?)"', home, re.S).group(1))
+    assert 120 <= len(desc) <= 160

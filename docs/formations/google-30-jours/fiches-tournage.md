@@ -62,6 +62,10 @@ Restent en schéma, sans capture :
   de la page.
 - **Durée** : 60 s.
 - **À flouter** : rien.
+- **Essai du 10 novembre 2026** (captures image par image, Playwright, 1440 × 900) : score 95/100. L'essai
+  a révélé deux défauts, corrigés dans la PR #28 : l'audit affichait « &amp; » au lieu de « & » (et
+  comptait ces caractères en trop), et la meta description de l'accueil faisait 192 caractères. **Filmer
+  D1 après la mise en ligne de la PR #28**, pour que le rapport montré soit propre.
 
 ### D2. PageSpeed Insights (Claude seul)
 
