@@ -72,3 +72,17 @@ Application : envoyées par l'entrée standard dans le conteneur `digita-web` (m
 | 08/11/2026 | Admin : messages, newsletter, mot de passe ; revue de l'admin et recommandations (RECOMMANDATIONS_GESTION_ADMIN.md) ; tests 111. |
 | 08/11/2026 | P1 de la revue : connexion, factures conformes, accord exprès des formations, RGPD, retrait du factice ; migration factures appliquée ; tests 116. |
 | 08/11/2026 | INES : PR INES-organisation/INES#83 fusionnée et déployée (route des ventes, livre des recettes réel, plafonds, déclarations URSSAF, numérotation des factures INES). Vérifié en production que la route accepte la clé de DIGITA (réponse 422 sur un envoi volontairement incomplet, rien d'enregistré). |
+
+## Packs de prompts : section « Dans INES » (9 et 10 novembre 2026)
+
+- 9/11 : chaque pack (`python/digita/boutique_files/pack-*.md`, PDF régénérés) indique que les prompts
+  s'utilisent aussi dans le chat d'INES, et que les fonctions d'IA d'INES consomment des crédits, y
+  compris avec le compte gratuit.
+- 10/11 : INES permet enfin d'enregistrer ses propres prompts (PR INES #117 : vue « Mes prompts » de
+  `/codex/templates`, prompts privés, bouton « Enregistrer » sur la bibliothèque). Les packs expliquent
+  le chemin : « Templates » → « Mes prompts » → « Nouveau prompt » → « Enregistrer ». Libellés relevés
+  dans le code de la PR (`MyPromptsPanel.tsx`).
+- **À ne mettre en ligne sur digita.buzz qu'une fois la PR INES #117 déployée**, sinon les acheteurs
+  chercheraient un bouton qui n'existe pas encore.
+- PDF : `tools/build_boutique_pdfs.py` (Playwright). Si le paquet Python Playwright manque, générer le
+  HTML avec `build_html` et imprimer avec Playwright pour Node (même rendu A4, même pied de page).
