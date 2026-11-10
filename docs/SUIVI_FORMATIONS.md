@@ -113,3 +113,6 @@ Stripe d'INES) se fait sur INES.
   sur L2). Les bornes sont recalées sur les pauses réelles de l'audio final (`silencedetect`), encadrées
   par le premier et le dernier mot. Résultat sur L2 : 0,13 s d'écart maximal à l'apparition, 0,19 s à la
   disparition.
+  Garde-fou ajouté : un sous-titre n'apparaît jamais plus de 0,15 s après le premier mot entendu (une
+  micro-pause après le premier mot avait retardé un sous-titre de 0,7 s sur L12), et en début de piste il
+  démarre avec la voix.
