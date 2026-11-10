@@ -452,3 +452,22 @@ def test_server_error_page_matches_the_site():
     from digita import main
 
     assert "Un souci technique momentané" in main.ERROR_500 and "wa.me/262693487817" in main.ERROR_500
+
+
+def test_dgt_fiche_is_hidden_until_ines_page_is_fixed_then_links_to_ines(monkeypatch):
+    """Fiche DGT : masquée tant que « visible » est faux ; sinon prix de la grille et achat sur INES."""
+    from digita import grille
+    r = _client().get("/formations/dgt-systeme", follow_redirects=False)
+    assert r.status_code == 301 and r.headers["location"].endswith("/formations")
+
+    monkeypatch.setitem(grille.DGT_SYSTEME, "visible", True)
+    html = _client().get("/formations/dgt-systeme").text
+    assert grille.euros(grille.DGT_SYSTEME["price"]) in html
+    assert f'href="{grille.DGT_SYSTEME["url"]}"' in html
+    assert "Parcours avec attestation INES" in html and "certifiante" not in html.lower()
+    from digita.models import formation as Formation
+    for name, value in (("count", 0), ("available_ids", set()), ("get_all_published", []), ("get_popular", []),
+                        ("get_categories", [])):
+        monkeypatch.setattr(Formation, name, lambda *a, v=value: v)
+    html = _client().get("/formations").text
+    assert 'href="/formations/dgt-systeme"' in html and "Les premières formations arrivent" in html

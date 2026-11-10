@@ -75,3 +75,21 @@ Plan détaillé du pilote et script de la leçon 1 : `docs/formations/PILOTE_GOO
 1. Plan détaillé du pilote (modules, leçons, durée) à valider par Anthony.
 2. Scripts des scènes, puis une première vidéo test (voix et rendu) avant de produire le reste.
 3. Import des leçons, page de vente, mise en ligne.
+
+## Formation DGT-Système (vendue sur INES) : fiche vitrine préparée le 10 novembre 2026
+
+Décision d'Anthony (9 et 10 novembre 2026) : DGT-Système reste dans son workspace INES (lecteur de
+cours, examen, projet, attestation). DIGITA ne montre qu'une fiche, et l'achat (197 €, paiement unique,
+Stripe d'INES) se fait sur INES.
+
+- Prix et lien : `grille.FORMATIONS_INES` (`DGT_SYSTEME`), jamais en dur dans le gabarit.
+- Page : `/formations/dgt-systeme` (`routes/formations.py`, `formations/dgt-systeme-content.html`), carte
+  en tête de `/formations`. Textes : « parcours avec attestation INES », avec la mention que ce n'est pas
+  une certification reconnue par l'État, voix de synthèse annoncée, crédits INES annoncés, aucun chiffre
+  de résultat.
+- **Masquée** tant que `visible` vaut `False` (la page redirige vers `/formations`). On la rend visible
+  quand la page INES `/formation/dgt-systeme` et le workspace sont corrigés : mot « certifiante »,
+  chiffres non sourcés, prix barré, bouton d'achat et liens cassés des pages du Page Builder. Liste
+  complète dans le dépôt INES :
+  `docs/user/Produit et parcours/Workspaces/PLAN_DGT_SYSTEME_ET_RESTE_A_FAIRE_INES.md`.
+- Test : `test_dgt_fiche_is_hidden_until_ines_page_is_fixed_then_links_to_ines` (`tests/test_site.py`).

@@ -1,0 +1,62 @@
+{# Fiche vitrine : la formation est vendue et suivie sur INES. Prix et lien : grille.FORMATIONS_INES. Aucun chiffre de résultat. #}
+{% set hero_kicker = 'Formation en ligne sur INES' %}{% set hero_title = f.title %}
+{% set hero_lead = "Un parcours pas à pas pour choisir un sujet, construire une offre, créer le produit, le mettre en vente et le livrer automatiquement, avec les outils d'INES." %}
+{% include 'includes/partials/page-hero.html' %}
+
+<section class="v2-section" aria-labelledby="dgt-contenu">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Le contenu</p>
+            <h2 id="dgt-contenu">11 modules, 43 leçons vidéo</h2>
+            <p>Chaque leçon est une courte vidéo narrée (voix de synthèse), avec un objectif et les étapes à suivre dans INES. Un quiz clôt chaque module.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-6" data-aos="fade-up">
+                <div class="v2-card">
+                    <h3>Le programme</h3>
+                    <ul>
+                        <li>Module 0 : démarrer, le modèle du produit digital</li>
+                        <li>Module 1 : choisir sa niche et son client idéal</li>
+                        <li>Module 2 : concevoir son offre</li>
+                        <li>Module 3 : créer le produit avec INES</li>
+                        <li>Module 4 : la page de vente</li>
+                        <li>Module 5 : la vidéo de vente et les visuels</li>
+                        <li>Module 6 : attirer des visiteurs sans budget publicitaire</li>
+                        <li>Module 7 : paiement, offres complémentaires</li>
+                        <li>Module 8 : automatiser la livraison, assistants IA</li>
+                        <li>Module 9 : support, avis clients, développement</li>
+                        <li>Module bonus : le marketing avec l'IA</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="80">
+                <div class="v2-card pg-price is-featured">
+                    <span class="pg-tag">Parcours avec attestation INES</span>
+                    <div class="pg-amount">{{ price }}</div>
+                    <p>{{ f.price_note }}. Le parcours se suit dans votre espace INES, à votre rythme.</p>
+                    <ul>
+                        <li>Les 43 leçons vidéo et les quiz de fin de module</li>
+                        <li>13 ressources à consulter dans INES : modèles, grilles et checklists</li>
+                        <li>Un examen final et un projet pratique réalisé dans INES</li>
+                        <li>Une attestation INES quand l'examen et le projet sont validés</li>
+                    </ul>
+                    <a href="{{ f.url }}" class="v2-btn v2-btn-primary" rel="noopener">S'inscrire sur INES <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+                    <p class="v2-small">L'attestation INES n'est pas une certification reconnue par l'État (RNCP ou Répertoire spécifique). Les outils d'INES utilisés pendant le parcours consomment des crédits, y compris avec le compte gratuit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="v2-section" aria-labelledby="dgt-pour-qui">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Pour qui</p>
+            <h2 id="dgt-pour-qui">Indépendants, formateurs, experts d'un métier</h2>
+            <p>Pour transformer un savoir-faire en produit vendu en ligne (guide, modèles, mini-formation), sans équipe technique. Aucun résultat de vente n'est garanti : il dépend du sujet, de l'offre et du travail fourni.</p>
+        </div>
+    </div>
+</section>
+
+{% set cta_title = 'Une question avant de vous inscrire ?' %}{% set cta_text = "On en parle pendant le diagnostic gratuit : 30 minutes pour voir si le parcours correspond à votre projet." %}
+{% include 'includes/partials/page-cta.html' %}
