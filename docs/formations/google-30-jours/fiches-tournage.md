@@ -75,7 +75,7 @@ Restent en schéma, sans capture :
   - `D1-audit-agent24-7-rouge.mp4` : `agent24-7.digita.buzz`, score 90, une ligne rouge (aucun lien
     interne).
   Aucune page de DIGITA ne montre à la fois une ligne orange et une ligne rouge. Prise conseillée pour la
-  leçon 3 : `/boutique` (défaut simple et lisible). Choix à confirmer par Anthony. Si on corrige ensuite
+  leçon 3 : `/boutique`, **choisie par Anthony le 10 novembre 2026**. Si on corrige ensuite
   la meta description de `/boutique`, garder la prise déjà filmée.
 
 ### D2. PageSpeed Insights (Claude seul)
