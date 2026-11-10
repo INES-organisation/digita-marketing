@@ -105,3 +105,7 @@ Stripe d'INES) se fait sur INES.
   dans `~/Desktop/formation-google-lecon-1/sources/` (pas encore versionnées).
 - **Voix** : la synthèse peut omettre une phrase (deux fois sur trois pour la scène 5 de la leçon 1). Après
   chaque génération, retranscrire, comparer au script, et régénérer la phrase manquante.
+  Un seuil de couverture par phrase (75 %) ne suffit pas : la synthèse coupe parfois la **fin** d'une phrase
+  (L2 scène 3, L12 scène 4, le 10 novembre). Contrôle retenu : les derniers mots de chaque phrase doivent
+  être entendus. Les écarts restants viennent souvent de la retranscription (« la fiche » entendu
+  « l'affiche ») : on les vérifie à l'écoute, un par un.
