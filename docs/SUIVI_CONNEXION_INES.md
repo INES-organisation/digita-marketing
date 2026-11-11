@@ -142,6 +142,33 @@
 
 Détail côté DIGITA : [SUIVI_BOUTIQUE_FACTURATION_RGPD.md](SUIVI_BOUTIQUE_FACTURATION_RGPD.md). Vérifié en production le 08/11/2026 : la route répond 422 (contrôle du contenu) et non 401/403 à la clé de DIGITA, donc l'authentification passe ; aucune vente fictive enregistrée. Premier envoi réel : au premier achat.
 
+## 9. Anti-robots du formulaire de diagnostic (11/11/2026)
+
+**Incident** : le 10/11 à 19 h 51, un robot a envoyé 3 fois en une minute le formulaire de diagnostic
+(`/api/audit-request`). Nom « TVuEYaKiNfTagVdYfjrOQRiI », entreprise « Jhbjecedg LLC », e-mail
+`ni.g.e.l...da.n.cy@gmail.com`. Dans INES, il a créé un contact, une affaire et un devis brouillon (agent
+d'acquisition), et le site a écrit à cette adresse (`send_diagnostic_confirmation`). Le même jour,
+tonyalpha80.com recevait 17 inscriptions de robots. Les 18 fiches ont été supprimées dans INES le 11/11
+(sauvegarde : `/home/ubuntu/backups/spam-11-11/` sur le VPS).
+
+**Cause** : contrairement à `/contact`, à la newsletter et à la liste d'attente, `/api/audit-request`
+n'avait ni jeton CSRF, ni limite par visiteur, ni contrôle de l'e-mail. N'importe quel script pouvait
+le poster depuis n'importe où.
+
+**Corrigé** (`routes/leads.py`, `security.py`, `csrf.py`, formulaires de la fenêtre « Diagnostic
+gratuit » et de `/diagnostic`) :
+- jeton CSRF obligatoire (sans jeton, le visiteur voit « Votre session a expiré : rechargez la page ») ;
+- limite `contact` (10 envois par heure et par visiteur) ;
+- e-mail vérifié (`valid_email` refuse aussi les `..`) ;
+- `bot_reason` : champ piège `site_web` rempli, envoi moins de 3 s après l'affichage du formulaire
+  (date posée par `csrf_field`), ou texte aléatoire (`security.looks_random`). Le robot reçoit la
+  même réponse qu'un envoi réussi, mais rien n'est enregistré ni envoyé. Une ligne
+  `Diagnostic refusé (…)` est écrite dans les logs.
+
+**Règle** : tout nouveau formulaire public qui crée un contact ou envoie un e-mail doit avoir le
+jeton CSRF, `check_rate` et le champ piège. Si des robots passent encore : Cloudflare Turnstile
+(déjà vérifiable côté INES, `backend/app/services/turnstile.py`).
+
 ## 5. Journal
 
 | Date | Étape |
@@ -153,3 +180,4 @@ Détail côté DIGITA : [SUIVI_BOUTIQUE_FACTURATION_RGPD.md](SUIVI_BOUTIQUE_FACT
 | 25/10/2026 | Vérifié en production de bout en bout : réservation depuis `/diagnostic` → créneau dans INES Booking, événement « appel » dans le Planning (même id), contact « Lead DIGITA » dans le CRM, créneau retiré des disponibilités ; annulation par le lien de l'e-mail → réservation annulée, événement du Planning supprimé, créneau de nouveau proposé. Données de test supprimées. Chatbot : prix réels cités. Générateur de meta : description seule. |
 | 05/11/2026 | Lot D livré (§7) : tests Digita (70) et INES (acquisition, contacts, notifications : 52) verts, déployés ; vérifié en production (301, sitemap, lead de test supprimé). |
 | 08/11/2026 | Lot E livré (§8) : PR INES #83 fusionnée et déployée, envoi des ventes depuis Digita en place (tests Digita 116, INES 151 en local et CI verte). |
+| 11/11/2026 | Robots sur le formulaire de diagnostic (route sans CSRF) : jeton CSRF, limite, contrôle de l'e-mail, champ piège, délai minimal, refus du texte aléatoire (§9). Tests : 145 verts. Fiches robots supprimées dans INES. |

@@ -52,6 +52,11 @@
                     </ul>
 
                     <form id="diagnosticForm" novalidate>
+                        {# Piège à robots (11/11/2026) : invisible et ignoré des lecteurs d'écran, seul un robot le remplit. #}
+              <div style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+                <label>Ne pas remplir<input type="text" name="site_web" tabindex="-1" autocomplete="off"></label>
+              </div>
+              {{ CsrfMiddleware_field() }}
                         {% if pack %}<input type="hidden" name="pack" value="{{ h(pack['title']) }}">
                         <p class="small mb-3"><span class="badge rounded-pill px-3 py-2" style="background: var(--gold-gradient); color: var(--on-gold);">Pack : {{ h(pack['title']) }}</span></p>{% endif %}
                         <div class="row g-3">
