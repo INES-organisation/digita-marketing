@@ -13,7 +13,12 @@ def get_token(session):
     return session[TOKEN_NAME]
 
 
+FORM_SHOWN_AT = "form_shown_at"
+
+
 def csrf_field(session):
+    # Date d'affichage du formulaire : un envoi plus rapide qu'un humain trahit un robot (leads.bot_reason).
+    session[FORM_SHOWN_AT] = php.time()
     return f'<input type="hidden" name="{TOKEN_NAME}" value="{php.h(get_token(session))}">'
 
 

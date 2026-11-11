@@ -216,6 +216,7 @@ def test_diagnostic_page_offers_both_formats(monkeypatch):
     monkeypatch.setattr(ines, "push_lead", lambda *a, **k: leads_sent.append(a))
     monkeypatch.setattr(email, "send_new_contact_notification", lambda *a: True)
     monkeypatch.setattr(email, "send_diagnostic_confirmation", lambda *a: True)
+    monkeypatch.setattr(leads, "MIN_FILL_SECONDS", 0)  # le test envoie aussitôt la page ouverte
     c = _client()
     html = c.get("/diagnostic").text
     assert "<title>Diagnostic Digital Gratuit à La Réunion | DIGITA</title>" in html
@@ -224,7 +225,8 @@ def test_diagnostic_page_offers_both_formats(monkeypatch):
     assert 'href="/diagnostic"' in html  # lien du pied de page
 
     r = c.post("/api/audit-request", data={"name": "Ana", "email": "ana@example.com", "phone": "0693000000",
-                                           "company": "Piscines Ana", "sector": "Artisan / BTP"})
+                                           "company": "Piscines Ana", "sector": "Artisan / BTP",
+                                           "_csrf_token": _token(html)})
     assert r.json()["success"] is True
     assert saved[0][2] == "0693000000" and "Entreprise : Piscines Ana" in saved[0][4]
     assert "Secteur : Artisan / BTP" in leads_sent[0][3]
@@ -476,3 +478,25 @@ def test_meta_descriptions_fit_google_snippet():
                            ("Réseaux Sociaux", "Community management et publicité sur les réseaux sociaux")):
             meta = category_meta(kind, {"name": name, "description": desc})
             assert 120 <= len(meta) <= 160 and "google Ads" not in meta, meta
+
+
+def test_diagnostic_refuses_scripts_and_bots(monkeypatch):
+    """11/11/2026 : la route n'avait ni CSRF ni contrôle ; un robot y créait affaire + devis dans INES."""
+    leads_sent, mails = [], []
+    monkeypatch.setattr(leads.db, "execute", lambda sql, p=None: None)
+    monkeypatch.setattr(ines, "push_lead", lambda *a, **k: leads_sent.append(a))
+    monkeypatch.setattr(email, "send_new_contact_notification", lambda *a: True)
+    monkeypatch.setattr(email, "send_diagnostic_confirmation", lambda *a: mails.append(a) or True)
+    c = _client()
+    base = {"name": "Ana", "email": "ana@example.com", "phone": "0693000000"}
+    assert c.post("/api/audit-request", data=base).json()["success"] is False  # sans jeton : refusé
+    token = _token(c.get("/diagnostic").text)
+    # Envoyé aussitôt la page affichée : réponse « réussie », mais rien n'est fait.
+    assert c.post("/api/audit-request", data={**base, "_csrf_token": token}).json()["success"] is True
+    monkeypatch.setattr(leads, "MIN_FILL_SECONDS", 0)
+    assert c.post("/api/audit-request", data={**base, "_csrf_token": token, "site_web": "x"}).json()["success"] is True
+    assert c.post("/api/audit-request", data={**base, "name": "TVuEYaKiNfTagVdYfjrOQRiI", "_csrf_token": token}).json()["success"] is True
+    assert c.post("/api/audit-request", data={**base, "email": "ni.g.e.l...da@gmail.com", "_csrf_token": token}).json()["success"] is False
+    assert leads_sent == [] and mails == []
+    assert c.post("/api/audit-request", data={**base, "_csrf_token": token}).json()["success"] is True
+    assert len(leads_sent) == 1 and len(mails) == 1
