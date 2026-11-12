@@ -82,9 +82,9 @@ Décision d'Anthony (9 et 10 novembre 2026) : DGT-Système reste dans son worksp
 cours, examen, projet, attestation). DIGITA ne montre qu'une fiche, et l'achat (197 €, paiement unique,
 Stripe d'INES) se fait sur INES.
 
-- Prix et lien : `grille.FORMATIONS_INES` (`DGT_SYSTEME`), jamais en dur dans le gabarit.
-- Page : `/formations/dgt-systeme` (`routes/formations.py`, `formations/dgt-systeme-content.html`), carte
-  en tête de `/formations`. Textes : « parcours avec attestation INES », avec la mention que ce n'est pas
+- Prix, lien et textes : une entrée de `grille.FORMATIONS_INES`, jamais en dur dans le gabarit.
+- Page : `/formations/dgt-systeme` (`routes/formations.py` `ines_formation`, gabarit commun
+  `formations/ines-content.html`), carte en tête de `/formations`. Textes : « parcours avec attestation INES », avec la mention que ce n'est pas
   une certification reconnue par l'État, voix de synthèse annoncée, crédits INES annoncés, aucun chiffre
   de résultat.
 - **Masquée** tant que `visible` vaut `False` (la page redirige vers `/formations`). On la rend visible
@@ -92,7 +92,7 @@ Stripe d'INES) se fait sur INES.
   chiffres non sourcés, prix barré, bouton d'achat et liens cassés des pages du Page Builder. Liste
   complète dans le dépôt INES :
   `docs/user/Produit et parcours/Workspaces/PLAN_DGT_SYSTEME_ET_RESTE_A_FAIRE_INES.md`.
-- Test : `test_dgt_fiche_is_hidden_until_ines_page_is_fixed_then_links_to_ines` (`tests/test_site.py`).
+- Test : `test_ines_formation_fiches_are_hidden_until_ready_then_link_to_ines` (`tests/test_site.py`).
 
 ## Méthode de capture et de rendu validée (10 novembre 2026)
 
@@ -152,3 +152,37 @@ INES. L3 cale la capture D1 par `video:at:16.5` (le clic sur « Analyser » tomb
 
 Reste : leçons 4 à 9, 11 et 14, après les captures d'Anthony (D3 à D10). La leçon 1 a été produite le
 9 novembre avec l'ancienne méthode : à refaire avec ce moteur pour l'homogénéité.
+
+## Formation Google à 149 €, préparée pour INES (12 novembre 2026)
+
+Décision d'Anthony (12 novembre 2026) : la formation Google se crée **dans INES** (première formation
+officielle « made in INES » pour DIGITA, pilotable dans INES ou par MCP), au prix de **149 €**, comme
+DGT-Système. La boutique garde la redirection vers MultiProShop.
+
+- **Catalogue DIGITA** : `grille.FORMATIONS_INES` liste maintenant les deux formations vendues sur INES
+  (`etre-trouve-sur-google` 149 €, `dgt-systeme` 197 €). Chaque entrée porte ses textes (carte, accroche,
+  programme, contenu, avertissement, public). Une seule route par entrée (`/formations/<id>`) et un seul
+  gabarit (`formations/ines-content.html`). Les deux restent **masquées** (`visible: False`) : on passe
+  `visible` à `True` quand la formation est en vente dans INES et que son lien est confirmé.
+- **Lien Google** : `https://ines.weballone.com/formation/etre-trouve-sur-google` est provisoire, à
+  confirmer quand le workspace sera créé dans INES.
+- **Quiz** : `docs/formations/google-30-jours/quiz.json`, 45 questions (3 par leçon, choix unique,
+  3 options, explication), seuil de réussite 70 %. Tiré uniquement des textes des leçons.
+
+### Déjà fait
+
+- Textes des 15 leçons (`lecon-01.md` à `lecon-15.md`), kit de 8 outils (`kit.md`), fiches de tournage.
+- Moteur vidéo (scènes, voix marin, sous-titres calés sur la voix, contrôles) sur l'iMac.
+- Vidéos rendues : leçons 2, 3, 10, 12, 13 et 15 (voir « Leçons produites »).
+- Quiz des 15 leçons, prix et fiche DIGITA (masquée).
+
+### Reste à faire
+
+- Nouveaux logos officiels (Anthony), puis nouveau rendu des vidéos (pas besoin de tout refaire : seules
+  les scènes avec logo changent).
+- Leçons 1, 4 à 9, 11 et 14 : scènes et voix préparées sans rendu en attendant les logos ; captures
+  D3 à D10 par Anthony.
+- Kit en PDF, page de vente dans INES, paiement 149 € (Stripe d'INES), chargement dans le workspace.
+- Côté INES : ce qui manque pour héberger une deuxième formation (programme par workspace au lieu du
+  programme DGT figé, préfixe vidéo par formation, quiz importables). Suivi complet dans le doc dédié
+  du dépôt INES.

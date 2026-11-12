@@ -149,15 +149,75 @@ def price_label(level):
     return euros(once)
 
 
-# Formations vendues sur INES (achat et suivi dans l'espace INES ; DIGITA ne montre qu'une fiche).
-# « visible » reste False tant que la page INES n'est pas corrigée (« parcours avec attestation INES »,
-# chiffres sourcés) : voir docs/SUIVI_FORMATIONS.md et, dans INES, PLAN_DGT_SYSTEME_ET_RESTE_A_FAIRE_INES.md.
+# Formations vendues sur INES (achat et suivi dans l'espace INES ; DIGITA ne montre qu'une fiche,
+# servie à /formations/<id>). « visible » reste False tant que la formation n'est pas prête dans INES :
+# voir docs/SUIVI_FORMATIONS.md. Aucun chiffre de résultat dans ces textes.
 FORMATIONS_INES = [
+    {"id": "etre-trouve-sur-google",
+     "title": "Être trouvé sur Google en 30 jours",
+     "price": 149,
+     "price_note": "Paiement unique, sur INES",
+     "url": "https://ines.weballone.com/formation/etre-trouve-sur-google",  # à confirmer à la création dans INES
+     "visible": False,
+     "card": "Fiche Google, avis, site et suivi : une action simple par leçon, pendant quatre semaines.",
+     "lead": "Quinze leçons courtes, une action concrète à chaque fois, pour que vos clients vous trouvent "
+             "quand ils cherchent votre métier près de chez eux. La leçon 1 est offerte.",
+     "meta": "Formation en ligne pour TPE de La Réunion : fiche Google, avis, site et suivi, en 15 leçons "
+             "vidéo et un kit de 8 outils. Leçon 1 offerte.",
+     "content_title": "4 semaines, 15 leçons vidéo",
+     "content_lead": "Chaque leçon est une courte vidéo narrée (voix de synthèse) avec une fiche action, et un "
+                     "quiz de trois questions.",
+     "modules": ["Semaine 1 : comprendre ce que voit votre client et faire l'état des lieux",
+                 "Semaine 2 : revendiquer et régler votre fiche Google (catégorie, zone, horaires, services, photos)",
+                 "Semaine 3 : obtenir des avis, y répondre, éviter ce qui fait disparaître une fiche",
+                 "Semaine 4 : relier votre site, le rendre rapide sur téléphone, suivre vos résultats"],
+     "includes": ["15 leçons vidéo et leurs fiches action",
+                  "Un kit de 8 outils à adapter : grille d'état des lieux, modèles de demande et de réponse aux "
+                  "avis, gabarit de page service, tableau de suivi…",
+                  "Un quiz par leçon",
+                  "La leçon 1 en accès libre"],
+     "tag": "Leçon 1 offerte",
+     "notice": "Aucune position sur Google n'est garantie : personne ne peut la promettre. Les résultats "
+               "dépendent de votre métier, de votre zone et de la régularité de vos actions.",
+     "audience_title": "Artisans, commerçants, indépendants",
+     "audience_text": "Pour les entreprises de La Réunion qui veulent être trouvées par leurs clients sans outil "
+                      "payant ni jargon. Tout se fait depuis un téléphone ou un ordinateur."},
     {"id": "dgt-systeme",
      "title": "DGT-Système : créer et vendre son produit digital avec INES",
      "price": 197,
      "price_note": "Paiement unique, sur INES",
      "url": "https://ines.weballone.com/formation/dgt-systeme",
-     "visible": False},
+     "visible": False,
+     "card": "Choisir un sujet, construire l'offre, créer le produit, le vendre et le livrer avec INES.",
+     "lead": "Un parcours pas à pas pour choisir un sujet, construire une offre, créer le produit, le mettre en "
+             "vente et le livrer automatiquement, avec les outils d'INES.",
+     "meta": "Parcours en ligne pour créer, mettre en vente et livrer un produit digital avec INES : 11 modules, "
+             "43 leçons vidéo, attestation INES.",
+     "content_title": "11 modules, 43 leçons vidéo",
+     "content_lead": "Chaque leçon est une courte vidéo narrée (voix de synthèse), avec un objectif et les étapes "
+                     "à suivre dans INES. Un quiz clôt chaque module.",
+     "modules": ["Module 0 : démarrer, le modèle du produit digital",
+                 "Module 1 : choisir sa niche et son client idéal",
+                 "Module 2 : concevoir son offre",
+                 "Module 3 : créer le produit avec INES",
+                 "Module 4 : la page de vente",
+                 "Module 5 : la vidéo de vente et les visuels",
+                 "Module 6 : attirer des visiteurs sans budget publicitaire",
+                 "Module 7 : paiement, offres complémentaires",
+                 "Module 8 : automatiser la livraison, assistants IA",
+                 "Module 9 : support, avis clients, développement",
+                 "Module bonus : le marketing avec l'IA"],
+     "includes": ["Les 43 leçons vidéo et les quiz de fin de module",
+                  "13 ressources à consulter dans INES : modèles, grilles et checklists",
+                  "Un examen final et un projet pratique réalisé dans INES",
+                  "Une attestation INES quand l'examen et le projet sont validés"],
+     "tag": "Parcours avec attestation INES",
+     "notice": "L'attestation INES n'est pas une certification reconnue par l'État (RNCP ou Répertoire "
+               "spécifique). Les outils d'INES utilisés pendant le parcours consomment des crédits, y compris "
+               "avec le compte gratuit.",
+     "audience_title": "Indépendants, formateurs, experts d'un métier",
+     "audience_text": "Pour transformer un savoir-faire en produit vendu en ligne (guide, modèles, mini-formation), "
+                      "sans équipe technique. Aucun résultat de vente n'est garanti : il dépend du sujet, de l'offre "
+                      "et du travail fourni."},
 ]
-DGT_SYSTEME = FORMATIONS_INES[0]
+FORMATIONS_INES_BY_ID = {f["id"]: f for f in FORMATIONS_INES}
