@@ -428,23 +428,28 @@ def test_server_error_page_matches_the_site():
     assert "Un souci technique momentané" in main.ERROR_500 and "wa.me/262693487817" in main.ERROR_500
 
 
-def test_dgt_fiche_is_hidden_until_ines_page_is_fixed_then_links_to_ines(monkeypatch):
-    """Fiche DGT : masquée tant que « visible » est faux ; sinon prix de la grille et achat sur INES."""
+def test_ines_formation_fiches_are_hidden_until_ready_then_link_to_ines(monkeypatch):
+    """Fiches INES (Google 149 €, DGT 197 €) : masquées tant que « visible » est faux ; sinon prix de la grille,
+    achat sur INES et carte au catalogue."""
     from digita import grille
-    r = _client().get("/formations/dgt-systeme", follow_redirects=False)
-    assert r.status_code == 301 and r.headers["location"].endswith("/formations")
-
-    monkeypatch.setitem(grille.DGT_SYSTEME, "visible", True)
-    html = _client().get("/formations/dgt-systeme").text
-    assert grille.euros(grille.DGT_SYSTEME["price"]) in html
-    assert f'href="{grille.DGT_SYSTEME["url"]}"' in html
-    assert "Parcours avec attestation INES" in html and "certifiante" not in html.lower()
     from digita.models import formation as Formation
+    assert grille.FORMATIONS_INES_BY_ID["etre-trouve-sur-google"]["price"] == 149
     for name, value in (("count", 0), ("available_ids", set()), ("get_all_published", []), ("get_popular", []),
                         ("get_categories", [])):
         monkeypatch.setattr(Formation, name, lambda *a, v=value: v)
-    html = _client().get("/formations").text
-    assert 'href="/formations/dgt-systeme"' in html and "Les premières formations arrivent" in html
+    for f in grille.FORMATIONS_INES:
+        path = "/formations/" + f["id"]
+        r = _client().get(path, follow_redirects=False)
+        assert r.status_code == 301 and r.headers["location"].endswith("/formations")
+        assert f'href="{path}"' not in _client().get("/formations").text
+
+        monkeypatch.setitem(f, "visible", True)
+        html = _client().get(path).text
+        assert grille.euros(f["price"]) in html and f'href="{f["url"]}"' in html
+        assert f["notice"].split(":")[0] in html and "certifiante" not in html.lower()
+        assert len(f["meta"]) <= 160
+        html = _client().get("/formations").text
+        assert f'href="{path}"' in html and "Les premières formations arrivent" in html
 
 
 def test_seo_audit_unescapes_entities_and_home_description_fits(monkeypatch):

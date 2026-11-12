@@ -1,0 +1,533 @@
+{
+ "formation": "etre-trouve-sur-google-30-jours",
+ "version": "2026-11-12",
+ "format": "question, options, answer (index de la bonne option, à partir de 0), explanation",
+ "passing_score": 70,
+ "lessons": [
+  {
+   "lesson": "lecon-01",
+   "questions": [
+    {
+     "question": "Dans une recherche locale, qu'est-ce que Google affiche souvent avant la liste des sites internet ?",
+     "options": [
+      "Une carte avec quelques entreprises de la zone",
+      "Uniquement des annonces payantes",
+      "Les réseaux sociaux des entreprises"
+     ],
+     "answer": 0,
+     "explanation": "La carte arrive avant les sites, et y figurer est gratuit grâce à la fiche Google."
+    },
+    {
+     "question": "Quel critère de Google ne dépend pas de vous ?",
+     "options": [
+      "La pertinence",
+      "La distance",
+      "La notoriété"
+     ],
+     "answer": 1,
+     "explanation": "La distance entre vous et la personne ne se change pas ; la pertinence et la notoriété, si."
+    },
+    {
+     "question": "Pour voir ce que voit un client, comment chercher ?",
+     "options": [
+      "Dans une fenêtre de navigation privée, votre métier puis votre commune",
+      "Le nom exact de votre entreprise, connecté à votre compte",
+      "Votre numéro de téléphone"
+     ],
+     "answer": 0,
+     "explanation": "La navigation privée évite que vos propres habitudes faussent le résultat."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-02",
+   "questions": [
+    {
+     "question": "Que lit Google pour juger la pertinence d'une fiche ?",
+     "options": [
+      "Le nombre de photos",
+      "La catégorie, la description et la liste des services",
+      "L'ancienneté de l'entreprise"
+     ],
+     "answer": 1,
+     "explanation": "La pertinence dépend de ce que la fiche dit de votre activité."
+    },
+    {
+     "question": "Vous vous déplacez dans plusieurs communes. Que faire ?",
+     "options": [
+      "Créer une fiche par commune",
+      "Indiquer une zone d'intervention claire sur une seule fiche",
+      "Mettre le nom des communes dans le nom de l'entreprise"
+     ],
+     "answer": 1,
+     "explanation": "Créer des fiches dans des communes sans local est interdit par Google."
+    },
+    {
+     "question": "Quelqu'un vous promet la première place sur la carte contre paiement. Que retenir ?",
+     "options": [
+      "C'est un bon investissement",
+      "Personne ne peut garantir une position, et la fiche est gratuite",
+      "Il faut d'abord acheter des avis"
+     ],
+     "answer": 1,
+     "explanation": "Aucune position n'est garantie, et la fiche Google ne coûte rien."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-03",
+   "questions": [
+    {
+     "question": "Que mesure la note de l'audit SEO gratuit ?",
+     "options": [
+      "Votre position sur Google",
+      "La base technique d'une page",
+      "Le nombre de visiteurs de votre site"
+     ],
+     "answer": 1,
+     "explanation": "La note vérifie dix points techniques, pas votre classement."
+    },
+    {
+     "question": "Quelles lignes du rapport regarder en priorité ?",
+     "options": [
+      "HTTPS, affichage sur téléphone et titre de la page",
+      "Couleurs, polices et logo",
+      "Nombre de pages et d'images"
+     ],
+     "answer": 0,
+     "explanation": "Ce sont les trois points à vérifier en premier selon la leçon."
+    },
+    {
+     "question": "Combien de priorités entourer à la fin de l'état des lieux ?",
+     "options": [
+      "Toutes les lignes rouges",
+      "Trois, pas plus",
+      "Une seule"
+     ],
+     "answer": 1,
+     "explanation": "Trois priorités suffisent pour avancer sans se disperser."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-04",
+   "questions": [
+    {
+     "question": "Une fiche existe déjà pour votre entreprise. Que faire ?",
+     "options": [
+      "En créer une seconde à votre nom",
+      "La revendiquer",
+      "L'ignorer"
+     ],
+     "answer": 1,
+     "explanation": "Deux fiches pour la même entreprise sont contraires aux règles et dispersent les avis."
+    },
+    {
+     "question": "Avec quel compte gérer la fiche ?",
+     "options": [
+      "Le compte Google de l'entreprise",
+      "Le compte personnel d'un salarié",
+      "Le compte du prestataire"
+     ],
+     "answer": 0,
+     "explanation": "Un compte personnel peut être perdu ; la fiche doit appartenir à l'entreprise."
+    },
+    {
+     "question": "Un prestataire vous aide. Comment lui donner accès ?",
+     "options": [
+      "En lui donnant votre mot de passe",
+      "En l'ajoutant comme utilisateur",
+      "En lui transférant la propriété"
+     ],
+     "answer": 1,
+     "explanation": "On ajoute un utilisateur, sans jamais partager le mot de passe."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-05",
+   "questions": [
+    {
+     "question": "Quel réglage pèse le plus sur la pertinence ?",
+     "options": [
+      "La catégorie principale",
+      "La photo de couverture",
+      "Le nombre d'avis"
+     ],
+     "answer": 0,
+     "explanation": "Choisissez la catégorie la plus précise proposée par Google."
+    },
+    {
+     "question": "Un climaticien hésite entre « Électricien » et « Entreprise de climatisation ». Laquelle choisir ?",
+     "options": [
+      "Électricien, plus large",
+      "Entreprise de climatisation, plus précise",
+      "Les deux en catégorie principale"
+     ],
+     "answer": 1,
+     "explanation": "La catégorie la plus précise correspond mieux aux recherches."
+    },
+    {
+     "question": "Quand mettre à jour les horaires exceptionnels, comme le 20 décembre ?",
+     "options": [
+      "Avant la date",
+      "Le jour même",
+      "Après, si un client se plaint"
+     ],
+     "answer": 0,
+     "explanation": "Un client qui trouve porte close ne revient pas : on anticipe."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-06",
+   "questions": [
+    {
+     "question": "Quels mots utiliser pour décrire vos services ?",
+     "options": [
+      "Le vocabulaire technique du métier",
+      "Les mots que tapent vos clients",
+      "Des mots-clés ajoutés au nom de l'entreprise"
+     ],
+     "answer": 1,
+     "explanation": "Google ne fait pas le lien à votre place : reprenez les mots de vos clients."
+    },
+    {
+     "question": "Quelle source gratuite permet de trouver ces mots ?",
+     "options": [
+      "Les suggestions de Google quand on tape le début d'une recherche",
+      "Un logiciel payant de mots-clés",
+      "Les fiches des concurrents copiées"
+     ],
+     "answer": 0,
+     "explanation": "Les questions des clients, les suggestions de Google, puis la Search Console."
+    },
+    {
+     "question": "Que doit contenir la description de la fiche ?",
+     "options": [
+      "Ce que vous faites, où vous intervenez, ce qui vous distingue avec des faits",
+      "Une liste de mots-clés",
+      "Vos tarifs complets"
+     ],
+     "answer": 0,
+     "explanation": "Trois phrases suffisent, avec des faits vérifiables."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-07",
+   "questions": [
+    {
+     "question": "D'où viennent la plupart des photos floues ?",
+     "options": [
+      "D'un bougé",
+      "D'un téléphone trop ancien",
+      "D'un mauvais format de fichier"
+     ],
+     "answer": 0,
+     "explanation": "Tenez le téléphone à deux mains et faites plusieurs prises."
+    },
+    {
+     "question": "Quelle retouche est acceptable ?",
+     "options": [
+      "Un filtre qui change les couleurs",
+      "Recadrer, redresser, éclaircir un peu",
+      "Ajouter un produit qui n'existe pas"
+     ],
+     "answer": 1,
+     "explanation": "Google demande des photos fidèles à la réalité."
+    },
+    {
+     "question": "Une personne reconnaissable figure sur la photo. Que faut-il avant de publier ?",
+     "options": [
+      "Rien",
+      "Son accord écrit",
+      "Flouter seulement son visage après publication"
+     ],
+     "answer": 1,
+     "explanation": "L'accord écrit est demandé avant la publication."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-08",
+   "questions": [
+    {
+     "question": "Quel est l'outil principal pour obtenir des avis ?",
+     "options": [
+      "Le lien qui ouvre directement la fenêtre d'avis",
+      "Une remise offerte au client",
+      "Un avis écrit par un proche pour lancer la fiche"
+     ],
+     "answer": 0,
+     "explanation": "Le lien évite au client de chercher votre fiche."
+    },
+    {
+     "question": "Quand demander un avis ?",
+     "options": [
+      "Juste après une intervention réussie",
+      "Une fois par an",
+      "Seulement aux clients très contents"
+     ],
+     "answer": 0,
+     "explanation": "Le client a encore l'expérience en tête ; et on demande à tous, sans trier."
+    },
+    {
+     "question": "Offrir une remise contre un avis honnête est :",
+     "options": [
+      "Autorisé si l'avis est honnête",
+      "Interdit par les règles de Google",
+      "Conseillé pour démarrer"
+     ],
+     "answer": 1,
+     "explanation": "Pas de remise ni de cadeau contre un avis, même honnête."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-09",
+   "questions": [
+    {
+     "question": "À qui s'adresse une réponse à un avis ?",
+     "options": [
+      "Au client seulement",
+      "Au client et à tous ceux qui la liront ensuite",
+      "À Google seulement"
+     ],
+     "answer": 1,
+     "explanation": "Les réponses sont publiques."
+    },
+    {
+     "question": "Face à un avis négatif, que faire d'abord ?",
+     "options": [
+      "Répondre tout de suite pour ne pas laisser l'avis seul",
+      "Vérifier les faits avant de répondre calmement, une fois",
+      "Signaler l'avis à Google"
+     ],
+     "answer": 1,
+     "explanation": "On ne répond pas à chaud, et on règle le problème en privé."
+    },
+    {
+     "question": "Google retire-t-il un avis qui vous déplaît ?",
+     "options": [
+      "Oui, sur simple demande",
+      "Non, seulement les avis contraires à ses règles",
+      "Oui, si vous répondez"
+     ],
+     "answer": 1,
+     "explanation": "On signale les avis faux ou injurieux ; les autres restent."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-10",
+   "questions": [
+    {
+     "question": "Pourquoi éviter un nom du type « Dupont Plomberie Pas Cher Saint-Denis 974 » ?",
+     "options": [
+      "C'est contraire aux consignes et peut faire suspendre la fiche",
+      "C'est trop long pour être lu",
+      "Cela coûte plus cher"
+     ],
+     "answer": 0,
+     "explanation": "Utilisez votre vrai nom, celui de l'enseigne ou de vos documents."
+    },
+    {
+     "question": "Vous trouvez un doublon de votre fiche. Que faire ?",
+     "options": [
+      "Le laisser",
+      "Le signaler à Google",
+      "Y répondre aux avis"
+     ],
+     "answer": 1,
+     "explanation": "Une seule fiche par entreprise."
+    },
+    {
+     "question": "Quelle est l'erreur la plus fréquente selon la leçon ?",
+     "options": [
+      "La fiche abandonnée",
+      "Le nom trop court",
+      "Trop de photos"
+     ],
+     "answer": 0,
+     "explanation": "Horaires faux, téléphone qui ne répond plus, avis sans réponse : elle fait fuir les clients."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-11",
+   "questions": [
+    {
+     "question": "Que faut-il afficher à l'identique sur la fiche et sur le site ?",
+     "options": [
+      "Le nom, l'adresse et le téléphone",
+      "Les tarifs",
+      "Les photos"
+     ],
+     "answer": 0,
+     "explanation": "Mot pour mot, y compris sur Facebook et dans les annuaires."
+    },
+    {
+     "question": "Vers quelle page peut pointer le lien du site sur la fiche ?",
+     "options": [
+      "Toujours l'accueil",
+      "La page la plus utile, par exemple celle d'un service ou d'une zone",
+      "La page des mentions légales"
+     ],
+     "answer": 1,
+     "explanation": "Le lien peut viser la page la plus utile pour le client."
+    },
+    {
+     "question": "Quel élément doit être visible sur mobile ?",
+     "options": [
+      "Un téléphone cliquable",
+      "Une vidéo d'accueil",
+      "Un menu à dix entrées"
+     ],
+     "answer": 0,
+     "explanation": "Le client doit pouvoir appeler en un geste."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-12",
+   "questions": [
+    {
+     "question": "Quelle règle simple pour les pages du site ?",
+     "options": [
+      "Une page, un sujet, une recherche principale",
+      "Une seule page pour tous les services",
+      "Une page par mot-clé"
+     ],
+     "answer": 0,
+     "explanation": "Une page par service donne une chance de plus d'être trouvé."
+    },
+    {
+     "question": "Comment commencer le titre d'une page de service ?",
+     "options": [
+      "Par le nom de l'entreprise",
+      "Par la recherche visée, le nom à la fin",
+      "Par « Bienvenue »"
+     ],
+     "answer": 1,
+     "explanation": "Exemple : « Pose de climatisation à Saint-Paul et dans l'Ouest », puis le nom."
+    },
+    {
+     "question": "Que visent les règles de Google contre les pages produites en masse ?",
+     "options": [
+      "Les pages créées surtout pour se positionner, sans aider le lecteur",
+      "Les pages avec des photos",
+      "Les pages de plus de 500 mots"
+     ],
+     "answer": 0,
+     "explanation": "Mieux vaut quelques pages utiles que des dizaines de pages vides."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-13",
+   "questions": [
+    {
+     "question": "Dans PageSpeed Insights, quel onglet regarder ?",
+     "options": [
+      "Ordinateur",
+      "Mobile",
+      "Accessibilité"
+     ],
+     "answer": 1,
+     "explanation": "Les clients cherchent surtout sur téléphone."
+    },
+    {
+     "question": "Quelle est souvent la première cause de lenteur d'un petit site ?",
+     "options": [
+      "Les photos trop lourdes",
+      "Le nom de domaine",
+      "Le nombre de pages"
+     ],
+     "answer": 0,
+     "explanation": "Redimensionnez-les et enregistrez-les en WebP ou en JPEG compressé."
+    },
+    {
+     "question": "Quel temps d'affichage du contenu principal est jugé bon ?",
+     "options": [
+      "Sous deux secondes et demie",
+      "Sous dix secondes",
+      "Sous une minute"
+     ],
+     "answer": 0,
+     "explanation": "C'est le premier des trois signaux regardés par Google."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-14",
+   "questions": [
+    {
+     "question": "Que montre la Search Console ?",
+     "options": [
+      "Les recherches qui affichent votre site, les clics et les pages connues de Google",
+      "Les avis de votre fiche",
+      "Le chiffre d'affaires de votre site"
+     ],
+     "answer": 0,
+     "explanation": "Elle dit comment Google voit votre site, sans cookie chez vos visiteurs."
+    },
+    {
+     "question": "Une recherche a beaucoup d'impressions et peu de clics. Que tenter ?",
+     "options": [
+      "Un titre de page plus clair",
+      "Supprimer la page",
+      "Acheter de la publicité"
+     ],
+     "answer": 0,
+     "explanation": "Comme le moniteur de parapente de l'exemple, qui annonce le prix et la durée."
+    },
+    {
+     "question": "Quand choisir une propriété « Domaine » ?",
+     "options": [
+      "Si vous pouvez modifier la zone DNS de votre nom de domaine",
+      "Toujours",
+      "Jamais"
+     ],
+     "answer": 0,
+     "explanation": "Sinon, choisissez « Préfixe d'URL »."
+    }
+   ]
+  },
+  {
+   "lesson": "lecon-15",
+   "questions": [
+    {
+     "question": "Quel rythme pour entretenir sa fiche ?",
+     "options": [
+      "Une demi-heure chaque semaine",
+      "Une journée par an",
+      "Seulement quand les résultats baissent"
+     ],
+     "answer": 0,
+     "explanation": "Un peu chaque semaine plutôt que beaucoup une fois."
+    },
+    {
+     "question": "Que faire chaque mois ?",
+     "options": [
+      "Remplir le tableau de suivi et tester le formulaire de contact",
+      "Changer de catégorie",
+      "Recréer la fiche"
+     ],
+     "answer": 0,
+     "explanation": "Le suivi mensuel montre ce qui progresse."
+    },
+    {
+     "question": "Que vérifier chaque année ?",
+     "options": [
+      "Les renouvellements du nom de domaine et de l'hébergement",
+      "La couleur du logo",
+      "Le nombre d'abonnés Facebook"
+     ],
+     "answer": 0,
+     "explanation": "Un nom de domaine expiré met le site hors ligne."
+    }
+   ]
+  }
+ ]
+}

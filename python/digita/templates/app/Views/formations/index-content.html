@@ -6,17 +6,19 @@
 
 <section class="v2-section">
     <div class="container-fluid v2-container">
-        {% if dgt.visible %}
+        {% if inesFormations %}
         <div class="row g-4 mb-5">
+            {% for f in inesFormations %}
             <div class="col-md-6 col-lg-4" data-aos="fade-up">
-                <a href="/formations/dgt-systeme" class="v2-card v2-need formation-card">
-                    <span class="pg-tag">Sur INES · Parcours avec attestation INES</span>
-                    <h3>{{ dgt.title }}</h3>
-                    <p>Choisir un sujet, construire l'offre, créer le produit, le vendre et le livrer avec INES.</p>
-                    <span class="formation-meta"><strong>{{ dgt_price }}</strong></span>
+                <a href="/formations/{{ f.id }}" class="v2-card v2-need formation-card">
+                    <span class="pg-tag">Sur INES{% if f.tag %} · {{ f.tag }}{% endif %}</span>
+                    <h3>{{ f.title }}</h3>
+                    <p>{{ f.card }}</p>
+                    <span class="formation-meta"><strong>{{ f.price_label }}</strong></span>
                     <span class="v2-link">Voir la formation <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
                 </a>
             </div>
+            {% endfor %}
         </div>
         {% endif %}
         {% if empty(formations) %}
