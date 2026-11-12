@@ -6,7 +6,7 @@ import httpx
 from starlette.concurrency import run_in_threadpool
 from starlette.responses import Response
 
-from .. import booking, config, db, php, security
+from .. import booking, config, csrf, db, php, security
 from ..services import email, ines
 from ..render import render_view
 from .common import redirect
@@ -23,10 +23,29 @@ AUDIT_DETAILS = {"pack": "Pack", "goal": "Objectif", "sector": "Secteur", "compa
                  "phone": "Téléphone"}
 
 
+def bot_reason(form, session):
+    """Robot reconnu sur un formulaire de prospect (diagnostic) : piège rempli, envoi plus rapide qu'un
+    humain, texte aléatoire. 10/11/2026 : « TVuEYaKiNfTagVdYfjrOQRiI », « Jhbjecedg LLC », envoyé 3 fois
+    en une minute — il a créé une affaire et un devis dans INES et écrit à l'adresse saisie."""
+    if php.trim(form.get("site_web", "")):
+        return "piège rempli"
+    shown = session.get(csrf.FORM_SHOWN_AT)
+    if shown is not None and php.time() - shown < MIN_FILL_SECONDS:
+        return f"envoyé {php.time() - shown} s après l'affichage"
+    if any(security.looks_random(str(v)) for k, v in form.items() if k not in ("email", "website", csrf.TOKEN_NAME)):
+        return "texte aléatoire"
+    return None
+
+
 async def submit_audit(request):
     form = await request.form()
+    # Jusqu'au 11/11/2026 cette route n'avait ni jeton CSRF, ni limite, ni contrôle de l'e-mail : n'importe
+    # quel script pouvait la poster et faire écrire le site à l'adresse de son choix.
+    if not csrf.validate(request.session, form.get(csrf.TOKEN_NAME)):
+        return _json({"success": False, "message": "Votre session a expiré : rechargez la page puis renvoyez le formulaire."})
+    security.check_rate(request, "contact")
     name = form.get("name")
-    mail = form.get("email")
+    mail = php.trim(form.get("email") or "").lower()
     website = form.get("website") or "Non précisé"
     # Champs facultatifs des formulaires de diagnostic (accueil, /diagnostic) : qualifient le prospect.
     details = {label: php.trim(form.get(key) or "") for key, label in AUDIT_DETAILS.items()}
@@ -35,6 +54,12 @@ async def submit_audit(request):
 
     if not php.t(name) or not php.t(mail):
         return _json({"success": False, "message": "Veuillez remplir les champs obligatoires."})
+    if not security.valid_email(mail):
+        return _json({"success": False, "message": "Adresse e-mail invalide."})
+    if reason := bot_reason(form, request.session):
+        # Même réponse qu'un envoi réussi : un robot ne doit pas savoir qu'il a été repéré. Rien n'est enregistré.
+        log.warning("Diagnostic refusé (%s) : %s", reason, security.remote_addr(request))
+        return _json({"success": True, "message": "Votre demande a été prise en compte. Un consultant vous rappelle sous 24 h ouvrées."})
     if day and slot and not details["Téléphone"]:
         return _json({"success": False, "message": "Indiquez votre téléphone : le consultant vous appelle à l'heure choisie."})
     # Base, INES et e-mails sont bloquants : hors de la boucle asynchrone.

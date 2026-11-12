@@ -45,9 +45,14 @@ def test_slots_come_from_ines_without_past_ones(ines_booking):
     assert days == [{"date": "2026-10-27", "label": "Mardi 27 octobre", "slots": ["09:00", "09:30"]}]
 
 
-def test_diagnostic_form_books_the_slot_in_ines(ines_booking):
-    c = TestClient(app)
-    form = {"name": "Ana", "email": "ana@example.com", "date": "2026-10-27", "time_slot": "09:30"}
+def test_diagnostic_form_books_the_slot_in_ines(ines_booking, monkeypatch):
+    import re
+
+    from digita.routes import leads
+    monkeypatch.setattr(leads, "MIN_FILL_SECONDS", 0)  # le test envoie aussitôt la page ouverte
+    c = TestClient(app, base_url="https://digita.buzz")  # cookie de session « Secure » : jeton CSRF en https
+    token = re.search(r'name="_csrf_token" value="([^"]+)"', c.get("/diagnostic").text).group(1)
+    form = {"name": "Ana", "email": "ana@example.com", "date": "2026-10-27", "time_slot": "09:30", "_csrf_token": token}
     assert c.post("/api/audit-request", data=form).json()["success"] is False  # téléphone requis
     r = c.post("/api/audit-request", data={**form, "phone": "0692123456", "pack": "Devis et relances automatiques"}).json()
     assert r["success"] and r["booked"] and "mardi 27 octobre à 9 h 30" in r["message"]

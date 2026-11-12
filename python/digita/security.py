@@ -60,6 +60,14 @@ def reset_rate(request, action="default"):
 EMAIL_RX = re.compile(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$")
 
 
+def looks_random(text):
+    """Mot de 10 lettres ou plus avec au moins 3 majuscules après la première (« TVuEYaKiNfTagVdY ») :
+    signature des robots qui remplissent les champs au hasard (11/11/2026).
+    ponytail: heuristique simple ; un vrai mot en CamelCase très chargé serait refusé."""
+    return any(sum(c.isupper() for c in w[1:]) >= 3 and any(c.islower() for c in w)
+               for w in re.findall(r"[A-Za-z]{10,}", text or ""))
+
+
 def valid_email(s):
     return bool(EMAIL_RX.match(s or "")) and ".." not in s and not s.startswith(".")
 
