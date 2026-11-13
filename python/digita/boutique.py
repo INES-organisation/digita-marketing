@@ -17,7 +17,7 @@ database/migrations/2026_11_08_boutique.sql appliquées en production).
 """
 
 OPEN = True
-MPS_URL = "https://multiproshop.com"
+MPS_URL = "https://multiproshop.com/selection/digita"
 WORKFLOW_MAINTENANCE = "49 €/mois"
 DOWNLOAD_DAYS = 30        # validité d'un lien de téléchargement
 DOWNLOAD_MAX = 5          # téléchargements par lien (un nouveau lien s'obtient depuis « Mes commandes »)
