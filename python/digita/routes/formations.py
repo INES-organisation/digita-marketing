@@ -14,8 +14,7 @@ def index(request):
     total = Formation.count()
     return render_view(request, "formations/index-content", {
         "availableIds": Formation.available_ids(),
-        "dgt": grille.DGT_SYSTEME,
-        "dgt_price": grille.euros(grille.DGT_SYSTEME["price"]),
+        "inesFormations": [{**f, "price_label": grille.euros(f["price"])} for f in grille.FORMATIONS_INES if f["visible"]],
         "title": "Formations Marketing Digital & IA en Ligne | DIGITA",
         "metaDescription": "Formations en ligne au marketing digital et à l'IA : SEO, réseaux sociaux, automatisation. "
                            "Apprenez à votre rythme, avec des cas concrets pour TPE/PME.",
@@ -155,16 +154,17 @@ def verify_certificate(request):
     })
 
 
-def dgt_systeme(request):
-    """Fiche vitrine de la formation DGT-Système, vendue et suivie sur INES."""
-    f = grille.DGT_SYSTEME
-    if not f["visible"]:
-        return moved("/formations")
-    return render_view(request, "formations/dgt-systeme-content", {
-        "title": "Formation DGT-Système : vendre un produit digital | DIGITA",
-        "metaDescription": "Parcours en ligne pour créer, mettre en vente et livrer un produit digital avec INES : "
-                           "11 modules, 43 leçons vidéo, attestation INES. " + grille.euros(f["price"]) + ".",
-        "extraCss": ["/assets/css/formations.css"],
-        "f": f,
-        "price": grille.euros(f["price"]),
-    })
+def ines_formation(slug):
+    """Fiche vitrine d'une formation vendue et suivie sur INES (grille.FORMATIONS_INES)."""
+    def handler(request):
+        f = grille.FORMATIONS_INES_BY_ID[slug]
+        if not f["visible"]:
+            return moved("/formations")
+        return render_view(request, "formations/ines-content", {
+            "title": f["title"] + " | DIGITA" if len(f["title"]) <= 51 else f["title"],
+            "metaDescription": f["meta"],
+            "extraCss": ["/assets/css/formations.css"],
+            "f": f,
+            "price": grille.euros(f["price"]),
+        })
+    return handler

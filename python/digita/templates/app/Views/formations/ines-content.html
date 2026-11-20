@@ -1,0 +1,50 @@
+{# Fiche vitrine d'une formation vendue et suivie sur INES. Textes, prix et lien : grille.FORMATIONS_INES. Aucun chiffre de résultat. #}
+{% set hero_kicker = 'Formation en ligne sur INES' %}{% set hero_title = f.title %}{% set hero_lead = f.lead %}
+{% include 'includes/partials/page-hero.html' %}
+
+<section class="v2-section" aria-labelledby="ines-contenu">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Le contenu</p>
+            <h2 id="ines-contenu">{{ f.content_title }}</h2>
+            <p>{{ f.content_lead }}</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-6" data-aos="fade-up">
+                <div class="v2-card">
+                    <h3>Le programme</h3>
+                    <ul>
+                        {% for m in f.modules %}<li>{{ m }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="80">
+                <div class="v2-card pg-price is-featured">
+                    {% if f.tag %}<span class="pg-tag">{{ f.tag }}</span>{% endif %}
+                    <div class="pg-amount">{{ price }}</div>
+                    <p>{{ f.price_note }}. La formation se suit dans votre espace INES, à votre rythme.</p>
+                    <ul>
+                        {% for i in f.includes %}<li>{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{{ f.url }}" class="v2-btn v2-btn-primary" rel="noopener">S'inscrire sur INES <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></a>
+                    <p class="v2-small">{{ f.notice }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="v2-section" aria-labelledby="ines-pour-qui">
+    <div class="container-fluid v2-container">
+        <div class="v2-head" data-aos="fade-up">
+            <p class="v2-kicker">Pour qui</p>
+            <h2 id="ines-pour-qui">{{ f.audience_title }}</h2>
+            <p>{{ f.audience_text }}</p>
+        </div>
+    </div>
+</section>
+
+{% set cta_title = 'Une question avant de vous inscrire ?' %}{% set cta_text = "On en parle pendant le diagnostic gratuit : 30 minutes pour voir si la formation correspond à votre besoin." %}
+{% include 'includes/partials/page-cta.html' %}

@@ -2,6 +2,7 @@
 
 Chaque entrée : (méthode, chemin PHP avec :param, fonction).
 """
+from .. import grille
 from ..realisations import AGENT_URL
 from . import pages, blog, formations, tools, auth, leads, chatbot, analytics, learning, payment, projects, admin, automation, shop
 
@@ -102,7 +103,8 @@ post("/outils/calendrier-editorial", tools.editorial_calendar_post)
 post("/api/analytics/pageview", analytics.pageview)
 post("/api/analytics/conversion", analytics.conversion)
 
-get("/formations/dgt-systeme", formations.dgt_systeme)
+for _f in grille.FORMATIONS_INES:  # avant /formations/:slug (formations du catalogue DIGITA)
+    get("/formations/" + _f["id"], formations.ines_formation(_f["id"]))
 get("/formations/:slug", formations.show)
 get("/boutique", pages.boutique)
 get("/solutions", pages.solutions)
